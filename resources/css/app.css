@@ -2,8 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Myriad Pro */
+
+@font-face {
+    font-family: 'Myriad Pro';
+    font-style: normal;
+    font-weight: 300;
+    src: url("/fonts/Myriad Pro/MyriadPro-Light.otf") format("otf");
+}
+
+@font-face {
+    font-family: 'Myriad Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: url("/fonts/Myriad Pro/MyriadPro-Regular.otf") format("otf");
+}
+
+@font-face {
+    font-family: 'Myriad Pro';
+    font-style: normal;
+    font-weight: 600;
+    src: url("/fonts/Myriad Pro/MyriadPro-Semibold.otf") format("otf");
+}
+
+@font-face {
+    font-family: 'Myriad Pro';
+    font-style: normal;
+    font-weight: 700;
+    src: url("/fonts/Myriad Pro/MyriadPro-Bold.otf") format("otf");
+}
+
+/* Minion Pro */
+
+@font-face {
+    font-family: 'Minion Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: url("/fonts/Minion Pro/MinionPro-Regular.otf") format("otf");
+}
+
+@font-face {
+    font-family: 'Minion Pro';
+    font-style: normal;
+    font-weight: 500;
+    src: url("/fonts/Minion Pro/MinionPro-Medium.otf") format("otf");
+}
+
+@font-face {
+    font-family: 'Minion Pro';
+    font-style: normal;
+    font-weight: 600;
+    src: url("/fonts/Minion Pro/MinionPro-Semibold.otf") format("otf");
+}
+
+@font-face {
+    font-family: 'Minion Pro';
+    font-style: normal;
+    font-weight: 700;
+    src: url("/fonts/Minion Pro/MinionPro-Bold.otf") format("otf");
+}
+
+/* Theme */
+
 @layer base {
   :root {
+    --font-myriad-pro: 'Myriad Pro', sans-serif;
+    --font-minion-pro: 'Minion Pro', serif;
+
+    --sevsu-primary-blue: 207.48, 72.77%, 41.76%;
+    --sevsu-secondary-blue: 232.2, 56.18%, 34.9%;
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
