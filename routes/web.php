@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('test');
+    return Inertia::render('Main');
+});
+
+Route::get('/projects', function () {
+    return Inertia::render('Projects');
 });

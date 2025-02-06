@@ -26,8 +26,13 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
 
-        "sevsu-primary-blue": "hsl(var(--sevsu-primary-blue))",
-        "sevsu-secondary-blue": "hsl(var(--sevsu-secondary-blue))",
+        "accent-primary": "hsl(var(--accent-primary))",
+        "accent-secondary": "hsl(var(--accent-secondary))",
+        "content-default": "hsl(var(--text-default))",
+        "content-dark": "hsl(var(--text-dark))",
+        "content-light": "hsl(var(--text-light))",
+        "dominant-primary": "hsl(var(--bg-primary))",
+        "dominant-secondary": "hsl(var(--bg-secondary))",
 
         card: {
           DEFAULT: "hsl(var(--card))",

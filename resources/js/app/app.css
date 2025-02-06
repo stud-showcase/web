@@ -69,8 +69,15 @@
     --font-myriad-pro: 'Myriad Pro', sans-serif;
     --font-minion-pro: 'Minion Pro', serif;
 
-    --sevsu-primary-blue: 207.48, 72.77%, 41.76%;
-    --sevsu-secondary-blue: 232.2, 56.18%, 34.9%;
+    --accent-primary: 207, 73%, 42%;
+    --accent-secondary: 232, 56%, 35%;
+
+    --text-default: 207, 8%, 32%;
+    --text-dark: 207, 25%, 28%;
+    --text-light: 207, 15%, 65%;
+
+    --bg-primary: 207, 100%, 97%;
+    --bg-secondary: 0, 0%, 100%;
 
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
