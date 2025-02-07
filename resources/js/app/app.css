@@ -72,15 +72,17 @@
     --accent-primary: 207, 73%, 42%;
     --accent-secondary: 232, 56%, 35%;
 
-    --text-default: 207, 8%, 32%;
-    --text-dark: 207, 25%, 28%;
-    --text-light: 207, 15%, 65%;
+    --content-default: 207, 8%, 32%;
+    --content-dark: 207, 25%, 28%;
+    --content-light: 207, 15%, 65%;
 
-    --bg-primary: 207, 100%, 97%;
-    --bg-secondary: 0, 0%, 100%;
+    --dominant-primary: 207, 100%, 97%;
+    --dominant-secondary: 0, 0%, 100%;
 
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --border-default: 207, 25%, 28%;
+
+    --background: var(--dominant-primary);
+    --foreground: var(--content-default);
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
@@ -95,7 +97,7 @@
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
+    --border: var(--border-default);
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
     --chart-1: 12 76% 61%;
@@ -134,7 +136,7 @@
 }
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border font-myriad;
   }
   body {
     @apply bg-background text-foreground;

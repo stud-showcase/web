@@ -10,3 +10,7 @@ Route::get('/', function () {
 Route::get('/projects', function () {
     return Inertia::render('Projects');
 });
+
+Route::get('/project-request', function () {
+    return Inertia::render('ProjectRequest');
+});

@@ -10,7 +10,10 @@ export default {
     "./resources/views/**/*.blade.php",
     "./resources/js/**/*.tsx",
   ],
-
+  safelist: [
+    'font-myriad',
+    'font-minion'
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -28,11 +31,11 @@ export default {
 
         "accent-primary": "hsl(var(--accent-primary))",
         "accent-secondary": "hsl(var(--accent-secondary))",
-        "content-default": "hsl(var(--text-default))",
-        "content-dark": "hsl(var(--text-dark))",
-        "content-light": "hsl(var(--text-light))",
-        "dominant-primary": "hsl(var(--bg-primary))",
-        "dominant-secondary": "hsl(var(--bg-secondary))",
+        "content-default": "hsl(var(--content-default))",
+        "content-dark": "hsl(var(--content-dark))",
+        "content-light": "hsl(var(--content-light))",
+        "dominant-primary": "hsl(var(--dominant-primary))",
+        "dominant-secondary": "hsl(var(--dominant-secondary))",
 
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -62,7 +65,7 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        border: "hsl(var(--border))",
+        border: "hsla(var(--border), 0.15)",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         chart: {
