@@ -18,14 +18,15 @@ export function Heading({
   theme = "dark",
 }: PropsWithChildren<Props>) {
   const As = `h${level}` as keyof JSX.IntrinsicElements;
-  const headingSizes = ["4xl", "3xl", "2xl", "xl", "lg", "base"] as const;
+  const sizes = ["4xl", "3xl", "2xl", "xl", "lg", "base"] as const;
+  const tracking = level <= 3 ? 'normal' : 'wider';
 
   return (
     <As
       className={cn(
         `font-${family} text-${
-          headingSizes[level - 1]
-        } font-${weight} tracking-normal`,
+          sizes[level - 1]
+        } font-${weight} tracking-${tracking}`,
         {
           "text-content-dark": theme === "dark",
           "text-white": theme === "light",

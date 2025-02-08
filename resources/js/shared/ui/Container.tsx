@@ -1,14 +1,16 @@
 import { PropsWithChildren } from "react";
 import { cn } from "../lib/utils";
 
+type Props = {
+  className?: string;
+  align?: "left" | "center" | "right";
+};
+
 export function Container({
   children,
   className,
   align = "center",
-}: PropsWithChildren<{
-  className?: string;
-  align?: "left" | "center" | "right";
-}>) {
+}: PropsWithChildren<Props>) {
   return (
     <div
       className={cn(

@@ -12,7 +12,14 @@ export default {
   ],
   safelist: [
     'font-myriad',
-    'font-minion'
+    'font-minion',
+    "text-sm",
+    "text-md",
+    "text-lg",
+    "text-xl",
+    "text-2xl",
+    "text-3xl",
+    "text-4xl"
   ],
   theme: {
     extend: {
