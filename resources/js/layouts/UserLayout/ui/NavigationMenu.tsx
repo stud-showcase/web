@@ -1,5 +1,5 @@
 import { cn } from "@/shared/lib/utils";
-import { Link, usePage } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import { PropsWithChildren } from "react";
 
 type Props = {
@@ -31,15 +31,16 @@ export function NavigationLink({
 }
 
 export function NavigationMenu() {
-  const { url } = usePage();
-
   return (
     <nav className="h-full">
       <ul className="h-full flex gap-4">
-        <NavigationLink href="/" isActive={url === "/"}>
+        <NavigationLink href="/" isActive={window.location.pathname === "/"}>
           Главная
         </NavigationLink>
-        <NavigationLink href="/projects" isActive={url === "/projects"}>
+        <NavigationLink
+          href="/projects"
+          isActive={window.location.pathname.startsWith("/projects")}
+        >
           Проекты
         </NavigationLink>
       </ul>

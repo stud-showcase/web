@@ -19,7 +19,9 @@ export default {
     "text-xl",
     "text-2xl",
     "text-3xl",
-    "text-4xl"
+    "text-4xl",
+    "fill-accent-primary",
+    "fill-white"
   ],
   theme: {
     extend: {
