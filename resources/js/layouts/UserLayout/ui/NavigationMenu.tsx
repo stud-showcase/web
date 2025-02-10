@@ -16,9 +16,10 @@ export function NavigationLink({
     <li>
       <Link
         className={cn(
-          "h-full relative flex items-center font-semibold tracking-wider text-content-dark opacity-75 hover:opacity-100",
+          "h-full relative flex items-center font-semibold tracking-wide text-content-link",
           {
-            "text-accent-primary opacity-100 after:content-[''] after:absolute after:left-0 after:bottom-0 after:bg-accent-primary after:h-1 after:w-full after:rounded-tl-sm after:rounded-tr-sm":
+            "hover:text-content-link-active": !isActive,
+            "text-accent-primary after:content-[''] after:absolute after:left-0 after:bottom-0 after:bg-accent-primary after:h-1 after:w-full after:rounded-tl-sm after:rounded-tr-sm":
               isActive,
           }
         )}

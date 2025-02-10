@@ -42,9 +42,12 @@ export default {
         "accent-secondary": "hsl(var(--accent-secondary))",
         "content-default": "hsl(var(--content-default))",
         "content-dark": "hsl(var(--content-dark))",
+        "content-link": "hsla(var(--content-link))",
+        "content-link-active": "hsl(var(--content-link-active))",
         "content-light": "hsl(var(--content-light))",
         "dominant-primary": "hsl(var(--dominant-primary))",
         "dominant-secondary": "hsl(var(--dominant-secondary))",
+        "dominant-tetriary": "hsl(var(--dominant-tetriary))",
 
         card: {
           DEFAULT: "hsl(var(--card))",

@@ -12,9 +12,8 @@ export function Header() {
         <SevSULogo width={166} height={46} color="blue" />
       </Link>
       <NavigationMenu />
-      <div className="flex items-center">
+      <div className="flex gap-4 items-center">
         <RequestLink />
-        <Divider />
         <ProfileIcon />
       </div>
     </div>
