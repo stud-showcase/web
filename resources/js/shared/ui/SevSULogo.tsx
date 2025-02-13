@@ -5,7 +5,7 @@ type Props = {
 };
 
 export function SevSULogo({ width, height, color }: Props) {
-  const fillColor = color === "blue" ? "accent-primary" : "white";
+  const fillColor = color === "blue" ? "primary" : "white";
 
   return (
     <svg

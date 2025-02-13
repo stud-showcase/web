@@ -11,6 +11,19 @@ Route::get('/projects', function () {
     return Inertia::render('Projects');
 });
 
-Route::get('/project-request', function () {
-    return Inertia::render('ProjectRequest');
+Route::get('/task-bank', function () {
+    return Inertia::render('TaskBank');
 });
+
+Route::get('/vacancies', function () {
+    return Inertia::render('Vacancies');
+});
+
+Route::get('/profile', function () {
+    return Inertia::render('Profile');
+});
+
+Route::get('/admin/dashboard', function () {
+    return Inertia::render('Dashboard');
+});
+

@@ -14,7 +14,7 @@ export function Container({
   return (
     <div
       className={cn(
-        "max-w-7xl",
+        "max-w-[1392px]",
         {
           "mr-auto": align === "left",
           "mx-auto": align === "center",

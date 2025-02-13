@@ -5,169 +5,126 @@
 /* Myriad Pro */
 
 @font-face {
-    font-family: 'Myriad Pro';
-    font-style: normal;
-    font-weight: 300;
-    src: url("/fonts/Myriad Pro/MyriadPro-Light.otf") format("otf");
+  font-family: "Myriad Pro";
+  font-style: normal;
+  font-weight: 300;
+  src: url("/fonts/Myriad Pro/MyriadPro-Light.otf") format("otf");
 }
 
 @font-face {
-    font-family: 'Myriad Pro';
-    font-style: normal;
-    font-weight: 400;
-    src: url("/fonts/Myriad Pro/MyriadPro-Regular.otf") format("otf");
+  font-family: "Myriad Pro";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/Myriad Pro/MyriadPro-Regular.otf") format("otf");
 }
 
 @font-face {
-    font-family: 'Myriad Pro';
-    font-style: normal;
-    font-weight: 600;
-    src: url("/fonts/Myriad Pro/MyriadPro-Semibold.otf") format("otf");
+  font-family: "Myriad Pro";
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/Myriad Pro/MyriadPro-Semibold.otf") format("otf");
 }
 
 @font-face {
-    font-family: 'Myriad Pro';
-    font-style: normal;
-    font-weight: 700;
-    src: url("/fonts/Myriad Pro/MyriadPro-Bold.otf") format("otf");
+  font-family: "Myriad Pro";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/Myriad Pro/MyriadPro-Bold.otf") format("otf");
 }
 
 /* Minion Pro */
 
 @font-face {
-    font-family: 'Minion Pro';
-    font-style: normal;
-    font-weight: 400;
-    src: url("/fonts/Minion Pro/MinionPro-Regular.otf") format("otf");
+  font-family: "Minion Pro";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/Minion Pro/MinionPro-Regular.otf") format("otf");
 }
 
 @font-face {
-    font-family: 'Minion Pro';
-    font-style: normal;
-    font-weight: 500;
-    src: url("/fonts/Minion Pro/MinionPro-Medium.otf") format("otf");
+  font-family: "Minion Pro";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/fonts/Minion Pro/MinionPro-Medium.otf") format("otf");
 }
 
 @font-face {
-    font-family: 'Minion Pro';
-    font-style: normal;
-    font-weight: 600;
-    src: url("/fonts/Minion Pro/MinionPro-Semibold.otf") format("otf");
+  font-family: "Minion Pro";
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/Minion Pro/MinionPro-Semibold.otf") format("otf");
 }
 
 @font-face {
-    font-family: 'Minion Pro';
-    font-style: normal;
-    font-weight: 700;
-    src: url("/fonts/Minion Pro/MinionPro-Bold.otf") format("otf");
+  font-family: "Minion Pro";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/Minion Pro/MinionPro-Bold.otf") format("otf");
 }
-
-/* Theme */
 
 @layer base {
   :root {
-    --font-myriad-pro: 'Myriad Pro', sans-serif;
-    --font-minion-pro: 'Minion Pro', serif;
+    --font-myriad-pro: "Myriad Pro", sans-serif;
+    --font-minion-pro: "Minion Pro", serif;
 
-    /* Custom theme */
-    --accent-primary: 207, 73%, 42%;
-    --accent-secondary: 232, 56%, 35%;
-
-    --content-default: 207, 8%, 32%;
-    --content-dark: 207, 25%, 28%;
-    --content-light: 207, 15%, 65%;
-    --content-link: var(--content-dark), 0.75;
-    --content-link-active: var(--content-dark);
-
-    --dominant-primary: 207, 100%, 97%;
-    --dominant-secondary: 0, 0%, 100%;
-    --dominant-tetriary: 207 5% 97%;
-
-    --border-default: 207, 25%, 28%;
-
-    /* Shadcn/UI colors */
-
-    /* Colors for body */
-    --background: var(--dominant-primary);
-    --foreground: var(--content-default);
-
-    /* Colors for <Card /> */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-
-    /* Colors for popovers such as <DropdownMenu />, <HoverCard />, <Popover /> */
-    --popover: var(--dominant-secondary);
-    --popover-foreground: var(--content-default);
-
-    /* Primary colors for <Button /> */
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-
-    /* Secondary colors for <Button /> */
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-
-    /* Colors for <TabsList />, <Skeleton />, <Switch />,  <Dialog />  */
-    --muted: 0 0% 96.1%;
-    --muted-foreground: var(--content-default); /* --muted-foreground: 0 0% 45.1%; */
-
-    /* Accent colors for <DropdownMenuItem>, <SelectItem> */
-    --accent: var(--dominant-tetriary); /* --accent: 0 0% 96.1%; */
-    --accent-foreground: var(--content-dark); /* --accent-foreground: 0 0% 9%; */
-
-    /* Used for destructive actions such as <Button variant="destructive"> */
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 207 73% 42%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    /* Default border color */
-    --border: var(--border-default);
-
-    /* Border color for inputs such as <Input />, <Select />, <Textarea /> */
-    --input: 0 0% 89.8%;
-
-    /* Used for focus ring */
-    --ring: 0 0% 3.9%;
-
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 207 73% 42%;
+    --radius: 0.75rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-
-    /* Border radius for card, input and buttons */
-    --radius: 0.5rem
   }
+
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
-}
-@layer base {
+
   * {
-    @apply border-border font-myriad;
+    @apply border-border font-myriad tracking-wide;
   }
+
   body {
     @apply bg-background text-foreground;
   }

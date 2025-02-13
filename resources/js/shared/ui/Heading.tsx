@@ -28,7 +28,7 @@ export function Heading({
           sizes[level - 1]
         } font-${weight} tracking-${tracking}`,
         {
-          "text-content-dark": theme === "dark",
+          "text-foreground": theme === "dark",
           "text-white": theme === "light",
         },
         className

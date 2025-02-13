@@ -18,7 +18,7 @@ export function Text({
       className={cn(
         `font-${family} text-base font-normal tracking-wider`,
         {
-          "text-content-default": theme === "dark",
+          "text-foreground": theme === "dark",
           "text-white": theme === "light",
         },
         className

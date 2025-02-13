@@ -1,21 +1,24 @@
-import { SevSULogo } from "@/shared/ui/SevSULogo";
-import { NavigationMenu } from "./NavigationMenu";
+import { NavigationLinks } from "./NavigationLinks";
+import { LeaveRequestButton } from "./LeaveRequestButton";
+import { SignInButton } from "./SignInButton";
+import { AuthContext } from "../state";
+import { useState } from "react";
 import { ProfileIcon } from "./ProfileIcon";
-import { RequestLink } from "./RequestLink";
-import { Link } from "@inertiajs/react";
-import { Divider } from "./Divider";
 
 export function Header() {
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true" ? true : false
+  );
+
   return (
-    <div className="px-6 top-8 left-6 bg-dominant-secondary h-[68px] rounded-lg flex items-center justify-between border">
-      <Link href="/">
-        <SevSULogo width={166} height={46} color="blue" />
-      </Link>
-      <NavigationMenu />
-      <div className="flex gap-4 items-center">
-        <RequestLink />
-        <ProfileIcon />
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+      <div className="px-6 top-8 left-6 bg-background h-[68px] rounded-lg flex items-center justify-between border">
+        <NavigationLinks />
+        <div className="flex gap-4 items-center">
+          <LeaveRequestButton />
+          {isLoggedIn ? <ProfileIcon /> : <SignInButton />}
+        </div>
       </div>
-    </div>
+    </AuthContext.Provider>
   );
 }

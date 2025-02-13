@@ -3,18 +3,18 @@ import { Heading } from "@/shared/ui/Heading";
 import { UserLayout } from "@/layouts/UserLayout";
 import { Head } from "@inertiajs/react";
 
-export default function ProjectRequest() {
+export default function TaskBank() {
   return (
     <>
       <Head>
-        <title>Заявка на проект</title>
+        <title>Банк задач</title>
       </Head>
       <UserLayout>
         <Heading level={1}>
-          Страница заявки на проект
+          Банк задач
         </Heading>
         <div className="mt-4">
-          <Text>Контент страницы заявки на проект</Text>
+          <Text>Контент страницы банка задач</Text>
         </div>
       </UserLayout>
     </>

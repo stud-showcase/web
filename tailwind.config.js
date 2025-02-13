@@ -20,7 +20,7 @@ export default {
     "text-2xl",
     "text-3xl",
     "text-4xl",
-    "fill-accent-primary",
+    "fill-primary",
     "fill-white"
   ],
   theme: {
@@ -37,17 +37,6 @@ export default {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-
-        "accent-primary": "hsl(var(--accent-primary))",
-        "accent-secondary": "hsl(var(--accent-secondary))",
-        "content-default": "hsl(var(--content-default))",
-        "content-dark": "hsl(var(--content-dark))",
-        "content-link": "hsla(var(--content-link))",
-        "content-link-active": "hsl(var(--content-link-active))",
-        "content-light": "hsl(var(--content-light))",
-        "dominant-primary": "hsl(var(--dominant-primary))",
-        "dominant-secondary": "hsl(var(--dominant-secondary))",
-        "dominant-tetriary": "hsl(var(--dominant-tetriary))",
 
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -77,7 +66,7 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        border: "hsla(var(--border), 0.15)",
+        border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         chart: {
