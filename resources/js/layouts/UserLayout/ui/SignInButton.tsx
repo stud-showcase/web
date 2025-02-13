@@ -10,5 +10,12 @@ export function SignInButton() {
     setIsLoggedIn(true);
   };
 
-  return <Button onClick={login} variant={"gradient"}>Войти</Button>;
+  return (
+    <Button
+      onClick={login}
+      className="bg-gradient-to-r from-[#1D71B8] to-[#1588E9] hover:opacity-95 text-white"
+    >
+      Войти
+    </Button>
+  );
 }

@@ -26,7 +26,6 @@ import { useContext } from "react";
 import { AuthContext } from "../state";
 import { Link } from "@inertiajs/react";
 import { useTheme } from "@/shared/providers/ThemeProvider";
-import { Button } from "@/shared/ui/Button";
 
 export function ProfileIcon() {
   const { setIsLoggedIn } = useContext(AuthContext);

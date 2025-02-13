@@ -22,7 +22,9 @@ export function LeaveRequestButton() {
       open={window.location.hash === "#leave-a-request"}
     >
       <DialogTrigger asChild>
-        <Button variant={"outline-accent"}>Оставить заявку</Button>
+        <Button className="border-2 border-primary text-primary bg-background hover:bg-accent">
+          Оставить заявку
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
