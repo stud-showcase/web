@@ -1,30 +1,34 @@
 import { PropsWithChildren } from "react";
 import { cn } from "../lib/utils";
 
+type Variant = "default" | "lead" | "large" | "small" | "muted";
+
 type Props = {
+  variant?: Variant;
   className?: string;
-  family?: "myriad" | "minion";
-  theme?: "dark" | "light";
+};
+
+const variantToElement: Record<Variant, keyof JSX.IntrinsicElements> = {
+  default: "p",
+  lead: "p",
+  muted: "p",
+  large: "div",
+  small: "small",
+};
+
+const textStyles: Record<Variant, string> = {
+  default: "leading-7",
+  lead: "text-xl text-muted-foreground",
+  large: "text-lg font-semibold",
+  small: "text-sm font-medium leading-none",
+  muted: "text-sm text-muted-foreground",
 };
 
 export function Text({
-  children,
-  family = "myriad",
+  variant = "default",
   className,
-  theme = "dark",
+  children,
 }: PropsWithChildren<Props>) {
-  return (
-    <p
-      className={cn(
-        `font-${family} text-base font-normal tracking-wider`,
-        {
-          "text-foreground": theme === "dark",
-          "text-white": theme === "light",
-        },
-        className
-      )}
-    >
-      {children}
-    </p>
-  );
+  const As = variantToElement[variant];
+  return <As className={cn(textStyles[variant], className)}>{children}</As>;
 }
