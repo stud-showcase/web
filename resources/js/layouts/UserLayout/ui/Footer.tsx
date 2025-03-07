@@ -24,15 +24,110 @@ export function Footer() {
           <use xlinkHref="#gentle-wave" x="50" y="6" fill="#095DA4" />
         </g>
       </svg>
-      <div className="content bg-[#095da4] min-h-96">
+      <footer className="bg-[#095da4] text-white">
         <Container className="py-12 px-6">
           <SevSULogo width={273} height={78} color="white" />
-          <div className="text-center font-semibold text-white mt-6">
-            Все права защищены © «Севастопольский государственный университет»,
-            2025
+          <div className="flex justify-between mt-10">
+            <div>
+              <h3 className="font-semibold mb-4">ЦИФРОВАЯ ЭКОСИСТЕМА</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#" className="hover:underline">
+                    Официальный сайт
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Дистанционное обучение
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Личный кабинет
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Расписание занятий
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Rocket Chat
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">СОЦСЕТИ</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#" className="hover:underline">
+                    ВКонтакте
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Telegram
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Одноклассники
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    YouTube
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    RuTube
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">КОНТАКТЫ</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="tel:+79781234567" className="hover:underline">
+                    +7 (978) 123-45-67
+                  </a>
+                </li>
+                <li>
+                  <a href="mailto:info@sevsu.ru" className="hover:underline">
+                    info@sevsu.ru
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">ПОМОЩЬ</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#" className="hover:underline">
+                    Студенту
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Заказчику
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
+          <p className="text-sm mt-20 text-center">
+            Все права защищены © «Севастопольский государственный университет»,{" "}
+            {new Date().getFullYear()}
+          </p>
         </Container>
-      </div>
+      </footer>
     </>
   );
 }
