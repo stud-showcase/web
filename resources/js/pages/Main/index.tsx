@@ -10,25 +10,10 @@ export default function Main() {
         <title>Главная</title>
       </Head>
       <UserLayout>
-        <Heading level={1}>
-          Главная страница
-        </Heading>
-        <Heading level={2}>
-          Главная страница
-        </Heading>
-        <Heading level={3}>
-          Главная страница
-        </Heading>
-        <Heading level={4}>
-          Главная страница
-        </Heading>
-        <div className="mt-4">
-          <Text variant="muted">Контент главной страницы</Text>
-          <Text variant="small">Контент главной страницы</Text>
-          <Text variant="default">Контент главной страницы</Text>
-          <Text variant="large">Контент главной страницы</Text>
-          <Text variant="lead">Контент главной страницы</Text>
-        </div>
+        <Heading level={1}>Главная страница</Heading>
+         <div className="mt-4">
+            <Text>Контент главной страницы</Text>
+          </div>
       </UserLayout>
     </>
   );

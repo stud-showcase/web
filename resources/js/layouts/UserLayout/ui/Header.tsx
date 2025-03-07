@@ -12,7 +12,7 @@ export function Header() {
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-      <div className="px-6 top-8 left-6 bg-background h-[68px] rounded-lg flex items-center justify-between border">
+      <div className="px-6 shadow-sm border bg-background h-[68px] rounded-lg flex items-center justify-between">
         <NavigationLinks />
         <div className="flex gap-4 items-center">
           <LeaveRequestButton />

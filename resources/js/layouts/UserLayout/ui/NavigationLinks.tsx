@@ -59,12 +59,6 @@ export function NavigationLinks() {
             >
               Банк задач
             </NavigationLink>
-            <NavigationLink
-              href="/vacancies"
-              isActive={window.location.pathname.startsWith("/vacancies")}
-            >
-              Вакансии
-            </NavigationLink>
           </>
         )}
       </ul>

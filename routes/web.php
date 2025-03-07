@@ -15,10 +15,6 @@ Route::get('/task-bank', function () {
     return Inertia::render('TaskBank');
 });
 
-Route::get('/vacancies', function () {
-    return Inertia::render('Vacancies');
-});
-
 Route::get('/profile', function () {
     return Inertia::render('Profile');
 });
