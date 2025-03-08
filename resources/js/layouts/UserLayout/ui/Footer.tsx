@@ -1,5 +1,6 @@
 import { Container } from "@/shared/ui/Container";
 import { SevSULogo } from "@/shared/ui/SevSULogo";
+import { Text } from "@/shared/ui/Text";
 import "./footer.css";
 
 export function Footer() {
@@ -29,61 +30,110 @@ export function Footer() {
           <SevSULogo width={273} height={78} color="white" />
           <div className="flex justify-between mt-10">
             <div>
-              <h3 className="font-semibold mb-4">ЦИФРОВАЯ ЭКОСИСТЕМА</h3>
-              <ul className="space-y-2 text-sm">
+              <Text variant="large">ЦИФРОВАЯ ЭКОСИСТЕМА</Text>
+              <ul className="space-y-2 text-sm mt-4">
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://sevsu.ru"
+                    className="hover:underline"
+                  >
                     Официальный сайт
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://do.sevsu.ru"
+                    className="hover:underline"
+                  >
                     Дистанционное обучение
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://lk.sevsu.ru"
+                    className="hover:underline"
+                  >
                     Личный кабинет
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://timetable.sevsu.ru"
+                    className="hover:underline"
+                  >
                     Расписание занятий
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://chat.is.sevsu.ru"
+                    className="hover:underline"
+                  >
                     Rocket Chat
+                  </a>
+                </li>
+                <li>
+                  <a
+                    target="_blank"
+                    href="https://iot.sevsu.ru"
+                    className="hover:underline"
+                  >
+                    ИОТ
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">СОЦСЕТИ</h3>
-              <ul className="space-y-2 text-sm">
+              <Text variant="large">СОЦСЕТИ</Text>
+              <ul className="space-y-2 text-sm mt-4">
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://vk.com/sevsu"
+                    className="hover:underline"
+                  >
                     ВКонтакте
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://t.me/sevsu_live"
+                    className="hover:underline"
+                  >
                     Telegram
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://ok.ru/sevsu"
+                    className="hover:underline"
+                  >
                     Одноклассники
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://www.youtube.com/channel/UC1rFaFbJ4pDQgnrolyDfq0g"
+                    className="hover:underline"
+                  >
                     YouTube
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="https://rutube.ru/channel/25013780/"
+                    className="hover:underline"
+                  >
                     RuTube
                   </a>
                 </li>
@@ -91,15 +141,23 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">КОНТАКТЫ</h3>
-              <ul className="space-y-2 text-sm">
+              <Text variant="large">КОНТАКТЫ</Text>
+              <ul className="space-y-2 text-sm mt-4">
                 <li>
-                  <a href="tel:+79781234567" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="tel:+79781234567"
+                    className="hover:underline"
+                  >
                     +7 (978) 123-45-67
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:info@sevsu.ru" className="hover:underline">
+                  <a
+                    target="_blank"
+                    href="mailto:info@sevsu.ru"
+                    className="hover:underline"
+                  >
                     info@sevsu.ru
                   </a>
                 </li>
@@ -107,22 +165,22 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">ПОМОЩЬ</h3>
-              <ul className="space-y-2 text-sm">
+              <Text variant="large">ПОМОЩЬ</Text>
+              <ul className="space-y-2 text-sm mt-4">
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a target="_blank" href="#" className="hover:underline">
                     Студенту
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a target="_blank" href="#" className="hover:underline">
                     Заказчику
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-          <p className="text-sm mt-20 text-center">
+          <p className="mt-20 text-center text-sm">
             Все права защищены © «Севастопольский государственный университет»,{" "}
             {new Date().getFullYear()}
           </p>
