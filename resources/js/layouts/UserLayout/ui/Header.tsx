@@ -3,7 +3,7 @@ import { LeaveRequestButton } from "./LeaveRequestButton";
 import { SignInButton } from "./SignInButton";
 import { AuthContext } from "@/shared/state";
 import { useState } from "react";
-import { ProfileIcon } from "@/features/ProfileIcon";
+import { UserProfileIcon } from "./UserProfileIcon";
 import {
   Sheet,
   SheetContent,
@@ -34,7 +34,7 @@ export function Header() {
         </div>
         <div className="lg:flex gap-4 items-center hidden">
           <LeaveRequestButton />
-          {isLoggedIn ? <ProfileIcon /> : <SignInButton />}
+          {isLoggedIn ? <UserProfileIcon /> : <SignInButton />}
         </div>
         <div className="flex lg:hidden">
           <Sheet>
@@ -52,7 +52,7 @@ export function Header() {
                 <div className="flex flex-col gap-4">
                   <LeaveRequestButton />
                   <Separator />
-                  {isLoggedIn ? <ProfileIcon mobile /> : <SignInButton />}
+                  {isLoggedIn ? <UserProfileIcon mobile /> : <SignInButton />}
                 </div>
               </div>
             </SheetContent>

@@ -7,7 +7,7 @@ export function MobileNavLinks() {
 
   return (
     <nav>
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-4 text-lg">
         <NavLink href="/" isActive={window.location.pathname === "/"}>
           Главная
         </NavLink>

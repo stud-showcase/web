@@ -7,7 +7,7 @@ export function NavLinks() {
 
   return (
     <nav className="h-full">
-      <ul className="h-full lg:flex gap-4 hidden">
+      <ul className="h-full lg:flex gap-4 hidden text-sm">
         <NavLink
           href="/"
           withUnderline
