@@ -9,7 +9,7 @@ import {
 } from "@/shared/ui/DropdownMenu";
 import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react";
 import { PropsWithChildren, useContext } from "react";
-import { AuthContext } from "../state";
+import { AuthContext } from "@/shared/state";
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 
@@ -63,7 +63,7 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
           <DropdownMenuItem asChild>
             <Link href="/profile">
               <User className="mr-2 h-4 w-4" />
-              <span>Профиль</span>
+              <span>Личный кабинет</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>

@@ -1,9 +1,9 @@
 import { NavLinks } from "./NavLinks";
 import { LeaveRequestButton } from "./LeaveRequestButton";
 import { SignInButton } from "./SignInButton";
-import { AuthContext } from "../state";
+import { AuthContext } from "@/shared/state";
 import { useState } from "react";
-import { ProfileIcon } from "./ProfileIcon";
+import { ProfileIcon } from "@/features/ProfileIcon";
 import {
   Sheet,
   SheetContent,
@@ -44,7 +44,7 @@ export function Header() {
                 <span className="sr-only">Переключить меню</span>
               </Button>
             </SheetTrigger>
-            <SheetContent className="w-64" side="left">
+            <SheetContent className="w-64">
               <SheetTitle className="hidden"></SheetTitle>
               <SheetDescription className="hidden"></SheetDescription>
               <div className="h-full flex justify-between flex-col gap-8">

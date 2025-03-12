@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext } from "../state";
+import { AuthContext } from "@/shared/state";
 import { Button } from "@/shared/ui/Button";
 
 export function SignInButton() {
