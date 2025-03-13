@@ -15,7 +15,7 @@ export function Header() {
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-      <div className="px-6 shadow-sm border h-[68px] rounded-lg flex items-center justify-between">
+      <div className="px-6 shadow-sm bg-background border h-[68px] rounded-lg flex items-center justify-between">
         <div className="h-full flex items-center gap-8">
           <Link href="/">
             <SevSULogo width={166} height={46} color="blue" />

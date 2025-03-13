@@ -6,11 +6,15 @@ import { Container } from "@/shared/ui/Container";
 export function UserLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <Container className="h-screen px-6 py-8">
-        <Header />
-        <main className="pt-9">{children}</main>
-      </Container>
-      <Footer />
+      <div className="min-h-screen">
+        <Container className="mt-8">
+          <Header />
+        </Container>
+        <main>{children}</main>
+      </div>
+      <div className="mt-20">
+        <Footer />
+      </div>
     </>
   );
 }
