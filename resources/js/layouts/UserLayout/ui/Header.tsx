@@ -1,22 +1,12 @@
 import { NavLinks } from "./NavLinks";
 import { LeaveRequestButton } from "./LeaveRequestButton";
-import { SignInButton } from "./SignInButton";
 import { AuthContext } from "@/shared/state";
 import { useState } from "react";
-import { UserProfileIcon } from "./UserProfileIcon";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTitle,
-  SheetTrigger,
-} from "@/shared/ui/Sheet";
-import { Button } from "@/shared/ui/Button";
-import { Menu } from "lucide-react";
+import { ProfileIcon } from "./ProfileIcon";
 import { Link } from "@inertiajs/react";
 import { SevSULogo } from "@/shared/ui/SevSULogo";
-import { MobileNavLinks } from "./MobileNavLinks";
-import { Separator } from "@/shared/ui/Separator";
+import { SignInButton } from "./SignInButton";
+import { MobileMenu } from "./MobileMenu";
 
 export function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -30,33 +20,18 @@ export function Header() {
           <Link href="/">
             <SevSULogo width={166} height={46} color="blue" />
           </Link>
-          <NavLinks />
+          <nav className="h-full">
+            <ul className="h-full lg:flex gap-4 hidden text-sm">
+              <NavLinks />
+            </ul>
+          </nav>
         </div>
         <div className="lg:flex gap-4 items-center hidden">
           <LeaveRequestButton />
-          {isLoggedIn ? <UserProfileIcon /> : <SignInButton />}
+          {isLoggedIn ? <ProfileIcon /> : <SignInButton />}
         </div>
         <div className="flex lg:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Переключить меню</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="w-64">
-              <SheetTitle className="hidden"></SheetTitle>
-              <SheetDescription className="hidden"></SheetDescription>
-              <div className="h-full flex justify-between flex-col gap-8">
-                <MobileNavLinks />
-                <div className="flex flex-col gap-4">
-                  <LeaveRequestButton />
-                  <Separator />
-                  {isLoggedIn ? <UserProfileIcon mobile /> : <SignInButton />}
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <MobileMenu />
         </div>
       </div>
     </AuthContext.Provider>

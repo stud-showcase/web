@@ -1,7 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { Menu } from "lucide-react";
 import { Button } from "@/shared/ui/Button";
-import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/Sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/shared/ui/Sheet";
 import { SevSULogo } from "@/shared/ui/SevSULogo";
 import { NavLinks } from "./NavLinks";
 
@@ -15,6 +15,8 @@ export function MobileMenu() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="flex flex-col">
+        <SheetTitle className="hidden"></SheetTitle>
+        <SheetDescription className="hidden"></SheetDescription>
         <Link href="/admin/dashboard" className="px-3">
           <SevSULogo color="blue" width={204} height={88} />
         </Link>

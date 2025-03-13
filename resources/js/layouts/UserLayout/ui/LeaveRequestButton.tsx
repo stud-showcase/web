@@ -34,7 +34,7 @@ export function LeaveRequestButton() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button type="submit">Отправить заявку</Button>
+          <Button type="submit">Оставить заявку</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

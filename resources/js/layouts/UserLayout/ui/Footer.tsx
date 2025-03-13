@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <>
       <svg
-        className="wave w-full h-44"
+        className="wave w-full h-22 lg:h-44"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 24 150 28"

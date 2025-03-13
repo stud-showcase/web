@@ -17,7 +17,7 @@ type Props = {
   mobile?: boolean;
 };
 
-export function UserProfileIcon({ mobile }: PropsWithChildren<Props>) {
+export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
   const { setIsLoggedIn } = useContext(AuthContext);
 
   const logout = () => {

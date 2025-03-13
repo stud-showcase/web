@@ -10,7 +10,7 @@ import {
 import { LogOut, Users } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "@/shared/state";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 
 export function ProfileIcon() {
@@ -19,6 +19,7 @@ export function ProfileIcon() {
   const logout = () => {
     localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
+    router.visit("/");
   };
 
   return (
