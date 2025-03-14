@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/shared/ui/Accordion";
+import { LeaveRequestWrapper } from "@/features/LeaveRequestWrapper";
 
 export default function Main() {
   return (
@@ -27,7 +28,9 @@ export default function Main() {
               Платформа, обеспечивающая взаимодействие заказчиков, студентов и
               преподавателей в рамках образовательного процесса СевГУ.
             </Text>
-            <Button size="lg">Оставить заявку на проект</Button>
+            <LeaveRequestWrapper>
+              <Button size="lg">Оставить заявку на проект</Button>
+            </LeaveRequestWrapper>
           </section>
 
           <section className="px-6 py-16 w-full bg-muted/40">
