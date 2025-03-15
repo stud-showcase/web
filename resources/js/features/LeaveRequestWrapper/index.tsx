@@ -14,16 +14,8 @@ import { LeaveRequestForm } from "./ui/LeaveRequestForm";
 import { DialogClose } from "@radix-ui/react-dialog";
 
 export function LeaveRequestWrapper({ children }: { children: ReactNode }) {
-  const onOpenChange = (isOpen: boolean) => {
-    if (isOpen) router.push({ url: "#leave-request" });
-    else router.push({ url: window.location.pathname });
-  };
-
   return (
-    <Dialog
-      onOpenChange={onOpenChange}
-      open={window.location.hash === "#leave-request"}
-    >
+    <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-4xl w-11/12 overflow-y-auto h-[95vh] custom-scrollbar">
         <DialogHeader>
