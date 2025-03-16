@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/Dialog";
-import { router } from "@inertiajs/react";
 import { ReactNode } from "react";
 import { LeaveRequestForm } from "./ui/LeaveRequestForm";
 import { DialogClose } from "@radix-ui/react-dialog";

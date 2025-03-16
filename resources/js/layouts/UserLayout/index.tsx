@@ -7,10 +7,10 @@ export function UserLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <div className="min-h-screen">
-        <Container className="mt-8">
+        <Container className="pt-8">
           <Header />
         </Container>
-        <main>{children}</main>
+        <main className="h-full">{children}</main>
       </div>
       <div className="mt-20">
         <Footer />

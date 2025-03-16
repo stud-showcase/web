@@ -1,0 +1,122 @@
+import { Project } from "../types";
+
+export const mockProjects: Project[] = [
+  {
+    id: 1,
+    title: "Редизайн сайта",
+    description:
+      "Полный редизайн корпоративного сайта с учетом современных требований к UX/UI. Включает адаптивный дизайн, интеграцию с внутренними системами и улучшение производительности.",
+    customer: "ООО ТехКорп",
+    status: "in_progress",
+    complexity: "hard",
+    tags: ["веб", "дизайн", "интеграция"],
+    isHiring: true,
+  },
+  {
+    id: 2,
+    title: "Мобильное приложение",
+    description:
+      "Создание мобильного приложения для социальной сети с функциями обмена сообщениями, публикации контента и интеграции с API.",
+    customer: "ООО СоцИнк",
+    status: "under_review",
+    complexity: "medium",
+    tags: ["мобильное", "социальные сети", "api"],
+    isHiring: false,
+  },
+  {
+    id: 3,
+    title: "Система учета",
+    description:
+      "Разработка внутренней системы учета для автоматизации процессов в компании. Включает модули аналитики, отчетности и управления задачами.",
+    customer: "АО Инновации",
+    status: "completed",
+    complexity: "easy",
+    tags: ["внутренние системы", "аналитика", "отчетность"],
+    isHiring: false,
+  },
+  {
+    id: 4,
+    title: "CRM-система",
+    description:
+      "Разработка CRM-системы для управления клиентами и продажами. Интеграция с почтой и мессенджерами.",
+    customer: "ООО БизнесПлюс",
+    status: "in_progress",
+    complexity: "medium",
+    tags: ["crm", "интеграция", "бизнес"],
+    isHiring: true,
+  },
+  {
+    id: 5,
+    title: "Онлайн-магазин",
+    description:
+      "Создание онлайн-магазина с каталогом товаров, корзиной и системой оплаты.",
+    customer: "ИП Иванов",
+    status: "completed",
+    complexity: "hard",
+    tags: ["ecommerce", "платежи", "веб"],
+    isHiring: false,
+  },
+  {
+    id: 6,
+    title: "Образовательная платформа",
+    description:
+      "Платформа для онлайн-курсов с поддержкой видеоуроков и тестирования.",
+    customer: "ООО Образование",
+    status: "under_review",
+    complexity: "medium",
+    tags: ["образование", "видео", "тесты"],
+    isHiring: true,
+  },
+  {
+    id: 7,
+    title: "Система бронирования",
+    description:
+      "Разработка системы бронирования для отелей с интеграцией календаря и уведомлений.",
+    customer: "ООО ОтельСервис",
+    status: "in_progress",
+    complexity: "easy",
+    tags: ["бронирование", "уведомления", "веб"],
+    isHiring: false,
+  },
+  {
+    id: 8,
+    title: "Приложение для фитнеса",
+    description: "Мобильное приложение для отслеживания тренировок и питания.",
+    customer: "ООО ФитнесПро",
+    status: "completed",
+    complexity: "medium",
+    tags: ["фитнес", "мобильное", "здоровье"],
+    isHiring: false,
+  },
+  {
+    id: 9,
+    title: "Панель аналитики",
+    description: "Создание панели аналитики для визуализации данных бизнеса.",
+    customer: "АО Данные",
+    status: "in_progress",
+    complexity: "hard",
+    tags: ["аналитика", "визуализация", "дашборд"],
+    isHiring: true,
+  },
+  {
+    id: 10,
+    title: "Игра для обучения",
+    description:
+      "Разработка образовательной игры для детей с интерактивными заданиями.",
+    customer: "ООО Развитие",
+    status: "under_review",
+    complexity: "easy",
+    tags: ["образование", "игра", "дети"],
+    isHiring: false,
+  },
+  {
+    id: 11,
+    title: "Система управления задачами",
+    description: "Разработка системы управления задачами для командной работы.",
+    customer: "ООО Команда",
+    status: "completed",
+    complexity: "medium",
+    tags: ["управление", "команда", "задачи"],
+    isHiring: false,
+  },
+];

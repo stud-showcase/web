@@ -11,7 +11,7 @@ export default function TaskBank() {
         <title>Банк задач</title>
       </Head>
       <UserLayout>
-        <Container className="mt-8">
+        <Container className="pt-8">
           <Heading level={1}>Банк задач</Heading>
           <div className="mt-4">
             <Text>Контент страницы банка задач</Text>

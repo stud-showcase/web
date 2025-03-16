@@ -11,6 +11,10 @@ Route::get('/projects', function () {
     return Inertia::render('user/Projects');
 });
 
+Route::get('/my-projects', function () {
+    return Inertia::render('user/Projects');
+});
+
 Route::get('/task-bank', function () {
     return Inertia::render('user/TaskBank');
 });
