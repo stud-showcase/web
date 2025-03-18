@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/app/Dockerfile
+    container_name: showcase_app
+    restart: unless-stopped
+    volumes:
+      - ..:/var/www
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=local
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=showcase
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: showcase
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/default.cnf:/etc/mysql/conf.d/default.cnf
+
+volumes:
+  mysql_data:
