@@ -1,4 +1,3 @@
-import { CardListWrapper } from "@/features/CardListWrapper";
 import { SearchBar } from "@/features/SearchBar";
 import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
 import { UserLayout } from "@/layouts/UserLayout";
@@ -7,13 +6,14 @@ import { mockTasks } from "./mock";
 import { TaskCard } from "./ui/TaskCard";
 import { TasksFilterPanel } from "./ui/TaskFilterPanel";
 
-function TaskList() {
+function TaskBankContent() {
   return (
-    <CardListWrapper>
+    <div className="grid grid-cols-1 gap-6">
+      <SearchBar />
       {mockTasks.map((task) => (
         <TaskCard task={task} key={task.id} />
       ))}
-    </CardListWrapper>
+    </div>
   );
 }
 
@@ -27,8 +27,7 @@ export default function TaskBank() {
         <FiltersItemsLayout
           heading="Банк задач"
           filterPanel={<TasksFilterPanel />}
-          searchBar={<SearchBar />}
-          items={<TaskList />}
+          content={<TaskBankContent />}
         />
       </UserLayout>
     </>

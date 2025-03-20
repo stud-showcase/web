@@ -28,13 +28,6 @@ export function NavLinks({ mobile }: Props) {
       {isLoggedIn && (
         <>
           <NavLink
-            href="/my-projects"
-            withUnderline={!mobile}
-            isActive={window.location.pathname.startsWith("/my-projects")}
-          >
-            Мои проекты
-          </NavLink>
-          <NavLink
             href="/task-bank"
             withUnderline={!mobile}
             isActive={window.location.pathname.startsWith("/task-bank")}
