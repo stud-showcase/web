@@ -1,4 +1,3 @@
-// components/projects/FilterPanel.tsx
 import { Button } from "@/shared/ui/Button";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { Text } from "@/shared/ui/Text";
