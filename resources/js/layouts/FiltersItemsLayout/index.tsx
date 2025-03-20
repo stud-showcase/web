@@ -6,14 +6,14 @@ type Props = {
   heading: string;
   searchBar: ReactNode;
   filterPanel: ReactNode;
-  cards: ReactNode;
+  items: ReactNode;
 };
 
 export function FiltersItemsLayout({
   heading,
   searchBar,
   filterPanel,
-  cards,
+  items,
 }: Props) {
   return (
     <>
@@ -25,7 +25,7 @@ export function FiltersItemsLayout({
 
         <div className="grid mt-6 grid-cols-1 lg:grid-cols-4 gap-6">
           {filterPanel}
-          {cards}
+          {items}
         </div>
       </Container>
     </>

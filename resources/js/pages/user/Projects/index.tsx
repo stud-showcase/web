@@ -1,9 +1,9 @@
+import { SearchBar } from "@/features/SearchBar";
+import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
 import { UserLayout } from "@/layouts/UserLayout";
 import { Head } from "@inertiajs/react";
-import { SearchBar } from "./ui/SearchBar";
-import { FilterPanel } from "./ui/FilterPanel";
 import { ProjectList } from "./ui/ProjectList";
-import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
+import { ProjectsFilterPanel } from "./ui/ProjectsFilterPanel";
 
 export default function Projects() {
   return (
@@ -15,8 +15,8 @@ export default function Projects() {
         <FiltersItemsLayout
           heading="Проекты"
           searchBar={<SearchBar />}
-          filterPanel={<FilterPanel />}
-          cards={<ProjectList />}
+          filterPanel={<ProjectsFilterPanel />}
+          items={<ProjectList />}
         />
       </UserLayout>
     </>
