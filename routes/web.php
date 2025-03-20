@@ -23,6 +23,10 @@ Route::get('/task-bank', function () {
     return Inertia::render('user/TaskBank');
 });
 
+Route::get('/task-bank/{id}', function ($id) {
+    return Inertia::render('user/TaskBank', ["id" => $id]);
+});
+
 Route::get('/profile', function () {
     return Inertia::render('user/Profile');
 });

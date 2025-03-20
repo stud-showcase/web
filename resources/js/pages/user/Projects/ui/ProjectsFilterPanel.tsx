@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/Select";
+import { ScrollArea } from "@/shared/ui/ScrollArea"; // Импорт ScrollArea
 import { FilterPanelWrapper } from "@/features/FilterPanelWrapper";
 
 export function ProjectsFilterPanel() {
@@ -70,14 +71,46 @@ export function ProjectsFilterPanel() {
         <AccordionItem value="tags">
           <AccordionTrigger>Теги</AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-2 max-h-40 overflow-y-auto">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="tag-sample" />
-                <label htmlFor="tag-sample">
-                  <Text variant="small">Sample Tag</Text>
-                </label>
+            <ScrollArea className="h-40 w-full">
+              <div className="space-y-2">
+                {[
+                  "веб",
+                  "дизайн",
+                  "интеграция",
+                  "мобильное",
+                  "социальные сети",
+                  "api",
+                  "внутренние системы",
+                  "аналитика",
+                  "отчетность",
+                  "crm",
+                  "бизнес",
+                  "ecommerce",
+                  "платежи",
+                  "образование",
+                  "видео",
+                  "тесты",
+                  "бронирование",
+                  "уведомления",
+                  "фитнес",
+                  "здоровье",
+                  "визуализация",
+                  "дашборд",
+                  "игра",
+                  "дети",
+                  "управление",
+                  "команда",
+                  "задачи",
+                ].map((tag) => (
+                  <div key={tag} className="flex items-center space-x-2">
+                    <Checkbox id={`tag-${tag}`} />
+                    <label htmlFor={`tag-${tag}`}>
+                      <Text variant="small">{tag}</Text>
+                    </label>
+                  </div>
+                ))}
               </div>
-            </div>
+            </ScrollArea>
           </AccordionContent>
         </AccordionItem>
 

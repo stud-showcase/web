@@ -1,8 +1,21 @@
-import { Heading } from "@/shared/ui/Heading";
+import { CardListWrapper } from "@/features/CardListWrapper";
+import { SearchBar } from "@/features/SearchBar";
+import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
 import { UserLayout } from "@/layouts/UserLayout";
 import { Head } from "@inertiajs/react";
-import { Text } from "@/shared/ui/Text";
-import { Container } from "@/shared/ui/Container";
+import { mockTasks } from "./mock";
+import { TaskCard } from "./ui/TaskCard";
+import { TasksFilterPanel } from "./ui/TaskFilterPanel";
+
+function TaskList() {
+  return (
+    <CardListWrapper>
+      {mockTasks.map((task) => (
+        <TaskCard task={task} key={task.id} />
+      ))}
+    </CardListWrapper>
+  );
+}
 
 export default function TaskBank() {
   return (
@@ -11,12 +24,12 @@ export default function TaskBank() {
         <title>Банк задач</title>
       </Head>
       <UserLayout>
-        <Container className="pt-8">
-          <Heading level={1}>Банк задач</Heading>
-          <div className="mt-4">
-            <Text>Контент страницы банка задач</Text>
-          </div>
-        </Container>
+        <FiltersItemsLayout
+          heading="Банк задач"
+          filterPanel={<TasksFilterPanel />}
+          searchBar={<SearchBar />}
+          items={<TaskList />}
+        />
       </UserLayout>
     </>
   );
