@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('customer');
             $table->tinyInteger('max_projects')->default(1);
             $table->tinyInteger('max_members');

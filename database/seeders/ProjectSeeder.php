@@ -24,12 +24,35 @@ class ProjectSeeder extends Seeder
             }
 
             $task = $availableTasks->random();
+            $mentor = User::whereNull('group_id')->inRandomOrder()->first();
 
-            Project::factory()->create([
+            if (!$mentor) {
+                $mentor = User::factory()->create(['group_id' => null]);
+            }
+
+            $project = Project::factory()->create([
                 'task_id' => $task->id,
                 'status_id' => fn() => ProjectStatus::inRandomOrder()->first()->id,
-                'mentor_id' => fn() => User::inRandomOrder()->first()->id,
+                'mentor_id' => $mentor->id,
             ]);
+
+            $maxMembers = $task->max_members;
+            $participantsCount = rand(1, $maxMembers);
+            $participants = User::whereNotNull('group_id')
+                ->where('id', '!=', $mentor->id)
+                ->inRandomOrder()
+                ->limit($participantsCount)
+                ->get();
+
+            $creatorAssigned = false;
+            foreach ($participants as $participant) {
+                $isCreator = !$creatorAssigned;
+                $project->users()->attach($participant->id, [
+                    'position' => fake()->jobTitle(),
+                    'is_creator' => $isCreator,
+                ]);
+                $creatorAssigned = true;
+            }
 
             $task->projects_count++;
         }

@@ -10,7 +10,7 @@ class TaskFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(3),
-            'description' => $this->faker->optional()->paragraph(),
+            'description' => $this->faker->optional()->realText(200),
             'customer' => $this->faker->name(),
             'max_projects' => $this->faker->numberBetween(1, 5),
             'max_members' => $this->faker->numberBetween(1, 10),

@@ -12,10 +12,13 @@ class UserSeeder extends Seeder
     {
         User::factory()
             ->count(50)
-            ->create()
-            ->each(function ($user) {
+            ->create();
+
+        User::all()->each(function ($user) {
+            if (rand(0, 100) < 70) {
                 $user->group_id = Group::inRandomOrder()->first()->id;
                 $user->save();
-            });
+            }
+        });
     }
 }
