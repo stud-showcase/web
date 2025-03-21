@@ -53,8 +53,8 @@ export function LeaveRequestForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="description">Описание проекта</Label>
-          <Textarea id="description" placeholder="Опишите проект" />
+          <Label htmlFor="description">Описание проекта *</Label>
+          <Textarea id="description" placeholder="Опишите проект" required />
         </div>
 
         <div className="space-y-2">
