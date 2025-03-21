@@ -15,4 +15,9 @@ class ProjectFile extends Model
         'project_id',
         'path'
     ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
 }

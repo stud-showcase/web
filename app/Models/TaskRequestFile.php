@@ -15,4 +15,9 @@ class TaskRequestFile extends Model
         'task_request_id',
         'path',
     ];
+
+    public function taskRequest()
+    {
+        return $this->belongsTo(TaskRequest::class);
+    }
 }

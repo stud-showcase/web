@@ -15,4 +15,9 @@ class Tag extends Model
         'id',
         'name'
     ];
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'task_tags');
+    }
 }

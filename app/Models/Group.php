@@ -15,4 +15,14 @@ class Group extends Model
         'id',
         'name',
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'group_task');
+    }
 }

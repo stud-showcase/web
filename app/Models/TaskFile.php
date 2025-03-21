@@ -15,4 +15,9 @@ class TaskFile extends Model
         'task_id',
         'path'
     ];
+
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
 }
