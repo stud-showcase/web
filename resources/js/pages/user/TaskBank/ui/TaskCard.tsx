@@ -6,7 +6,7 @@ import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
 import { ArrowRight, Calendar, Users } from "lucide-react";
 import { useContext } from "react";
-import { Task } from "../types";
+import { Task } from "@/shared/types/Task";
 
 function Badges({ task }: { task: Task }) {
   const complexityVariant = (complexity: Task["complexity"]) => {
@@ -48,7 +48,7 @@ function Content({ task }: { task: Task }) {
     <>
       <Text variant="muted" className="flex gap-1 mt-4">
         <span className="font-medium">Заказчик:</span>
-        {task.customer}
+        {task.customer.name}
       </Text>
       <Text className="mt-4 line-clamp-3">{task.description}</Text>
     </>
@@ -75,7 +75,7 @@ function Footer({ task }: { task: Task }) {
       )}
       <Button asChild size="sm">
         <Link
-          href={`/tasks/${task.id}`}
+          href={`/task-bank/${task.id}`}
           className="flex items-center justify-center gap-1 md:flex-initial flex-1"
         >
           Подробнее

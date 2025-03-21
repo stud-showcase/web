@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 export function FilterPanelWrapper({ children }: { children: ReactNode }) {
   return (
-    <div className="lg:col-span-1 border shadow-sm rounded-lg px-6 pb-4">
+    <div className="lg:col-span-1 bg-white border shadow-sm rounded-lg px-6 pb-4">
       <div className="sticky top-4 space-y-4">
         {children}
         <div className="flex gap-2">
