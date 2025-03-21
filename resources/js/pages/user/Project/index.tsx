@@ -2,7 +2,7 @@ import { UserLayout } from "@/layouts/UserLayout";
 import { Container } from "@/shared/ui/Container";
 import { Heading } from "@/shared/ui/Heading";
 
-export default function Project({ id }: { id: number }) {
+export default function ProjectPage({ id }: { id: number }) {
   console.log(id);
   return (
     <UserLayout>

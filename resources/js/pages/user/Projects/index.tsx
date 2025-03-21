@@ -37,7 +37,7 @@ function ProjectsContent() {
   );
 }
 
-export default function Projects() {
+export default function ProjectsPage() {
   return (
     <>
       <Head>

@@ -12,7 +12,7 @@ import {
 } from "@/shared/ui/Accordion";
 import { LeaveRequestWrapper } from "@/features/LeaveRequestWrapper";
 
-export default function Main() {
+export default function MainPage() {
   return (
     <>
       <Head>

@@ -17,7 +17,7 @@ function TaskBankContent() {
   );
 }
 
-export default function TaskBank() {
+export default function TaskBankPage() {
   return (
     <>
       <Head>

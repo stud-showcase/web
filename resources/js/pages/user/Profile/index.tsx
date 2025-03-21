@@ -1,7 +1,7 @@
 import { Heading } from "@/shared/ui/Heading";
 import { Text } from "@/shared/ui/Text";
 
-export default function Profile() {
+export default function ProfilePage() {
   return (
     <div className="p-4">
       <Heading level={1}>Страница профиля</Heading>
