@@ -12,10 +12,9 @@ Route::get('/', function () {
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
 Route::get('/projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
 
-Route::prefix('auth')->group(function () {
+Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/{provider}/redirect', [SocialController::class, 'redirectToProvider'])->name('login');
     Route::get('/{provider}/callback', [SocialController::class, 'handleProviderCallback']);
-    Route::get('/{provider}/logout', [SocialController::class, 'logout'])->name('logout');
 });
 
 Route::middleware('auth')->group(function () {
@@ -54,4 +53,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/analytics', function () {
         return Inertia::render('admin/Analytics');
     });
+
+    Route::get('/auth/{provider}/logout', [SocialController::class, 'logout'])->name('logout');
 });

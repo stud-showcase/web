@@ -32,6 +32,7 @@ class SocialController extends Controller
             $user = User::updateOrCreate(
                 ['email' => $socialUser['email']],
                 [
+                    'id' => $socialUser['mapping_id'],
                     'first_name' => $socialUser['first_name'],
                     'second_name' => $socialUser['family_name'],
                     'last_name' => $socialUser['middle_name'] ?? '',
@@ -40,8 +41,6 @@ class SocialController extends Controller
             );
 
             Auth::login($user);
-
-            $request->session()->regenerate();
 
             return redirect('/tasks');
         } catch (\Exception $e) {
@@ -54,8 +53,6 @@ class SocialController extends Controller
         $redirectUri = url('/');
 
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
 
         $logoutUrl = env('KEYCLOAK_BASE_URL') . '/realms/' . env('KEYCLOAK_REALM') . '/protocol/openid-connect/logout';
         $query = http_build_query([

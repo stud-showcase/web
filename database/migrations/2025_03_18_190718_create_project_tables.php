@@ -19,7 +19,8 @@ return new class extends Migration
             $table->foreignId('status_id')->constrained('project_status');
             $table->text('annotation')->nullable();
             $table->boolean('is_close')->default(false);
-            $table->foreignId('mentor_id')->nullable()->constrained('users');
+            $table->uuid('mentor_id')->nullable();
+            $table->foreign('mentor_id')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
         });
 
