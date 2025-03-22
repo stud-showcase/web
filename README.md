@@ -3,11 +3,11 @@
 ## Инициализация проекта
 1. Сборка и запуск контейнеров:
 ```bash
-docker-compose -f docker/docker-compose.yml up -d --build
+make build
 ```
 2. Выполнение миграций:
 ```bash
-docker-compose -f docker/docker-compose.yml exec app php artisan migrate
+make migrate
 ```
 
 ## Доступ к сервисам
@@ -22,20 +22,19 @@ docker-compose -f docker/docker-compose.yml exec app php artisan migrate
 ### Управление контейнерами
 - Запуск контейнеров:
 ```bash
-docker-compose -f docker/docker-compose.yml up -d
+make up
 ```
 - Остановка контейнеров:
 ```bash
-docker-compose -f docker/docker-compose.yml down
+make down
 ```
 
 ### Работа с базой данных
 - Выполнение миграций:
 ```bash
-docker-compose -f docker/docker-compose.yml exec app php artisan migrate
+make migrate
 ```
-
 - Перезапуск миграций с заполнением тестовыми данными:
 ```bash
-docker-compose -f docker/docker-compose.yml exec app php artisan migrate:fresh --seed
+make migrate-fresh
 ```
