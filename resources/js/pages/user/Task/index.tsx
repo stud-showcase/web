@@ -10,7 +10,6 @@ import {
   UsersIcon,
 } from "lucide-react";
 import { UserLayout } from "@/layouts/UserLayout";
-import { TaskComplexity } from "@/shared/types/Task";
 import { Text } from "@/shared/ui/Text";
 import { Heading } from "@/shared/ui/Heading";
 import { Container } from "@/shared/ui/Container";
@@ -24,14 +23,9 @@ import {
   BreadcrumbSeparator,
 } from "@/shared/ui/Breadcrumb";
 import { mockTask } from "./mock";
+import { ComplexityBadge } from "@/features/ComplexityBadge";
 
 export default function TaskPage() {
-  const difficultyColors: Record<TaskComplexity, string> = {
-    easy: "bg-success",
-    medium: "bg-warning",
-    hard: "bg-destructive",
-  };
-
   const formattedDeadline = mockTask.deadline.toLocaleDateString("ru-RU", {
     day: "numeric",
     month: "long",
@@ -50,7 +44,7 @@ export default function TaskPage() {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink>
-                    <Link href="/task-bank">Банк задач</Link>
+                    <Link href="/tasks">Банк задач</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
@@ -67,17 +61,7 @@ export default function TaskPage() {
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <Heading level={2}>{mockTask.title}</Heading>
-                    <Badge
-                      className={`${
-                        difficultyColors[mockTask.complexity]
-                      } text-white`}
-                    >
-                      {mockTask.complexity === "easy"
-                        ? "Легкая"
-                        : mockTask.complexity === "medium"
-                        ? "Средняя"
-                        : "Сложная"}
-                    </Badge>
+                    <ComplexityBadge complexity={mockTask.complexity} />
                   </div>
                 </CardHeader>
                 <CardContent>

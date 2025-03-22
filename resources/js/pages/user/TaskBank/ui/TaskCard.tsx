@@ -7,21 +7,9 @@ import { Link } from "@inertiajs/react";
 import { ArrowRight, Calendar, Users } from "lucide-react";
 import { useContext } from "react";
 import { Task } from "@/shared/types/Task";
+import { ComplexityBadge } from "@/features/ComplexityBadge";
 
 function Badges({ task }: { task: Task }) {
-  const complexityVariant = (complexity: Task["complexity"]) => {
-    switch (complexity) {
-      case "easy":
-        return "success";
-      case "medium":
-        return "warning";
-      case "hard":
-        return "destructive";
-      default:
-        return "outline";
-    }
-  };
-
   return (
     <>
       <Badge variant="outline" className="flex items-center gap-1">
@@ -32,13 +20,7 @@ function Badges({ task }: { task: Task }) {
         <Calendar className="w-4 h-4" />
         {task.deadline.toLocaleDateString()}
       </Badge>
-      <Badge variant={complexityVariant(task.complexity)}>
-        {task.complexity === "easy"
-          ? "Легкая"
-          : task.complexity === "medium"
-          ? "Средняя"
-          : "Сложная"}
-      </Badge>
+      <ComplexityBadge complexity={task.complexity} />
     </>
   );
 }
@@ -57,7 +39,7 @@ function Content({ task }: { task: Task }) {
 
 function Tags({ task }: { task: Task }) {
   return task.tags.map((tag) => (
-    <Badge key={tag} variant="outline" className="">
+    <Badge key={tag} variant="outline">
       {tag}
     </Badge>
   ));
@@ -75,7 +57,7 @@ function Footer({ task }: { task: Task }) {
       )}
       <Button asChild size="sm">
         <Link
-          href={`/task-bank/${task.id}`}
+          href={`/tasks/${task.id}`}
           className="flex items-center justify-center gap-1 md:flex-initial flex-1"
         >
           Подробнее

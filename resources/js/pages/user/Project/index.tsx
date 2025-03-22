@@ -3,7 +3,6 @@ import { Container } from "@/shared/ui/Container";
 import { Heading } from "@/shared/ui/Heading";
 
 export default function ProjectPage({ id }: { id: number }) {
-  console.log(id);
   return (
     <UserLayout>
       <Container className="mt-8">

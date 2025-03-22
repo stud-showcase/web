@@ -28,9 +28,9 @@ export function NavLinks({ mobile }: Props) {
       {isLoggedIn && (
         <>
           <NavLink
-            href="/task-bank"
+            href="/tasks"
             withUnderline={!mobile}
-            isActive={window.location.pathname.startsWith("/task-bank")}
+            isActive={window.location.pathname.startsWith("/tasks")}
           >
             Банк задач
           </NavLink>

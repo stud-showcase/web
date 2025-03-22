@@ -7,6 +7,7 @@ import { ArrowRight, Users, Clock, Settings, CheckCircle } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "@/shared/state";
 import { CardWrapper } from "@/features/CardWrapper";
+import { ComplexityBadge } from "@/features/ComplexityBadge";
 
 function Badges({ project }: { project: Project }) {
   const statusIcon = (status: Project["status"]) => {
@@ -19,19 +20,6 @@ function Badges({ project }: { project: Project }) {
         return <CheckCircle className="w-4 h-4 mr-2" />;
       default:
         return null;
-    }
-  };
-
-  const complexityVariant = (complexity: Project["complexity"]) => {
-    switch (complexity) {
-      case "easy":
-        return "success";
-      case "medium":
-        return "warning";
-      case "hard":
-        return "destructive";
-      default:
-        return "outline";
     }
   };
 
@@ -51,13 +39,7 @@ function Badges({ project }: { project: Project }) {
           ? "В разработке"
           : "Завершён"}
       </Badge>
-      <Badge variant={complexityVariant(project.complexity)}>
-        {project.complexity === "easy"
-          ? "Легкий"
-          : project.complexity === "medium"
-          ? "Средний"
-          : "Сложный"}
-      </Badge>
+      <ComplexityBadge complexity={project.complexity} />
     </>
   );
 }

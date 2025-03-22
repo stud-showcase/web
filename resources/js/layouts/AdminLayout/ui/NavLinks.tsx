@@ -30,10 +30,10 @@ export function NavLinks({ mobile }: Props) {
         mobile={mobile}
       />
       <NavLink
-        href="/admin/task-bank"
+        href="/admin/tasks"
         icon={Archive}
         label="Банк задач"
-        isActive={window.location.pathname.startsWith("/admin/task-bank")}
+        isActive={window.location.pathname.startsWith("/admin/tasks")}
         mobile={mobile}
       />
       <NavLink
