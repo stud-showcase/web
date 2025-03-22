@@ -45,7 +45,6 @@ class SocialController extends Controller
 
             return redirect('/tasks');
         } catch (\Exception $e) {
-            dd('Как-то так - ' . $e->getMessage());
             return redirect('/')->with('error', 'Ошибка авторизации: ' . $e->getMessage());
         }
     }
