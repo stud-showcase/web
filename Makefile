@@ -16,5 +16,11 @@ migrate:
 migrate-fresh:
 	$(APP_EXEC) php artisan migrate:fresh --seed
 
-app:
-	$(APP_EXEC) $(CMD)
+shell:
+	$(APP_EXEC) bash
+
+run:
+	$(APP_EXEC) $(filter-out $@,$(MAKECMDGOALS))
+
+%:
+	@:
