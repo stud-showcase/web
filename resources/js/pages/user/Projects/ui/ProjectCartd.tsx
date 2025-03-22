@@ -2,43 +2,20 @@ import { Link } from "@inertiajs/react";
 import { Badge } from "@/shared/ui/Badge";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
-import { Project } from "../types";
-import { ArrowRight, Users, Clock, Settings, CheckCircle } from "lucide-react";
+import { Project } from "@/shared/types/Project";
+import { ArrowRight, Users } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "@/shared/state";
 import { CardWrapper } from "@/features/CardWrapper";
 import { ComplexityBadge } from "@/features/ComplexityBadge";
+import { StatusBadge } from "@/features/StatusBadge";
+import { HiringBadge } from "@/features/HiringBadge";
 
 function Badges({ project }: { project: Project }) {
-  const statusIcon = (status: Project["status"]) => {
-    switch (status) {
-      case "under_review":
-        return <Clock className="w-4 h-4 mr-2" />;
-      case "in_progress":
-        return <Settings className="w-4 h-4 mr-2" />;
-      case "completed":
-        return <CheckCircle className="w-4 h-4 mr-2" />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <>
-      {project.isHiring && (
-        <Badge variant="outline" className="flex items-center gap-1">
-          <Users className="w-4 h-4" />
-          Набор открыт
-        </Badge>
-      )}
-      <Badge variant="secondary" className="flex items-center">
-        {statusIcon(project.status)}
-        {project.status === "under_review"
-          ? "В рассмотрении"
-          : project.status === "in_progress"
-          ? "В разработке"
-          : "Завершён"}
-      </Badge>
+      {project.isHiring && <HiringBadge />}
+      <StatusBadge status={project.status} />
       <ComplexityBadge complexity={project.complexity} />
     </>
   );

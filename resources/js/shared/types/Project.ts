@@ -1,5 +1,6 @@
+import { TaskComplexity } from "./Task";
+
 export type ProjectStatus = "under_review" | "in_progress" | "completed";
-export type ProjectComplexity = "easy" | "medium" | "hard";
 
 export interface Project {
   id: number;
@@ -7,7 +8,7 @@ export interface Project {
   description: string;
   customer: string;
   status: ProjectStatus;
-  complexity: ProjectComplexity;
+  complexity: TaskComplexity;
   tags: string[];
   isHiring: boolean;
 }

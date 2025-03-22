@@ -18,8 +18,7 @@ Route::prefix('auth')->group(function () {
     Route::get('/{provider}/logout', [SocialController::class, 'logout'])->name('logout');
 });
 
-// TODO: return!
-// Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/tasks', function () {
         return Inertia::render('user/TaskBank');
     });
@@ -55,4 +54,4 @@ Route::prefix('auth')->group(function () {
     Route::get('/admin/analytics', function () {
         return Inertia::render('admin/Analytics');
     });
-// });
+});
