@@ -1,18 +1,9 @@
-import { useContext } from "react";
-import { AuthContext } from "@/shared/state";
 import { Button } from "@/shared/ui/Button";
 
 export function SignInButton() {
-  const { setIsLoggedIn } = useContext(AuthContext);
-
-  const login = () => {
-    localStorage.setItem("isLoggedIn", "true");
-    setIsLoggedIn(true);
-  };
-
   return (
-    <Button onClick={login}>
-      Войти
+    <Button asChild>
+      <a href="/auth/keycloak/redirect">Войти</a>
     </Button>
   );
 }
