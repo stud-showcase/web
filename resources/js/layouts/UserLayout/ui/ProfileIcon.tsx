@@ -8,8 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/DropdownMenu";
 import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react";
-import { PropsWithChildren, useContext } from "react";
-import { AuthContext } from "@/shared/state";
+import { PropsWithChildren } from "react";
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 
@@ -18,13 +17,6 @@ type Props = {
 };
 
 export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
-  const { setIsLoggedIn } = useContext(AuthContext);
-
-  const logout = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
-  };
-
   return (
     <>
       <DropdownMenu>
@@ -73,7 +65,7 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={logout}>
+          <DropdownMenuItem>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Выйти</span>
           </DropdownMenuItem>

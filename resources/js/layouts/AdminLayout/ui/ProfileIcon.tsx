@@ -8,20 +8,10 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/DropdownMenu";
 import { LogOut, Users } from "lucide-react";
-import { useContext } from "react";
-import { AuthContext } from "@/shared/state";
-import { Link, router } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 
 export function ProfileIcon() {
-  const { setIsLoggedIn } = useContext(AuthContext);
-
-  const logout = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
-    router.visit("/");
-  };
-
   return (
     <>
       <DropdownMenu>
@@ -44,7 +34,7 @@ export function ProfileIcon() {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={logout}>
+          <DropdownMenuItem>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Выйти</span>
           </DropdownMenuItem>

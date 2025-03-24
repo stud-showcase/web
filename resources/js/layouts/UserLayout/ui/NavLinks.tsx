@@ -7,7 +7,7 @@ type Props = {
 };
 
 export function NavLinks({ mobile }: Props) {
-  const { isLoggedIn } = useContext(AuthContext);
+  const isLoggedIn = useContext(AuthContext);
 
   return (
     <>

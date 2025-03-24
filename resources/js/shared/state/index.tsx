@@ -1,9 +1,3 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext } from "react";
 
-export const AuthContext = createContext<{
-  isLoggedIn: boolean;
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
-}>({
-  isLoggedIn: localStorage.getItem("isLoggedIn") === "true" ? true : false,
-  setIsLoggedIn: () => {},
-});
+export const AuthContext = createContext<boolean | undefined>(undefined);

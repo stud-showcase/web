@@ -46,7 +46,7 @@ function Tags({ task }: { task: Task }) {
 }
 
 function Footer({ task }: { task: Task }) {
-  const { isLoggedIn } = useContext(AuthContext);
+  const isLoggedIn = useContext(AuthContext);
 
   return (
     <>

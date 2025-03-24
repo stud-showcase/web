@@ -54,5 +54,5 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('admin/Analytics');
     });
 
-    Route::get('/auth/{provider}/logout', [SocialController::class, 'logout'])->name('logout');
+    Route::post('/auth/{provider}/logout', [SocialController::class, 'logout'])->name('logout');
 });

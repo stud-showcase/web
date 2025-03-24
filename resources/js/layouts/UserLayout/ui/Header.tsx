@@ -1,7 +1,6 @@
 import { NavLinks } from "./NavLinks";
 import { LeaveRequestButton } from "./LeaveRequestButton";
 import { AuthContext } from "@/shared/state";
-import { useState } from "react";
 import { ProfileIcon } from "./ProfileIcon";
 import { Link } from "@inertiajs/react";
 import { SevSULogo } from "@/shared/ui/SevSULogo";
@@ -9,12 +8,10 @@ import { SignInButton } from "./SignInButton";
 import { MobileMenu } from "./MobileMenu";
 
 export function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn") === "true" ? true : false
-  );
+  const isLoggedIn = true;
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AuthContext.Provider value={isLoggedIn}>
       <header className="px-6 shadow-sm bg-white border h-[68px] rounded-lg flex items-center justify-between">
         <div className="h-full flex items-center gap-8">
           <Link href="/">

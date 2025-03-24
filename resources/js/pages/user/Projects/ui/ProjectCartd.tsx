@@ -42,7 +42,7 @@ function Tags({ project }: { project: Project }) {
 }
 
 function Footer({ project }: { project: Project }) {
-  const { isLoggedIn } = useContext(AuthContext);
+  const isLoggedIn = useContext(AuthContext);
 
   return (
     <>

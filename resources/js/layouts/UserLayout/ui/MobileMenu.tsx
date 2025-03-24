@@ -16,7 +16,7 @@ import { AuthContext } from "@/shared/state";
 import { NavLinks } from "./NavLinks";
 
 export function MobileMenu() {
-  const { isLoggedIn } = useContext(AuthContext);
+  const isLoggedIn = useContext(AuthContext);
 
   return (
     <Sheet>
