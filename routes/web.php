@@ -17,7 +17,7 @@ Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/{provider}/callback', [SocialController::class, 'handleProviderCallback']);
 });
 
-Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
     Route::get('/tasks', function () {
         return Inertia::render('user/TaskBank');
     });
@@ -59,4 +59,4 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::post('/auth/{provider}/logout', [SocialController::class, 'logout'])->name('logout');
-});
+// });

@@ -1,3 +1,4 @@
+import { Project } from "@/shared/types/Project";
 import { Task } from "@/shared/types/Task";
 
 export const mockTask: Task = {
@@ -25,3 +26,46 @@ export const mockTask: Task = {
     { name: "Схема БД.sql", url: "/files/db-schema.sql" },
   ],
 };
+
+export const mockTaskProjects: Project[] = [
+  {
+    id: 1,
+    title: "Команда Альфа",
+    description: "Здесь должна быть аннотация",
+    customer: "ООО Техно",
+    status: "in_progress",
+    complexity: "medium",
+    tags: ["web", "react"],
+    isHiring: true,
+  },
+  {
+    id: 2,
+    title: "Команда Бета",
+    description: "Здесь должна быть аннотация",
+    customer: "ООО Техно",
+    status: "in_progress",
+    complexity: "medium",
+    tags: ["frontend", "typescript"],
+    isHiring: false,
+  },
+  {
+    id: 3,
+    title: "Команда Бета",
+    description: "Здесь должна быть аннотация",
+    customer: "ООО Техно",
+    status: "in_progress",
+    complexity: "medium",
+    tags: ["frontend", "typescript"],
+    isHiring: false,
+  },
+  {
+    id: 4,
+    title: "Команда Бета",
+    description: "Здесь должна быть аннотация",
+    customer: "ООО Техно",
+    status: "in_progress",
+    complexity: "medium",
+    tags: ["frontend", "typescript"],
+    isHiring: false,
+  },
+];
