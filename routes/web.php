@@ -26,6 +26,10 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('user/Task', ["id" => $id]);
     });
 
+    Route::get('/vacancies', function() {
+        return Inertia::render('user/Vacancies');
+    });
+
     Route::get('/profile', function () {
         return Inertia::render('user/Profile');
     });
