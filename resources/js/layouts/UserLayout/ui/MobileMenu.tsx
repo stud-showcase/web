@@ -11,12 +11,11 @@ import { LeaveRequestButton } from "./LeaveRequestButton";
 import { Separator } from "@/shared/ui/Separator";
 import { ProfileIcon } from "./ProfileIcon";
 import { SignInButton } from "./SignInButton";
-import { useContext } from "react";
-import { AuthContext } from "@/shared/state";
 import { NavLinks } from "./NavLinks";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 export function MobileMenu() {
-  const isLoggedIn = useContext(AuthContext);
+  const { isLoggedIn } = useAuth();
 
   return (
     <Sheet>

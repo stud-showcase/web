@@ -4,12 +4,11 @@ import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Project } from "@/shared/types/Project";
 import { ArrowRight, Users } from "lucide-react";
-import { useContext } from "react";
-import { AuthContext } from "@/shared/state";
 import { CardWrapper } from "@/features/CardWrapper";
 import { ComplexityBadge } from "@/features/ComplexityBadge";
 import { StatusBadge } from "@/features/StatusBadge";
 import { HiringBadge } from "@/features/HiringBadge";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 function Badges({ project }: { project: Project }) {
   return (
@@ -42,7 +41,7 @@ function Tags({ project }: { project: Project }) {
 }
 
 function Footer({ project }: { project: Project }) {
-  const isLoggedIn = useContext(AuthContext);
+  const { isLoggedIn } = useAuth();
 
   return (
     <>

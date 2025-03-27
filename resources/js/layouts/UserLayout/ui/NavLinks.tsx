@@ -1,13 +1,12 @@
-import { useContext } from "react";
-import { AuthContext } from "@/shared/state";
 import { NavLink } from "./NavLink";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 type Props = {
   mobile?: boolean;
 };
 
 export function NavLinks({ mobile }: Props) {
-  const isLoggedIn = useContext(AuthContext);
+  const { isLoggedIn } = useAuth();
 
   return (
     <>

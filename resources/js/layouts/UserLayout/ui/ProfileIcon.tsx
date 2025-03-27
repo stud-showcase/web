@@ -11,12 +11,18 @@ import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react";
 import { PropsWithChildren } from "react";
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 type Props = {
   mobile?: boolean;
 };
 
 export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
+  const { user } = useAuth();
+
+  const initials = `${user.firstName[0]}${user.lastName[0]}`;
+  const lastNameAndInitials = `${user.lastName} ${user.firstName[0]}.${user.middleName[0]}`;
+
   return (
     <>
       <DropdownMenu>
@@ -26,11 +32,11 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
               <div className="inline-flex gap-2 items-center">
                 <Avatar>
                   <AvatarFallback className="bg-primary text-white">
-                    ИИ
+                    {initials}
                   </AvatarFallback>
                 </Avatar>
                 <span className="font-medium text-primary text-sm">
-                  Иванов И.И.
+                  {lastNameAndInitials}
                 </span>
               </div>
               <div className="inline text-primary">
@@ -42,7 +48,7 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
               <Button variant="ghost" size={"icon"}>
                 <Avatar>
                   <AvatarFallback className="bg-primary text-white">
-                    ИИ
+                    {initials}
                   </AvatarFallback>
                 </Avatar>
               </Button>
@@ -50,7 +56,7 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel>Иванов И.И.</DropdownMenuLabel>
+          <DropdownMenuLabel>{lastNameAndInitials}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/profile">

@@ -1,11 +1,9 @@
 import { CardWrapper } from "@/features/CardWrapper";
-import { AuthContext } from "@/shared/state";
 import { Badge } from "@/shared/ui/Badge";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
 import { ArrowRight, Calendar, Users } from "lucide-react";
-import { useContext } from "react";
 import { Task } from "@/shared/types/Task";
 import { ComplexityBadge } from "@/features/ComplexityBadge";
 
@@ -46,15 +44,11 @@ function Tags({ task }: { task: Task }) {
 }
 
 function Footer({ task }: { task: Task }) {
-  const isLoggedIn = useContext(AuthContext);
-
   return (
     <>
-      {isLoggedIn && (
-        <Button variant="outline" size="sm" className="md:flex-initial flex-1">
-          Взять задачу
-        </Button>
-      )}
+      <Button variant="outline" size="sm" className="md:flex-initial flex-1">
+        Взять задачу
+      </Button>
       <Button asChild size="sm">
         <Link
           href={`/tasks/${task.id}`}
