@@ -6,7 +6,7 @@ export function FilterPanelWrapper({ children }: { children: ReactNode }) {
     <div className="lg:col-span-1 bg-white border shadow-sm rounded-lg px-6 pb-4">
       <div className="sticky top-0 left-0 space-y-4">
         {children}
-        <div className="flex gap-2">
+        <div className="flex flex-col xl:flex-row gap-2">
           <Button variant="outline" className="w-full">
             Сбросить
           </Button>
