@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Header } from "./ui/Header";
 import { Footer } from "./ui/Footer";
 import { Container } from "@/shared/ui/Container";
+import { Toaster } from "@/shared/ui/Toaster";
 
 export function UserLayout({ children }: { children: ReactNode }) {
   return (
@@ -11,6 +12,7 @@ export function UserLayout({ children }: { children: ReactNode }) {
           <Header />
         </Container>
         <main className="h-full">{children}</main>
+        <Toaster />
       </div>
       <div className="mt-20">
         <Footer />
