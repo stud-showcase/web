@@ -4,9 +4,9 @@ import { Link } from "@inertiajs/react";
 import { Project } from "@/shared/types/Project";
 import { HiringBadge } from "@/features/HiringBadge";
 import { StatusBadge } from "@/features/StatusBadge";
-import { UsersIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
 
-function SimplifiedProjectCard({ project }: { project: Project }) {
+export function SimplifiedProjectCard({ project }: { project: Project }) {
   return (
     <Link href={`/projects/${project.id}`} className="block">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-3 border-b">
@@ -26,5 +26,3 @@ function SimplifiedProjectCard({ project }: { project: Project }) {
     </Link>
   );
 }
-
-export { SimplifiedProjectCard };
