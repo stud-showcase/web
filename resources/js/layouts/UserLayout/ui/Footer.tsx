@@ -28,7 +28,7 @@ export function Footer() {
       <footer className="bg-[#095da4] text-white">
         <Container className="py-12 px-6">
           <SevSULogo width={273} height={78} color="white" />
-          <div className="flex justify-between mt-10">
+          <div className="flex flex-col md:flex-row justify-between mt-10 space-y-8 md:space-y-0">
             <div>
               <Text variant="large">ЦИФРОВАЯ ЭКОСИСТЕМА</Text>
               <ul className="space-y-2 text-sm mt-4">
