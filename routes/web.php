@@ -30,10 +30,6 @@ Route::prefix('auth')->middleware('guest')->group(function () {
         return Inertia::render('user/Vacancies');
     });
 
-    Route::get('/profile', function () {
-        return Inertia::render('user/Profile');
-    });
-
     Route::get('/admin/dashboard', function () {
         return Inertia::render('admin/Dashboard');
     });
