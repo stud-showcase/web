@@ -17,7 +17,7 @@ export const mockTask: Task = {
     email: "info@warehouse.ru",
     phone: "+7 (495) 555-01-23",
   },
-  max_members: 5,
+  maxMembers: 5,
   deadline: new Date("2025-07-20"),
   complexity: "medium",
   tags: ["веб-разработка", "React", "TypeScript", "API", "склад"],

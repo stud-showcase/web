@@ -12,7 +12,7 @@ function Badges({ task }: { task: Task }) {
     <>
       <Badge variant="outline" className="flex items-center gap-1">
         <Users className="w-4 h-4" />
-        {task.max_members} {task.max_members === 1 ? "участник" : "участника"}
+        {task.maxMembers} {task.maxMembers === 1 ? "участник" : "участника"}
       </Badge>
       <Badge variant="secondary" className="flex items-center gap-1">
         <Calendar className="w-4 h-4" />

@@ -22,7 +22,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/shared/ui/Breadcrumb";
-import { mockTask, mockTaskProjects } from "./mock";
+import { mockTask, mockTaskProjects } from "./mocks";
 import { ComplexityBadge } from "@/features/ComplexityBadge";
 import { useToast } from "@/shared/hooks/useToast";
 import { SimplifiedProjectCard } from "./ui/SimplifiedProjectCard";
@@ -43,14 +43,6 @@ export default function TaskPage() {
         description: `${text} теперь в буфере обмена.`,
         duration: 2000,
       });
-    });
-  };
-
-  const handleTakeTask = () => {
-    toast({
-      title: "Задача взята!",
-      description: "Вы успешно взяли задачу.",
-      duration: 2000,
     });
   };
 
@@ -139,8 +131,8 @@ export default function TaskPage() {
                   <div>
                     <Text variant="muted">Команда</Text>
                     <Text>
-                      До {mockTask.max_members}{" "}
-                      {mockTask.max_members === 1 ? "участника" : "участников"}
+                      До {mockTask.maxMembers}{" "}
+                      {mockTask.maxMembers === 1 ? "участника" : "участников"}
                     </Text>
                   </div>
                 </div>

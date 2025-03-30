@@ -1,11 +1,22 @@
 import { UserLayout } from "@/layouts/UserLayout";
-import { Container } from "@/shared/ui/Container";
-import { Heading } from "@/shared/ui/Heading";
+import { Head } from "@inertiajs/react";
+import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
+import { VacanciesPageFilterPanel } from "./ui/VacanciesPageFilterPanel";
+import { VacanciesPageContent } from "./ui/VacanciesPageContent";
 
-export default function Vacancies() {
-  return <UserLayout>
-    <Container className="pt-8">
-      <Heading level={1}>Вакансии</Heading>
-    </Container>
-  </UserLayout>
+export default function VacanciesPage() {
+  return (
+    <>
+      <Head>
+        <title>Вакансии</title>
+      </Head>
+      <UserLayout>
+        <FiltersItemsLayout
+          heading="Вакансии"
+          content={<VacanciesPageContent />}
+          filterPanel={<VacanciesPageFilterPanel />}
+        />
+      </UserLayout>
+    </>
+  );
 }

@@ -1,21 +1,8 @@
-import { SearchBar } from "@/features/SearchBar";
 import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
 import { UserLayout } from "@/layouts/UserLayout";
 import { Head } from "@inertiajs/react";
-import { mockTasks } from "./mock";
-import { TaskCard } from "./ui/TaskCard";
-import { TasksFilterPanel } from "./ui/TaskFilterPanel";
-
-function TaskBankContent() {
-  return (
-    <div className="grid grid-cols-1 gap-6">
-      <SearchBar />
-      {mockTasks.map((task) => (
-        <TaskCard task={task} key={task.id} />
-      ))}
-    </div>
-  );
-}
+import { TasksBankPageFilterPanel } from "./ui/TaskBankPageFilterPanel";
+import { TaskBankPageContent } from "./ui/TaskBankPageContent";
 
 export default function TaskBankPage() {
   return (
@@ -26,8 +13,8 @@ export default function TaskBankPage() {
       <UserLayout>
         <FiltersItemsLayout
           heading="Банк задач"
-          filterPanel={<TasksFilterPanel />}
-          content={<TaskBankContent />}
+          filterPanel={<TasksBankPageFilterPanel />}
+          content={<TaskBankPageContent />}
         />
       </UserLayout>
     </>

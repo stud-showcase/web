@@ -16,7 +16,7 @@ import {
 import { ScrollArea } from "@/shared/ui/ScrollArea"; // Импорт ScrollArea
 import { FilterPanelWrapper } from "@/features/FilterPanelWrapper";
 
-export function TasksFilterPanel() {
+export function TasksBankPageFilterPanel() {
   return (
     <FilterPanelWrapper>
       <Accordion

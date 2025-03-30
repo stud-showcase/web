@@ -5,7 +5,7 @@ export interface Task {
   title: string;
   description: string;
   customer: { name: string; email?: string; phone?: string };
-  max_members: number;
+  maxMembers: number;
   deadline: Date;
   complexity: TaskComplexity;
   tags: string[];
