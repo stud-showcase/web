@@ -57,13 +57,6 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>{lastNameAndInitials}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <Link href="/profile">
-              <User className="mr-2 h-4 w-4" />
-              <span>Личный кабинет</span>
-            </Link>
-          </DropdownMenuItem>
           {(user.role === "mentor" || user.role === "admin") && (
             <DropdownMenuItem asChild>
               <Link href="/admin/dashboard">
