@@ -26,7 +26,6 @@ import { mockTask, mockTaskProjects } from "./mock";
 import { ComplexityBadge } from "@/features/ComplexityBadge";
 import { useToast } from "@/shared/hooks/useToast";
 import { SimplifiedProjectCard } from "./ui/SimplifiedProjectCard";
-import { TaskSidebar } from "./ui/TaskSidebar";
 
 export default function TaskPage() {
   const formattedDeadline = mockTask.deadline.toLocaleDateString("ru-RU", {
@@ -61,17 +60,9 @@ export default function TaskPage() {
         <title>{mockTask.title}</title>
       </Head>
       <UserLayout>
-        <Container className="pt-8 flex flex-col lg:flex-row gap-8">
-          {/* Боковое меню */}
-          <TaskSidebar
-            task={mockTask}
-            taskProjects={mockTaskProjects}
-            onTakeTask={handleTakeTask}
-          />
-
-          {/* Основной контент */}
-          <main className="lg:w-4/5 w-full">
-            <header id="header" className="border-b pb-8">
+        <Container className="pt-8">
+          <main>
+            <header className="border-b pb-8">
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem>
@@ -98,10 +89,7 @@ export default function TaskPage() {
               </div>
             </header>
 
-            <section
-              id="description"
-              className="mt-8 pl-6 border-l-4 border-primary"
-            >
+            <section className="mt-8 pl-6 border-l-4 border-primary">
               <Text>{mockTask.description}</Text>
               {mockTask.files && (
                 <div className="mt-6">
@@ -109,31 +97,34 @@ export default function TaskPage() {
                     <Files className="h-5 w-5" />
                     <Text variant="small">Файлы к описанию</Text>
                   </div>
-                  <div className="flex flex-wrap gap-3 mt-4">
-                    {mockTask.files?.map((file) => (
-                      <Button
-                        key={file.name}
-                        variant="outline"
-                        size="sm"
-                        asChild
-                      >
-                        <a
-                          href={file.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2"
+                  <div className="flex items-center justify-between mt-4">
+                    <div className="flex flex-wrap gap-3">
+                      {mockTask.files?.map((file) => (
+                        <Button
+                          key={file.name}
+                          variant="outline"
+                          size="sm"
+                          asChild
                         >
-                          <FileIcon className="h-4 w-4" />
-                          {file.name}
-                        </a>
-                      </Button>
-                    ))}
+                          <a
+                            href={file.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2"
+                          >
+                            <FileIcon className="h-4 w-4" />
+                            {file.name}
+                          </a>
+                        </Button>
+                      ))}
+                    </div>
+                    <Button>Взять задачу</Button>
                   </div>
                 </div>
               )}
             </section>
 
-            <section id="info" className="mt-10">
+            <section className="mt-10">
               <Heading level={2}>Информация о задаче</Heading>
               <div className="mt-4 flex flex-wrap gap-6">
                 <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px]">
@@ -164,7 +155,7 @@ export default function TaskPage() {
             </section>
 
             {(mockTask.customer.email || mockTask.customer.phone) && (
-              <section id="contacts" className="mt-10">
+              <section className="mt-10">
                 <Heading level={2} className="mb-4">
                   Контакты заказчика
                 </Heading>
@@ -194,7 +185,7 @@ export default function TaskPage() {
             )}
 
             {mockTaskProjects?.length > 0 && (
-              <section id="projects" className="mt-10">
+              <section className="mt-10">
                 <Heading level={2}>Проекты</Heading>
                 <ul className="space-y-3 mt-6">
                   {mockTaskProjects.map((project) => (
