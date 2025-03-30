@@ -8,7 +8,7 @@ import {
 import { ReactNode } from "react";
 
 type Props = {
-  title: string;
+  title: ReactNode | string;
   badges?: ReactNode;
   tags?: ReactNode;
   content: ReactNode;
@@ -17,7 +17,7 @@ type Props = {
 
 export function CardWrapper({ title, badges, tags, content, footer }: Props) {
   return (
-    <Card>
+    <Card className="hover:shadow-md transition-shadow">
       <CardHeader className="border-b border-border p-3">
         <div className="flex md:items-center md:justify-between md:flex-row gap-4 flex-col">
           <CardTitle>{title}</CardTitle>

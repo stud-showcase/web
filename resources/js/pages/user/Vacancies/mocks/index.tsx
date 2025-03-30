@@ -3,6 +3,8 @@ export const mockVacancies = [
     id: 1,
     projectId: 1,
     vacancyTitle: "Frontend Developer",
+    vacancyDescription:
+      "Ищем гуру Node.js для серверной магии. Ищем гуру Node.js для серверной магии. Ищем гуру Node.js для серверной магии. Ищем гуру Node.js для серверной магии.",
     projectTeam: "Alpha Squad",
     taskTitle: "Супер CRM",
   },
@@ -47,6 +49,8 @@ export const mockVacancies = [
     projectId: 1,
     vacancyTitle: "Backend Developer",
     projectTeam: "Beta Crew",
+    vacancyDescription:
+      "Ищем гуру Node.js для серверной магии. Ищем гуру Node.js для серверной магии. Ищем гуру Node.js для серверной магии. Ищем гуру Node.js для серверной магии.",
     taskTitle: "API для будущего",
   },
   {
@@ -63,6 +67,8 @@ export const mockVacancies = [
     projectId: 1,
     vacancyTitle: "DevOps Engineer",
     projectTeam: "Delta Force",
+    vacancyDescription:
+      "Ищем гуру Node.js для серверной магии. Ищем гуру Node.js для серверной магии. Ищем гуру Node.js для серверной магии. Ищем гуру Node.js для серверной магии.",
     taskTitle: "Облачная платформа",
   },
   {

@@ -6,7 +6,7 @@ export function VacanciesPageContent() {
   return (
     <>
       <SearchBar />
-      <div className="mt-6 space-y-6">
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         {mockVacancies.map((vacancy) => (
           <VacancyCard vacancy={vacancy} />
         ))}

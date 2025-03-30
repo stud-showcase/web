@@ -33,7 +33,7 @@ export default function MainPage() {
             </LeaveRequestWrapper>
           </section>
 
-          <section className="px-6 py-16 w-full bg-muted/40">
+          <section className="px-6 py-16 w-full bg-muted/60">
             <Heading level={2} className="mb-6 text-center">
               Для кого
             </Heading>
@@ -126,7 +126,7 @@ export default function MainPage() {
             </Accordion>
           </section>
 
-          <section className="px-6 py-16 bg-muted/40 w-full">
+          <section className="px-6 py-16 bg-muted/60 w-full">
             <Heading level={2} className="mb-6 text-center">
               Почему мы
             </Heading>
@@ -226,7 +226,7 @@ export default function MainPage() {
             </div>
           </section>
 
-          <section className="px-6 py-16 w-full bg-muted/40 text-center">
+          <section className="px-6 py-16 w-full bg-muted/60 text-center">
             <Heading level={2} className="mb-4">
               Изучите проекты
             </Heading>

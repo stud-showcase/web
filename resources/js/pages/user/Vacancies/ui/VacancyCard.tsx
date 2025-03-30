@@ -11,20 +11,20 @@ export function VacancyCard({ vacancy }: { vacancy: Vacancy }) {
       title={vacancy.vacancyTitle}
       content={
         <div className="flex flex-col gap-4 mt-4">
-          {vacancy.vacancyDescription && (
-            <Text>{vacancy.vacancyDescription}</Text>
-          )}
-          <div className="flex gap-4">
-            <div className="flex items-center gap-2">
-              <UsersIcon className="h-4 w-4 text-muted-foreground" />
-              <Text variant="muted">
-                <span>Проектная команда:</span> {vacancy.projectTeam}
-              </Text>
-            </div>
+          <Text className="line-clamp-2">{vacancy.vacancyDescription}</Text>
+          <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <FolderIcon className="h-4 w-4 text-muted-foreground" />
               <Text variant="muted">
-                <span>Задача:</span> {vacancy.taskTitle}
+                <span className="font-semibold">Задача:</span>{" "}
+                {vacancy.taskTitle}
+              </Text>
+            </div>
+            <div className="flex items-center gap-2">
+              <UsersIcon className="h-4 w-4 text-muted-foreground" />
+              <Text variant="muted">
+                <span className="font-semibold">Проектная команда:</span>{" "}
+                {vacancy.projectTeam}
               </Text>
             </div>
           </div>
@@ -32,7 +32,11 @@ export function VacancyCard({ vacancy }: { vacancy: Vacancy }) {
       }
       footer={
         <>
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            className="md:flex-initial flex-1"
+          >
             Вступить в команду
           </Button>
           <Button asChild size="sm">
