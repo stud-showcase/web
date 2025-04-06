@@ -35,7 +35,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'isLoggedIn' => true,
                 'user' => [
-                    'role' => 'student',
+                    'role' => 'admin',
                     'firstName' => 'Иван',
                     'lastName' => 'Иванов',
                     'middleName' => 'Иванович'

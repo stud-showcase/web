@@ -11,7 +11,6 @@ export function VacancyCard({ vacancy }: { vacancy: Vacancy }) {
       title={vacancy.vacancyTitle}
       content={
         <div className="flex flex-col gap-4 mt-4">
-          <Text className="line-clamp-2">{vacancy.vacancyDescription}</Text>
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <FolderIcon className="h-4 w-4 text-muted-foreground" />
