@@ -26,6 +26,7 @@ import { mockTask, mockTaskProjects } from "./mocks";
 import { ComplexityBadge } from "@/features/ComplexityBadge";
 import { useToast } from "@/shared/hooks/useToast";
 import { SimplifiedProjectCard } from "./ui/SimplifiedProjectCard";
+import { Tag } from "@/features/Tag";
 
 export default function TaskPage() {
   const formattedDeadline = mockTask.deadline.toLocaleDateString("ru-RU", {
@@ -52,7 +53,7 @@ export default function TaskPage() {
         <title>{mockTask.title}</title>
       </Head>
       <UserLayout>
-        <Container className="pt-8">
+        <Container withVerticalPaddings>
           <main>
             <header className="border-b pb-8">
               <Breadcrumb>
@@ -74,9 +75,7 @@ export default function TaskPage() {
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
                 {mockTask.tags.map((tag) => (
-                  <Badge key={tag} variant={"outline"}>
-                    {tag}
-                  </Badge>
+                  <Tag value={tag} />
                 ))}
               </div>
             </header>
@@ -117,7 +116,7 @@ export default function TaskPage() {
             </section>
 
             <section className="mt-10">
-              <Heading level={2}>Информация о задаче</Heading>
+              <Heading level={3}>Информация о задаче</Heading>
               <div className="mt-4 flex flex-wrap gap-6">
                 <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px]">
                   <CalendarIcon className="h-6 w-6" />
@@ -148,7 +147,7 @@ export default function TaskPage() {
 
             {(mockTask.customer.email || mockTask.customer.phone) && (
               <section className="mt-10">
-                <Heading level={2} className="mb-4">
+                <Heading level={3} className="mb-4">
                   Контакты заказчика
                 </Heading>
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -178,7 +177,7 @@ export default function TaskPage() {
 
             {mockTaskProjects?.length > 0 && (
               <section className="mt-10">
-                <Heading level={2}>Проекты</Heading>
+                <Heading level={3}>Проекты</Heading>
                 <ul className="space-y-3 mt-6">
                   {mockTaskProjects.map((project) => (
                     <li key={project.id}>

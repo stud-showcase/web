@@ -3,41 +3,52 @@ import { Badge } from "@/shared/ui/Badge";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Project } from "@/shared/types/Project";
-import { ArrowRight, Users } from "lucide-react";
+import { ArrowRight, UserIcon, FolderIcon, Users } from "lucide-react";
 import { CardWrapper } from "@/features/CardWrapper";
-import { ComplexityBadge } from "@/features/ComplexityBadge";
 import { StatusBadge } from "@/features/StatusBadge";
+import { ComplexityBadge } from "@/features/ComplexityBadge";
 import { HiringBadge } from "@/features/HiringBadge";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { Tag } from "@/features/Tag";
 
 function Badges({ project }: { project: Project }) {
   return (
     <>
       {project.isHiring && <HiringBadge />}
       <StatusBadge status={project.status} />
-      <ComplexityBadge complexity={project.complexity} />
+      <ComplexityBadge complexity={project.task.complexity} />
     </>
   );
 }
 
 function Content({ project }: { project: Project }) {
   return (
-    <>
-      <Text variant="muted" className="flex gap-1 mt-4">
-        <span className="font-medium">Заказчик:</span>
-        {project.customer}
-      </Text>
-      <Text className="mt-4 line-clamp-3">{project.description}</Text>
-    </>
+    <div className="space-y-3 mt-4">
+      <div className="flex items-center gap-2">
+        <FolderIcon className="h-4 w-4 text-muted-foreground" />
+        <Text variant="muted">Задача: {project.task.title}</Text>
+      </div>
+      {project.mentor && (
+        <div className="flex items-center gap-2">
+          <UserIcon className="h-4 w-4 text-muted-foreground" />
+          <Text variant="muted">Наставник: {project.mentor}</Text>
+        </div>
+      )}
+      {project.abstract && (
+        <Text className="line-clamp-3">{project.abstract}</Text>
+      )}
+    </div>
   );
 }
 
 function Tags({ project }: { project: Project }) {
-  return project.tags.map((tag) => (
-    <Badge key={tag} variant="outline" className="">
-      {tag}
-    </Badge>
-  ));
+  return (
+    <div className="flex flex-wrap gap-2">
+      {project.task.tags.map((tag) => (
+        <Tag value={tag} />
+      ))}
+    </div>
+  );
 }
 
 function Footer({ project }: { project: Project }) {
@@ -66,7 +77,7 @@ function Footer({ project }: { project: Project }) {
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <CardWrapper
-      title={project.title}
+      title={project.name}
       badges={<Badges project={project} />}
       content={<Content project={project} />}
       tags={<Tags project={project} />}

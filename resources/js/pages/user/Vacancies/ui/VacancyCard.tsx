@@ -14,17 +14,11 @@ export function VacancyCard({ vacancy }: { vacancy: Vacancy }) {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <FolderIcon className="h-4 w-4 text-muted-foreground" />
-              <Text variant="muted">
-                <span className="font-semibold">Задача:</span>{" "}
-                {vacancy.taskTitle}
-              </Text>
+              <Text variant="muted">Задача: {vacancy.taskTitle}</Text>
             </div>
             <div className="flex items-center gap-2">
               <UsersIcon className="h-4 w-4 text-muted-foreground" />
-              <Text variant="muted">
-                <span className="font-semibold">Проектная команда:</span>{" "}
-                {vacancy.projectTeam}
-              </Text>
+              <Text variant="muted">Проект: {vacancy.projectTeam}</Text>
             </div>
           </div>
         </div>

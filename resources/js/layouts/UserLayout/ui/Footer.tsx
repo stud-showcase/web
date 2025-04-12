@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <>
       <svg
-        className="wave w-full h-22 lg:h-44"
+        className="wave w-full h-10 lg:h-28"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 24 150 28"
@@ -25,14 +25,15 @@ export function Footer() {
           <use xlinkHref="#gentle-wave" x="50" y="6" fill="#095DA4" />
         </g>
       </svg>
+
       <footer className="bg-[#095da4] text-white">
-        <Container className="py-12 px-6">
-          <SevSULogo width={273} height={78} color="white" />
-          <div className="flex flex-col md:flex-row justify-between mt-10 space-y-8 md:space-y-0">
+        <Container className="py-4 px-4">
+          <SevSULogo width={200} height={60} color="white" />
+          <div className="flex flex-col md:flex-row justify-between mt-6 space-y-6 md:space-y-0 md:space-x-8 text-sm">
             <div>
-              <Text variant="large">ЦИФРОВАЯ ЭКОСИСТЕМА</Text>
-              <ul className="space-y-2 text-sm mt-4">
-                <li>
+              <Text className="font-semibold">ЦИФРОВАЯ ЭКОСИСТЕМА</Text>
+              <ul className="mt-2 space-y-2">
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://sevsu.ru"
@@ -41,7 +42,7 @@ export function Footer() {
                     Официальный сайт
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://do.sevsu.ru"
@@ -50,7 +51,7 @@ export function Footer() {
                     Дистанционное обучение
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://lk.sevsu.ru"
@@ -59,7 +60,7 @@ export function Footer() {
                     Личный кабинет
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://timetable.sevsu.ru"
@@ -68,7 +69,7 @@ export function Footer() {
                     Расписание занятий
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://chat.is.sevsu.ru"
@@ -77,7 +78,7 @@ export function Footer() {
                     Rocket Chat
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://iot.sevsu.ru"
@@ -90,9 +91,9 @@ export function Footer() {
             </div>
 
             <div>
-              <Text variant="large">СОЦСЕТИ</Text>
-              <ul className="space-y-2 text-sm mt-4">
-                <li>
+              <Text className="font-semibold">СОЦСЕТИ</Text>
+              <ul className="mt-2 space-y-2">
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://vk.com/sevsu"
@@ -101,7 +102,7 @@ export function Footer() {
                     ВКонтакте
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://t.me/sevsu_live"
@@ -110,7 +111,7 @@ export function Footer() {
                     Telegram
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://ok.ru/sevsu"
@@ -119,7 +120,7 @@ export function Footer() {
                     Одноклассники
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://www.youtube.com/channel/UC1rFaFbJ4pDQgnrolyDfq0g"
@@ -128,7 +129,7 @@ export function Footer() {
                     YouTube
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="https://rutube.ru/channel/25013780/"
@@ -141,9 +142,9 @@ export function Footer() {
             </div>
 
             <div>
-              <Text variant="large">КОНТАКТЫ</Text>
-              <ul className="space-y-2 text-sm mt-4">
-                <li>
+              <Text className="font-semibold">КОНТАКТЫ</Text>
+              <ul className="mt-2 space-y-2">
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="tel:+79781234567"
@@ -152,7 +153,7 @@ export function Footer() {
                     +7 (978) 123-45-67
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a
                     target="_blank"
                     href="mailto:info@sevsu.ru"
@@ -165,14 +166,14 @@ export function Footer() {
             </div>
 
             <div>
-              <Text variant="large">ПОМОЩЬ</Text>
-              <ul className="space-y-2 text-sm mt-4">
-                <li>
+              <Text className="font-semibold">ПОМОЩЬ</Text>
+              <ul className="mt-2 space-y-2">
+                <li className="text-xs">
                   <a target="_blank" href="#" className="hover:underline">
                     Студенту
                   </a>
                 </li>
-                <li>
+                <li className="text-xs">
                   <a target="_blank" href="#" className="hover:underline">
                     Заказчику
                   </a>
@@ -180,7 +181,8 @@ export function Footer() {
               </ul>
             </div>
           </div>
-          <p className="mt-20 text-center text-sm">
+
+          <p className="mt-10 text-center text-xs">
             Все права защищены © «Севастопольский государственный университет»,{" "}
             {new Date().getFullYear()}
           </p>

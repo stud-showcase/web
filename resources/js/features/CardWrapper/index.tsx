@@ -17,7 +17,7 @@ type Props = {
 
 export function CardWrapper({ title, badges, tags, content, footer }: Props) {
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ">
       <CardHeader className="border-b border-border p-3">
         <div className="flex md:items-center md:justify-between md:flex-row gap-4 flex-col">
           <CardTitle>{title}</CardTitle>

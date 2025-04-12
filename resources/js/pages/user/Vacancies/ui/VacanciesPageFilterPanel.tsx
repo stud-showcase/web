@@ -45,7 +45,7 @@ export function VacanciesPageFilterPanel() {
         </AccordionItem>
 
         <AccordionItem value="project_team">
-          <AccordionTrigger>Проектная команда</AccordionTrigger>
+          <AccordionTrigger>Проект</AccordionTrigger>
           <AccordionContent>
             <ScrollArea className="h-40">
               <div className="space-y-2">

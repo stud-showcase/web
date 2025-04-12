@@ -1,6 +1,6 @@
 import { SearchBar } from "@/features/SearchBar";
-import { mockProjects } from "../mocks";
-import { ProjectCard } from "./ProjectCartd";
+import { mockProject } from "../mocks";
+import { ProjectCard } from "./ProjectCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
 
 export function ProjectsPageContent() {
@@ -15,15 +15,17 @@ export function ProjectsPageContent() {
       </div>
       <TabsContent value="all">
         <div className="grid grid-cols-1 gap-6">
-          {mockProjects.map((project) => (
-            <ProjectCard project={project} key={project.id} />
-          ))}
+          {Array(20)
+            .fill(mockProject)
+            .map((project) => (
+              <ProjectCard project={project} key={project.id} />
+            ))}
         </div>
       </TabsContent>
       <TabsContent value="my">
         <div className="grid grid-cols-1 gap-6">
-          {mockProjects
-            .filter((project) => project.isHiring)
+          {Array(20)
+            .fill(mockProject)
             .map((project) => (
               <ProjectCard project={project} key={project.id} />
             ))}

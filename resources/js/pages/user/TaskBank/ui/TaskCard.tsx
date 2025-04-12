@@ -3,9 +3,10 @@ import { Badge } from "@/shared/ui/Badge";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
-import { ArrowRight, Calendar, Users } from "lucide-react";
+import { ArrowRight, Calendar, UserIcon, Users } from "lucide-react";
 import { Task } from "@/shared/types/Task";
 import { ComplexityBadge } from "@/features/ComplexityBadge";
+import { Tag } from "@/features/Tag";
 
 function Badges({ task }: { task: Task }) {
   return (
@@ -26,21 +27,17 @@ function Badges({ task }: { task: Task }) {
 function Content({ task }: { task: Task }) {
   return (
     <>
-      <Text variant="muted" className="flex gap-1 mt-4">
-        <span className="font-medium">Заказчик:</span>
-        {task.customer.name}
-      </Text>
-      <Text className="mt-4 line-clamp-3">{task.description}</Text>
+      <div className="flex gap-2 items-center mt-4">
+        <UserIcon className="h-4 w-4 text-muted-foreground" />
+        <Text variant="muted">Заказчик: {task.customer.name}</Text>
+      </div>
+      <Text className="mt-3 line-clamp-3">{task.description}</Text>
     </>
   );
 }
 
 function Tags({ task }: { task: Task }) {
-  return task.tags.map((tag) => (
-    <Badge key={tag} variant="outline">
-      {tag}
-    </Badge>
-  ));
+  return task.tags.map((tag) => <Tag value={tag} />);
 }
 
 function Footer({ task }: { task: Task }) {

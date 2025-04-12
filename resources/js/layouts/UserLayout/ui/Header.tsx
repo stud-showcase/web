@@ -6,12 +6,14 @@ import { SevSULogo } from "@/shared/ui/SevSULogo";
 import { SignInButton } from "./SignInButton";
 import { MobileMenu } from "./MobileMenu";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { Container } from "@/shared/ui/Container";
 
 export function Header() {
   const { isLoggedIn } = useAuth();
 
   return (
-    <header className="px-6 bg-white border h-[68px] rounded-lg flex items-center justify-between">
+    <header className="bg-background border-b h-[68px] sticky z-10 inset-0 ">
+      <Container className="px-6 flex items-center justify-between h-full">
       <div className="h-full flex items-center gap-8">
         <Link href="/">
           <SevSULogo width={166} height={46} color="blue" />
@@ -29,6 +31,7 @@ export function Header() {
       <div className="flex lg:hidden">
         <MobileMenu />
       </div>
+      </Container>
     </header>
   );
 }
