@@ -1,32 +1,31 @@
 import { Link } from "@inertiajs/react";
-import { Badge } from "@/shared/ui/Badge";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
-import { Project } from "@/shared/types/Project";
-import { ArrowRight, UserIcon, FolderIcon, Users } from "lucide-react";
-import { CardWrapper } from "@/features/CardWrapper";
-import { StatusBadge } from "@/features/StatusBadge";
-import { ComplexityBadge } from "@/features/ComplexityBadge";
-import { HiringBadge } from "@/features/HiringBadge";
+import { Project } from "@/entities/Project/types";
+import { ArrowRight, UserIcon, FolderIcon } from "lucide-react";
+import { CardWrapper } from "@/shared/components/CardWrapper";
+import { StatusBadge } from "./StatusBadge";
+import { ComplexityBadge, Task } from "@/entities/Task";
+import { HiringBadge } from "@/entities/Project/ui/HiringBadge";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { Tag } from "@/features/Tag";
+import { TaskTag } from "@/entities/Task";
 
-function Badges({ project }: { project: Project }) {
+function Badges({ project, task }: { project: Project; task: Task }) {
   return (
     <>
       {project.isHiring && <HiringBadge />}
       <StatusBadge status={project.status} />
-      <ComplexityBadge complexity={project.task.complexity} />
+      <ComplexityBadge complexity={task.complexity} />
     </>
   );
 }
 
-function Content({ project }: { project: Project }) {
+function Content({ project, task }: { project: Project, task: Task }) {
   return (
     <div className="space-y-3 mt-4">
       <div className="flex items-center gap-2">
         <FolderIcon className="h-4 w-4 text-muted-foreground" />
-        <Text variant="muted">Задача: {project.task.title}</Text>
+        <Text variant="muted">Задача: {task.title}</Text>
       </div>
       {project.mentor && (
         <div className="flex items-center gap-2">
@@ -41,11 +40,11 @@ function Content({ project }: { project: Project }) {
   );
 }
 
-function Tags({ project }: { project: Project }) {
+function Tags({ task }: { task: Task }) {
   return (
     <div className="flex flex-wrap gap-2">
-      {project.task.tags.map((tag) => (
-        <Tag value={tag} />
+      {task.tags.map((tag) => (
+        <TaskTag value={tag} />
       ))}
     </div>
   );
@@ -74,13 +73,13 @@ function Footer({ project }: { project: Project }) {
   );
 }
 
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({ project, task }: { project: Project, task: Task }) {
   return (
     <CardWrapper
       title={project.name}
-      badges={<Badges project={project} />}
-      content={<Content project={project} />}
-      tags={<Tags project={project} />}
+      badges={<Badges project={project} task={task} />}
+      content={<Content project={project} task={task} />}
+      tags={<Tags task={task} />}
       footer={<Footer project={project} />}
     />
   );

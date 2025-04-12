@@ -1,4 +1,4 @@
-import { FilterPanelWrapper, FilterBlock, RangeFilterBlock } from "@/features/FilterPanel";
+import { FilterPanelWrapper, FilterBlock } from "@/shared/components/FilterPanel";
 
 export function ProjectsPageFilterPanel() {
   return (

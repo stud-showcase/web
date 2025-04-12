@@ -1,12 +1,12 @@
-import { CardWrapper } from "@/features/CardWrapper";
+import { CardWrapper } from "@/shared/components/CardWrapper";
 import { Badge } from "@/shared/ui/Badge";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
 import { ArrowRight, Calendar, UserIcon, Users } from "lucide-react";
-import { Task } from "@/shared/types/Task";
-import { ComplexityBadge } from "@/features/ComplexityBadge";
-import { Tag } from "@/features/Tag";
+import { Task } from "@/entities/Task/types";
+import { ComplexityBadge } from "./ComplexityBadge";
+import { TaskTag } from "./TaskTag";
 
 function Badges({ task }: { task: Task }) {
   return (
@@ -37,7 +37,7 @@ function Content({ task }: { task: Task }) {
 }
 
 function Tags({ task }: { task: Task }) {
-  return task.tags.map((tag) => <Tag value={tag} />);
+  return task.tags.map((tag) => <TaskTag value={tag} />);
 }
 
 function Footer({ task }: { task: Task }) {

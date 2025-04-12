@@ -1,4 +1,4 @@
-import { TaskComplexity } from "@/shared/types/Task";
+import { TaskComplexity } from "@/entities/Task/types";
 import { Badge } from "@/shared/ui/Badge";
 
 const complexityToBadge = {

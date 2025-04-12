@@ -1,9 +1,7 @@
-import { Pagination } from "@/features/Pagination";
+import { Pagination } from "@/shared/components/Pagination";
 import { Container } from "@/shared/ui/Container";
 import { Heading } from "@/shared/ui/Heading";
-import { Badge } from "@/shared/ui/Badge";
 import { ReactNode } from "react";
-import { Button } from "@/shared/ui/Button";
 
 type Props = {
   heading: string;

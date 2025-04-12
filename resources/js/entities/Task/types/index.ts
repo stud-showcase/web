@@ -1,6 +1,6 @@
 export type TaskComplexity = "easy" | "medium" | "hard";
 
-export interface Task {
+export type Task = {
   id: number;
   title: string;
   description: string;
@@ -11,4 +11,3 @@ export interface Task {
   tags: string[];
   files?: { name: string; url: string }[];
 }
-

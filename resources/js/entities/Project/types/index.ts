@@ -1,11 +1,4 @@
-import { Task } from "./Task";
-
 export type ProjectStatus = "under_review" | "in_progress" | "completed";
-
-type Vacancy = {
-  title: string;
-  description: string;
-}
 
 export type Project = {
   id: number;
@@ -16,6 +9,4 @@ export type Project = {
   files?: { name: string; url: string }[];
   status: ProjectStatus;
   isHiring: boolean;
-  vacancies?: Vacancy[];
-  task: Pick<Task, "id" | "title" | "tags" | "complexity">;
 };

@@ -1,24 +1,34 @@
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
 import { UsersIcon, FolderIcon, ArrowRight } from "lucide-react";
-import { CardWrapper } from "@/features/CardWrapper";
-import { Vacancy } from "@/shared/types/Vacancy";
+import { CardWrapper } from "@/shared/components/CardWrapper";
+import { Vacancy } from "../types";
 import { Button } from "@/shared/ui/Button";
+import { Task } from "@/entities/Task";
+import { Project } from "@/entities/Project";
 
-export function VacancyCard({ vacancy }: { vacancy: Vacancy }) {
+export function VacancyCard({
+  vacancy,
+  project,
+  task,
+}: {
+  vacancy: Vacancy;
+  project: Project;
+  task: Task;
+}) {
   return (
     <CardWrapper
-      title={vacancy.vacancyTitle}
+      title={vacancy.title}
       content={
         <div className="flex flex-col gap-4 mt-4">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <FolderIcon className="h-4 w-4 text-muted-foreground" />
-              <Text variant="muted">Задача: {vacancy.taskTitle}</Text>
+              <Text variant="muted">Задача: {task.title}</Text>
             </div>
             <div className="flex items-center gap-2">
               <UsersIcon className="h-4 w-4 text-muted-foreground" />
-              <Text variant="muted">Проект: {vacancy.projectTeam}</Text>
+              <Text variant="muted">Проект: {project.name}</Text>
             </div>
           </div>
         </div>
@@ -34,7 +44,7 @@ export function VacancyCard({ vacancy }: { vacancy: Vacancy }) {
           </Button>
           <Button asChild size="sm">
             <Link
-              href={`/projects/${vacancy.projectId}`}
+              href={`/projects/${project.id}`}
               className="flex items-center justify-center gap-1 md:flex-initial flex-1"
             >
               Подробнее

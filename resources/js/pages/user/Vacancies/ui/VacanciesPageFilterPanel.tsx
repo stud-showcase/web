@@ -1,4 +1,4 @@
-import { FilterBlock, FilterPanelWrapper } from "@/features/FilterPanel";
+import { FilterBlock, FilterPanelWrapper } from "@/shared/components/FilterPanel";
 
 export function VacanciesPageFilterPanel() {
   const tags = [

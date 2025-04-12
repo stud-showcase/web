@@ -3,8 +3,12 @@ import { Head } from "@inertiajs/react";
 import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
 import { VacanciesPageFilterPanel } from "./ui/VacanciesPageFilterPanel";
 import { VacanciesPageContent } from "./ui/VacanciesPageContent";
+import { FullVacancy } from "./types/FullVacancy";
+import { project, task, vacancy } from "@/shared/mocks";
 
-export default function VacanciesPage() {
+export default function VacanciesPage({}: { vacancies: FullVacancy[] }) {
+  const vacancies = Array(20).fill({ vacancy, project, task });
+
   return (
     <>
       <Head>
@@ -13,7 +17,7 @@ export default function VacanciesPage() {
       <UserLayout>
         <FiltersItemsLayout
           heading="Вакансии"
-          content={<VacanciesPageContent />}
+          content={<VacanciesPageContent vacancies={vacancies} />}
           filterPanel={<VacanciesPageFilterPanel />}
         />
       </UserLayout>
