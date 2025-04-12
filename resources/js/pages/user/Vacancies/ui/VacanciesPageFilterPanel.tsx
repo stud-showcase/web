@@ -1,80 +1,71 @@
 import { Text } from "@/shared/ui/Text";
-import { FilterPanelWrapper } from "@/features/FilterPanelWrapper";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/shared/ui/Accordion";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { ScrollArea } from "@/shared/ui/ScrollArea";
+import { Separator } from "@/shared/ui/Separator";
+import { FilterPanelWrapper } from "@/features/FilterPanelWrapper";
 
 export function VacanciesPageFilterPanel() {
+  const filters = [
+    {
+      label: "Задача",
+      idPrefix: "task_title",
+      options: [
+        "web",
+        "backend",
+        "frontend",
+        "design",
+        "devops",
+        "mobile",
+        "database",
+        "api",
+        "security",
+        "testing",
+        "automation",
+        "branding",
+      ],
+    },
+    {
+      label: "Проект",
+      idPrefix: "project_team",
+      options: [
+        "web",
+        "backend",
+        "frontend",
+        "design",
+        "devops",
+        "mobile",
+        "database",
+        "api",
+        "security",
+        "testing",
+        "automation",
+        "branding",
+      ],
+    },
+  ];
+
   return (
     <FilterPanelWrapper>
-      <Accordion type="multiple" defaultValue={["task_title", "project_team"]}>
-        <AccordionItem value="task_title">
-          <AccordionTrigger>Задача</AccordionTrigger>
-          <AccordionContent>
-            <ScrollArea className="h-40">
-              <div className="space-y-2">
-                {[
-                  "web",
-                  "backend",
-                  "frontend",
-                  "design",
-                  "devops",
-                  "mobile",
-                  "database",
-                  "api",
-                  "security",
-                  "testing",
-                  "automation",
-                  "branding",
-                ].map((tag) => (
-                  <div key={tag} className="flex items-center space-x-2">
-                    <Checkbox id={`task_title-${tag}`} />
-                    <label htmlFor={`task_title-${tag}`}>
-                      <Text variant="small">{tag}</Text>
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="project_team">
-          <AccordionTrigger>Проект</AccordionTrigger>
-          <AccordionContent>
-            <ScrollArea className="h-40">
-              <div className="space-y-2">
-                {[
-                  "web",
-                  "backend",
-                  "frontend",
-                  "design",
-                  "devops",
-                  "mobile",
-                  "database",
-                  "api",
-                  "security",
-                  "testing",
-                  "automation",
-                  "branding",
-                ].map((tag) => (
-                  <div key={tag} className="flex items-center space-x-2">
-                    <Checkbox id={`project_team-${tag}`} />
-                    <label htmlFor={`project_team-${tag}`}>
-                      <Text variant="small">{tag}</Text>
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      {filters.map(({ label, idPrefix, options }) => (
+        <div key={idPrefix}>
+          <Text className="font-medium pt-4 pb-3">{label}</Text>
+          <ScrollArea className="h-40 w-full">
+            <div className="space-y-2">
+              {options.map((option) => (
+                <div key={option} className="flex items-center space-x-2">
+                  <Checkbox id={`${idPrefix}-${option}`} />
+                  <label htmlFor={`${idPrefix}-${option}`}>
+                    <Text className="text-sm">{option}</Text>
+                  </label>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+          <div className="pt-3">
+            <Separator />
+          </div>
+        </div>
+      ))}
     </FilterPanelWrapper>
   );
 }
