@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <>
       <svg
-        className="wave w-full h-10 lg:h-28"
+        className="wave w-full h-[50px] lg:h-[80px]"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 24 150 28"
@@ -27,7 +27,7 @@ export function Footer() {
       </svg>
 
       <footer className="bg-[#095da4] text-white">
-        <Container className="py-4 px-4">
+        <Container className="py-12 px-4">
           <SevSULogo width={200} height={60} color="white" />
           <div className="flex flex-col md:flex-row justify-between mt-6 space-y-6 md:space-y-0 md:space-x-8 text-sm">
             <div>

@@ -19,7 +19,7 @@ export default function MainPage() {
         <title>Главная</title>
       </Head>
       <UserLayout>
-        <div className="flex flex-col items-center font-myriad space-y-6">
+        <div className="flex flex-col items-center font-myriad">
           <section className="px-6 py-16 bg-background text-center w-full">
             <Heading level={1} className="mb-4">
               Витрина студенческих проектов
@@ -126,66 +126,14 @@ export default function MainPage() {
             </Accordion>
           </section>
 
-          <section className="px-6 py-16 bg-muted/60 w-full">
-            <Heading level={2} className="mb-6 text-center">
-              Почему мы
-            </Heading>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-              <Card className="shadow-sm">
-                <CardHeader>
-                  <CardTitle>Оптимизация</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Text variant="muted">
-                    Выполнение проектов в рамках учебного процесса с
-                    минимальными затратами.
-                  </Text>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Профессионализм</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Text variant="muted">
-                    Координация проектов преподавателями с учётом
-                    образовательных стандартов.
-                  </Text>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Кадры</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Text variant="muted">
-                    Возможность оценки потенциала студентов для дальнейшего
-                    сотрудничества.
-                  </Text>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Актуальность</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Text variant="muted">
-                    Использование современных методов с акцентом на
-                    междисциплинарном подходе.
-                  </Text>
-                </CardContent>
-              </Card>
-            </div>
-          </section>
-
-          <section className="px-6 py-16 w-full bg-background">
+          <section className="px-6 py-16 w-full bg-muted/60">
             <Heading level={2} className="mb-6 text-center">
               Функции
             </Heading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
               <Card className="shadow-sm">
                 <CardHeader>
-                  <CardTitle>База задач</CardTitle>
+                  <CardTitle>Банк задач</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Text variant="muted">
@@ -195,7 +143,7 @@ export default function MainPage() {
               </Card>
               <Card className="shadow-sm">
                 <CardHeader>
-                  <CardTitle>Организация команд</CardTitle>
+                  <CardTitle>Организация проектов</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Text variant="muted">
@@ -226,7 +174,7 @@ export default function MainPage() {
             </div>
           </section>
 
-          <section className="px-6 py-16 w-full bg-muted/60 text-center">
+          <section className="px-6 py-16 w-full bg-background text-center">
             <Heading level={2} className="mb-4">
               Изучите проекты
             </Heading>
