@@ -25,7 +25,7 @@ export function FiltersItemsLayout({ heading, filterPanel, content }: Props) {
         {filterPanel}
         <div className="lg:col-span-3">
           {content}
-          <Pagination>
+          <Pagination className="mt-6">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious href="#" />
