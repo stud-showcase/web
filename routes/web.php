@@ -9,6 +9,9 @@ use Inertia\Inertia;
 Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/{provider}/redirect', [SocialController::class, 'redirectToProvider'])->name('login');
     Route::get('/{provider}/callback', [SocialController::class, 'handleProviderCallback']);
+    Route::get('/test-guest', function () {
+        dd('test if u guest');
+    });
 });
 
 Route::middleware('auth')->group(function () {
