@@ -10,6 +10,10 @@ up:
 down:
 	$(DOCKER_COMPOSE) down
 
+reup:
+	$(DOCKER_COMPOSE) down
+	$(DOCKER_COMPOSE) up -d
+
 migrate:
 	$(APP_EXEC) php artisan migrate
 

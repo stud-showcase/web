@@ -16,26 +16,27 @@ class SocialController extends Controller
         if ($provider !== 'keycloak') {
             abort(404, 'Провайдер не поддерживается');
         }
-        return Socialite::driver($provider)->redirect();
+        return Socialite::driver($provider)->with(['prompt' => 'login'])->redirect();
     }
 
     public function handleProviderCallback(Request $request, $provider)
     {
         if ($provider !== 'keycloak') {
             abort(404, 'Провайдер не поддерживается');
-        }
+        };
 
         try {
-            $socialUser = (Socialite::driver($provider)->user())->user;
-            $group = $this->checkGroup($socialUser['syncable_cohorts']);
+            $socialUser = Socialite::driver($provider)->user();
+            $userData = $socialUser->user;
+            $group = $this->checkGroup($userData['syncable_cohorts']);
 
             $user = User::updateOrCreate(
-                ['email' => $socialUser['email']],
+                ['email' => $userData['email']],
                 [
-                    'id' => $socialUser['mapping_id'],
-                    'first_name' => $socialUser['first_name'],
-                    'second_name' => $socialUser['family_name'],
-                    'last_name' => $socialUser['middle_name'] ?? '',
+                    'id' => $userData['mapping_id'],
+                    'first_name' => $userData['first_name'],
+                    'second_name' => $userData['family_name'],
+                    'last_name' => $userData['middle_name'] ?? '',
                     'group_id' => $group->id,
                 ]
             );
@@ -48,19 +49,19 @@ class SocialController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        $redirectUri = url('/');
+        try {
+            Auth::logout();
 
-        Auth::logout();
-
-        $logoutUrl = env('KEYCLOAK_BASE_URL') . '/realms/' . env('KEYCLOAK_REALM') . '/protocol/openid-connect/logout';
-        $query = http_build_query([
-            'client_id' => env('KEYCLOAK_CLIENT_ID'),
-            'post_logout_redirect_uri' => $redirectUri,
-        ]);
-
-        return redirect($logoutUrl . '?' . $query);
+            $logoutUri = env('KEYCLOAK_BASE_URL') . '/realms/' . env('KEYCLOAK_REALM') . '/protocol/openid-connect/logout';
+            $query = http_build_query([
+                'client_id' => env('KEYCLOAK_CLIENT_ID'),
+            ]);
+            return redirect($logoutUri . '?' . $query);
+        } catch (\Throwable $e) {
+            return redirect('/')->with('error', 'Ошибка при выходе из системы');
+        }
     }
 
     private function checkGroup(string $groupName)

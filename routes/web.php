@@ -9,16 +9,10 @@ use Inertia\Inertia;
 Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/{provider}/redirect', [SocialController::class, 'redirectToProvider'])->name('login');
     Route::get('/{provider}/callback', [SocialController::class, 'handleProviderCallback']);
-    Route::get('/test-guest', function () {
-        dd('test if u guest');
-    });
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [SocialController::class, 'logout'])->name('logout');
-    Route::get('/test', function () {
-        dd('test if u auth');
-    });
 });
 
 Route::get('/', function () {
@@ -40,26 +34,28 @@ Route::get('/vacancies', function () {
     return Inertia::render('user/Vacancies');
 });
 
-Route::get('/admin/dashboard', function () {
-    return Inertia::render('admin/Dashboard');
-});
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('admin/Dashboard');
+    });
 
-Route::get('/admin/requests', function () {
-    return Inertia::render('admin/Requests');
-});
+    Route::get('/requests', function () {
+        return Inertia::render('admin/Requests');
+    });
 
-Route::get('/admin/tasks', function () {
-    return Inertia::render('admin/TaskBank');
-});
+    Route::get('/tasks', function () {
+        return Inertia::render('admin/TaskBank');
+    });
 
-Route::get('/admin/projects', function () {
-    return Inertia::render('admin/Projects');
-});
+    Route::get('/projects', function () {
+        return Inertia::render('admin/Projects');
+    });
 
-Route::get('/admin/users', function () {
-    return Inertia::render('admin/Users');
-});
+    Route::get('/users', function () {
+        return Inertia::render('admin/Users');
+    });
 
-Route::get('/admin/analytics', function () {
-    return Inertia::render('admin/Analytics');
+    Route::get('/analytics', function () {
+        return Inertia::render('admin/Analytics');
+    });
 });

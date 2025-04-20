@@ -13,22 +13,16 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g npm
-
 WORKDIR /var/www
 
 COPY . /var/www
 
 RUN composer install --no-scripts --no-interaction
 
-RUN npm install
-
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
 
 COPY docker/app/php.ini /usr/local/etc/php/php.ini
 
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=8000 & npm run dev"]
-EXPOSE 8000 5173
+CMD ["php-fpm"]
+EXPOSE 9000
