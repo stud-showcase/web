@@ -2,7 +2,7 @@ import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Project } from "@/entities/Project/types";
-import { ArrowRight, UserIcon, FolderIcon } from "lucide-react";
+import { ArrowRight, UserIcon, FolderIcon, UserPlus } from "lucide-react";
 import { CardWrapper } from "@/shared/components/CardWrapper";
 import { StatusBadge } from "./StatusBadge";
 import { ComplexityBadge, Task } from "@/entities/Task";
@@ -20,7 +20,7 @@ function Badges({ project, task }: { project: Project; task: Task }) {
   );
 }
 
-function Content({ project, task }: { project: Project, task: Task }) {
+function Content({ project, task }: { project: Project; task: Task }) {
   return (
     <div className="space-y-3 mt-4">
       <div className="flex items-center gap-2">
@@ -57,14 +57,12 @@ function Footer({ project }: { project: Project }) {
     <>
       {project.isHiring && isLoggedIn && (
         <Button variant="outline" size="sm" className="md:flex-initial flex-1">
-          Вступить в команду
+          <UserPlus />
+          Вступить
         </Button>
       )}
       <Button asChild size="sm">
-        <Link
-          href={`/projects/${project.id}`}
-          className="flex items-center justify-center gap-1 md:flex-initial flex-1"
-        >
+        <Link href={`/projects/${project.id}`}>
           Подробнее
           <ArrowRight className="w-4 h-4" />
         </Link>
@@ -73,7 +71,13 @@ function Footer({ project }: { project: Project }) {
   );
 }
 
-export function ProjectCard({ project, task }: { project: Project, task: Task }) {
+export function ProjectCard({
+  project,
+  task,
+}: {
+  project: Project;
+  task: Task;
+}) {
   return (
     <CardWrapper
       title={project.name}

@@ -30,7 +30,7 @@ export function LeaveRequestWrapper({ children }: { children: ReactNode }) {
               <Button variant="outline">Отменить</Button>
             </DialogClose>
             <Button type="submit" form="leave-request-form">
-              Оставить заявку
+              Отправить
             </Button>
           </div>
         </DialogFooter>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Avatar, AvatarFallback } from "@/shared/ui/Avatar";
-import { Users, FileIcon, Link as LinkIcon } from "lucide-react";
+import { Users, FileIcon, Link as LinkIcon, UserPlus } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -203,20 +203,17 @@ const ProjectPage: React.FC = () => {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <Heading level={1}>{project.title}</Heading>
                 <div className="flex gap-3">
-                  <Button onClick={handleJoinProject} size="sm">
-                    <Users className=" h-4 w-4" />
-                    Вступить
-                  </Button>
                   {project.task && (
                     <Button variant="outline" size="sm" asChild>
-                      <a
-                        href={`/task/${project.task.id}`}
-                        className="flex items-center gap-2"
-                      >
-                        <LinkIcon className="h-4 w-4" /> К задаче
-                      </a>
+                      <Link href={`/task/${project.task.id}`}>
+                        <LinkIcon /> К задаче
+                      </Link>
                     </Button>
                   )}
+                  <Button onClick={handleJoinProject} size="sm">
+                    <UserPlus />
+                    Вступить
+                  </Button>
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-3">

@@ -3,7 +3,7 @@ import { Badge } from "@/shared/ui/Badge";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
-import { ArrowRight, Calendar, UserIcon, Users } from "lucide-react";
+import { ArrowRight, Briefcase, Calendar, ClipboardCheck, UserIcon, Users } from "lucide-react";
 import { Task } from "@/entities/Task/types";
 import { ComplexityBadge } from "./ComplexityBadge";
 import { TaskTag } from "./TaskTag";
@@ -28,7 +28,7 @@ function Content({ task }: { task: Task }) {
   return (
     <>
       <div className="flex gap-2 items-center mt-4">
-        <UserIcon className="h-4 w-4 text-muted-foreground" />
+        <Briefcase className="h-4 w-4 text-muted-foreground" />
         <Text variant="muted">Заказчик: {task.customer.name}</Text>
       </div>
       <Text className="mt-3 line-clamp-3">{task.description}</Text>
@@ -44,13 +44,11 @@ function Footer({ task }: { task: Task }) {
   return (
     <>
       <Button variant="outline" size="sm" className="md:flex-initial flex-1">
-        Взять задачу
+        <ClipboardCheck />
+        Взять
       </Button>
       <Button asChild size="sm">
-        <Link
-          href={`/tasks/${task.id}`}
-          className="flex items-center justify-center gap-1 md:flex-initial flex-1"
-        >
+        <Link href={`/tasks/${task.id}`}>
           Подробнее
           <ArrowRight className="w-4 h-4" />
         </Link>

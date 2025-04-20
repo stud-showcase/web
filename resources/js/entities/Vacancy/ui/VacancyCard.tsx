@@ -1,6 +1,6 @@
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
-import { UsersIcon, FolderIcon, ArrowRight } from "lucide-react";
+import { UsersIcon, FolderIcon, ArrowRight, UserPlus } from "lucide-react";
 import { CardWrapper } from "@/shared/components/CardWrapper";
 import { Vacancy } from "../types";
 import { Button } from "@/shared/ui/Button";
@@ -40,13 +40,11 @@ export function VacancyCard({
             size="sm"
             className="md:flex-initial flex-1"
           >
-            Вступить в команду
+            <UserPlus />
+            Вступить
           </Button>
           <Button asChild size="sm">
-            <Link
-              href={`/projects/${project.id}`}
-              className="flex items-center justify-center gap-1 md:flex-initial flex-1"
-            >
+            <Link href={`/projects/${project.id}`}>
               Подробнее
               <ArrowRight className="w-4 h-4" />
             </Link>

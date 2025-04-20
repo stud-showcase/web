@@ -7,6 +7,8 @@ import {
   CalendarIcon,
   UsersIcon,
   Files,
+  ClipboardCheck,
+  Briefcase,
 } from "lucide-react";
 import { UserLayout } from "@/layouts/UserLayout";
 import { Text } from "@/shared/ui/Text";
@@ -27,11 +29,7 @@ import { Project, SimpleProjectCard } from "@/entities/Project";
 import { TaskTag } from "@/entities/Task";
 import { project, task } from "@/shared/mocks";
 
-export default function TaskPage({
-}: {
-  task: Task;
-  projects: Project[];
-}) {
+export default function TaskPage({}: { task: Task; projects: Project[] }) {
   const projects = Array(5).fill(project);
 
   const formattedDeadline = task.deadline.toLocaleDateString("ru-RU", {
@@ -76,9 +74,13 @@ export default function TaskPage({
               </Breadcrumb>
               <div className="mt-6 flex flex-col sm:flex-row justify-between sm:items-center items-start gap-6">
                 <Heading level={1}>{task.title}</Heading>
-                <ComplexityBadge complexity={task.complexity} />
+                <Button size="sm">
+                  <ClipboardCheck />
+                  Взять
+                </Button>
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
+                <ComplexityBadge complexity={task.complexity} />
                 {task.tags.map((tag) => (
                   <TaskTag value={tag} />
                 ))}
@@ -114,7 +116,6 @@ export default function TaskPage({
                         </Button>
                       ))}
                     </div>
-                    <Button>Взять задачу</Button>
                   </div>
                 </div>
               )}
@@ -141,7 +142,7 @@ export default function TaskPage({
                   </div>
                 </div>
                 <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px]">
-                  <UserIcon className="h-6 w-6" />
+                  <Briefcase className="h-6 w-6" />
                   <div>
                     <Text variant="muted">Заказчик</Text>
                     <Text>{task.customer.name}</Text>
