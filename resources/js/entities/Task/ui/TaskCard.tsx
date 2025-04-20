@@ -45,10 +45,10 @@ function Footer({ task }: { task: Task }) {
     <>
       <Button variant="outline" size="sm" className="md:flex-initial flex-1">
         <ClipboardCheck />
-        Взять
+        Взять задачу
       </Button>
       <Button asChild size="sm">
-        <Link href={`/tasks/${task.id}`}>
+        <Link href={`/tasks/${task.id}`} className="md:flex-initial flex-1">
           Подробнее
           <ArrowRight className="w-4 h-4" />
         </Link>

@@ -44,7 +44,10 @@ export function VacancyCard({
             Вступить
           </Button>
           <Button asChild size="sm">
-            <Link href={`/projects/${project.id}`}>
+            <Link
+              href={`/projects/${project.id}`}
+              className="md:flex-initial flex-1"
+            >
               Подробнее
               <ArrowRight className="w-4 h-4" />
             </Link>

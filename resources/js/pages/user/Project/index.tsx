@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Avatar, AvatarFallback } from "@/shared/ui/Avatar";
-import { Users, FileIcon, Link as LinkIcon, UserPlus } from "lucide-react";
+import { FileIcon, Link as LinkIcon, UserPlus } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -103,73 +103,6 @@ interface Project {
 
 const ProjectPage: React.FC = () => {
   const [project, setProject] = useState<Project>(mockProject);
-  const [isEditingAnnotation, setIsEditingAnnotation] = useState(false);
-  const [newAnnotation, setNewAnnotation] = useState(project.annotation || "");
-  const [newVacancy, setNewVacancy] = useState({ title: "", description: "" });
-
-  const handleJoinProject = () => {
-    alert("Join request sent!");
-  };
-
-  const toggleRecruitment = () => {
-    setProject({ ...project, isRecruiting: !project.isRecruiting });
-  };
-
-  const handleAnnotationSave = () => {
-    setProject({ ...project, annotation: newAnnotation });
-    setIsEditingAnnotation(false);
-  };
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const newFile = {
-        id: `file${project.files.length + 1}`,
-        name: file.name,
-        url: "#",
-      };
-      setProject({ ...project, files: [...project.files, newFile] });
-    }
-  };
-
-  const handleFileDelete = (fileId: string) => {
-    setProject({
-      ...project,
-      files: project.files.filter((f) => f.id !== fileId),
-    });
-  };
-
-  const handleVacancyCreate = () => {
-    if (newVacancy.title && newVacancy.description) {
-      const vacancy = {
-        id: `vac${project.vacancies.length + 1}`,
-        ...newVacancy,
-      };
-      setProject({ ...project, vacancies: [...project.vacancies, vacancy] });
-      setNewVacancy({ title: "", description: "" });
-    }
-  };
-
-  const handleVacancyDelete = (vacancyId: string) => {
-    setProject({
-      ...project,
-      vacancies: project.vacancies.filter((v) => v.id !== vacancyId),
-    });
-  };
-
-  const handleApplicationAction = (
-    applicationId: string,
-    action: "accept" | "reject"
-  ) => {
-    setProject({
-      ...project,
-      applications: project.applications.map((app) =>
-        app.id === applicationId
-          ? { ...app, status: action === "accept" ? "Accepted" : "Rejected" }
-          : app
-      ),
-    });
-  };
 
   return (
     <>
@@ -202,15 +135,19 @@ const ProjectPage: React.FC = () => {
             <header className="border-b pb-6 mt-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <Heading level={1}>{project.title}</Heading>
-                <div className="flex gap-3">
+                <div className="flex flex-row w-full sm:w-auto gap-3">
                   {project.task && (
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href={`/task/${project.task.id}`}>
+                    <Button
+                      variant="outline"
+                      asChild
+                      className="flex-1 sm:flex-none"
+                    >
+                      <Link href={`/tasks/1}`}>
                         <LinkIcon /> К задаче
                       </Link>
                     </Button>
                   )}
-                  <Button onClick={handleJoinProject} size="sm">
+                  <Button className="flex-1 sm:flex-none">
                     <UserPlus />
                     Вступить
                   </Button>
