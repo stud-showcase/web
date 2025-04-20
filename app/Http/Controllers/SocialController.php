@@ -43,7 +43,7 @@ class SocialController extends Controller
 
             Auth::login($user);
 
-            return redirect('/tasks');
+            return redirect('/projects');
         } catch (\Throwable $e) {
             return redirect('/')->with('error', 'Ошибка авторизации: ' . $e->getMessage());
         }
@@ -57,6 +57,7 @@ class SocialController extends Controller
             $logoutUri = env('KEYCLOAK_BASE_URL') . '/realms/' . env('KEYCLOAK_REALM') . '/protocol/openid-connect/logout';
             $query = http_build_query([
                 'client_id' => env('KEYCLOAK_CLIENT_ID'),
+                'post_logout_redirect_uri' => env('APP_URL') . '/',
             ]);
             return redirect($logoutUri . '?' . $query);
         } catch (\Throwable $e) {
