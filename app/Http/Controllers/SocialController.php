@@ -16,7 +16,7 @@ class SocialController extends Controller
         if ($provider !== 'keycloak') {
             abort(404, 'Провайдер не поддерживается');
         }
-        return Socialite::driver($provider)->scopes(['openid', 'profile', 'email'])->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
     public function handleProviderCallback(Request $request, $provider)
@@ -43,7 +43,7 @@ class SocialController extends Controller
             Auth::login($user);
 
             return redirect('/tasks');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return redirect('/')->with('error', 'Ошибка авторизации: ' . $e->getMessage());
         }
     }
