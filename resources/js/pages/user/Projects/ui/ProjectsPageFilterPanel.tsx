@@ -1,8 +1,8 @@
-import { FilterPanelWrapper, FilterBlock } from "@/shared/components/FilterPanel";
+import { FilterPanel, FilterBlock } from "@/shared/ui/FilterPanel";
 
 export function ProjectsPageFilterPanel() {
   return (
-    <FilterPanelWrapper>
+    <FilterPanel>
       <FilterBlock
         title="Статус"
         idPrefix="status"
@@ -36,6 +36,6 @@ export function ProjectsPageFilterPanel() {
         idPrefix="recruitment"
         options={["Все", "Набор открыт", "Набор закрыт"]}
       />
-    </FilterPanelWrapper>
+    </FilterPanel>
   );
 }

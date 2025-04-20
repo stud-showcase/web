@@ -1,5 +1,6 @@
-import { SearchBar } from "@/shared/components/SearchBar";
-import { Task, TaskCard } from "@/entities/Task";
+import { SearchBar } from "@/shared/ui/SearchBar";
+import { Task  } from "@/entities/Task";
+import { TaskCard } from "./TaskCard";
 
 export function TaskBankPageContent({ tasks }: { tasks: Task[] }) {
   return (

@@ -9,10 +9,10 @@ import {
   DialogTrigger,
 } from "@/shared/ui/Dialog";
 import { ReactNode } from "react";
-import { LeaveRequestForm } from "./ui/LeaveRequestForm";
+import { LeaveRequestForm } from "./LeaveRequestForm";
 import { DialogClose } from "@radix-ui/react-dialog";
 
-export function LeaveRequestWrapper({ children }: { children: ReactNode }) {
+export function LeaveRequest({ children }: { children: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>

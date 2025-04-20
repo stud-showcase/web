@@ -1,4 +1,4 @@
-import { FilterBlock, FilterPanelWrapper } from "@/shared/components/FilterPanel";
+import { FilterBlock, FilterPanel } from "@/shared/ui/FilterPanel";
 
 export function VacanciesPageFilterPanel() {
   const tags = [
@@ -17,7 +17,7 @@ export function VacanciesPageFilterPanel() {
   ];
 
   return (
-    <FilterPanelWrapper>
+    <FilterPanel>
       <FilterBlock
         title="Задача"
         idPrefix="task_title"
@@ -30,6 +30,6 @@ export function VacanciesPageFilterPanel() {
         options={tags}
         scrollable
       />
-    </FilterPanelWrapper>
+    </FilterPanel>
   );
 }

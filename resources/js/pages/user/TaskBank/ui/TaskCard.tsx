@@ -1,12 +1,12 @@
-import { CardWrapper } from "@/shared/components/CardWrapper";
+import { EntityCard } from "@/shared/ui/EntityCard";
 import { Badge } from "@/shared/ui/Badge";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
 import { ArrowRight, Briefcase, Calendar, ClipboardCheck, UserIcon, Users } from "lucide-react";
-import { Task } from "@/entities/Task/types";
-import { ComplexityBadge } from "./ComplexityBadge";
-import { TaskTag } from "./TaskTag";
+import { Task } from "@/entities/Task/model/Task";
+import { ComplexityBadge } from "../../../../entities/Task/ui/ComplexityBadge";
+import { TaskTag } from "../../../../entities/Task/ui/TaskTag";
 
 function Badges({ task }: { task: Task }) {
   return (
@@ -59,7 +59,7 @@ function Footer({ task }: { task: Task }) {
 
 export function TaskCard({ task }: { task: Task }) {
   return (
-    <CardWrapper
+    <EntityCard
       title={task.title}
       badges={<Badges task={task} />}
       content={<Content task={task} />}

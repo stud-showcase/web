@@ -1,8 +1,8 @@
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
 import { UsersIcon, FolderIcon, ArrowRight, UserPlus } from "lucide-react";
-import { CardWrapper } from "@/shared/components/CardWrapper";
-import { Vacancy } from "../types";
+import { EntityCard } from "@/shared/ui/EntityCard";
+import { Vacancy } from "@/entities/Vacancy";
 import { Button } from "@/shared/ui/Button";
 import { Task } from "@/entities/Task";
 import { Project } from "@/entities/Project";
@@ -17,7 +17,7 @@ export function VacancyCard({
   task: Task;
 }) {
   return (
-    <CardWrapper
+    <EntityCard
       title={vacancy.title}
       content={
         <div className="flex flex-col gap-4 mt-4">

@@ -1,4 +1,4 @@
-export type ProjectStatus = "under_review" | "in_progress" | "completed";
+import { ProjectStatus } from "./ProjectStatus";
 
 export type Project = {
   id: number;

@@ -1,4 +1,4 @@
-export type TaskComplexity = "easy" | "medium" | "hard";
+import { TaskComplexity } from "./TaskCompexity";
 
 export type Task = {
   id: number;

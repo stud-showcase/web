@@ -2,7 +2,7 @@ import { Project } from "@/entities/Project";
 import { Task } from "@/entities/Task";
 import { Vacancy } from "@/entities/Vacancy";
 
-export type FullVacancy = {
+export type ExtendedVacancy = {
   vacancy: Vacancy;
   task: Task;
   project: Project;

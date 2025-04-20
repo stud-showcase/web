@@ -1,8 +1,8 @@
-import { FilterBlock, FilterPanelWrapper, RangeFilterBlock } from "@/shared/components/FilterPanel";
+import { FilterBlock, FilterPanel, RangeFilterBlock } from "@/shared/ui/FilterPanel";
 
 export function TasksBankPageFilterPanel() {
   return (
-    <FilterPanelWrapper>
+    <FilterPanel>
       <FilterBlock
         title="Сложность"
         idPrefix="complexity"
@@ -47,6 +47,6 @@ export function TasksBankPageFilterPanel() {
         ]}
         scrollable
       />
-    </FilterPanelWrapper>
+    </FilterPanel>
   );
 }

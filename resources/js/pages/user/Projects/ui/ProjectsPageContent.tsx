@@ -1,9 +1,10 @@
-import { SearchBar } from "@/shared/components/SearchBar";
-import { ProjectCard } from "@/entities/Project";
+import { SearchBar } from "@/shared/ui/SearchBar";
+import { ProjectCard } from "./ProjectCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
-import { FullProject } from "../types/FullProject";
+import { ExtendedProject } from "../model/ExtendedProject";
 
-export function ProjectsPageContent({ projects }: { projects: FullProject[] }) {
+
+export function ProjectsPageContent({ projects }: { projects: ExtendedProject[] }) {
   return (
     <Tabs defaultValue="all" className="flex flex-col gap-6">
       <div className="flex lg:flex-row flex-col gap-4">

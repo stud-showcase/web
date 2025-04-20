@@ -1,11 +1,11 @@
-import { SearchBar } from "@/shared/components/SearchBar";
-import { VacancyCard } from "@/entities/Vacancy";
-import { FullVacancy } from "../types/FullVacancy";
+import { SearchBar } from "@/shared/ui/SearchBar";
+import { VacancyCard } from "./VacancyCard";
+import { ExtendedVacancy } from "../model/ExtendedVacancy";
 
 export function VacanciesPageContent({
   vacancies,
 }: {
-  vacancies: FullVacancy[];
+  vacancies: ExtendedVacancy[];
 }) {
   return (
     <>

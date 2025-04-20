@@ -15,7 +15,7 @@ type Props = {
   footer?: ReactNode;
 };
 
-export function CardWrapper({ title, badges, tags, content, footer }: Props) {
+export function EntityCard({ title, badges, tags, content, footer }: Props) {
   return (
     <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ">
       <CardHeader className="border-b border-border p-3">

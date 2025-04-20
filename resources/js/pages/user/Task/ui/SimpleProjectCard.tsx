@@ -1,9 +1,9 @@
 import { Text } from "@/shared/ui/Text";
 import { Heading } from "@/shared/ui/Heading";
 import { Link } from "@inertiajs/react";
-import { Project } from "@/entities/Project/types";
+import { Project } from "@/entities/Project/model/Project";
 import { HiringBadge } from "@/entities/Project/ui/HiringBadge";
-import { StatusBadge } from "./StatusBadge";
+import { StatusBadge } from "@/entities/Project";
 import { ChevronRightIcon } from "lucide-react";
 
 export function SimpleProjectCard({ project }: { project: Project }) {

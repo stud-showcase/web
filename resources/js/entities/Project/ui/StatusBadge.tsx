@@ -1,4 +1,4 @@
-import { ProjectStatus } from "@/entities/Project/types";
+import { ProjectStatus } from "@/entities/Project/model/ProjectStatus";
 import { Badge } from "@/shared/ui/Badge";
 import { CheckCircle, Clock, Settings } from "lucide-react";
 

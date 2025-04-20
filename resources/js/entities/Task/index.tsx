@@ -1,4 +1,4 @@
-export type { Task, TaskComplexity } from "./types";
+export type { Task } from "./model/Task";
+export type { TaskComplexity } from "./model/TaskCompexity";
 export { ComplexityBadge } from "./ui/ComplexityBadge";
 export { TaskTag } from "./ui/TaskTag";
-export { TaskCard } from "./ui/TaskCard";

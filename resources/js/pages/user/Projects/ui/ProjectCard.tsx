@@ -1,10 +1,10 @@
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
-import { Project } from "@/entities/Project/types";
+import { Project } from "@/entities/Project/model/Project";
 import { ArrowRight, UserIcon, FolderIcon, UserPlus } from "lucide-react";
-import { CardWrapper } from "@/shared/components/CardWrapper";
-import { StatusBadge } from "./StatusBadge";
+import { EntityCard } from "@/shared/ui/EntityCard";
+import { StatusBadge } from "../../../../entities/Project/ui/StatusBadge";
 import { ComplexityBadge, Task } from "@/entities/Task";
 import { HiringBadge } from "@/entities/Project/ui/HiringBadge";
 import { useAuth } from "@/shared/hooks/useAuth";
@@ -79,7 +79,7 @@ export function ProjectCard({
   task: Task;
 }) {
   return (
-    <CardWrapper
+    <EntityCard
       title={project.name}
       badges={<Badges project={project} task={task} />}
       content={<Content project={project} task={task} />}
