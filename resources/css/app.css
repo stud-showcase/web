@@ -2,134 +2,122 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Myriad Pro */
-
 @font-face {
-  font-family: "Myriad Pro";
-  font-style: normal;
-  font-weight: 300;
-  src: url("/fonts/Myriad Pro/MyriadPro-Light.otf") format("otf");
+    font-family: "Myriad Pro";
+    font-style: normal;
+    font-weight: 300;
+    src: url("/fonts/MyriadPro/otf/MyriadPro-Light.otf") format("opentype"),
+        url("/fonts/MyriadPro/ttf/MyriadPro-Light.ttf") format("truetype"),
+        url("/fonts/MyriadPro/woff/MyriadPro-Light.woff") format("woff"),
+        url("/fonts/MyriadPro/woff2/MyriadPro-Light.woff2") format("woff2"),
+        url("/fonts/MyriadPro/svg/MyriadPro-Light.svg#MyriadPro-Light")
+            format("svg");
 }
 
 @font-face {
-  font-family: "Myriad Pro";
-  font-style: normal;
-  font-weight: 400;
-  src: url("/fonts/Myriad Pro/MyriadPro-Regular.otf") format("otf");
+    font-family: "Myriad Pro";
+    font-style: normal;
+    font-weight: 400;
+    src: url("/fonts/MyriadPro/otf/MyriadPro-Regular.otf") format("opentype"),
+        url("/fonts/MyriadPro/ttf/MyriadPro-Regular.ttf") format("truetype"),
+        url("/fonts/MyriadPro/woff/MyriadPro-Regular.woff") format("woff"),
+        url("/fonts/MyriadPro/woff2/MyriadPro-Regular.woff2") format("woff2"),
+        url("/fonts/MyriadPro/svg/MyriadPro-Regular.svg#MyriadPro-Regular")
+            format("svg");
 }
 
 @font-face {
-  font-family: "Myriad Pro";
-  font-style: normal;
-  font-weight: 600;
-  src: url("/fonts/Myriad Pro/MyriadPro-Semibold.otf") format("otf");
+    font-family: "Myriad Pro";
+    font-style: normal;
+    font-weight: 600;
+    src: url("/fonts/MyriadPro/otf/MyriadPro-Semibold.otf") format("opentype"),
+        url("/fonts/MyriadPro/ttf/MyriadPro-Semibold.ttf") format("truetype"),
+        url("/fonts/MyriadPro/woff/MyriadPro-Semibold.woff") format("woff"),
+        url("/fonts/MyriadPro/woff2/MyriadPro-Semibold.woff2") format("woff2"),
+        url("/fonts/MyriadPro/svg/MyriadPro-Semibold.svg#MyriadPro-Semibold")
+            format("svg");
 }
 
 @font-face {
-  font-family: "Myriad Pro";
-  font-style: normal;
-  font-weight: 700;
-  src: url("/fonts/Myriad Pro/MyriadPro-Bold.otf") format("otf");
-}
-
-/* Minion Pro */
-
-@font-face {
-  font-family: "Minion Pro";
-  font-style: normal;
-  font-weight: 400;
-  src: url("/fonts/Minion Pro/MinionPro-Regular.otf") format("otf");
-}
-
-@font-face {
-  font-family: "Minion Pro";
-  font-style: normal;
-  font-weight: 500;
-  src: url("/fonts/Minion Pro/MinionPro-Medium.otf") format("otf");
-}
-
-@font-face {
-  font-family: "Minion Pro";
-  font-style: normal;
-  font-weight: 600;
-  src: url("/fonts/Minion Pro/MinionPro-Semibold.otf") format("otf");
-}
-
-@font-face {
-  font-family: "Minion Pro";
-  font-style: normal;
-  font-weight: 700;
-  src: url("/fonts/Minion Pro/MinionPro-Bold.otf") format("otf");
+    font-family: "Myriad Pro";
+    font-style: normal;
+    font-weight: 700;
+    src: url("/fonts/MyriadPro/otf/MyriadPro-Bold.otf") format("opentype"),
+        url("/fonts/MyriadPro/ttf/MyriadPro-Bold.ttf") format("truetype"),
+        url("/fonts/MyriadPro/woff/MyriadPro-Bold.woff") format("woff"),
+        url("/fonts/MyriadPro/woff2/MyriadPro-Bold.woff2") format("woff2"),
+        url("/fonts/MyriadPro/svg/MyriadPro-Bold.svg#MyriadPro-Bold")
+            format("svg");
 }
 
 @layer base {
-  :root {
-    --font-myriad-pro: "Myriad Pro", sans-serif;
-    --font-minion-pro: "Minion Pro", serif;
+    :root {
+        --font-myriad-pro: "Myriad Pro", sans-serif;
+        --font-minion-pro: "Minion Pro", serif;
 
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 207 73% 42%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --warning: 24.6 95% 53.1%;
-    --warning-foreground: 60 9.1% 97.8%;
-    --success: 142.1 76.2% 36.3%;
-    --success-foreground: 355.7 100% 97.3%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 207 73% 42%;
-    --radius: 0.75rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-  }
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 207 73% 42%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --warning: 24.6 95% 53.1%;
+        --warning-foreground: 60 9.1% 97.8%;
+        --success: 142.1 76.2% 36.3%;
+        --success-foreground: 355.7 100% 97.3%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 207 73% 42%;
+        --radius: 0.75rem;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+    }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 207 73% 42%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 207 73% 42%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
+    .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 207 73% 42%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 207 73% 42%;
+        --chart-1: 220 70% 50%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+    }
 
-  * {
-    @apply border-border font-myriad tracking-wide;
-  }
+    * {
+        @apply border-border font-myriad tracking-wide;
+    }
 
-  body {
-    @apply bg-background text-foreground;
-  }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
