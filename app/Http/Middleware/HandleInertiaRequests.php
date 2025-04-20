@@ -30,20 +30,6 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        // Пока тут мок данные
-        return [
-            ...parent::share($request),
-            'auth' => [
-                'isLoggedIn' => true,
-                'user' => [
-                    'role' => 'admin',
-                    'firstName' => 'Иван',
-                    'lastName' => 'Иванов',
-                    'middleName' => 'Иванович'
-                ]
-            ],
-        ];
-
         $user = Auth::user();
 
         return [
@@ -54,6 +40,7 @@ class HandleInertiaRequests extends Middleware
                     'lastName' => $user->second_name,
                     'middleName' => $user->last_name,
                     'email' => $user->email,
+                    'role' => 'admin'
                 ] : null,
             ],
         ];

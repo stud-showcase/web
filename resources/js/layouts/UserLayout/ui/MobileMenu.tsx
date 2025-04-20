@@ -15,7 +15,7 @@ import { NavLinks } from "./NavLinks";
 import { useAuth } from "@/shared/hooks/useAuth";
 
 export function MobileMenu() {
-  const { isLoggedIn } = useAuth();
+  const { user } = useAuth();
 
   return (
     <Sheet>
@@ -37,7 +37,7 @@ export function MobileMenu() {
           <div className="flex flex-col gap-4">
             <LeaveRequestButton />
             <Separator />
-            {isLoggedIn ? <ProfileIcon mobile /> : <SignInButton />}
+            {user ? <ProfileIcon mobile /> : <SignInButton />}
           </div>
         </div>
       </SheetContent>

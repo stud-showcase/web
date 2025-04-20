@@ -51,11 +51,11 @@ function Tags({ task }: { task: Task }) {
 }
 
 function Footer({ project }: { project: Project }) {
-  const { isLoggedIn } = useAuth();
+  const { user } = useAuth();
 
   return (
     <>
-      {project.isHiring && isLoggedIn && (
+      {project.isHiring && user && (
         <Button variant="outline" size="sm" className="md:flex-initial flex-1">
           <UserPlus />
           Вступить

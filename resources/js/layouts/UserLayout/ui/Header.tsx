@@ -9,7 +9,7 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { Container } from "@/shared/ui/Container";
 
 export function Header() {
-  const { isLoggedIn } = useAuth();
+  const { user } = useAuth();
 
   return (
     <header className="bg-background border-b h-[68px] sticky z-10 inset-0 ">
@@ -26,7 +26,7 @@ export function Header() {
       </div>
       <div className="lg:flex gap-4 items-center hidden">
         <LeaveRequestButton />
-        {isLoggedIn ? <ProfileIcon /> : <SignInButton />}
+        {user ? <ProfileIcon /> : <SignInButton />}
       </div>
       <div className="flex lg:hidden">
         <MobileMenu />

@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/DropdownMenu";
-import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react";
+import { ChevronsUpDown, LogOut, Settings } from "lucide-react";
 import { PropsWithChildren } from "react";
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
@@ -66,9 +66,11 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Выйти</span>
+          <DropdownMenuItem asChild>
+            <a href="/logout">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Выйти</span>
+            </a>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
