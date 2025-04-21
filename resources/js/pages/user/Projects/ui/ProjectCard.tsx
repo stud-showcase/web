@@ -4,7 +4,7 @@ import { Text } from "@/shared/ui/Text";
 import { Project } from "@/entities/Project/model/Project";
 import { ArrowRight, UserPlus, Users } from "lucide-react";
 import { EntityCard } from "@/shared/ui/EntityCard";
-import { StatusBadge } from "../../../../entities/Project/ui/StatusBadge";
+import { StatusBadge } from "@/entities/Project/ui/StatusBadge";
 import { ComplexityBadge, Task } from "@/entities/Task";
 import { HiringBadge } from "@/entities/Project/ui/HiringBadge";
 import { useAuth } from "@/shared/hooks/useAuth";
