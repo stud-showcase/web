@@ -1,11 +1,58 @@
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
-import { UsersIcon, FolderIcon, ArrowRight, UserPlus } from "lucide-react";
+import { ArrowRight, FolderIcon, UserPlus, Users } from "lucide-react";
 import { EntityCard } from "@/shared/ui/EntityCard";
-import { Vacancy } from "@/entities/Vacancy";
 import { Button } from "@/shared/ui/Button";
-import { Task } from "@/entities/Task";
+import { Vacancy } from "@/entities/Vacancy";
 import { Project } from "@/entities/Project";
+import { Task } from "@/entities/Task";
+
+function Content({
+  vacancy,
+  task,
+  project,
+}: {
+  vacancy: Vacancy;
+  task: Task;
+  project: Project;
+}) {
+  return (
+    <>
+      {vacancy.description && (
+        <Text variant="small" className="line-clamp-2">
+          {vacancy.description}
+        </Text>
+      )}
+      <div className="flex flex-col gap-2 mt-2">
+        <div className="flex items-center gap-2">
+          <FolderIcon className="h-3 w-3 text-muted-foreground" />
+          <Text variant="muted">Задача: {task.title}</Text>
+        </div>
+        <div className="flex items-center gap-2">
+          <Users className="w-3 h-3 text-muted-foreground" />
+          <Text variant="muted">Проект: {project.name}</Text>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Footer({ project }: { project: Project }) {
+  return (
+    <>
+      <Button variant="outline" size="sm" className="flex-1">
+        <UserPlus />
+        Вступить
+      </Button>
+      <Button asChild size="sm" className="flex-1">
+        <Link href={`/projects/${project.id}`}>
+          Подробнее
+          <ArrowRight />
+        </Link>
+      </Button>
+    </>
+  );
+}
 
 export function VacancyCard({
   vacancy,
@@ -19,41 +66,8 @@ export function VacancyCard({
   return (
     <EntityCard
       title={vacancy.title}
-      content={
-        <div className="flex flex-col gap-4 mt-4">
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-              <FolderIcon className="h-4 w-4 text-muted-foreground" />
-              <Text variant="muted">Задача: {task.title}</Text>
-            </div>
-            <div className="flex items-center gap-2">
-              <UsersIcon className="h-4 w-4 text-muted-foreground" />
-              <Text variant="muted">Проект: {project.name}</Text>
-            </div>
-          </div>
-        </div>
-      }
-      footer={
-        <>
-          <Button
-            variant="outline"
-            size="sm"
-            className="md:flex-initial flex-1"
-          >
-            <UserPlus />
-            Вступить
-          </Button>
-          <Button asChild size="sm">
-            <Link
-              href={`/projects/${project.id}`}
-              className="md:flex-initial flex-1"
-            >
-              Подробнее
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </Button>
-        </>
-      }
+      content={<Content vacancy={vacancy} task={task} project={project} />}
+      footer={<Footer project={project} />}
     />
   );
 }

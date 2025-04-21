@@ -13,7 +13,9 @@ import { TaskTag } from "@/entities/Task";
 function Title({ project, task }: { project: Project; task: Task }) {
   return (
     <div className="flex justify-between items-center">
-      {project.name}
+      <span className="text-xl font-bold leading-none tracking-tight">
+        {project.name}
+      </span>
       <span className="text-sm flex gap-2 items-center">
         <Users className="w-4 h-4 " />
         {project.members.length}/{task.maxMembers}
