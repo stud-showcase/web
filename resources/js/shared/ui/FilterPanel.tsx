@@ -40,7 +40,7 @@ export function FilterBlock({
 
   return (
     <div>
-      <Text className="font-medium pt-4 pb-3">{title}</Text>
+      <Text className="font-semibold pt-4 pb-3">{title}</Text>
       {scrollable ? (
         <ScrollArea className="h-40 w-full">{content}</ScrollArea>
       ) : (
@@ -61,7 +61,7 @@ type RangeFilterBlockProps = {
 export function RangeFilterBlock({ title, range }: RangeFilterBlockProps) {
   return (
     <div>
-      <Text className="font-medium pt-4 pb-3">{title}</Text>
+      <Text className="font-semibold pt-4 pb-3">{title}</Text>
       <div className="flex gap-2">
         <Select>
           <SelectTrigger className="w-full">

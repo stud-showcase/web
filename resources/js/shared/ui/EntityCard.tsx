@@ -17,7 +17,14 @@ type Props = {
   footer?: ReactNode;
 };
 
-export function EntityCard({ title, subtitle, badges, tags, content, footer }: Props) {
+export function EntityCard({
+  title,
+  subtitle,
+  badges,
+  tags,
+  content,
+  footer,
+}: Props) {
   return (
     <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ">
       <CardHeader>
@@ -32,7 +39,11 @@ export function EntityCard({ title, subtitle, badges, tags, content, footer }: P
         {tags && <div className="flex gap-2">{tags}</div>}
       </CardContent>
 
-      {footer && <CardFooter>{footer}</CardFooter>}
+      {footer && (
+        <CardFooter>
+          <div className="flex gap-2 flex-1">{footer}</div>
+        </CardFooter>
+      )}
     </Card>
   );
 }

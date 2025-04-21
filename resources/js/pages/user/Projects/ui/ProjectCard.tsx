@@ -10,13 +10,13 @@ import { HiringBadge } from "@/entities/Project/ui/HiringBadge";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { TaskTag } from "@/entities/Task";
 
-function Title({ project }: { project: Project; task: Task }) {
+function Title({ project, task }: { project: Project; task: Task }) {
   return (
     <div className="flex justify-between items-center">
       {project.name}
       <span className="text-sm flex gap-2 items-center">
         <Users className="w-4 h-4 " />
-        {project.members.length}/10
+        {project.members.length}/{task.maxMembers}
       </span>
     </div>
   );
@@ -52,20 +52,20 @@ function Footer({ project }: { project: Project }) {
   const { user } = useAuth();
 
   return (
-    <div className="flex gap-2 flex-1">
+    <>
       {project.isHiring && user && (
         <Button variant="outline" size="sm" className="flex-1">
-          <UserPlus className="w-4 h-4" />
+          <UserPlus />
           Вступить
         </Button>
       )}
       <Button asChild size="sm" className="flex-1">
         <Link href={`/projects/${project.id}`}>
           Подробнее
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight />
         </Link>
       </Button>
-    </div>
+    </>
   );
 }
 
