@@ -2,13 +2,25 @@ import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Project } from "@/entities/Project/model/Project";
-import { ArrowRight, UserIcon, FolderIcon, UserPlus } from "lucide-react";
+import { ArrowRight, UserPlus, Users } from "lucide-react";
 import { EntityCard } from "@/shared/ui/EntityCard";
 import { StatusBadge } from "../../../../entities/Project/ui/StatusBadge";
 import { ComplexityBadge, Task } from "@/entities/Task";
 import { HiringBadge } from "@/entities/Project/ui/HiringBadge";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { TaskTag } from "@/entities/Task";
+
+function Title({ project }: { project: Project; task: Task }) {
+  return (
+    <div className="flex justify-between items-center">
+      {project.name}
+      <span className="text-sm flex gap-2 items-center">
+        <Users className="w-4 h-4 " />
+        {project.members.length}/10
+      </span>
+    </div>
+  );
+}
 
 function Badges({ project, task }: { project: Project; task: Task }) {
   return (
@@ -20,54 +32,40 @@ function Badges({ project, task }: { project: Project; task: Task }) {
   );
 }
 
-function Content({ project, task }: { project: Project; task: Task }) {
+function Content({ project }: { project: Project; task: Task }) {
   return (
-    <div className="space-y-3 mt-4">
-      <div className="flex items-center gap-2">
-        <FolderIcon className="h-4 w-4 text-muted-foreground" />
-        <Text variant="muted">Задача: {task.title}</Text>
-      </div>
-      {project.mentor && (
-        <div className="flex items-center gap-2">
-          <UserIcon className="h-4 w-4 text-muted-foreground" />
-          <Text variant="muted">Наставник: {project.mentor}</Text>
-        </div>
-      )}
+    <>
       {project.abstract && (
-        <Text className="line-clamp-3">{project.abstract}</Text>
+        <Text variant="small" className="line-clamp-2">
+          {project.abstract}
+        </Text>
       )}
-    </div>
+    </>
   );
 }
 
 function Tags({ task }: { task: Task }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {task.tags.map((tag) => (
-        <TaskTag value={tag} />
-      ))}
-    </div>
-  );
+  return task.tags.map((tag) => <TaskTag value={tag} />);
 }
 
 function Footer({ project }: { project: Project }) {
   const { user } = useAuth();
 
   return (
-    <>
+    <div className="flex gap-2 flex-1">
       {project.isHiring && user && (
-        <Button variant="outline" size="sm" className="md:flex-initial flex-1">
-          <UserPlus />
+        <Button variant="outline" size="sm" className="flex-1">
+          <UserPlus className="w-4 h-4" />
           Вступить
         </Button>
       )}
-      <Button asChild size="sm">
-        <Link href={`/projects/${project.id}`} className="md:flex-initial flex-1">
+      <Button asChild size="sm" className="flex-1">
+        <Link href={`/projects/${project.id}`}>
           Подробнее
           <ArrowRight className="w-4 h-4" />
         </Link>
       </Button>
-    </>
+    </div>
   );
 }
 
@@ -80,7 +78,8 @@ export function ProjectCard({
 }) {
   return (
     <EntityCard
-      title={project.name}
+      title={<Title project={project} task={task} />}
+      subtitle={task.title}
       badges={<Badges project={project} task={task} />}
       content={<Content project={project} task={task} />}
       tags={<Tags task={task} />}

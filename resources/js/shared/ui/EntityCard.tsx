@@ -1,6 +1,7 @@
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -9,37 +10,29 @@ import { ReactNode } from "react";
 
 type Props = {
   title: ReactNode | string;
+  subtitle?: ReactNode | string;
   badges?: ReactNode;
   tags?: ReactNode;
   content: ReactNode;
   footer?: ReactNode;
 };
 
-export function EntityCard({ title, badges, tags, content, footer }: Props) {
+export function EntityCard({ title, subtitle, badges, tags, content, footer }: Props) {
   return (
     <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ">
-      <CardHeader className="border-b border-border p-3">
-        <div className="flex md:items-center md:justify-between md:flex-row gap-4 flex-col">
-          <CardTitle>{title}</CardTitle>
-          {badges && <div className="flex flex-wrap gap-2">{badges}</div>}
-        </div>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        {subtitle && <CardDescription>{subtitle}</CardDescription>}
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
         {content}
 
-        {tags && (
-          <div className="mt-4">
-            <div className="flex flex-wrap gap-1">{tags}</div>
-          </div>
-        )}
+        {badges && <div className="flex gap-2">{badges}</div>}
+        {tags && <div className="flex gap-2">{tags}</div>}
       </CardContent>
 
-      {footer && (
-        <CardFooter className="border-t p-3 bg-muted/20">
-          <div className="flex gap-2 justify-end w-full">{footer}</div>
-        </CardFooter>
-      )}
+      {footer && <CardFooter>{footer}</CardFooter>}
     </Card>
   );
 }

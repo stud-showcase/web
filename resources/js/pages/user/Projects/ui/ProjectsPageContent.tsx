@@ -15,14 +15,14 @@ export function ProjectsPageContent({ projects }: { projects: ExtendedProject[] 
         <SearchBar />
       </div>
       <TabsContent value="all">
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
           {projects.map(({ project, task }) => (
             <ProjectCard project={project} task={task} key={project.id} />
           ))}
         </div>
       </TabsContent>
       <TabsContent value="my">
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
           {projects.map(({ project, task }) => (
             <ProjectCard project={project} task={task} key={project.id} />
           ))}
