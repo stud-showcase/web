@@ -6,6 +6,7 @@ import { Button } from "@/shared/ui/Button";
 import { Vacancy } from "@/entities/Vacancy";
 import { Project } from "@/entities/Project";
 import { Task } from "@/entities/Task";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 function Content({
   vacancy,
@@ -38,12 +39,16 @@ function Content({
 }
 
 function Footer({ project }: { project: Project }) {
+  const { user } = useAuth();
+
   return (
     <>
-      <Button variant="outline" size="sm" className="flex-1">
-        <UserPlus />
-        Вступить
-      </Button>
+      {project.isHiring && user?.role === "student" && (
+        <Button variant="outline" size="sm" className="flex-1">
+          <UserPlus />
+          Вступить
+        </Button>
+      )}
       <Button asChild size="sm" className="flex-1">
         <Link href={`/projects/${project.id}`}>
           Подробнее

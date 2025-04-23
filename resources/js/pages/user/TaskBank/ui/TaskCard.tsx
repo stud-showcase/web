@@ -2,16 +2,12 @@ import { EntityCard } from "@/shared/ui/EntityCard";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
-import {
-  ArrowRight,
-  Calendar,
-  ClipboardCheck,
-  Users,
-} from "lucide-react";
+import { ArrowRight, Calendar, ClipboardCheck, Users } from "lucide-react";
 import { Task } from "@/entities/Task/model/Task";
 import { ComplexityBadge } from "@/entities/Task/ui/ComplexityBadge";
 import { TaskTag } from "@/entities/Task/ui/TaskTag";
 import { Badge } from "@/shared/ui/Badge";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 function Badges({ task }: { task: Task }) {
   return (
@@ -46,12 +42,16 @@ function Tags({ task }: { task: Task }) {
 }
 
 function Footer({ task }: { task: Task }) {
+  const { user } = useAuth();
+
   return (
     <>
-      <Button variant="outline" size="sm" className="flex-1">
-        <ClipboardCheck />
-        Взять задачу
-      </Button>
+      {user?.role === "student" && (
+        <Button variant="outline" size="sm" className="flex-1">
+          <ClipboardCheck />
+          Взять задачу
+        </Button>
+      )}
       <Button asChild size="sm" className="flex-1">
         <Link href={`/tasks/${task.id}`}>
           Подробнее
