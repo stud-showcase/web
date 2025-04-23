@@ -94,7 +94,7 @@ export default function TaskPage({}: { task: Task; projects: Project[] }) {
             </header>
 
             <section className="mt-8 pl-6 border-l-4 border-primary">
-              <Text>{task.description}</Text>
+              <Text variant="muted">{task.description}</Text>
               {task.files && (
                 <div className="mt-6">
                   <div className="flex items-center gap-2">

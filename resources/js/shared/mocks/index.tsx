@@ -11,6 +11,7 @@ export const project: Project = {
   files: [{ name: "ТЗ.pdf", url: "/files/specs.pdf" }],
   status: "in_progress" as const,
   isHiring: true,
+  requests: [{ name: "Иван Иванович Иванов", role: "Designer" }],
 };
 
 export const task: Task = {

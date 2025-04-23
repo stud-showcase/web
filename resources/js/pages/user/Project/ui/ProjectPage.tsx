@@ -1,8 +1,14 @@
-import React, { useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Avatar, AvatarFallback } from "@/shared/ui/Avatar";
-import { FileIcon, Link as LinkIcon, UserPlus } from "lucide-react";
+import {
+  Check,
+  FileIcon,
+  Link as LinkIcon,
+  User,
+  UserPlus,
+  X,
+} from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,105 +19,32 @@ import {
 } from "@/shared/ui/Breadcrumb";
 import { Text } from "@/shared/ui/Text";
 import { Heading } from "@/shared/ui/Heading";
+import { ComplexityBadge, Task, TaskTag } from "@/entities/Task";
+import { HiringBadge, Project, StatusBadge } from "@/entities/Project";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { Vacancy } from "@/entities/Vacancy";
+import { project, task, vacancy } from "@/shared/mocks";
 import { UserLayout } from "@/layouts/UserLayout";
 import { Container } from "@/shared/ui/Container";
-import { ComplexityBadge, TaskTag } from "@/entities/Task";
-import { HiringBadge, StatusBadge } from "@/entities/Project";
 
-const mockProject = {
-  id: "proj1",
-  title: "AI-Powered Task Manager",
-  task: {
-    id: "task1",
-    title: "Develop AI Task Prioritization",
-    tags: ["AI", "Productivity", "WebApp"],
-    complexity: "Advanced",
-  },
-  mentor: {
-    id: "user1",
-    name: "John Doe",
-    avatar: "https://i.pravatar.cc/150?img=1",
-  },
-  status: "In Progress",
-  isRecruiting: true,
-  annotation:
-    "A smart task management system using AI to prioritize and organize tasks efficiently.",
-  files: [
-    { id: "file1", name: "requirements.pdf", url: "#" },
-    { id: "file2", name: "mockups.fig", url: "#" },
-  ],
-  members: [
-    {
-      id: "user2",
-      name: "Jane Smith",
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-      id: "user3",
-      name: "Bob Wilson",
-      avatar: "https://i.pravatar.cc/150?img=3",
-    },
-  ],
-  vacancies: [
-    {
-      id: "vac1",
-      title: "Frontend Developer",
-      description: "React expertise required",
-    },
-    {
-      id: "vac2",
-      title: "AI Engineer",
-      description: "Experience with ML models",
-    },
-  ],
-  applications: [
-    {
-      id: "app1",
-      user: { id: "user4", name: "Alice Brown" },
-      status: "Pending",
-    },
-    { id: "app2", user: { id: "user5", name: "Tom Clark" }, status: "Pending" },
-  ],
+type Props = {
+  project: Project;
+  task: Task;
+  vacancies?: Vacancy[];
 };
 
-interface Project {
-  id: string;
-  title: string;
-  task?: {
-    id: string;
-    title: string;
-    tags: string[];
-    complexity: string;
-  };
-  mentor?: {
-    id: string;
-    name: string;
-    avatar: string;
-  };
-  status: string;
-  isRecruiting: boolean;
-  annotation?: string;
-  files: { id: string; name: string; url: string }[];
-  members: { id: string; name: string; avatar: string }[];
-  vacancies: { id: string; title: string; description: string }[];
-  applications: {
-    id: string;
-    user: { id: string; name: string };
-    status: string;
-  }[];
-}
-
-const ProjectPage: React.FC = () => {
-  const [project, setProject] = useState<Project>(mockProject);
+export default function ProjectPage({}: Props) {
+  const { user } = useAuth();
+  const vacancies = Array(4).fill(vacancy);
 
   return (
     <>
       <Head>
-        <title>Название проекта</title>
+        <title>{project.name}</title>
       </Head>
       <UserLayout>
         <Container withVerticalPaddings>
-          <main>
+          <header className="border-b pb-8  bg-background">
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
@@ -122,21 +55,21 @@ const ProjectPage: React.FC = () => {
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href="/tasks/1">Название связанной задачи</Link>
+                    <Link href={`/tasks/${task.id}`}>{task.title}</Link>
                   </BreadcrumbLink>
                   <BreadcrumbSeparator />
                 </BreadcrumbItem>
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Название проекта</BreadcrumbPage>
+                  <BreadcrumbPage>{project.name}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
 
-            <header className="border-b pb-6 mt-6">
+            <div className="mt-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <Heading level={1}>{project.title}</Heading>
+                <Heading level={1}>{project.name}</Heading>
                 <div className="flex flex-row w-full sm:w-auto gap-3">
-                  {project.task && (
+                  {task && (
                     <Button
                       variant="outline"
                       asChild
@@ -147,114 +80,149 @@ const ProjectPage: React.FC = () => {
                       </Link>
                     </Button>
                   )}
-                  <Button className="flex-1 sm:flex-none">
-                    <UserPlus />
-                    Вступить
-                  </Button>
+                  {user?.role === "student" && project.isHiring && (
+                    <Button className="flex-1 sm:flex-none">
+                      <UserPlus />
+                      Вступить
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
                 <ComplexityBadge complexity="medium" />
                 <StatusBadge status="in_progress" />
                 <HiringBadge />
-                {project.task?.tags.map((tag) => (
+                {task?.tags.map((tag) => (
                   <TaskTag value={tag} />
                 ))}
               </div>
-            </header>
+            </div>
+          </header>
 
+          {project?.abstract && (
             <section className="mt-8">
               <div className="flex gap-2 items-center">
                 <Heading level={3}>Описание</Heading>
               </div>
-              <Text className="mt-4">{project.annotation}</Text>
+              <Text className="mt-4" variant="muted">
+                {project.abstract}
+              </Text>
             </section>
+          )}
 
+          {project?.files && (
             <section className="mt-10">
-              <Heading level={3}>Файлы</Heading>
-              {project.files.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-3">
-                  {project.files.map((file) => (
-                    <Button key={file.name} variant="outline" size="sm" asChild>
-                      <a
-                        href={file.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2"
-                      >
-                        <FileIcon className="h-4 w-4" />
-                        {file.name}
-                      </a>
-                    </Button>
-                  ))}
-                </div>
-              )}
-            </section>
-
-            <section className="mt-10">
-              <Heading level={3}>Участники</Heading>
-              <div className="mt-4 flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 border p-4 rounded-lg">
-                  <Avatar>
-                    <AvatarFallback className="bg-muted">Н</AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col">
-                    <Text>Иванов Иван Иванович</Text>
-                    <Text variant="muted">Наставник проекта</Text>
-                  </div>
-                </div>
-                {project.members.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center gap-2 border p-4 rounded-lg"
-                  >
-                    <Avatar>
-                      <AvatarFallback className="bg-muted">
-                        {member.name[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <Text>{member.name}</Text>
-                      <Text variant="muted">Front-end разработчик</Text>
-                    </div>
-                  </div>
+              <Heading level={3}>Дополнительные материалы</Heading>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {project.files.map((file) => (
+                  <Button key={file.name} variant="outline" size="sm" asChild>
+                    <a
+                      href={file.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2"
+                    >
+                      <FileIcon className="h-4 w-4" />
+                      {file.name}
+                    </a>
+                  </Button>
                 ))}
               </div>
             </section>
+          )}
 
+          <section className="mt-10">
+            <Heading level={3}>Проектная команда</Heading>
+            <div className="mt-4 flex flex-wrap gap-4">
+              <div className="flex items-center gap-2 border p-4 rounded-lg">
+                <Avatar>
+                  <AvatarFallback className="bg-muted">Н</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <Text>{project.mentor}</Text>
+                  <Text variant="muted">Наставник проекта</Text>
+                </div>
+              </div>
+              {project.members.map((member) => (
+                <div
+                  key={member.id}
+                  className="flex items-center gap-2 border p-4 rounded-lg"
+                >
+                  <Avatar>
+                    <AvatarFallback className="bg-muted">
+                      {member.name[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <Text>{member.name}</Text>
+                    {member.role && <Text variant="muted">{member.role}</Text>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {vacancies && (
             <section className="mt-10">
               <div className="flex gap-1 items-center">
                 <Heading level={3}>Вакансии</Heading>
               </div>
-              {project.vacancies.length > 0 && (
-                <div className="mt-4 space-y-3">
-                  {project.vacancies.map((vacancy) => (
-                    <div
-                      key={vacancy.id}
-                      className="flex items-center justify-between  border p-4 rounded-lg"
-                    >
-                      <div>
-                        <Text className="font-medium">{vacancy.title}</Text>
-                        <Text variant="muted">{vacancy.description}</Text>
-                      </div>
+              <div className="mt-4 space-y-3">
+                {vacancies.map((vacancy) => (
+                  <div
+                    key={vacancy.id}
+                    className="flex items-center justify-between  border p-4 rounded-lg"
+                  >
+                    <div>
+                      <Text className="font-medium">{vacancy.title}</Text>
+                      <Text variant="muted">{vacancy.description}</Text>
                     </div>
-                  ))}
-                </div>
-              )}
+                    <Button size="sm" variant="secondary">
+                      Подать заявку
+                    </Button>
+                  </div>
+                ))}
+              </div>
             </section>
+          )}
 
+          {user?.role === "student" && project.requests && (
             <section className="mt-10">
               <Heading level={3}>Заявки</Heading>
               <div className="mt-4 border p-4 rounded-lg">
-                <Text>Иван Иванов</Text>
-                <Text variant="muted">Front-end разработчик</Text>
+                {project.requests.map((request) => {
+                  return (
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Text>{request.name}</Text>
+                        {request.role && (
+                          <Text variant="muted">{request.role}</Text>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="text-success"
+                        >
+                          <Check />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="text-destructive"
+                        >
+                          <X />
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </section>
-          </main>
+          )}
         </Container>
       </UserLayout>
     </>
   );
-};
-
-export default ProjectPage;
+}
