@@ -60,7 +60,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         return Inertia::render('admin/Users');
     });
 
-    Route::get('/analytics', function () {
-        return Inertia::render('admin/Analytics');
+    Route::get('/vacancies', function () {
+        return Inertia::render('admin/Vacancies');
     });
 });
