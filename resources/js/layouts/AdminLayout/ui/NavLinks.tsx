@@ -1,9 +1,9 @@
 import {
-  Archive,
   Briefcase,
-  FilePlus,
-  Folder,
-  Home,
+  ClipboardList,
+  FileText,
+  FolderKanban,
+  LayoutDashboard,
   Users,
 } from "lucide-react";
 import { NavLink } from "./NavLink";
@@ -17,28 +17,28 @@ export function NavLinks({ mobile }: Props) {
     <>
       <NavLink
         href="/admin/dashboard"
-        icon={Home}
+        icon={LayoutDashboard}
         label="Дашборд"
         isActive={window.location.pathname.startsWith("/admin/dashboard")}
         mobile={mobile}
       />
       <NavLink
         href="/admin/requests"
-        icon={FilePlus}
+        icon={FileText}
         label="Заявки"
         isActive={window.location.pathname.startsWith("/admin/requests")}
         mobile={mobile}
       />
       <NavLink
         href="/admin/tasks"
-        icon={Archive}
+        icon={ClipboardList}
         label="Банк задач"
         isActive={window.location.pathname.startsWith("/admin/tasks")}
         mobile={mobile}
       />
       <NavLink
         href="/admin/projects"
-        icon={Folder}
+        icon={FolderKanban}
         label="Проекты"
         isActive={window.location.pathname.startsWith("/admin/projects")}
         mobile={mobile}

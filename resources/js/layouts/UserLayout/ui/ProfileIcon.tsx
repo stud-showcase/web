@@ -20,8 +20,8 @@ type Props = {
 export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
   const { user } = useAuth();
 
-  const initials = `${user.firstName[0]}${user.lastName[0]}`;
-  const lastNameAndInitials = `${user.lastName} ${user.firstName[0]}.${user.middleName[0]}`;
+  const initials = `${user?.firstName[0]}${user?.lastName[0]}`;
+  const lastNameAndInitials = `${user?.lastName} ${user?.firstName[0]}.${user?.middleName[0]}`;
 
   return (
     <>
@@ -57,7 +57,7 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>{lastNameAndInitials}</DropdownMenuLabel>
-          {(user.role === "mentor" || user.role === "admin") && (
+          {(user?.role === "mentor" || user?.role === "admin") && (
             <DropdownMenuItem asChild>
               <Link href="/admin/dashboard">
                 <Settings className="mr-2 h-4 w-4" />
