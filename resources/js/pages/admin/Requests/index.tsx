@@ -1,6 +1,7 @@
 import { AdminLayout } from "@/layouts/AdminLayout";
-import { Heading } from "@/shared/ui/Heading";
 import { Head } from "@inertiajs/react";
+import { RequestsTable } from "./ui/RequestsTable";
+import { Heading } from "@/shared/ui/Heading";
 
 export default function RequestsPage() {
   return (
@@ -9,7 +10,10 @@ export default function RequestsPage() {
         <title>Заявки</title>
       </Head>
       <AdminLayout>
-        <Heading level={1}>Заявки</Heading>
+        <>
+          <Heading level={1}>Заявки</Heading>
+          <RequestsTable />
+        </>
       </AdminLayout>
     </>
   );

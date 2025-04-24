@@ -7,6 +7,7 @@ import {
   Users,
   Search,
   LogOut,
+  User,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { router } from "@inertiajs/react";
@@ -87,6 +88,10 @@ export function CommandMenu() {
             </CommandItem>
           </CommandGroup>
           <CommandGroup heading="Действия">
+            <CommandItem onSelect={() => navigateTo("/")}>
+              <User className="mr-2 h-4 w-4" />
+              <span>В подсистему пользователя</span>
+            </CommandItem>
             <CommandItem onSelect={logOut}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Выйти</span>
