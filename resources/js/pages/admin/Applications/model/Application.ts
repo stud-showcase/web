@@ -1,4 +1,4 @@
-export type Request = {
+export type Application = {
   id: number;
   title: string;
   customerName: string;

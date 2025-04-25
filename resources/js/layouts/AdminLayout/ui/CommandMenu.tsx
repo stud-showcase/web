@@ -66,7 +66,7 @@ export function CommandMenu() {
               <LayoutDashboard className="mr-2 h-4 w-4" />
               <span>Дашборд</span>
             </CommandItem>
-            <CommandItem onSelect={() => navigateTo("/admin/requests")}>
+            <CommandItem onSelect={() => navigateTo("/admin/applications")}>
               <FileText className="mr-2 h-4 w-4" />
               <span>Заявки</span>
             </CommandItem>

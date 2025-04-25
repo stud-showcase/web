@@ -44,23 +44,43 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         return Inertia::render('admin/Dashboard');
     });
 
-    Route::get('/requests', function () {
-        return Inertia::render('admin/Requests');
+    Route::get('/applications', function () {
+        return Inertia::render('admin/Applications');
+    });
+
+    Route::get('/applications/{id}', function () {
+        return Inertia::render('admin/Application');
     });
 
     Route::get('/tasks', function () {
         return Inertia::render('admin/TaskBank');
     });
 
+    Route::get('/tasks/{id}', function () {
+        return Inertia::render('admin/Task');
+    });
+
     Route::get('/projects', function () {
         return Inertia::render('admin/Projects');
+    });
+
+    Route::get('/projects/{id}', function () {
+        return Inertia::render('admin/Project');
     });
 
     Route::get('/users', function () {
         return Inertia::render('admin/Users');
     });
 
+    Route::get('/users/{id}', function () {
+        return Inertia::render('admin/User');
+    });
+
     Route::get('/vacancies', function () {
         return Inertia::render('admin/Vacancies');
+    });
+
+    Route::get('/vacancies/{id}', function () {
+        return Inertia::render('admin/Vacancy');
     });
 });

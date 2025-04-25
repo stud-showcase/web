@@ -1,6 +1,6 @@
-import { Request } from "../model/Request";
+import { Application } from "../model/Application";
 
-export const requests: Request[] = [
+export const applications: Application[] = [
   {
     id: 1,
     title: "Редизайн сайта",
