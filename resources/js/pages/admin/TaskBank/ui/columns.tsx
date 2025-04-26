@@ -50,7 +50,7 @@ export const columns: ColumnDef<Task>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Заказчик" />
     ),
-    cell: ({ row }) => <div>{row.getValue("customer").name}</div>,
+    cell: ({ row }) => <div>{row.getValue("customer")}</div>,
   },
   {
     accessorKey: "customerEmail",
@@ -58,7 +58,7 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Электронная почта" />
     ),
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("customer").email}</div>
+      <div className="lowercase">{row.getValue("customerEmail")}</div>
     ),
   },
   {
@@ -67,7 +67,7 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Телефон" />
     ),
     cell: ({ row }) => {
-      const phone = row.getValue("customer").phone;
+      const phone = row.getValue("customerPhone");
       return <div>{(phone as string) || "-"}</div>;
     },
   },

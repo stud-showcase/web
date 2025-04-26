@@ -151,36 +151,36 @@ export default function TaskPage({}: { task: Task; projects: Project[] }) {
                   <Briefcase className="h-6 w-6" />
                   <div>
                     <Text variant="muted">Заказчик</Text>
-                    <Text>{task.customer.name}</Text>
+                    <Text>{task.customer}</Text>
                   </div>
                 </div>
               </div>
             </section>
 
-            {((user && task.customer.email) || task.customer.phone) && (
+            {((user && task.customerEmail) || task.customerPhone) && (
               <section className="mt-10">
                 <Heading level={3} className="mb-4">
                   Контакты заказчика
                 </Heading>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  {task.customer.email && (
+                  {task.customerEmail && (
                     <Button
                       variant="outline"
                       className="flex items-center gap-3 w-full sm:w-auto"
-                      onClick={() => copyToClipboard(task.customer.email!)}
+                      onClick={() => copyToClipboard(task.customerEmail!)}
                     >
                       <MailIcon className="h-5 w-5" />
-                      <span>{task.customer.email}</span>
+                      <span>{task.customerEmail}</span>
                     </Button>
                   )}
-                  {task.customer.phone && (
+                  {task.customerPhone && (
                     <Button
                       variant="outline"
                       className="flex items-center gap-3 w-full sm:w-auto"
-                      onClick={() => copyToClipboard(task.customer.phone!)}
+                      onClick={() => copyToClipboard(task.customerPhone!)}
                     >
                       <PhoneIcon className="h-5 w-5" />
-                      <span>{task.customer.phone}</span>
+                      <span>{task.customerPhone}</span>
                     </Button>
                   )}
                 </div>

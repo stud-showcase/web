@@ -61,7 +61,7 @@ export function TaskCard({ task }: { task: Task }) {
   return (
     <EntityCard
       title={task.title}
-      subtitle={task.customer.name}
+      subtitle={task.customer}
       badges={<Badges task={task} />}
       content={<Content task={task} />}
       tags={<Tags task={task} />}
