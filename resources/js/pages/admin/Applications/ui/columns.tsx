@@ -2,7 +2,7 @@ import { Checkbox } from "@/shared/ui/Checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/shared/ui/Badge";
 import { DataTableColumnHeader } from "@/shared/ui/DataTableColumnHeader";
-import { Application } from "../model/Application";
+import { Application, ApplicationType } from "@/entities/Application";
 
 export const columns: ColumnDef<Application>[] = [
   {
@@ -76,7 +76,7 @@ export const columns: ColumnDef<Application>[] = [
       <DataTableColumnHeader column={column} title="Тип заявки" />
     ),
     cell: ({ row }) => {
-      const type = row.getValue("type") as string;
+      const type = row.getValue("type") as ApplicationType;
       return (
         <Badge variant="secondary">
           {type === "project" ? "Проект" : "Банк задач"}

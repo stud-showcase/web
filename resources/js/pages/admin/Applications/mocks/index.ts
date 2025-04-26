@@ -1,4 +1,4 @@
-import { Application } from "../model/Application";
+import { Application } from "@/entities/Application";
 
 export const applications: Application[] = [
   {

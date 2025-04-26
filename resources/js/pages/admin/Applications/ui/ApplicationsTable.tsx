@@ -1,5 +1,5 @@
 import { applications } from "../mocks";
-import { Application } from "../model/Application";
+import { Application } from "@/entities/Application";
 import { columns } from "./columns";
 import { DataTable } from "@/shared/ui/DataTable";
 

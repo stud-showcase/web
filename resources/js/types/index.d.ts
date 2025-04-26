@@ -1,10 +1,4 @@
-export interface User {
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  email: string;
-  role: "guest" | "student" | "team leader" | "mentor" | "admin";
-}
+import { User } from "@/entities/User";
 
 export type PageProps<
   T extends Record<string, unknown> = Record<string, unknown>

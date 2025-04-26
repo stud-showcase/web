@@ -1,3 +1,5 @@
+import { ApplicationType } from "./ApplicationType";
+
 export type Application = {
   id: number;
   title: string;
@@ -5,5 +7,5 @@ export type Application = {
   customer: string;
   customerEmail: string;
   customerPhone?: string;
-  type: "project" | "task";
+  type: ApplicationType;
 };
