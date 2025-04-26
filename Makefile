@@ -4,6 +4,10 @@ APP_EXEC = $(DOCKER_COMPOSE) exec app
 build:
 	$(DOCKER_COMPOSE) up -d --build
 
+build-no-cache:
+	$(DOCKER_COMPOSE) build --no-cache
+	$(DOCKER_COMPOSE) up -d
+
 up:
 	$(DOCKER_COMPOSE) up -d
 

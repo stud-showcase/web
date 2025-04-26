@@ -17,12 +17,11 @@ WORKDIR /var/www
 
 COPY . /var/www
 
-RUN composer install --no-scripts --no-interaction
-
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
 
 COPY docker/app/php.ini /usr/local/etc/php/php.ini
 
 CMD ["php-fpm"]
+
 EXPOSE 9000

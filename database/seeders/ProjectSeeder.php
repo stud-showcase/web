@@ -34,6 +34,7 @@ class ProjectSeeder extends Seeder
                 'task_id' => $task->id,
                 'status_id' => fn() => ProjectStatus::inRandomOrder()->first()->id,
                 'mentor_id' => $mentor->id,
+                'name' => fake()->sentence(3),
             ]);
 
             $maxMembers = $task->max_members;

@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             TaskSeeder::class,
             ProjectStatusSeeder::class,
             ProjectSeeder::class,
+            VacancySeeder::class,
             TagSeeder::class,
             SettingsSeeder::class,
         ]);

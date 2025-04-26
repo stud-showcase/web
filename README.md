@@ -28,6 +28,10 @@ make up
 ```bash
 make down
 ```
+- Перезапуск контейнеров:
+```bash
+make reup
+```
 - Войти в контейнер:
 ```bash
 make shell

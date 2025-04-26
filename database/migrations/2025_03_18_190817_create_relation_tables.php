@@ -9,8 +9,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('group_task', function (Blueprint $table) {
-            $table->foreignId('group_id')->constrained('groups');
-            $table->foreignId('task_id')->constrained('tasks');
+            $table->foreignId('group_id')->constrained('groups')->cascadeOnDelete();
+            $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
             $table->primary(['group_id', 'task_id']);
         });
 
@@ -36,6 +36,7 @@ return new class extends Migration
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreignId('project_id')->constrained('projects');
+            $table->foreignId('vacancy_id')->nullable()->constrained('vacancies')->nullOnDelete();
             $table->timestamps();
         });
 
@@ -47,6 +48,7 @@ return new class extends Migration
             $table->string('customer_email');
             $table->string('customer_phone')->nullable();
             $table->boolean('with_project')->default(false);
+            $table->string('project_name');
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

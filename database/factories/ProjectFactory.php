@@ -11,6 +11,7 @@ class ProjectFactory extends Factory
         return [
             'task_id' => null,
             'status_id' => null,
+            'name' => $this->faker->sentence(3),
             'annotation' => $this->faker->optional()->text(),
             'is_close' => $this->faker->boolean(20),
             'mentor_id' => null,

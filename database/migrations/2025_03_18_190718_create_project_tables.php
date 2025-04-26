@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained('tasks');
             $table->foreignId('status_id')->constrained('project_status');
+            $table->string('name');
             $table->text('annotation')->nullable();
             $table->boolean('is_close')->default(false);
             $table->uuid('mentor_id')->nullable();
@@ -30,6 +31,14 @@ return new class extends Migration
             $table->string('path');
             $table->timestamps();
         });
+
+        Schema::create('vacancies', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->string('description')->nullable();
+            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
+            $table->timestamps();
+        });
     }
 
     public function down()
@@ -37,5 +46,6 @@ return new class extends Migration
         Schema::dropIfExists('project_files');
         Schema::dropIfExists('projects');
         Schema::dropIfExists('project_status');
+        Schema::dropIfExists('vacancies');
     }
 };
