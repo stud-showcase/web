@@ -35,8 +35,10 @@ export function ProfileIcon() {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Выйти</span>
+            <a href="/logout">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Выйти</span>
+            </a>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

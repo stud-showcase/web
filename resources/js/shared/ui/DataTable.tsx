@@ -23,9 +23,14 @@ import {
   TableRow,
 } from "@/shared/ui/Table";
 import { DataTablePagination } from "@/shared/ui/DataTablePagination";
-import { DataTableToolbar, FilterConfig, SearchConfig } from "./DataTableToolbar";
+import {
+  DataTableToolbar,
+  FilterConfig,
+  SearchConfig,
+} from "./DataTableToolbar";
 import { Button } from "@/shared/ui/Button";
 import { Edit } from "lucide-react";
+import { Separator } from "./Separator";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,8 +52,11 @@ export function DataTable<TData, TValue>({
   filterConfig,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const columnsWithActions = React.useMemo(() => {
@@ -96,7 +104,9 @@ export function DataTable<TData, TValue>({
       return searchConfig.columnIds.some((id) => {
         const value = row.getValue(id);
         return value
-          ? String(value).toLowerCase().includes(String(filterValue).toLowerCase())
+          ? String(value)
+              .toLowerCase()
+              .includes(String(filterValue).toLowerCase())
           : false;
       });
     },
@@ -104,23 +114,32 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar
-        table={table}
-        searchConfig={searchConfig}
-        filterConfig={filterConfig}
-        onDelete={onDelete}
-        labels={labels}
-      />
       <div className="rounded-md border overflow-x-auto">
+        <div className="py-3 px-4 border-b">
+          <DataTableToolbar
+            table={table}
+            searchConfig={searchConfig}
+            filterConfig={filterConfig}
+            onDelete={onDelete}
+            labels={labels}
+          />
+        </div>
         <Table className="min-w-full">
-          <TableHeader>
+          <TableHeader className="bg-muted/50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} colSpan={header.colSpan} className="max-w-[200px] truncate">
+                  <TableHead
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className="max-w-[200px] truncate"
+                  >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -135,22 +154,30 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="max-w-[200px] truncate">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   Нет результатов.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
+        <div className="px-4 py-5 border-t">
+          <DataTablePagination table={table} />
+        </div>
       </div>
-      <DataTablePagination table={table} />
     </div>
   );
 }
