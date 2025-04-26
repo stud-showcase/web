@@ -1,8 +1,9 @@
 export type Application = {
   id: number;
   title: string;
-  customerName: string;
+  description?: string;
+  customer: string;
   customerEmail: string;
-  customerPhone: string;
-  type: "task_bank" | "project";
+  customerPhone?: string;
+  type: "project" | "task";
 };

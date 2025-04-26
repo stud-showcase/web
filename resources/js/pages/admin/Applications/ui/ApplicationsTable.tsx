@@ -6,7 +6,7 @@ import { DataTable } from "@/shared/ui/DataTable";
 const labels = {
   id: "ID",
   title: "Название",
-  customerName: "Заказчик",
+  customer: "Заказчик",
   customerEmail: "Электронная почта",
   customerPhone: "Телефон",
   type: "Тип заявки",
@@ -22,7 +22,7 @@ export function ApplicationsTable() {
   };
 
   const searchConfig = {
-    columnIds: ["customerEmail", "customerName"],
+    columnIds: ["customerEmail", "customer"],
     placeholder: "Поиск по email или заказчику...",
   };
 
@@ -33,25 +33,11 @@ export function ApplicationsTable() {
       filters: [
         {
           label: "Банк задач",
-          value: "task_bank",
+          value: "task",
         },
         {
           label: "Проект",
           value: "project",
-        },
-      ],
-    },
-    {
-      label: "Заказчик",
-      columnId: "customerName",
-      filters: [
-        {
-          label: "Иван Иванов",
-          value: "Иван Иванов",
-        },
-        {
-          label: "Анна Смирнова",
-          value: "Анна Смирнова",
         },
       ],
     },

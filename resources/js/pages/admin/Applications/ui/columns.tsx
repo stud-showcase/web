@@ -20,7 +20,7 @@ export const columns: ColumnDef<Application>[] = [
     ),
     cell: ({ row }) => (
       <Checkbox
-      className="mt-1"
+        className="mt-1"
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Выбрать строку"
@@ -45,11 +45,11 @@ export const columns: ColumnDef<Application>[] = [
     cell: ({ row }) => <div>{row.getValue("title")}</div>,
   },
   {
-    accessorKey: "customerName",
+    accessorKey: "customer",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Заказчик" />
     ),
-    cell: ({ row }) => <div>{row.getValue("customerName")}</div>,
+    cell: ({ row }) => <div>{row.getValue("customer")}</div>,
   },
   {
     accessorKey: "customerEmail",
@@ -65,7 +65,10 @@ export const columns: ColumnDef<Application>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Телефон" />
     ),
-    cell: ({ row }) => <div>{row.getValue("customerPhone")}</div>,
+    cell: ({ row }) => {
+      const phone = row.getValue("customerPhone");
+      return <div>{(phone as string) || "-"}</div>;
+    },
   },
   {
     accessorKey: "type",
@@ -76,7 +79,7 @@ export const columns: ColumnDef<Application>[] = [
       const type = row.getValue("type") as string;
       return (
         <Badge variant="secondary">
-          {type === "task_bank" ? "Банк задач" : "Проект"}
+          {type === "project" ? "Проект" : "Банк задач"}
         </Badge>
       );
     },
