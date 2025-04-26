@@ -18,7 +18,7 @@ export function SimpleProjectCard({ project }: { project: Project }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-4 shrink-0">
-          {project.isHiring && <HiringBadge />}
+          <HiringBadge isHiring={project.isHiring} />
           <StatusBadge status={project.status} />
           <ChevronRightIcon className="h-5 w-5" />
         </div>

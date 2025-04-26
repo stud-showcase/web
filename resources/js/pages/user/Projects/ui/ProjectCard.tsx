@@ -27,7 +27,7 @@ function Title({ project, task }: { project: Project; task: Task }) {
 function Badges({ project, task }: { project: Project; task: Task }) {
   return (
     <>
-      {project.isHiring && <HiringBadge />}
+      <HiringBadge isHiring={project.isHiring} />
       <StatusBadge status={project.status} />
       <ComplexityBadge complexity={task.complexity} />
     </>

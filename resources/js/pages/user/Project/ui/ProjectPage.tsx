@@ -91,7 +91,7 @@ export default function ProjectPage({}: Props) {
               <div className="mt-4 flex flex-wrap gap-3">
                 <ComplexityBadge complexity="medium" />
                 <StatusBadge status="in_progress" />
-                <HiringBadge />
+                <HiringBadge isHiring={true} />
                 {task?.tags.map((tag) => (
                   <TaskTag value={tag} />
                 ))}

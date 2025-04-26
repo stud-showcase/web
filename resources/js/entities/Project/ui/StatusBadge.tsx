@@ -19,7 +19,7 @@ const statusToBadge = {
 
 export function StatusBadge({ status }: { status: ProjectStatus }) {
   return (
-    <Badge variant="secondary" className="flex items-center gap-1">
+    <Badge variant="secondary" className="flex items-center gap-1 w-fit">
       {statusToBadge[status].icon}
       {statusToBadge[status].name}
     </Badge>

@@ -82,7 +82,7 @@ export function DataTableToolbar<TData>({
             placeholder={searchConfig.placeholder || "Поиск..."}
             value={searchValue}
             onChange={(event) => handleSearchChange(event.target.value)}
-            className="w-[150px] lg:w-[250px]"
+            className="min-w-[150px] lg:min-w-[280px] max-w-fit"
           />
         )}
       </div>
