@@ -4,7 +4,7 @@ export type Task = {
   id: number;
   title: string;
   description: string;
-  customer: { name: string; email?: string; phone?: string };
+  customer: { name: string; email: string; phone?: string };
   maxMembers: number;
   deadline: Date;
   complexity: TaskComplexity;

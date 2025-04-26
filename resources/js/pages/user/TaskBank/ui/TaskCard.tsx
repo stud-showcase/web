@@ -2,24 +2,19 @@ import { EntityCard } from "@/shared/ui/EntityCard";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
-import { ArrowRight, Calendar, ClipboardCheck, Users } from "lucide-react";
+import { ArrowRight, ClipboardCheck } from "lucide-react";
 import { Task } from "@/entities/Task/model/Task";
-import { ComplexityBadge } from "@/entities/Task/ui/ComplexityBadge";
-import { TaskTag } from "@/entities/Task/ui/TaskTag";
-import { Badge } from "@/shared/ui/Badge";
+import { ComplexityBadge } from "@/entities/Task";
+import { TaskTag } from "@/entities/Task/";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { TaskMaxMembers } from "@/entities/Task";
+import { TaskDeadline } from "@/entities/Task";
 
 function Badges({ task }: { task: Task }) {
   return (
     <>
-      <Badge variant="outline" className="flex items-center gap-1">
-        <Users className="w-3 h-3" />
-        {task.maxMembers} {task.maxMembers === 1 ? "участник" : "участника"}
-      </Badge>
-      <Badge variant="secondary" className="flex items-center gap-1">
-        <Calendar className="w-3 h-3" />
-        {task.deadline.toLocaleDateString()}
-      </Badge>
+      <TaskMaxMembers maxMembers={task.maxMembers} />
+      <TaskDeadline deadline={task.deadline} />
       <ComplexityBadge complexity={task.complexity} />
     </>
   );
