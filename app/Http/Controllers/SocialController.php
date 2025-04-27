@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+
 
 class SocialController extends Controller
 {
@@ -40,6 +41,11 @@ class SocialController extends Controller
                     'group_id' => $group->id,
                 ]
             );
+
+            if ($user->roles()->count() === 0) {
+                $studentRole = Role::where('name', 'student')->firstOrFail();
+                $user->roles()->attach($studentRole->id);
+            }
 
             Auth::login($user);
 

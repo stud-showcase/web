@@ -20,6 +20,11 @@ class User extends Authenticatable
         'group_id',
     ];
 
+    private const ROLE_ACCESS_MAP = [
+        'mentor'  => ['student'],
+        'admin'   => ['student', 'mentor'],
+    ];
+
     public function group()
     {
         return $this->belongsTo(Group::class);
@@ -27,7 +32,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_role');
+        return $this->belongsToMany(Role::class, 'user_role', 'user_id', 'role_id');
     }
 
     public function projects()
@@ -50,5 +55,34 @@ class User extends Authenticatable
     public function taskRequests()
     {
         return $this->hasMany(TaskRequest::class);
+    }
+
+    public function hasAnyRole($roles): bool
+    {
+        $roles = is_array($roles) ? $roles : explode(',', $roles);
+        $userRoles = $this->roles()->pluck('name')->toArray();
+
+        foreach ($roles as $role) {
+            if ($this->hasRole($role, $userRoles)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasRole(string $role, array $userRoles): bool
+    {
+        foreach ($userRoles as $userRole) {
+            if ($userRole === $role) {
+                return true;
+            }
+
+            if (isset(self::ROLE_ACCESS_MAP[$userRole]) && in_array($role, self::ROLE_ACCESS_MAP[$userRole])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
