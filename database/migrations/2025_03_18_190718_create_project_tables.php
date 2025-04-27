@@ -28,6 +28,7 @@ return new class extends Migration
         Schema::create('project_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained('projects');
+            $table->string('name');
             $table->string('path');
             $table->timestamps();
         });

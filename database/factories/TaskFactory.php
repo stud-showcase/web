@@ -14,7 +14,7 @@ class TaskFactory extends Factory
             'customer' => $this->faker->name(),
             'max_projects' => $this->faker->numberBetween(1, 5),
             'max_members' => $this->faker->numberBetween(1, 10),
-            'customer_email' => $this->faker->optional()->safeEmail(),
+            'customer_email' => $this->faker->safeEmail(),
             'customer_phone' => $this->faker->optional()->phoneNumber(),
             'deadline' => $this->faker->dateTimeBetween('now', '+1 month'),
             'complexity_id' => null,

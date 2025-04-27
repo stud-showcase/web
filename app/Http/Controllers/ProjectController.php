@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
-use Illuminate\Http\Request;
+use App\Services\ProjectService;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
+    public function __construct(
+        private ProjectService $projectService
+    ) {}
+
     public function index(): \Inertia\Response
     {
-        $projects = Project::with(['task', 'status', 'mentor'])->get();
+        $projects = $this->projectService->getFormattedProjects();
         return Inertia::render('user/Projects', [
-            'projects' => $projects,
+            'projects' => $projects
         ]);
     }
 
     public function show(int $id): \Inertia\Response
     {
-        $project = Project::with(['task', 'status', 'mentor', 'users'])->findOrFail($id);
+        $project = $this->projectService->getFormattedProjectById($id);
         return Inertia::render('user/Project', [
             'project' => $project,
         ]);

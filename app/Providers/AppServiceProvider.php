@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\ProjectService;
+use App\Repositories\ProjectRepository;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Support\Facades\Vite;
 use SocialiteProviders\Keycloak\Provider;
@@ -14,7 +16,15 @@ class AppServiceProvider extends EventServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(ProjectRepository::class, function () {
+            return new ProjectRepository();
+        });
+
+        $this->app->bind(ProjectService::class, function ($app) {
+            return new ProjectService(
+                $app->make(ProjectRepository::class)
+            );
+        });
     }
 
     /**

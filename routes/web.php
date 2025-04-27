@@ -19,13 +19,9 @@ Route::get('/', function () {
     return Inertia::render('user/Main');
 });
 
-Route::get('/projects', function () {
-    return Inertia::render('user/Projects');
-});
+Route::get('/projects', [ProjectController::class, 'index']);
 
-Route::get('/projects/{id}', function () {
-    return Inertia::render('user/Project');
-});
+Route::get('/projects/{id}', [ProjectController::class, 'show']);
 
 Route::get('/tasks', function () {
     return Inertia::render('user/TaskBank');

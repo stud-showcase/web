@@ -13,6 +13,7 @@ class Project extends Model
         'id',
         'task_id',
         'status_id',
+        'name',
         'annotation',
         'is_close',
         'mentor_id',
@@ -48,5 +49,10 @@ class Project extends Model
     public function invites()
     {
         return $this->hasMany(ProjectInvite::class);
+    }
+
+    public function vacancies()
+    {
+        return $this->hasMany(Vacancy::class, 'project_id');
     }
 }

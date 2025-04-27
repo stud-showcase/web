@@ -9,7 +9,7 @@ class VacancyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->optional()->jobTitle(),
+            'name' => $this->faker->jobTitle(),
             'description' => $this->faker->optional()->sentence(),
             'project_id' => null,
             'created_at' => now(),

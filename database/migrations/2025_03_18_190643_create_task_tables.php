@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('customer');
             $table->tinyInteger('max_projects')->default(1);
             $table->tinyInteger('max_members');
-            $table->string('customer_email')->nullable();
+            $table->string('customer_email');
             $table->string('customer_phone')->nullable();
             $table->dateTime('deadline');
             $table->foreignId('complexity_id')->constrained('complexity');
@@ -36,6 +36,7 @@ return new class extends Migration
         Schema::create('task_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_id')->constrained('tasks');
+            $table->string('name');
             $table->string('path');
             $table->timestamps();
         });
