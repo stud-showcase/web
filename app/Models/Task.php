@@ -20,6 +20,7 @@ class Task extends Model
         'customer_phone',
         'deadline',
         'complexity_id',
+        'created_at',
     ];
 
     public function complexity()
