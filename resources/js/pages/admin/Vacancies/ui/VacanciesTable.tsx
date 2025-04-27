@@ -1,5 +1,5 @@
-import { tasks } from "../mocks";
-import { Task } from "@/entities/Task";
+import { vacancies } from "../mocks";
+import { Vacancy } from "@/entities/Vacancy";
 import { columns } from "./columns";
 import { DataTable } from "@/shared/ui/DataTable";
 
@@ -14,12 +14,12 @@ const labels = {
   complexity: "Сложность",
 };
 
-export function TaskBankTable() {
-  const handleEdit = (row: Task) => {
+export function VacanciesTable() {
+  const handleEdit = (row: Vacancy) => {
     console.log("Редактирование", row);
   };
 
-  const handleDelete = (selectedRows: Task[]) => {
+  const handleDelete = (selectedRows: Vacancy[]) => {
     console.log("Удаление задач:", selectedRows);
   };
 
@@ -28,36 +28,14 @@ export function TaskBankTable() {
     placeholder: "Поиск...",
   };
 
-  const filterConfig = [
-    {
-      label: "Сложность",
-      columnId: "complexity",
-      filters: [
-        {
-          label: "Легкий",
-          value: "easy",
-        },
-        {
-          label: "Средний",
-          value: "medium",
-        },
-        {
-          label: "Сложный",
-          value: "hard",
-        },
-      ],
-    },
-  ];
-
   return (
     <DataTable
       columns={columns}
-      data={tasks}
+      data={vacancies}
       labels={labels}
       onEdit={handleEdit}
       onDelete={handleDelete}
       searchConfig={searchConfig}
-      filterConfig={filterConfig}
     />
   );
 }

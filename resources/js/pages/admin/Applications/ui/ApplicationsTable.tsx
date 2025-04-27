@@ -23,7 +23,7 @@ export function ApplicationsTable() {
 
   const searchConfig = {
     columnIds: ["customerEmail", "customer"],
-    placeholder: "Поиск по email или заказчику...",
+    placeholder: "Поиск...",
   };
 
   const filterConfig = [

@@ -22,7 +22,7 @@ export function ProjectsTable() {
 
   const searchConfig = {
     columnIds: ["name", "mentor"],
-    placeholder: "Поиск по названю или наставнику...",
+    placeholder: "Поиск...",
   };
 
   const filterConfig = [
