@@ -6,12 +6,7 @@ import { DataTable } from "@/shared/ui/DataTable";
 const labels = {
   id: "ID",
   title: "Название",
-  customer: "Заказчик",
-  customerEmail: "Электронная почта",
-  customerPhone: "Телефон",
-  maxMembers: "Макс. участников",
-  deadline: "Дедлайн",
-  complexity: "Сложность",
+  description: "Описание",
 };
 
 export function VacanciesTable() {

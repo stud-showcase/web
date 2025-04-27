@@ -30,7 +30,6 @@ import {
 } from "./DataTableToolbar";
 import { Button } from "@/shared/ui/Button";
 import { Edit } from "lucide-react";
-import { Separator } from "./Separator";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

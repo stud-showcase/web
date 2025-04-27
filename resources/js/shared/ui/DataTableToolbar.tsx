@@ -1,5 +1,5 @@
 import { Table } from "@tanstack/react-table";
-import { Filter, Trash2, X } from "lucide-react";
+import { Filter, Trash2 } from "lucide-react";
 
 import { Button } from "@/shared/ui/Button";
 import { Input } from "@/shared/ui/Input";
