@@ -43,7 +43,7 @@ function Footer({ project }: { project: Project }) {
 
   return (
     <>
-      {project.isHiring && user?.role === "student" && (
+      {project.isHiring && user && (
         <Button variant="outline" size="sm" className="flex-1">
           <UserPlus />
           Вступить

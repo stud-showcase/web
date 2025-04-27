@@ -11,7 +11,7 @@ export function ProjectsPageContent({
 }) {
   const { user } = useAuth();
 
-  if (user?.role === "student") {
+  if (user) {
     return (
       <Tabs defaultValue="all" className="flex flex-col gap-6">
         <div className="flex lg:flex-row flex-col gap-4">

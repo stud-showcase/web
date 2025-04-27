@@ -12,6 +12,7 @@ import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 
 export function ProfileIcon() {
+  // TODO: указать сведения о пользователе, убрать моки
   return (
     <>
       <DropdownMenu>

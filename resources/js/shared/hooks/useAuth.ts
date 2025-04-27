@@ -5,7 +5,7 @@ export const useAuth = () => {
 
   // TODO: delete
   if (auth.user) {
-    auth.user.role = "admin";
+    auth.user.roles = ["admin"];
   }
 
   return auth;

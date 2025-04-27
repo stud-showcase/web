@@ -80,7 +80,7 @@ export default function ProjectPage({}: Props) {
                       </Link>
                     </Button>
                   )}
-                  {user?.role === "student" && project.isHiring && (
+                  {user && project.isHiring && (
                     <Button className="flex-1 sm:flex-none">
                       <UserPlus />
                       Вступить
@@ -186,7 +186,7 @@ export default function ProjectPage({}: Props) {
             </section>
           )}
 
-          {user?.role === "student" && project.requests && (
+          {user && project.requests && (
             <section className="mt-10">
               <Heading level={3}>Заявки</Heading>
               <div className="mt-4 border p-4 rounded-lg">

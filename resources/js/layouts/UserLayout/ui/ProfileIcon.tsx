@@ -12,6 +12,7 @@ import { PropsWithChildren } from "react";
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { hasRole } from "@/entities/User";
 
 type Props = {
   mobile?: boolean;
@@ -20,8 +21,12 @@ type Props = {
 export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
   const { user } = useAuth();
 
-  const initials = `${user?.firstName[0]}${user?.lastName[0]}`;
-  const lastNameAndInitials = `${user?.lastName} ${user?.firstName[0]}.${user?.middleName[0]}`;
+  const initials = `${user!.firstName[0]}${user!.lastName[0]}`;
+
+  let fullName = `${user!.lastName} ${user!.firstName[0]}.`;
+  if (user!.middleName) {
+    fullName += `${user!.middleName[0]}.`;
+  }
 
   return (
     <>
@@ -36,7 +41,7 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
                   </AvatarFallback>
                 </Avatar>
                 <span className="font-medium text-primary text-sm">
-                  {lastNameAndInitials}
+                  {fullName}
                 </span>
               </div>
               <div className="inline text-primary">
@@ -56,8 +61,8 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel>{lastNameAndInitials}</DropdownMenuLabel>
-          {(user?.role === "mentor" || user?.role === "admin") && (
+          <DropdownMenuLabel>{fullName}</DropdownMenuLabel>
+          {(hasRole(user, "mentor") || hasRole(user, "admin")) && (
             <DropdownMenuItem asChild>
               <Link href="/admin/dashboard">
                 <Settings className="mr-2 h-4 w-4" />

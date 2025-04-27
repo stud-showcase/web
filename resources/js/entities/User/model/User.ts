@@ -1,9 +1,11 @@
+import { UserRole } from "./UserRole";
+
 export type User = {
   id: number;
   firstName: string;
-  secondName: string;
-  lastName?: string;
+  lastName: string;
+  middleName?: string;
   email: string;
   group?: string;
-  role: "guest" | "student" | "team leader" | "mentor" | "admin";
+  roles: UserRole[];
 };

@@ -41,7 +41,7 @@ function Footer({ task }: { task: Task }) {
 
   return (
     <>
-      {user?.role === "student" && (
+      {user && (
         <Button variant="outline" size="sm" className="flex-1">
           <ClipboardCheck />
           Взять задачу
