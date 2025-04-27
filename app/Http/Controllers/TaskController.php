@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
-use Illuminate\Http\Request;
+use App\Services\TaskService;
 use Inertia\Inertia;
 
 class TaskController extends Controller
 {
+    public function __construct(
+        private TaskService $taskService
+    ) {}
+
     public function index(): \Inertia\Response
     {
-        $tasks = Task::with(['complexity', 'projects', 'tags'])->paginate(10);
+        $tasks = $this->taskService->getFormattedTasks();
         return Inertia::render('user/TaskBank', [
             'tasks' => $tasks,
         ]);
@@ -18,7 +21,7 @@ class TaskController extends Controller
 
     public function show(int $id): \Inertia\Response
     {
-        $task = Task::with(['complexity', 'projects', 'tags'])->findOrFail($id);
+        $task = $this->taskService->getFormattedTaskById($id);
         return Inertia::render('user/Task', [
             'task' => $task,
         ]);

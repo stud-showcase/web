@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SocialController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,13 +24,9 @@ Route::get('/projects', [ProjectController::class, 'index']);
 
 Route::get('/projects/{id}', [ProjectController::class, 'show']);
 
-Route::get('/tasks', function () {
-    return Inertia::render('user/TaskBank');
-});
+Route::get('/tasks', [TaskController::class, 'index']);
 
-Route::get('/tasks/{id}', function ($id) {
-    return Inertia::render('user/Task', ["id" => $id]);
-});
+Route::get('/tasks/{id}', [TaskController::class, 'show']);
 
 Route::get('/vacancies', function () {
     return Inertia::render('user/Vacancies');

@@ -20,8 +20,7 @@ class ProjectService
 
     public function getFormattedProjectById(int $id): array
     {
-        $project = $this->projectRepository->getByIdWithDetails($id);
-
+        $project = $this->projectRepository->getByIdWithRelations($id);
         return ProjectDto::fromModel($project)->toArray();
     }
 }

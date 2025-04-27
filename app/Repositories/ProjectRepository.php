@@ -18,7 +18,7 @@ class ProjectRepository
         ])->get();
     }
 
-    public function getByIdWithDetails(int $id): Project
+    public function getByIdWithRelations(int $id): Project
     {
         return Project::with([
             'task.complexity',
