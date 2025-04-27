@@ -13,7 +13,7 @@ class ProjectRepository
             'task.complexity',
             'status',
             'mentor',
-            'users' => fn($q) => $q->select('users.id', 'users.first_name', 'users.second_name', 'last_name'),
+            'users' => fn($q) => $q->select('users.id', 'users.first_name', 'users.second_name', 'users.last_name', 'users.email'),
             'files'
         ])->get();
     }
@@ -25,7 +25,7 @@ class ProjectRepository
             'task.tags',
             'status',
             'mentor',
-            'users' => fn($q) => $q->select('users.id', 'users.first_name', 'users.second_name', 'users.last_name'),
+            'users' => fn($q) => $q->select('users.id', 'users.first_name', 'users.second_name', 'users.last_name', 'users.email')->with('roles'),
             'files',
             'vacancies',
         ])->findOrFail($id);
