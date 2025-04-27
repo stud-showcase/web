@@ -10,7 +10,9 @@ class UserDto
         public string $id,
         public string $firstName,
         public string $secondName,
-        public ?string $lastName
+        public ?string $lastName,
+        public string $email,
+        public array $roles,
     ) {}
 
     public static function fromModel(User $user): self
@@ -19,7 +21,9 @@ class UserDto
             id: $user->id,
             firstName: $user->first_name,
             secondName: $user->second_name,
-            lastName: $user->last_name
+            lastName: $user->last_name,
+            email: $user->email,
+            roles: $user->roles->pluck('name')->toArray()
         );
     }
 

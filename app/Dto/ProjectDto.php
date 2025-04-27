@@ -23,7 +23,15 @@ class ProjectDto
             id: $project->id,
             name: $project->name,
             annotation: $project->annotation,
-            members: $project->users->map(fn($user) => UserDto::fromModel($user)->toArray())->toArray(),
+            members: $project->users->map(function ($user) {
+                return array_merge(
+                    UserDto::fromModel($user)->toArray(),
+                    [
+                        'position' => $user->pivot->position,
+                        'isCreator' => (bool) $user->pivot->is_creator,
+                    ]
+                );
+            })->toArray(),
             mentor: $project->mentor ? UserDto::fromModel($project->mentor)->toArray() : null,
             files: $project->files->map(fn($file) => FileDto::fromModel($file)->toArray())->toArray(),
             status: [
