@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class SocialController extends Controller
 {
@@ -23,6 +24,7 @@ class SocialController extends Controller
     public function handleProviderCallback(Request $request, $provider)
     {
         if ($provider !== 'keycloak') {
+            Log::error('Не поддерживаемый провайдер: ' . $provider);
             abort(404, 'Провайдер не поддерживается');
         };
 
@@ -51,6 +53,7 @@ class SocialController extends Controller
 
             return redirect('/projects');
         } catch (\Throwable $e) {
+            Log::error('Ошибка авторизации: ' . $e->getMessage());
             return redirect('/')->with('error', 'Ошибка авторизации: ' . $e->getMessage());
         }
     }
@@ -67,6 +70,7 @@ class SocialController extends Controller
             ]);
             return redirect($logoutUri . '?' . $query);
         } catch (\Throwable $e) {
+            Log::error('Ошибка при выходе из системы: ' . $e->getMessage());
             return redirect('/')->with('error', 'Ошибка при выходе из системы');
         }
     }
