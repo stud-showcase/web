@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\VacancyController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -28,9 +29,7 @@ Route::get('/tasks', [TaskController::class, 'index']);
 
 Route::get('/tasks/{id}', [TaskController::class, 'show']);
 
-Route::get('/vacancies', function () {
-    return Inertia::render('user/Vacancies');
-});
+Route::get('/vacancies', [VacancyController::class, 'index']);
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard', function () {

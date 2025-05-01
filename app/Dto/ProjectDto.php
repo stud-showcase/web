@@ -14,7 +14,7 @@ class ProjectDto
         public array $status,
         public bool $isHiring,
         public TaskDto $task,
-        public ?array $vacancies = null
+        public ?array $vacancies
     ) {}
 
     public static function fromModel($project): self
