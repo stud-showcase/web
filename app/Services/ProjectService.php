@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Repositories\ProjectRepository;
 use App\Dto\ProjectDto;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProjectService
 {
@@ -12,10 +12,10 @@ class ProjectService
         private ProjectRepository $projectRepository
     ) {}
 
-    public function getFormattedProjects(): Collection
+    public function getFilteredProjects(array $filters): LengthAwarePaginator
     {
-        return $this->projectRepository->getAllWithRelations()
-            ->map(fn($project) => ProjectDto::fromModel($project)->toArray());
+        return $this->projectRepository->getFilteredWithRelations($filters)
+            ->through(fn($project) => ProjectDto::fromModel($project)->toArray());
     }
 
     public function getFormattedProjectById(int $id): array

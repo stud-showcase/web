@@ -52,7 +52,7 @@ class TaskDto
                         'id' => $project->status->id,
                         'name' => $project->status->name,
                     ],
-                    'isHiring' => $project->members_count < $task->max_members,
+                    'isHiring' => $project->users->count() < $task->max_members,
                 ])->toArray()
                 : null
         );

@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Repositories\TaskRepository;
 use App\Dto\TaskDto;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class TaskService
 {
@@ -12,10 +12,10 @@ class TaskService
         private TaskRepository $taskRepository
     ) {}
 
-    public function getFormattedTasks(): Collection
+    public function getFilteredTasks(array $filters): LengthAwarePaginator
     {
-        return $this->taskRepository->getAllWithRelations()
-            ->map(fn($task) => TaskDto::fromModel($task)->toArray());
+        return $this->taskRepository->getFilteredTasks($filters)
+            ->through(fn($task) => TaskDto::fromModel($task)->toArray());
     }
 
     public function getFormattedTaskById(int $id): array

@@ -31,7 +31,7 @@ Route::get('/tasks/{id}', [TaskController::class, 'show']);
 
 Route::get('/vacancies', [VacancyController::class, 'index']);
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('admin/Dashboard');
     });

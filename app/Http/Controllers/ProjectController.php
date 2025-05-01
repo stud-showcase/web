@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\ProjectService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -11,11 +12,13 @@ class ProjectController extends Controller
         private ProjectService $projectService
     ) {}
 
-    public function index(): \Inertia\Response
+    public function index(Request $request): \Inertia\Response
     {
-        $projects = $this->projectService->getFormattedProjects();
+        $filters = $request->only(['status', 'complexity', 'tags', 'isHiring']);
+        $projects = $this->projectService->getFilteredProjects($filters);
         return Inertia::render('user/Projects', [
-            'projects' => $projects
+            'projects' => $projects,
+            'filters' => $filters,
         ]);
     }
 
