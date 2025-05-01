@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\TaskController;
@@ -26,6 +27,10 @@ Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/projects/{id}', [ProjectController::class, 'show']);
 
 Route::get('/tasks', [TaskController::class, 'index']);
+
+Route::post('/taskRequest', [TaskController::class, 'createRequest']);
+
+Route::get('/download/{path}', [FileController::class, 'download'])->name('files.download')->where('path', '.*');
 
 Route::get('/tasks/{id}', [TaskController::class, 'show']);
 

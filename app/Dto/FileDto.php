@@ -4,6 +4,7 @@ namespace App\Dto;
 
 use App\Models\ProjectFile;
 use App\Models\TaskFile;
+use App\Models\TaskRequestFile;
 
 class FileDto
 {
@@ -12,7 +13,7 @@ class FileDto
         public string $path
     ) {}
 
-    public static function fromModel(TaskFile|ProjectFile $file): self
+    public static function fromModel(TaskFile|ProjectFile|TaskRequestFile $file): self
     {
         return new self(
             name: $file->name,

@@ -13,6 +13,7 @@ class TaskRequestFile extends Model
 
     protected $fillable = [
         'task_request_id',
+        'name',
         'path',
     ];
 

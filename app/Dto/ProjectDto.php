@@ -2,6 +2,8 @@
 
 namespace App\Dto;
 
+use App\Models\Project;
+
 class ProjectDto
 {
     public function __construct(
@@ -14,10 +16,11 @@ class ProjectDto
         public array $status,
         public bool $isHiring,
         public TaskDto $task,
-        public ?array $vacancies
+        public ?array $vacancies,
+        public ?array $invites
     ) {}
 
-    public static function fromModel($project): self
+    public static function fromModel(Project $project): self
     {
         return new self(
             id: $project->id,
@@ -43,6 +46,18 @@ class ProjectDto
             vacancies: isset($project->vacancies)
                 ? $project->vacancies->map(fn($vacancy) => VacancyDto::fromModel($vacancy)->toArray())->toArray()
                 : null,
+            invites: isset($project->invites)
+                ? $project->invites->map(function ($invite) {
+                    return [
+                        'id' => $invite->user->id,
+                        'firstName' => $invite->user->first_name,
+                        'secondName' => $invite->user->second_name,
+                        'lastName' => $invite->user->last_name,
+                        'vacancyId' => $invite->vacancy->id ?? null,
+                        'vacancyName' => $invite->vacancy->name ?? null,
+                    ];
+                })->toArray()
+                : null
         );
     }
 
@@ -59,6 +74,7 @@ class ProjectDto
             'isHiring' => $this->isHiring,
             'task' => $this->task->toArray(),
             'vacancies' => $this->vacancies,
+            'invites' => $this->invites,
         ];
     }
 }

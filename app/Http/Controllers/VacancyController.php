@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Services\VacancyService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class VacancyController extends Controller
@@ -11,11 +13,16 @@ class VacancyController extends Controller
         private VacancyService $vacancyService
     ) {}
 
-    public function index()
+    public function index(Request $request): \Inertia\Response
     {
-        $vacancies = $this->vacancyService->getFormattedVacancies();
+        $filters = $request->only(['tags', 'search']);
+        $vacancies = $this->vacancyService->getFormattedVacancies($filters);
         return Inertia::render('user/Vacancies', [
-            'vacancies' => $vacancies
+            'vacancies' => $vacancies,
+            'filters' => $filters,
+            'availableFilters' => [
+                'tags' => Tag::select('id', 'name')->get()->toArray(),
+            ]
         ]);
     }
 }

@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequestCreateRequest;
+use App\Models\Tag;
+use App\Models\Task;
+use App\Models\TaskRequest;
+use App\Models\TaskRequestFile;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class TaskController extends Controller
@@ -12,14 +19,15 @@ class TaskController extends Controller
         private TaskService $taskService
     ) {}
 
-    public function index(Request $request)
+    public function index(Request $request): \Inertia\Response
     {
         $filters = $request->only([
             'complexity',
             'tags',
-            'minMembers',
-            'maxMembers',
+            'members',
             'customers',
+            'deadline',
+            'search',
         ]);
 
         $tasks = $this->taskService->getFilteredTasks($filters);
@@ -27,6 +35,10 @@ class TaskController extends Controller
         return Inertia::render('user/TaskBank', [
             'tasks' => $tasks,
             'filters' => $filters,
+            'availableFilters' => [
+                'tags' => Tag::select('id', 'name')->get()->toArray(),
+                'customers' => Task::select('customer')->distinct()->pluck('customer')->toArray(),
+            ]
         ]);
     }
 
@@ -37,5 +49,49 @@ class TaskController extends Controller
         return Inertia::render('user/Task', [
             'task' => $task,
         ]);
+    }
+
+    public function createRequest(TaskRequestCreateRequest $request)
+    {
+        if ($request->input('with_project') && !Auth::check()) {
+            return response()->json([
+                'message' => 'Для заявки с проектом необходимо авторизоваться',
+            ], 403);
+        }
+
+        $validated = $request->validated();
+
+        $userId = Auth::check() ? Auth::id() : null;
+
+        $taskRequest = TaskRequest::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'customer' => $validated['customer'],
+            'customer_email' => $validated['customer_email'],
+            'customer_phone' => $validated['customer_phone'],
+            'with_project' => $validated['with_project'],
+            'project_name' => $validated['project_name'],
+            'user_id' => $userId,
+        ]);
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $extension = $file->getClientOriginalExtension();
+                $uniqueName = Str::uuid() . '.' . $extension;
+                $directory = 'task_requests/' . $taskRequest->id;
+                $path = $file->storeAs($directory, $uniqueName, 'public');
+
+                TaskRequestFile::create([
+                    'task_request_id' => $taskRequest->id,
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                ]);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Заявка успешно создана',
+            'taskRequest' => $taskRequest,
+        ], 201);
     }
 }
