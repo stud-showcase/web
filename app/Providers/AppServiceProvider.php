@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\ProjectInviteRepository;
 use App\Services\ProjectService;
 use App\Repositories\ProjectRepository;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
@@ -22,7 +23,8 @@ class AppServiceProvider extends EventServiceProvider
 
         $this->app->bind(ProjectService::class, function ($app) {
             return new ProjectService(
-                $app->make(ProjectRepository::class)
+                $app->make(ProjectRepository::class),
+                $app->make(ProjectInviteRepository::class)
             );
         });
     }

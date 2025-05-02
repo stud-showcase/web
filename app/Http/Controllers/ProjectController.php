@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AcceptInviteRequest;
+use App\Http\Requests\InviteRequestRequest;
 use App\Models\Tag;
 use App\Services\ProjectService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -43,5 +46,27 @@ class ProjectController extends Controller
         return Inertia::render('user/Project', [
             'project' => $project,
         ]);
+    }
+
+    public function inviteRequest(InviteRequestRequest $request)
+    {
+        $validated = $request->validated();
+
+        $success = $this->projectService->createInvite(
+            Auth::id(),
+            $validated['project_id'],
+            $validated['vacancy_id'] ?? null
+        );
+
+        return to_route('projects.show', $validated['project_id'], $success ? 200 : 409);
+    }
+
+    public function acceptInvite(AcceptInviteRequest $request)
+    {
+        $validated = $request->validated();
+
+        $invite = $this->projectService->acceptInvite($validated['invite_id']);
+
+        return to_route('projects.show', $invite->project_id, $invite ? 200 : 500);
     }
 }
