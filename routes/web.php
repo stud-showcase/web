@@ -22,17 +22,24 @@ Route::get('/', function () {
     return Inertia::render('user/Main');
 });
 
-Route::get('/projects', [ProjectController::class, 'index']);
+Route::prefix('projects')->group(function () {
+    Route::get('/', [ProjectController::class, 'index']);
+    Route::get('/{id}', [ProjectController::class, 'show'])->name('projects.show');
 
-Route::get('/projects/{id}', [ProjectController::class, 'show']);
+    Route::middleware('auth')->group(function () {
+        Route::post('/invite-request', [ProjectController::class, 'createInvite'])->name('projects.invite.request');
+        Route::post('/accept-invite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
+    });
+});
 
-Route::get('/tasks', [TaskController::class, 'index']);
+Route::prefix('tasks')->group(function () {
+    Route::get('/', [TaskController::class, 'index']);
+    Route::get('/{id}', [TaskController::class, 'show']);
+});
 
 Route::post('/taskRequest', [TaskController::class, 'createRequest']);
 
 Route::get('/download/{path}', [FileController::class, 'download'])->name('files.download')->where('path', '.*');
-
-Route::get('/tasks/{id}', [TaskController::class, 'show']);
 
 Route::get('/vacancies', [VacancyController::class, 'index']);
 
