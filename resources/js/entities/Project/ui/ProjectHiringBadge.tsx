@@ -1,7 +1,7 @@
 import { Badge } from "@/shared/ui/Badge";
 import { Users, XCircle } from "lucide-react";
 
-export function HiringBadge({ isHiring }: { isHiring: boolean }) {
+export function ProjectHiringBadge({ isHiring }: { isHiring: boolean }) {
   return (
     <Badge variant="outline" className="flex items-center gap-1 w-fit">
       {isHiring ? (

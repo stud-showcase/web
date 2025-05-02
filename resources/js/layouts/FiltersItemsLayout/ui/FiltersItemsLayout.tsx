@@ -13,42 +13,22 @@ import { ReactNode } from "react";
 
 type Props = {
   heading: string;
-  filterPanel: ReactNode;
-  content: ReactNode;
+  filtersSlot: ReactNode;
+  contentSlot: ReactNode;
 };
 
-export function FiltersItemsLayout({ heading, filterPanel, content }: Props) {
+export function FiltersItemsLayout({
+  heading,
+  filtersSlot,
+  contentSlot,
+}: Props) {
   return (
     <Container withVerticalPaddings>
       <Heading level={1}>{heading}</Heading>
       <div className="grid mt-6 grid-cols-1 lg:grid-cols-4 gap-6">
-        {filterPanel}
+        {filtersSlot}
         <div className="lg:col-span-3">
-          {content}
-          <Pagination className="mt-6">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  2
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          {contentSlot}
         </div>
       </div>
     </Container>

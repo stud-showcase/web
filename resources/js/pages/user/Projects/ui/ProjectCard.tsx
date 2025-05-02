@@ -1,14 +1,10 @@
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
-import { Text } from "@/shared/ui/Text";
-import { Project } from "@/entities/Project/model/Project";
 import { ArrowRight, UserPlus, Users } from "lucide-react";
 import { EntityCard } from "@/shared/ui/EntityCard";
-import { StatusBadge } from "@/entities/Project/ui/StatusBadge";
-import { ComplexityBadge, Task } from "@/entities/Task";
-import { HiringBadge } from "@/entities/Project/ui/HiringBadge";
+import { ProjectStatusBadge, ProjectHiringBadge, Project } from "@/entities/Project";
+import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { TaskTag } from "@/entities/Task";
 
 function Title({ project, task }: { project: Project; task: Task }) {
   return (
@@ -27,27 +23,15 @@ function Title({ project, task }: { project: Project; task: Task }) {
 function Badges({ project, task }: { project: Project; task: Task }) {
   return (
     <>
-      <HiringBadge isHiring={project.isHiring} />
-      <StatusBadge status={project.status} />
-      <ComplexityBadge complexity={task.complexity} />
-    </>
-  );
-}
-
-function Content({ project }: { project: Project; task: Task }) {
-  return (
-    <>
-      {project.abstract && (
-        <Text variant="small" className="line-clamp-2">
-          {project.abstract}
-        </Text>
-      )}
+      <ProjectHiringBadge isHiring={project.isHiring} />
+      <ProjectStatusBadge status={project.status} />
+      <TaskComplexityBadge complexity={task.complexity} />
     </>
   );
 }
 
 function Tags({ task }: { task: Task }) {
-  return task.tags.map((tag) => <TaskTag value={tag} />);
+  return task.tags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
 
 function Footer({ project }: { project: Project }) {
@@ -83,7 +67,6 @@ export function ProjectCard({
       title={<Title project={project} task={task} />}
       subtitle={task.title}
       badges={<Badges project={project} task={task} />}
-      content={<Content project={project} task={task} />}
       tags={<Tags task={task} />}
       footer={<Footer project={project} />}
     />

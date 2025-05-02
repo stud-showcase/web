@@ -1,40 +1,26 @@
+import { TaskTag } from "@/entities/Task";
 import { FilterPanel, FilterBlock } from "@/shared/ui/FilterPanel";
 
-export function ProjectsPageFilterPanel() {
+export function ProjectsPageFilterPanel({ tags }: { tags: TaskTag[] }) {
+  const tagNames = tags.map((tag) => tag.name);
+
   return (
     <FilterPanel>
       <FilterBlock
         title="Статус"
         idPrefix="status"
-        options={["В рассмотрении", "В разработке", "Завершён"]}
+        options={["В ожидании", "В работе", "Завершен"]}
       />
       <FilterBlock
         title="Сложность"
         idPrefix="complexity"
         options={["Легкий", "Средний", "Сложный"]}
       />
-      <FilterBlock
-        title="Теги"
-        idPrefix="tag"
-        options={[
-          "веб",
-          "дизайн",
-          "интеграция",
-          "мобильное",
-          "социальные сети",
-          "api",
-          "внутренние системы",
-          "аналитика",
-          "отчетность",
-          "crm",
-          "бизнес",
-        ]}
-        scrollable
-      />
+      <FilterBlock title="Теги" idPrefix="tag" options={tagNames} scrollable />
       <FilterBlock
         title="Набор в команду"
         idPrefix="recruitment"
-        options={["Все", "Набор открыт", "Набор закрыт"]}
+        options={["Открыт", "Закрыт"]}
       />
     </FilterPanel>
   );

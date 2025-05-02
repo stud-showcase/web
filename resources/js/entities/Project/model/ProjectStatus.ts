@@ -1,1 +1,4 @@
-export type ProjectStatus = "under_review" | "in_progress" | "completed";
+export type ProjectStatus = {
+  name: "В ожидании" | "В работе" | "Завершен";
+  id: number;
+};

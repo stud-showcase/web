@@ -5,7 +5,7 @@ import {
   HiringBadge,
   Project,
   ProjectStatus,
-  StatusBadge,
+  ProjectStatusBadge,
 } from "@/entities/Project";
 
 export const columns: ColumnDef<Project>[] = [
@@ -62,7 +62,7 @@ export const columns: ColumnDef<Project>[] = [
     ),
     cell: ({ row }) => {
       const status = row.getValue("status") as ProjectStatus;
-      return <StatusBadge status={status} />;
+      return <ProjectStatusBadge status={status} />;
     },
   },
   {

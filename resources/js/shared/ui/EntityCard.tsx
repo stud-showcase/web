@@ -13,7 +13,7 @@ type Props = {
   subtitle?: ReactNode | string;
   badges?: ReactNode;
   tags?: ReactNode;
-  content: ReactNode;
+  content?: ReactNode;
   footer?: ReactNode;
 };
 

@@ -1,11 +1,12 @@
 import { Badge } from "@/shared/ui/Badge";
 import { Tag as TagIcon } from "lucide-react";
+import { TaskTag } from "../model/TaskTag";
 
-export function TaskTag({ value }: { value: string }) {
+export function TaskTagBadge({ tag }: { tag: TaskTag }) {
   return (
     <Badge variant="outline" className="gap-1">
       <TagIcon className="h-3 w-3" />
-      {value}
+      {tag.name}
     </Badge>
   );
 }

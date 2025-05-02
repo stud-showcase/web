@@ -1,8 +1,10 @@
 import { TaskComplexity } from "./TaskCompexity";
+import { TaskTag } from "./TaskTag";
 
 export type Task = {
   id: number;
   title: string;
+  canTake: boolean;
   description: string;
   customer: string;
   customerEmail: string;
@@ -10,6 +12,6 @@ export type Task = {
   maxMembers: number;
   deadline: Date;
   complexity: TaskComplexity;
-  tags: string[];
+  tags: TaskTag[];
   files?: { name: string; url: string }[];
 };

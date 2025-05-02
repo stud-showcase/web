@@ -42,7 +42,7 @@ export function FilterBlock({
     <div>
       <Text className="font-semibold pt-4 pb-3">{title}</Text>
       {scrollable ? (
-        <ScrollArea className="h-40 w-full">{content}</ScrollArea>
+        <ScrollArea className="max-h-40 w-full">{content}</ScrollArea>
       ) : (
         content
       )}

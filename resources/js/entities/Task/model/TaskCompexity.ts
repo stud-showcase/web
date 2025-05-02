@@ -1,1 +1,1 @@
-export type TaskComplexity = "easy" | "medium" | "hard";
+export type TaskComplexity = { name: "Легкий" | "Средний" | "Сложный"; id: number };

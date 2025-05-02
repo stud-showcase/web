@@ -1,7 +1,6 @@
 import { Project } from "@/entities/Project";
 import { Task } from "@/entities/Task";
 
-export type ExtendedProject = {
-  project: Project;
+export type ExtendedProject = Project & {
   task: Task;
-}
+};

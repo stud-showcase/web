@@ -20,7 +20,7 @@ import {
 import { Text } from "@/shared/ui/Text";
 import { Heading } from "@/shared/ui/Heading";
 import { ComplexityBadge, Task, TaskTag } from "@/entities/Task";
-import { HiringBadge, Project, StatusBadge } from "@/entities/Project";
+import { HiringBadge, Project, ProjectStatusBadge } from "@/entities/Project";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { Vacancy } from "@/entities/Vacancy";
 import { project, task, vacancy } from "@/shared/mocks";
@@ -90,7 +90,7 @@ export default function ProjectPage({}: Props) {
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
                 <ComplexityBadge complexity="medium" />
-                <StatusBadge status="in_progress" />
+                <ProjectStatusBadge status="in_progress" />
                 <HiringBadge isHiring={true} />
                 {task?.tags.map((tag) => (
                   <TaskTag value={tag} />
