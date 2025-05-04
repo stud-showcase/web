@@ -21,20 +21,6 @@ export function SearchBar() {
   };
 
   const handleChange = (search: string) => {
-    const params = new URLSearchParams(window.location.search);
-
-    if (search) {
-      params.set("search", search);
-    } else {
-      params.delete("search");
-    }
-
-    window.history.replaceState(
-      {},
-      "",
-      `${window.location.pathname}?${params.toString()}`
-    );
-
     setSearchQuery(search);
   };
 

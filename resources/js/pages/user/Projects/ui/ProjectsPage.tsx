@@ -7,15 +7,18 @@ import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { Heading } from "@/shared/ui/Heading";
 import { Container } from "@/shared/ui/Container";
 import { TaskTag } from "@/entities/Task";
+import { Filters } from "../model/Filters";
 
 type Props = {
   projects: ServerPaginatedData<ExtendedProject>;
   userProjects: ServerPaginatedData<ExtendedProject>;
   availableFilters: { tags: TaskTag[] };
+  filters: Filters;
 };
 
 export default function ProjectsPage(props: Props) {
-  const { projects, userProjects, availableFilters } = props;
+  console.log(props);
+  const { projects, userProjects, availableFilters, filters: appliedFilters } = props;
 
   return (
     <>
@@ -26,7 +29,7 @@ export default function ProjectsPage(props: Props) {
         <Container withVerticalPaddings>
           <Heading level={1}>Проекты</Heading>
           <div className="grid mt-6 grid-cols-1 lg:grid-cols-4 gap-6">
-            <ProjectsPageFilterPanel tags={availableFilters.tags} />
+            <ProjectsPageFilterPanel tags={availableFilters.tags} appliedFilters={appliedFilters} />
             <div className="lg:col-span-3">
               <ProjectsPageContent
                 projects={projects}

@@ -1,9 +1,9 @@
-import { Button } from "@/shared/ui/Button";
-import { ReactNode } from "react";
-import { Text } from "@/shared/ui/Text";
-import { Checkbox } from "@/shared/ui/Checkbox";
-import { ScrollArea } from "@/shared/ui/ScrollArea";
-import { Separator } from "@/shared/ui/Separator";
+import { PropsWithChildren, ReactNode, useState } from "react";
+import { Button } from "./Button";
+import { Text } from "./Text";
+import { Checkbox } from "./Checkbox";
+import { ScrollArea } from "./ScrollArea";
+import { Separator } from "./Separator";
 import {
   Select,
   SelectTrigger,
@@ -11,45 +11,108 @@ import {
   SelectContent,
   SelectItem,
 } from "@/shared/ui/Select";
+import { Label } from "./Label";
+import { RadioGroup, RadioGroupItem } from "./RadioGroup";
 
-type FilterBlockProps = {
+type BaseFilterBlockProps = {
   title: string;
-  options: string[];
-  idPrefix: string;
   scrollable?: boolean;
+};
+
+function BaseFilterBlock({
+  scrollable = false,
+  title,
+  children,
+}: PropsWithChildren<BaseFilterBlockProps>) {
+  return (
+    <div className="border-b pb-4">
+      <Text className="font-semibold">{title}</Text>
+      <div className="mt-3">
+        {scrollable ? (
+          <ScrollArea className="flex flex-col max-h-40">{children}</ScrollArea>
+        ) : (
+          children
+        )}
+      </div>
+    </div>
+  );
+}
+
+type Option = {
+  id: number;
+  name: string;
+}
+
+type FilterBlockProps = BaseFilterBlockProps & {
+  options: Option[];
+  idPrefix: string;
+  values: string[];
+  onChange: (values: string[]) => void;
 };
 
 export function FilterBlock({
   title,
   options,
   idPrefix,
+  values,
+  onChange,
   scrollable = false,
 }: FilterBlockProps) {
-  const content = (
-    <div className="space-y-2">
-      {options.map((option) => (
-        <div key={option} className="flex items-center space-x-2">
-          <Checkbox id={`${idPrefix}-${option}`} />
-          <label htmlFor={`${idPrefix}-${option}`}>
-            <Text className="text-sm">{option}</Text>
-          </label>
-        </div>
-      ))}
-    </div>
-  );
+  const handleCheckboxChange = (optionId: string, checked: boolean) => {
+    const newValues = checked
+      ? [...values, optionId]
+      : values.filter((v) => v !== optionId);
+    onChange(newValues);
+  };
 
   return (
-    <div>
-      <Text className="font-semibold pt-4 pb-3">{title}</Text>
-      {scrollable ? (
-        <ScrollArea className="max-h-40 w-full">{content}</ScrollArea>
-      ) : (
-        content
-      )}
-      <div className="pt-3">
-        <Separator />
+    <BaseFilterBlock title={title} scrollable={scrollable}>
+      <div className="space-y-2">
+        {options.map((option) => (
+          <div key={option.id} className="flex items-center space-x-2">
+            <Checkbox
+              id={`${idPrefix}-${option.id}`}
+              checked={values.includes(option.id.toString())}
+              onCheckedChange={(checked) =>
+                handleCheckboxChange(option.id.toString(), !!checked)
+              }
+            />
+            <Label htmlFor={`${idPrefix}-${option.id}`}>{option.name}</Label>
+          </div>
+        ))}
       </div>
-    </div>
+    </BaseFilterBlock>
+  );
+}
+
+type RadioFilterBlockProps = BaseFilterBlockProps & {
+  options: string[];
+  idPrefix: string;
+  value?: string;
+  onChange: (value: string) => void;
+};
+
+export function RadioFilterBlock({
+  title,
+  options,
+  idPrefix,
+  value,
+  onChange,
+  scrollable = false,
+}: RadioFilterBlockProps) {
+  return (
+    <BaseFilterBlock title={title} scrollable={scrollable}>
+      <RadioGroup value={value} onValueChange={onChange}>
+        {options.map((option, index) => (
+          <div key={index} className="flex items-center space-x-2">
+            <RadioGroupItem value={index.toString()} id={`${idPrefix}-${option}`} />
+            <Label htmlFor={`${idPrefix}-${option}`} className="cursor-pointer">
+              {option}
+            </Label>
+          </div>
+        ))}
+      </RadioGroup>
+    </BaseFilterBlock>
   );
 }
 
@@ -64,7 +127,7 @@ export function RangeFilterBlock({ title, range }: RangeFilterBlockProps) {
       <Text className="font-semibold pt-4 pb-3">{title}</Text>
       <div className="flex gap-2">
         <Select>
-          <SelectTrigger className="w-full">
+          <SelectTrigger>
             <SelectValue placeholder="Мин..." />
           </SelectTrigger>
           <SelectContent>
@@ -76,7 +139,7 @@ export function RangeFilterBlock({ title, range }: RangeFilterBlockProps) {
           </SelectContent>
         </Select>
         <Select>
-          <SelectTrigger className="w-full">
+          <SelectTrigger>
             <SelectValue placeholder="Макс..." />
           </SelectTrigger>
           <SelectContent>
@@ -95,16 +158,25 @@ export function RangeFilterBlock({ title, range }: RangeFilterBlockProps) {
   );
 }
 
-export function FilterPanel({ children }: { children: ReactNode }) {
+export function FilterPanel({
+  children,
+  onApply,
+  onReset,
+}: PropsWithChildren<{
+  onApply: () => void;
+  onReset: () => void;
+}>) {
   return (
-    <div className="lg:col-span-1 bg-white border rounded-lg px-4 pb-4">
+    <div className="lg:col-span-1 bg-white border rounded-lg p-4">
       <div className="sticky top-0 left-0">
-        {children}
+        <div className="space-y-3">{children}</div>
         <div className="flex flex-col xl:flex-row gap-2 mt-4">
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="flex-1" onClick={onReset}>
             Сбросить
           </Button>
-          <Button className="w-full">Применить</Button>
+          <Button className="flex-1" onClick={onApply}>
+            Применить
+          </Button>
         </div>
       </div>
     </div>

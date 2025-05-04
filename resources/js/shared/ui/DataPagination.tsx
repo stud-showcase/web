@@ -51,6 +51,8 @@ export function DataPagination<TData>({
     return range;
   };
 
+  if (lastPage === 1) return;
+
   return (
     <Pagination className={className}>
       <PaginationContent>

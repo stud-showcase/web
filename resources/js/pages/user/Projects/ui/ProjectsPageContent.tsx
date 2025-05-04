@@ -28,9 +28,6 @@ export function ProjectsPageContent({
   projects: ServerPaginatedData<ExtendedProject>;
   userProjects: ServerPaginatedData<ExtendedProject>;
 }) {
-  console.log(projects);
-  console.log(userProjects);
-
   const { user } = useAuth();
 
   if (user) {
