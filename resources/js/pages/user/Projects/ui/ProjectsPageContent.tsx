@@ -1,4 +1,3 @@
-import { SearchBar } from "@/shared/ui/SearchBar";
 import { ProjectCard } from "./ProjectCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
 import { ExtendedProject } from "../model/ExtendedProject";
@@ -6,6 +5,7 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { Text } from "@/shared/ui/Text";
 import { DataPagination } from "@/shared/ui/DataPagination";
+import { SearchBar } from "./SearchBar";
 
 function ProjectsCards({ projects }: { projects: ExtendedProject[] }) {
   return (
@@ -18,7 +18,11 @@ function ProjectsCards({ projects }: { projects: ExtendedProject[] }) {
 }
 
 function NoProjectsText() {
-  return <Text variant="large" className="mt-6">Нет проектов</Text>;
+  return (
+    <Text variant="large" className="mt-6">
+      Нет проектов
+    </Text>
+  );
 }
 
 export function ProjectsPageContent({

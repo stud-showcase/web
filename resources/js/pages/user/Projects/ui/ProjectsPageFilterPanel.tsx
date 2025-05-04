@@ -5,39 +5,26 @@ import {
   FilterBlock,
   RadioFilterBlock,
 } from "@/shared/ui/FilterPanel";
-import { router } from "@inertiajs/react";
-import { useState } from "react";
+import { useContext } from "react";
+import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
+import { sendFilters } from "../util/sendFilters";
 
-type Filters = {
-  status: string[];
-  complexity: string[];
-  tags: string[];
-  isHiring: string;
-};
-
-export function ProjectsPageFilterPanel({
-  tags,
-  appliedFilters,
-}: {
-  tags: TaskTag[];
-  appliedFilters: Filters | undefined;
-}) {
-  const [filters, setFilters] = useState<Filters>({
-    status: appliedFilters?.status || [],
-    complexity: appliedFilters?.complexity || [],
-    tags: appliedFilters?.tags || [],
-    isHiring: appliedFilters?.isHiring || "",
-  });
+export function ProjectsPageFilterPanel({ tags }: { tags: TaskTag[] }) {
+  const { filters, setFilters } = useContext(ProjectsFiltersContext);
 
   const handleApply = () => {
-    router.get(`/projects`, filters, {
-      preserveState: true,
-      replace: true,
-    });
+    sendFilters(filters);
   };
 
   const handleReset = () => {
-    setFilters({ status: [], complexity: [], tags: [], isHiring: "" });
+    setFilters({
+      ...filters,
+      status: [],
+      complexity: [],
+      tags: [],
+      isHiring: "",
+    });
+    sendFilters(filters);
   };
 
   return (
@@ -65,14 +52,16 @@ export function ProjectsPageFilterPanel({
           setFilters({ ...filters, isHiring });
         }}
       />
-      <FilterBlock
-        title="Теги"
-        idPrefix="tag"
-        options={tags}
-        values={filters.tags}
-        onChange={(tags) => setFilters({ ...filters, tags })}
-        scrollable
-      />
+      {tags.length != 0 && (
+        <FilterBlock
+          title="Теги"
+          idPrefix="tag"
+          options={tags}
+          values={filters.tags}
+          onChange={(tags) => setFilters({ ...filters, tags })}
+          scrollable
+        />
+      )}
     </FilterPanel>
   );
 }

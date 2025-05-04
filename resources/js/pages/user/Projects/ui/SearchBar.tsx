@@ -1,27 +1,19 @@
 import { Input } from "@/shared/ui/Input";
 import { Button } from "@/shared/ui/Button";
 import { Search } from "lucide-react";
-import { router } from "@inertiajs/react";
-import { useState, KeyboardEvent } from "react";
+import { KeyboardEvent, ChangeEvent, useContext } from "react";
+import { ProjectsFiltersContext } from "@/pages/user/Projects/context/ProjectsFiltersContext";
+import { sendFilters } from "../util/sendFilters";
 
 export function SearchBar() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const { filters, setFilters } = useContext(ProjectsFiltersContext);
 
   const handleSearch = () => {
-    router.get(
-      `/projects`,
-      {
-        search: searchQuery.trim() || undefined,
-      },
-      {
-        preserveState: true,
-        replace: true,
-      }
-    );
+    sendFilters(filters);
   };
 
-  const handleChange = (search: string) => {
-    setSearchQuery(search);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilters({ ...filters, search: e.target.value });
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -35,8 +27,8 @@ export function SearchBar() {
       <Input
         placeholder="Поиск по названию..."
         type="text"
-        value={searchQuery}
-        onChange={(e) => handleChange(e.target.value)}
+        value={filters.search ?? ""}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
       <Button size="icon" variant="outline" onClick={handleSearch}>
