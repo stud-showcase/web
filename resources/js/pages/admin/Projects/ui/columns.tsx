@@ -2,7 +2,7 @@ import { Checkbox } from "@/shared/ui/Checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/shared/ui/DataTableColumnHeader";
 import {
-  HiringBadge,
+  ProjectHiringBadge,
   Project,
   ProjectStatus,
   ProjectStatusBadge,
@@ -72,7 +72,7 @@ export const columns: ColumnDef<Project>[] = [
     ),
     cell: ({ row }) => {
       const isHiring = row.getValue("isHiring") as boolean;
-      return <HiringBadge isHiring={isHiring} />;
+      return <ProjectHiringBadge isHiring={isHiring} />;
     },
   },
 ];

@@ -1,9 +1,9 @@
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/shared/ui/DataTableColumnHeader";
-import { ComplexityBadge, Task, TaskComplexity } from "@/entities/Task";
-import { TaskDeadline } from "@/entities/Task";
-import { TaskMaxMembers } from "@/entities/Task";
+import { TaskComplexityBadge, Task, TaskComplexity } from "@/entities/Task";
+import { TaskDeadlineBadge } from "@/entities/Task";
+import { TaskMembersBadge } from "@/entities/Task";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -78,7 +78,7 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const maxMembers = row.getValue("maxMembers") as number;
-      return <TaskMaxMembers maxMembers={maxMembers} />;
+      return <TaskMembersBadge maxMembers={maxMembers} />;
     },
   },
   {
@@ -88,7 +88,7 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const deadline = row.getValue("deadline") as Date;
-      return <TaskDeadline deadline={deadline} />;
+      return <TaskDeadlineBadge deadline={deadline} />;
     },
   },
   {
@@ -98,7 +98,7 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const compexity = row.getValue("complexity") as TaskComplexity;
-      return <ComplexityBadge complexity={compexity} />;
+      return <TaskComplexityBadge complexity={compexity} />;
     },
   },
 ];

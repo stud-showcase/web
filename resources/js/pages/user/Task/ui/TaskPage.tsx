@@ -22,11 +22,10 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/shared/ui/Breadcrumb";
-import { ComplexityBadge, Task } from "@/entities/Task";
+import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
 import { useToast } from "@/shared/hooks/useToast";
 import { Project } from "@/entities/Project";
 import { SimpleProjectCard } from "./SimpleProjectCard";
-import { TaskTag } from "@/entities/Task";
 import { project, task } from "@/shared/mocks";
 import { useAuth } from "@/shared/hooks/useAuth";
 
@@ -86,9 +85,9 @@ export default function TaskPage({}: { task: Task; projects: Project[] }) {
                 )}
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
-                <ComplexityBadge complexity={task.complexity} />
+                <TaskComplexityBadge complexity={task.complexity} />
                 {task.tags.map((tag) => (
-                  <TaskTag value={tag} />
+                  <TaskTagBadge value={tag} />
                 ))}
               </div>
             </header>

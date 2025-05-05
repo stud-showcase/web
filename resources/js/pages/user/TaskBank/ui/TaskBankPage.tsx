@@ -17,8 +17,8 @@ export default function TaskBankPage({}: { tasks: Task[] }) {
       <UserLayout>
         <FiltersItemsLayout
           heading="Банк задач"
-          filterPanel={<TasksBankPageFilterPanel />}
-          content={<TaskBankPageContent tasks={tasks} />}
+          filtersSlot={<TasksBankPageFilterPanel />}
+          contentSlot={<TaskBankPageContent tasks={tasks} />}
         />
       </UserLayout>
     </>

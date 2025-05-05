@@ -8,6 +8,7 @@ import {
 import { useContext } from "react";
 import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
 import { sendFilters } from "../util/sendFilters";
+import { defaultFilters } from "../consts/defaultFilters";
 
 export function ProjectsPageFilterPanel({ tags }: { tags: TaskTag[] }) {
   const { filters, setFilters } = useContext(ProjectsFiltersContext);
@@ -17,14 +18,12 @@ export function ProjectsPageFilterPanel({ tags }: { tags: TaskTag[] }) {
   };
 
   const handleReset = () => {
-    setFilters({
-      ...filters,
-      status: [],
-      complexity: [],
-      tags: [],
-      isHiring: "",
-    });
-    sendFilters(filters);
+    const clearedFilters = {
+      ...defaultFilters,
+      search: filters.search,
+    };
+    setFilters(clearedFilters);
+    sendFilters(clearedFilters);
   };
 
   return (

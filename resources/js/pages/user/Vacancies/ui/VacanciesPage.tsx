@@ -17,8 +17,8 @@ export default function VacanciesPage({}: { vacancies: ExtendedVacancy[] }) {
       <UserLayout>
         <FiltersItemsLayout
           heading="Вакансии"
-          content={<VacanciesPageContent vacancies={vacancies} />}
-          filterPanel={<VacanciesPageFilterPanel />}
+          contentSlot={<VacanciesPageContent vacancies={vacancies} />}
+          filtersSlot={<VacanciesPageFilterPanel />}
         />
       </UserLayout>
     </>

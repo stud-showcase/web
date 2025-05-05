@@ -19,8 +19,8 @@ import {
 } from "@/shared/ui/Breadcrumb";
 import { Text } from "@/shared/ui/Text";
 import { Heading } from "@/shared/ui/Heading";
-import { ComplexityBadge, Task, TaskTag } from "@/entities/Task";
-import { HiringBadge, Project, ProjectStatusBadge } from "@/entities/Project";
+import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
+import { ProjectHiringBadge, Project, ProjectStatusBadge } from "@/entities/Project";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { Vacancy } from "@/entities/Vacancy";
 import { project, task, vacancy } from "@/shared/mocks";
@@ -89,23 +89,23 @@ export default function ProjectPage({}: Props) {
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
-                <ComplexityBadge complexity="medium" />
+                <TaskComplexityBadge complexity="medium" />
                 <ProjectStatusBadge status="in_progress" />
-                <HiringBadge isHiring={true} />
+                <ProjectHiringBadge isHiring={true} />
                 {task?.tags.map((tag) => (
-                  <TaskTag value={tag} />
+                  <TaskTagBadge value={tag} />
                 ))}
               </div>
             </div>
           </header>
 
-          {project?.abstract && (
+          {project?.annotation && (
             <section className="mt-8">
               <div className="flex gap-2 items-center">
                 <Heading level={3}>Описание</Heading>
               </div>
               <Text className="mt-4" variant="muted">
-                {project.abstract}
+                {project.annotation}
               </Text>
             </section>
           )}
@@ -186,17 +186,17 @@ export default function ProjectPage({}: Props) {
             </section>
           )}
 
-          {user && project.requests && (
+          {user && project.invites && (
             <section className="mt-10">
               <Heading level={3}>Заявки</Heading>
               <div className="mt-4 border p-4 rounded-lg">
-                {project.requests.map((request) => {
+                {project.invites.map((invite) => {
                   return (
                     <div className="flex items-center justify-between">
                       <div>
-                        <Text>{request.name}</Text>
-                        {request.role && (
-                          <Text variant="muted">{request.role}</Text>
+                        <Text>{invite.name}</Text>
+                        {invite.role && (
+                          <Text variant="muted">{invite.role}</Text>
                         )}
                       </div>
                       <div className="flex gap-2">

@@ -4,18 +4,15 @@ import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
 import { ArrowRight, ClipboardCheck } from "lucide-react";
 import { Task } from "@/entities/Task/model/Task";
-import { ComplexityBadge } from "@/entities/Task";
-import { TaskTag } from "@/entities/Task/";
+import { TaskComplexityBadge, TaskDeadlineBadge, TaskMembersBadge, TaskTagBadge } from "@/entities/Task";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { TaskMaxMembers } from "@/entities/Task";
-import { TaskDeadline } from "@/entities/Task";
 
 function Badges({ task }: { task: Task }) {
   return (
     <>
-      <TaskMaxMembers maxMembers={task.maxMembers} />
-      <TaskDeadline deadline={task.deadline} />
-      <ComplexityBadge complexity={task.complexity} />
+      <TaskMembersBadge maxMembers={task.maxMembers} />
+      <TaskDeadlineBadge deadline={task.deadline} />
+      <TaskComplexityBadge complexity={task.complexity} />
     </>
   );
 }
@@ -33,7 +30,7 @@ function Content({ task }: { task: Task }) {
 }
 
 function Tags({ task }: { task: Task }) {
-  return task.tags.map((tag) => <TaskTag value={tag} />);
+  return task.tags.map((tag) => <TaskTagBadge value={tag} />);
 }
 
 function Footer({ task }: { task: Task }) {
