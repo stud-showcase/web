@@ -4,13 +4,12 @@ import { ProjectsPageFilterPanel } from "./ProjectsPageFilterPanel";
 import { ProjectsPageContent } from "./ProjectsPageContent";
 import { ExtendedProject } from "../model/ExtendedProject";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
-import { Heading } from "@/shared/ui/Heading";
-import { Container } from "@/shared/ui/Container";
 import { TaskTag } from "@/entities/Task";
 import { Filters } from "../model/Filters";
 import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
 import { useState } from "react";
 import { defaultFilters } from "../consts/defaultFilters";
+import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
 
 type Props = {
   projects: ServerPaginatedData<ExtendedProject>;
@@ -38,20 +37,20 @@ export default function ProjectsPage(props: Props) {
         <title>Проекты</title>
       </Head>
       <UserLayout>
-        <Container withVerticalPaddings>
-          <Heading level={1}>Проекты</Heading>
-          <ProjectsFiltersContext.Provider value={{ filters, setFilters }}>
-            <div className="grid mt-6 grid-cols-1 lg:grid-cols-4 gap-6">
+        <ProjectsFiltersContext.Provider value={{ filters, setFilters }}>
+          <FiltersItemsLayout
+            heading="Проекты"
+            filtersSlot={
               <ProjectsPageFilterPanel tags={availableFilters.tags} />
-              <div className="lg:col-span-3">
-                <ProjectsPageContent
-                  projects={projects}
-                  userProjects={userProjects}
-                />
-              </div>
-            </div>
-          </ProjectsFiltersContext.Provider>
-        </Container>
+            }
+            contentSlot={
+              <ProjectsPageContent
+                projects={projects}
+                userProjects={userProjects}
+              />
+            }
+          />
+        </ProjectsFiltersContext.Provider>
       </UserLayout>
     </>
   );

@@ -1,14 +1,5 @@
 import { Container } from "@/shared/ui/Container";
 import { Heading } from "@/shared/ui/Heading";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/shared/ui/Pagination";
 import { ReactNode } from "react";
 
 type Props = {

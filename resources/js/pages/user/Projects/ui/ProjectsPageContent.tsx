@@ -5,7 +5,10 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { Text } from "@/shared/ui/Text";
 import { DataPagination } from "@/shared/ui/DataPagination";
-import { SearchBar } from "./SearchBar";
+import { SearchBar } from "@/shared/ui/SearchBar";
+import { useContext } from "react";
+import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
+import { sendFilters } from "../util/sendFilters";
 
 function ProjectsCards({ projects }: { projects: ExtendedProject[] }) {
   return (
@@ -33,6 +36,15 @@ export function ProjectsPageContent({
   userProjects: ServerPaginatedData<ExtendedProject>;
 }) {
   const { user } = useAuth();
+  const { filters, setFilters } = useContext(ProjectsFiltersContext);
+
+  const handleSearch = () => {
+    sendFilters(filters);
+  };
+
+  const handleChange = (value: string) => {
+    setFilters({ ...filters, search: value });
+  };
 
   if (user) {
     <Tabs defaultValue="all" className="flex flex-col gap-6">
@@ -41,7 +53,11 @@ export function ProjectsPageContent({
           <TabsTrigger value="all">Все проекты</TabsTrigger>
           <TabsTrigger value="my">Мои проекты</TabsTrigger>
         </TabsList>
-        <SearchBar />
+        <SearchBar
+          value={filters.search ?? ""}
+          onSearch={handleSearch}
+          onChange={handleChange}
+        />
       </div>
       <TabsContent value="all">
         <ProjectsCards projects={projects.data} />
@@ -57,8 +73,12 @@ export function ProjectsPageContent({
   }
 
   return (
-    <>
-      <SearchBar />
+    <div>
+      <SearchBar
+        value={filters.search ?? ""}
+        onSearch={handleSearch}
+        onChange={handleChange}
+      />
       {projects.data.length === 0 ? (
         <NoProjectsText />
       ) : (
@@ -67,6 +87,6 @@ export function ProjectsPageContent({
           <DataPagination paginatedData={projects} className="mt-6" />
         </>
       )}
-    </>
+    </div>
   );
 }
