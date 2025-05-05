@@ -7,8 +7,8 @@ import { Text } from "@/shared/ui/Text";
 import { DataPagination } from "@/shared/ui/DataPagination";
 import { SearchBar } from "@/shared/ui/SearchBar";
 import { useContext } from "react";
+import { sendProjectsFilters } from "../util/sendProjectsFilters";
 import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
-import { sendFilters } from "../util/sendFilters";
 
 function ProjectsCards({ projects }: { projects: ExtendedProject[] }) {
   return (
@@ -39,7 +39,7 @@ export function ProjectsPageContent({
   const { filters, setFilters } = useContext(ProjectsFiltersContext);
 
   const handleSearch = () => {
-    sendFilters(filters);
+    sendProjectsFilters(filters);
   };
 
   const handleChange = (value: string) => {

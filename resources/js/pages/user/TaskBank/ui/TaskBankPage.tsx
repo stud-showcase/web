@@ -3,11 +3,29 @@ import { UserLayout } from "@/layouts/UserLayout";
 import { Head } from "@inertiajs/react";
 import { TasksBankPageFilterPanel } from "./TaskBankPageFilterPanel";
 import { TaskBankPageContent } from "./TaskBankPageContent";
-import { Task } from "@/entities/Task";
-import { task } from "@/shared/mocks";
+import { Task, TaskTag } from "@/entities/Task";
+import { TaskBankFilters } from "../model/TaskBankFilters";
+import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
+import { TaskBankFiltersContext } from "../context/TaskBankFiltersContext";
+import { useState } from "react";
+import { defaultTaskBankFilters } from "../consts/defaultTaskBankFilters";
 
-export default function TaskBankPage({}: { tasks: Task[] }) {
-  const tasks = Array(10).fill(task);
+type Props = {
+  tasks: ServerPaginatedData<Task>;
+  filters: TaskBankFilters;
+  availableFilters: {
+    customers: string[];
+    tags: TaskTag[];
+  };
+};
+
+export default function TaskBankPage(props: Props) {
+  const { tasks, availableFilters, filters: appliedFilters } = props;
+
+  const [filters, setFilters] = useState<TaskBankFilters>({
+    ...defaultTaskBankFilters,
+    ...appliedFilters,
+  });
 
   return (
     <>
@@ -15,11 +33,18 @@ export default function TaskBankPage({}: { tasks: Task[] }) {
         <title>Банк задач</title>
       </Head>
       <UserLayout>
-        <FiltersItemsLayout
-          heading="Банк задач"
-          filtersSlot={<TasksBankPageFilterPanel />}
-          contentSlot={<TaskBankPageContent tasks={tasks} />}
-        />
+        <TaskBankFiltersContext.Provider value={{ filters, setFilters }}>
+          <FiltersItemsLayout
+            heading="Банк задач"
+            filtersSlot={
+              <TasksBankPageFilterPanel
+                tags={availableFilters.tags}
+                customers={availableFilters.customers}
+              />
+            }
+            contentSlot={<TaskBankPageContent tasks={tasks} />}
+          />
+        </TaskBankFiltersContext.Provider>
       </UserLayout>
     </>
   );

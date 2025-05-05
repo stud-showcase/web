@@ -5,17 +5,17 @@ import { ProjectsPageContent } from "./ProjectsPageContent";
 import { ExtendedProject } from "../model/ExtendedProject";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { TaskTag } from "@/entities/Task";
-import { Filters } from "../model/Filters";
-import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
+import { ProjectsFilters } from "../model/ProjectsFilters";
 import { useState } from "react";
-import { defaultFilters } from "../consts/defaultFilters";
+import { defaultProjectsFilters } from "../consts/defaultProjectsFilters";
 import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
+import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
 
 type Props = {
   projects: ServerPaginatedData<ExtendedProject>;
   userProjects: ServerPaginatedData<ExtendedProject>;
   availableFilters: { tags: TaskTag[] };
-  filters: Filters;
+  filters: ProjectsFilters;
 };
 
 export default function ProjectsPage(props: Props) {
@@ -26,8 +26,8 @@ export default function ProjectsPage(props: Props) {
     filters: appliedFilters,
   } = props;
 
-  const [filters, setFilters] = useState<Filters>({
-    ...defaultFilters,
+  const [filters, setFilters] = useState<ProjectsFilters>({
+    ...defaultProjectsFilters,
     ...appliedFilters,
   });
 

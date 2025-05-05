@@ -39,7 +39,7 @@ function BaseFilterBlock({
 }
 
 type Option = {
-  id: number;
+  id: number | string;
   name: string;
 }
 
@@ -67,7 +67,7 @@ export function FilterBlock({
 
   return (
     <BaseFilterBlock title={title} scrollable={scrollable}>
-      <div className="space-y-2">
+      <div className="space-y-4">
         {options.map((option) => (
           <div key={option.id} className="flex items-center space-x-2">
             <Checkbox
@@ -102,7 +102,7 @@ export function RadioFilterBlock({
 }: RadioFilterBlockProps) {
   return (
     <BaseFilterBlock title={title} scrollable={scrollable}>
-      <RadioGroup value={value} onValueChange={onChange}>
+      <RadioGroup value={value} onValueChange={onChange} className="gap-4">
         {options.map((option, index) => (
           <div key={index} className="flex items-center space-x-2">
             <RadioGroupItem value={index.toString()} id={`${idPrefix}-${option}`} />

@@ -6,24 +6,24 @@ import {
   RadioFilterBlock,
 } from "@/shared/ui/FilterPanel";
 import { useContext } from "react";
+import { sendProjectsFilters } from "../util/sendProjectsFilters";
+import { defaultProjectsFilters } from "../consts/defaultProjectsFilters";
 import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
-import { sendFilters } from "../util/sendFilters";
-import { defaultFilters } from "../consts/defaultFilters";
 
 export function ProjectsPageFilterPanel({ tags }: { tags: TaskTag[] }) {
   const { filters, setFilters } = useContext(ProjectsFiltersContext);
 
   const handleApply = () => {
-    sendFilters(filters);
+    sendProjectsFilters(filters);
   };
 
   const handleReset = () => {
     const clearedFilters = {
-      ...defaultFilters,
+      ...defaultProjectsFilters,
       search: filters.search,
     };
     setFilters(clearedFilters);
-    sendFilters(clearedFilters);
+    sendProjectsFilters(clearedFilters);
   };
 
   return (

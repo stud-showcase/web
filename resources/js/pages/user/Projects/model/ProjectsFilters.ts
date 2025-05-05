@@ -1,4 +1,4 @@
-export type Filters = {
+export type ProjectsFilters = {
   status: string[];
   complexity: string[];
   tags: string[];

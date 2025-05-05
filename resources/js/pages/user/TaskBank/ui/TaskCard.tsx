@@ -4,33 +4,37 @@ import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
 import { ArrowRight, ClipboardCheck } from "lucide-react";
 import { Task } from "@/entities/Task/model/Task";
-import { TaskComplexityBadge, TaskDeadlineBadge, TaskMembersBadge, TaskTagBadge } from "@/entities/Task";
+import {
+  TaskComplexityBadge,
+  TaskDeadlineBadge,
+  TaskMembersBadge,
+  TaskTagBadge,
+} from "@/entities/Task";
 import { useAuth } from "@/shared/hooks/useAuth";
 
 function Badges({ task }: { task: Task }) {
+  console.log(task);
   return (
     <>
       <TaskMembersBadge maxMembers={task.maxMembers} />
-      <TaskDeadlineBadge deadline={task.deadline} />
+      {/* TODO: вернуть */}
+      {/* <TaskDeadlineBadge deadline={task.deadline} /> */}
       <TaskComplexityBadge complexity={task.complexity} />
     </>
   );
 }
 
 function Content({ task }: { task: Task }) {
+  // TODO: убрать мок описание
   return (
-    <>
-      {task.description && (
-        <Text variant="small" className="line-clamp-2">
-          {task.description}
-        </Text>
-      )}
-    </>
+    <Text variant="small" className="line-clamp-2">
+      {task.description || "Это описание является моком! Убрать его, когда станет обязательным полем"}
+    </Text>
   );
 }
 
 function Tags({ task }: { task: Task }) {
-  return task.tags.map((tag) => <TaskTagBadge value={tag} />);
+  return task.tags.map((tag) => <TaskTagBadge tag={tag} />);
 }
 
 function Footer({ task }: { task: Task }) {
@@ -38,7 +42,7 @@ function Footer({ task }: { task: Task }) {
 
   return (
     <>
-      {user && (
+      {user && task.canTake && (
         <Button variant="outline" size="sm" className="flex-1">
           <ClipboardCheck />
           Взять задачу
