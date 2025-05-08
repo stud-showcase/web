@@ -12,8 +12,6 @@ class SettingsSeeder extends Seeder
         Setting::create([
             'start_date' => now(),
             'end_date' => now()->addMonth(),
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
     }
 }
