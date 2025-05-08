@@ -1,11 +1,10 @@
 import { UserRole } from "./UserRole";
 
 export type User = {
-  id: number;
+  id: string;
   firstName: string;
-  lastName: string;
-  middleName?: string;
+  secondName: string;
+  lastName: string | null;
   email: string;
-  group?: string;
   roles: UserRole[];
 };

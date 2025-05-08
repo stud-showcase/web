@@ -1,11 +1,17 @@
+import { User } from "@/entities/User";
 import { ProjectStatus } from "./ProjectStatus";
+
+type ProjectMember = User & {
+  position: string;
+  isCreator: boolean;
+}
 
 export type Project = {
   id: number;
   name: string;
   annotation?: string;
-  members: { id: number; name: string; role?: string }[];
-  mentor?: string;
+  members: ProjectMember[];
+  mentor?: User;
   files?: { name: string; url: string }[];
   status: ProjectStatus;
   isHiring: boolean;

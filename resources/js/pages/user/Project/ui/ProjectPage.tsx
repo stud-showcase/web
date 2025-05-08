@@ -1,14 +1,7 @@
 import { Head, Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Avatar, AvatarFallback } from "@/shared/ui/Avatar";
-import {
-  Check,
-  FileIcon,
-  Link as LinkIcon,
-  User,
-  UserPlus,
-  X,
-} from "lucide-react";
+import { Check, FileIcon, Link as LinkIcon, UserPlus, X } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,23 +12,34 @@ import {
 } from "@/shared/ui/Breadcrumb";
 import { Text } from "@/shared/ui/Text";
 import { Heading } from "@/shared/ui/Heading";
-import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
-import { ProjectHiringBadge, Project, ProjectStatusBadge } from "@/entities/Project";
+import { TaskComplexityBadge, TaskTagBadge } from "@/entities/Task";
+import { ProjectHiringBadge, ProjectStatusBadge } from "@/entities/Project";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { Vacancy } from "@/entities/Vacancy";
-import { project, task, vacancy } from "@/shared/mocks";
 import { UserLayout } from "@/layouts/UserLayout";
 import { Container } from "@/shared/ui/Container";
+import { ExtendedProject } from "../model/ExtendedProject";
 
-type Props = {
-  project: Project;
-  task: Task;
-  vacancies?: Vacancy[];
-};
+function getAvatartName(firstName: string, lastName: string | null) {
+  if (lastName) {
+    return `${firstName[0]}${lastName[0]}`;
+  }
+  return firstName[0];
+}
 
-export default function ProjectPage({}: Props) {
+function getFullName(
+  firstName: string,
+  secondName: string,
+  lastName: string | null
+) {
+  if (lastName) {
+    return `${secondName} ${firstName} ${lastName}`;
+  }
+  return `${secondName} ${firstName}`;
+}
+
+export default function ProjectPage({ project }: { project: ExtendedProject }) {
   const { user } = useAuth();
-  const vacancies = Array(4).fill(vacancy);
+  console.log(project);
 
   return (
     <>
@@ -55,7 +59,9 @@ export default function ProjectPage({}: Props) {
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href={`/tasks/${task.id}`}>{task.title}</Link>
+                    <Link href={`/tasks/${project.task.id}`}>
+                      {project.task.title}
+                    </Link>
                   </BreadcrumbLink>
                   <BreadcrumbSeparator />
                 </BreadcrumbItem>
@@ -69,19 +75,18 @@ export default function ProjectPage({}: Props) {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <Heading level={1}>{project.name}</Heading>
                 <div className="flex flex-row w-full sm:w-auto gap-3">
-                  {task && (
-                    <Button
-                      variant="outline"
-                      asChild
-                      className="flex-1 sm:flex-none"
-                    >
-                      <Link href={`/tasks/1}`}>
-                        <LinkIcon /> К задаче
-                      </Link>
-                    </Button>
-                  )}
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="flex-1 sm:flex-none"
+                    size="sm"
+                  >
+                     <Link href={`/tasks/${project.task.id}`}>
+                      <LinkIcon /> К задаче
+                    </Link>
+                  </Button>
                   {user && project.isHiring && (
-                    <Button className="flex-1 sm:flex-none">
+                    <Button className="flex-1 sm:flex-none" size="sm">
                       <UserPlus />
                       Вступить
                     </Button>
@@ -89,17 +94,17 @@ export default function ProjectPage({}: Props) {
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
-                <TaskComplexityBadge complexity="medium" />
-                <ProjectStatusBadge status="in_progress" />
-                <ProjectHiringBadge isHiring={true} />
-                {task?.tags.map((tag) => (
-                  <TaskTagBadge value={tag} />
-                ))}
+                <TaskComplexityBadge complexity={project.task.complexity} />
+                <ProjectStatusBadge status={project.status} />
+                <ProjectHiringBadge isHiring={project.isHiring} />
+                {project.task.tags &&
+                  project.task.tags.length > 0 &&
+                  project.task.tags.map((tag) => <TaskTagBadge tag={tag} />)}
               </div>
             </div>
           </header>
 
-          {project?.annotation && (
+          {project.annotation && (
             <section className="mt-8">
               <div className="flex gap-2 items-center">
                 <Heading level={3}>Описание</Heading>
@@ -110,7 +115,7 @@ export default function ProjectPage({}: Props) {
             </section>
           )}
 
-          {project?.files && (
+          {project.files && project.files.length > 0 && (
             <section className="mt-10">
               <Heading level={3}>Дополнительные материалы</Heading>
               <div className="mt-4 flex flex-wrap gap-3">
@@ -134,15 +139,28 @@ export default function ProjectPage({}: Props) {
           <section className="mt-10">
             <Heading level={3}>Проектная команда</Heading>
             <div className="mt-4 flex flex-wrap gap-4">
-              <div className="flex items-center gap-2 border p-4 rounded-lg">
-                <Avatar>
-                  <AvatarFallback className="bg-muted">Н</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col">
-                  <Text>{project.mentor}</Text>
-                  <Text variant="muted">Наставник проекта</Text>
+              {project.mentor && (
+                <div className="flex items-center gap-2 border p-4 rounded-lg">
+                  <Avatar>
+                    <AvatarFallback className="bg-muted">
+                      {getAvatartName(
+                        project.mentor.firstName,
+                        project.mentor.lastName
+                      )}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <Text>
+                      {getFullName(
+                        project.mentor.firstName,
+                        project.mentor.secondName,
+                        project.mentor.lastName
+                      )}
+                    </Text>
+                    <Text variant="muted">Наставник проекта</Text>
+                  </div>
                 </div>
-              </div>
+              )}
               {project.members.map((member) => (
                 <div
                   key={member.id}
@@ -150,31 +168,39 @@ export default function ProjectPage({}: Props) {
                 >
                   <Avatar>
                     <AvatarFallback className="bg-muted">
-                      {member.name[0]}
+                      {getAvatartName(member.firstName, member.lastName)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
-                    <Text>{member.name}</Text>
-                    {member.role && <Text variant="muted">{member.role}</Text>}
+                    <Text>
+                      {getFullName(
+                        member.firstName,
+                        member.secondName,
+                        member.lastName
+                      )}
+                    </Text>
+                    {member.position && (
+                      <Text variant="muted">{member.position}</Text>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
           </section>
 
-          {vacancies && (
+          {project.vacancies && project.vacancies.length > 0 && (
             <section className="mt-10">
               <div className="flex gap-1 items-center">
                 <Heading level={3}>Вакансии</Heading>
               </div>
               <div className="mt-4 space-y-3">
-                {vacancies.map((vacancy) => (
+                {project.vacancies.map((vacancy) => (
                   <div
                     key={vacancy.id}
                     className="flex items-center justify-between  border p-4 rounded-lg"
                   >
                     <div>
-                      <Text className="font-medium">{vacancy.title}</Text>
+                      <Text className="font-medium">{vacancy.name}</Text>
                       <Text variant="muted">{vacancy.description}</Text>
                     </div>
                     <Button size="sm" variant="secondary">
@@ -186,7 +212,7 @@ export default function ProjectPage({}: Props) {
             </section>
           )}
 
-          {user && project.invites && (
+          {user && project.invites && project.invites.length > 0 && (
             <section className="mt-10">
               <Heading level={3}>Заявки</Heading>
               <div className="mt-4 border p-4 rounded-lg">

@@ -21,11 +21,11 @@ type Props = {
 export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
   const { user } = useAuth();
 
-  const initials = `${user!.firstName[0]}${user!.lastName[0]}`;
+  const initials = `${user!.firstName[0]}${user!.secondName[0]}`;
 
-  let fullName = `${user!.lastName} ${user!.firstName[0]}.`;
-  if (user!.middleName) {
-    fullName += `${user!.middleName[0]}.`;
+  let fullName = `${user!.secondName} ${user!.firstName[0]}.`;
+  if (user!.lastName) {
+    fullName += `${user!.lastName[0]}.`;
   }
 
   return (

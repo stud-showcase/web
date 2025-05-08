@@ -69,7 +69,7 @@ export default function TaskPage({ task }: { task: ExtendedTask }) {
                 <Heading level={1}>{task.title}</Heading>
                 {user && (
                   <div className="flex flex-row w-full sm:w-auto gap-3">
-                    <Button className="flex-1 sm:flex-none">
+                    <Button className="flex-1 sm:flex-none" size="sm">
                       <ClipboardCheck />
                       Взять задачу
                     </Button>
