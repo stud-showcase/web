@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AcceptInviteRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\InviteRequestRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Tag;
 use App\Services\ProjectService;
 use Illuminate\Http\Request;
@@ -64,6 +65,21 @@ class ProjectController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function update(UpdateProjectRequest $request, int|string $id)
+    {
+        try {
+            $project = $this->projectService->updateProject(
+                $id,
+                $request->validated()
+            );
+
+            return to_route('projects.show', $project->id);
+        } catch (Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
     public function inviteRequest(InviteRequestRequest $request)
     {

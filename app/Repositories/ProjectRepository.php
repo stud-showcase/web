@@ -162,4 +162,20 @@ class ProjectRepository
             throw $e;
         }
     }
+
+    public function update(int $projectId, array $data): Project
+    {
+        try {
+            return DB::transaction(function () use ($projectId, $data) {
+                $project = Project::findOrFail($projectId);
+
+                $project->update($data);
+
+                return $project->fresh();
+            });
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
 }
