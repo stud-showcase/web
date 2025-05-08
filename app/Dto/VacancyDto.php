@@ -45,4 +45,14 @@ class VacancyDto
             'task' => $this->task,
         ], fn($value) => $value !== null);
     }
+
+    public function toArrayForAdmin(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'project' => $this->project,
+        ];
+    }
 }

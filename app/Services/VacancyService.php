@@ -61,4 +61,21 @@ class VacancyService
             throw new \Exception("Не удалось удалить вакансию: {$e->getMessage()}", 0, $e);
         }
     }
+
+    public function getAdminVacancies(array $filters = []): array
+    {
+        $paginator = $this->vacancyRepository->getAdminVacancies($filters);
+        $paginator->setCollection(
+            $paginator->getCollection()->map(fn($vacancy) => VacancyDto::fromModel($vacancy)->toArrayForAdmin())
+        );
+
+        return [
+            'data' => $paginator->items(),
+            'currentPage' => $paginator->currentPage(),
+            'lastPage' => $paginator->lastPage(),
+            'perPage' => $paginator->perPage(),
+            'total' => $paginator->total(),
+            'links' => $paginator->links()->elements[0] ?? [],
+        ];
+    }
 }

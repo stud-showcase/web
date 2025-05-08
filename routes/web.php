@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SocialController;
@@ -56,10 +57,7 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
         return Inertia::render('admin/Dashboard');
     });
 
-    Route::get('/applications', function () {
-        return Inertia::render('admin/Applications');
-    });
-
+    Route::get('/applications', [AdminController::class, 'taskRequests'])->name('admin.applications.index');
     Route::get('/applications/{id}', function () {
         return Inertia::render('admin/Application');
     });
@@ -72,26 +70,17 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
         return Inertia::render('admin/Task');
     });
 
-    Route::get('/projects', function () {
-        return Inertia::render('admin/Projects');
-    });
-
+    Route::get('/projects', [AdminController::class, 'projects'])->name('admin.projects.index');
     Route::get('/projects/{id}', function () {
         return Inertia::render('admin/Project');
     });
 
-    Route::get('/users', function () {
-        return Inertia::render('admin/Users');
-    });
-
+    Route::get('/users', [AdminController::class, 'users'])->name('admin.users.index');
     Route::get('/users/{id}', function () {
         return Inertia::render('admin/User');
     });
 
-    Route::get('/vacancies', function () {
-        return Inertia::render('admin/Vacancies');
-    });
-
+    Route::get('/vacancies', [AdminController::class, 'vacancies'])->name('admin.vacancies.index');
     Route::get('/vacancies/{id}', function () {
         return Inertia::render('admin/Vacancy');
     });

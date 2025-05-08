@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Task;
+use App\Models\TaskRequest;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class TaskRepository
@@ -58,5 +59,18 @@ class TaskRepository
                 ]);
             },
         ])->findOrFail($id);
+    }
+
+    public function getFilteredTaskRequests(array $filters): LengthAwarePaginator
+    {
+        return TaskRequest::query()
+            ->when(
+                isset($filters['search']) && !empty($filters['search']),
+                fn($q) => $q->where('title', 'LIKE', '%' . $filters['search'] . '%')
+                    ->orWhere('customer', 'LIKE', '%' . $filters['search'] . '%')
+                    ->orWhere('customer_email', 'LIKE', '%' . $filters['search'] . '%')
+            )
+            ->paginate(10)
+            ->withQueryString();
     }
 }

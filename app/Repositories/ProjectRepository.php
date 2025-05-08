@@ -205,4 +205,20 @@ class ProjectRepository
             throw $e;
         }
     }
+
+    public function getAdminProjects(array $filters): LengthAwarePaginator
+    {
+        return Project::query()
+            ->with([
+                'mentor' => fn($q) => $q->select('users.id', 'first_name', 'second_name', 'last_name', 'email'),
+                'status'
+            ])
+            ->when(
+                isset($filters['search']) && !empty($filters['search']),
+                fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
+                    ->orWhere('annotation', 'LIKE', '%' . $filters['search'] . '%')
+            )
+            ->paginate(10)
+            ->withQueryString();
+    }
 }

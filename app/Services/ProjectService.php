@@ -133,4 +133,21 @@ class ProjectService
             throw new \Exception("Не удалось загрузить файлы: {$e->getMessage()}", 0, $e);
         }
     }
+
+    public function getAdminProjects(array $filters = []): array
+    {
+        $paginator = $this->projectRepository->getAdminProjects($filters);
+        $paginator->setCollection(
+            $paginator->getCollection()->map(fn($project) => ProjectDto::fromModel($project)->toArrayForAdmin())
+        );
+
+        return [
+            'data' => $paginator->items(),
+            'currentPage' => $paginator->currentPage(),
+            'lastPage' => $paginator->lastPage(),
+            'perPage' => $paginator->perPage(),
+            'total' => $paginator->total(),
+            'links' => $paginator->links()->elements[0] ?? [],
+        ];
+    }
 }

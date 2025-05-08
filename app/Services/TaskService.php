@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\TaskRepository;
 use App\Dto\TaskDto;
+use App\Dto\TaskRequestDto;
 
 class TaskService
 {
@@ -11,7 +12,7 @@ class TaskService
         private TaskRepository $taskRepository
     ) {}
 
-    public function getFilteredTasks(array $filters): array
+    public function getFilteredTasks(array $filters = []): array
     {
         $paginator = $this->taskRepository->getFilteredTasks($filters);
 
@@ -35,5 +36,22 @@ class TaskService
     {
         $task = $this->taskRepository->getByIdWithRelations($id);
         return TaskDto::fromModel($task)->toFullArray();
+    }
+
+    public function getFilteredTaskRequests(array $filters = []): array
+    {
+        $paginator = $this->taskRepository->getFilteredTaskRequests($filters);
+        $paginator->setCollection(
+            $paginator->getCollection()->map(fn($taskRequest) => TaskRequestDto::fromModel($taskRequest)->toArrayForAdmin())
+        );
+
+        return [
+            'data' => $paginator->items(),
+            'currentPage' => $paginator->currentPage(),
+            'lastPage' => $paginator->lastPage(),
+            'perPage' => $paginator->perPage(),
+            'total' => $paginator->total(),
+            'links' => $paginator->links()->elements[0] ?? [],
+        ];
     }
 }

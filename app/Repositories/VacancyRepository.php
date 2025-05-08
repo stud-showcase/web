@@ -71,4 +71,17 @@ class VacancyRepository
             throw $e;
         }
     }
+
+    public function getAdminVacancies(array $filters): LengthAwarePaginator
+    {
+        return Vacancy::query()
+            ->with(['project'])
+            ->when(
+                isset($filters['search']) && !empty($filters['search']),
+                fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
+                    ->orWhere('description', 'LIKE', '%' . $filters['search'] . '%')
+            )
+            ->paginate(10)
+            ->withQueryString();
+    }
 }

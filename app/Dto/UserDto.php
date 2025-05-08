@@ -12,6 +12,7 @@ class UserDto
         public string $secondName,
         public ?string $lastName,
         public string $email,
+        public ?string $group,
         public array $roles,
     ) {}
 
@@ -23,6 +24,7 @@ class UserDto
             secondName: $user->second_name,
             lastName: $user->last_name,
             email: $user->email,
+            group: $user->group->name ?? null,
             roles: $user->roles->pluck('name')->toArray()
         );
     }

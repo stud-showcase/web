@@ -77,4 +77,15 @@ class ProjectDto
             'invites' => $this->invites,
         ];
     }
+
+    public function toArrayForAdmin(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'annotation' => $this->annotation,
+            'mentor' => $this->mentor,
+            'status' => $this->status,
+        ];
+    }
 }
