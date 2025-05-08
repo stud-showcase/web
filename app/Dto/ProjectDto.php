@@ -41,7 +41,7 @@ class ProjectDto
                 'id' => $project->status->id,
                 'name' => $project->status->name,
             ],
-            isHiring: $project->users->count() < $project->task->max_members,
+            isHiring: $project->users->count() < $project->task->max_members && !$project->is_close,
             task: TaskDto::fromModel($project->task),
             vacancies: isset($project->vacancies)
                 ? $project->vacancies->map(fn($vacancy) => VacancyDto::fromModel($vacancy)->toArray())->toArray()

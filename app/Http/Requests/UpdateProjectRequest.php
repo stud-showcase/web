@@ -34,7 +34,8 @@ class UpdateProjectRequest extends FormRequest
         return [
             'name' => 'sometimes|string|max:255',
             'annotation' => 'sometimes|string|max:1000',
-            'status_id' => 'sometimes|exists:project_statuses,id',
+            'isClose' => 'sometimes|boolean',
+            'statusId' => 'sometimes|exists:project_statuses,id',
         ];
     }
 

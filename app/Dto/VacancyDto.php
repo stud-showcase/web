@@ -23,7 +23,7 @@ class VacancyDto
             project: $vacancy->relationLoaded('project') ? [
                 'id' => $vacancy->project->id,
                 'name' => $vacancy->project->name,
-                'isHiring' => $vacancy->project->users->count() < $vacancy->project->task->max_members,
+                'isHiring' => $vacancy->project->users->count() < $vacancy->project->task->max_members && !$vacancy->project->is_close,
             ] : null,
             task: $vacancy->project->relationLoaded('task') ? [
                 'title' => $vacancy->project->task->title ?? null,

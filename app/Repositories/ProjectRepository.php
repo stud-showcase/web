@@ -46,7 +46,11 @@ class ProjectRepository
                     isset($filters['isHiring']),
                     fn($q) => $filters['isHiring']
                         ? $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members')
-                        : $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
+                        ->where('projects.is_closed', false)
+                        : $q->where(function ($subQ) {
+                            $subQ->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
+                                ->orWhere('projects.is_closed', true);
+                        })
                 )
                 ->when(
                     isset($filters['members']),
@@ -99,7 +103,11 @@ class ProjectRepository
                     isset($filters['isHiring']),
                     fn($q) => $filters['isHiring']
                         ? $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members')
-                        : $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
+                        ->where('projects.is_closed', false)
+                        : $q->where(function ($subQ) {
+                            $subQ->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
+                                ->orWhere('projects.is_closed', true);
+                        })
                 )
                 ->when(
                     isset($filters['members']),

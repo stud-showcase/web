@@ -105,7 +105,7 @@ class ProjectService
     public function updateProject(int $projectId, array $data): Project
     {
         try {
-            $filteredData = array_filter($data, fn($key) => in_array($key, ['name', 'annotation', 'status_id']), ARRAY_FILTER_USE_KEY);
+            $filteredData = array_filter($data, fn($key) => in_array($key, ['name', 'annotation', 'statusId', 'isClose']), ARRAY_FILTER_USE_KEY);
             return $this->projectRepository->update($projectId, $filteredData);
         } catch (Throwable $e) {
             throw new \Exception("Не удалось обновить проект: {$e->getMessage()}", 0, $e);

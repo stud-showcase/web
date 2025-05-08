@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Repositories\VacancyRepository;
 use App\Dto\VacancyDto;
+use App\Models\Vacancy;
+use Throwable;
 
 class VacancyService
 {
@@ -29,5 +31,34 @@ class VacancyService
         ];
 
         return $vacanciesData;
+    }
+
+    public function createVacancy(int $projectId, array $data): Vacancy
+    {
+        try {
+            $filteredData = array_filter($data, fn($key) => in_array($key, ['name', 'description']), ARRAY_FILTER_USE_KEY);
+            return $this->vacancyRepository->create($projectId, $filteredData);
+        } catch (Throwable $e) {
+            throw new \Exception("Не удалось создать вакансию: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function updateVacancy(int $vacancyId, array $data): Vacancy
+    {
+        try {
+            $filteredData = array_filter($data, fn($key) => in_array($key, ['name', 'description']), ARRAY_FILTER_USE_KEY);
+            return $this->vacancyRepository->update($vacancyId, $filteredData);
+        } catch (Throwable $e) {
+            throw new \Exception("Не удалось обновить вакансию: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function deleteVacancy(int $vacancyId): void
+    {
+        try {
+            $this->vacancyRepository->delete($vacancyId);
+        } catch (Throwable $e) {
+            throw new \Exception("Не удалось удалить вакансию: {$e->getMessage()}", 0, $e);
+        }
     }
 }

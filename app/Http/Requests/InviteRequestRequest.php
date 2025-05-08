@@ -14,7 +14,7 @@ class InviteRequestRequest extends FormRequest
     {
         $project = Project::withCount('users')->with('task')->findOrFail($this->input('projectId'));
 
-        return !($project->users->count() >= $project->task->max_members);
+        return !($project->users->count() >= $project->task->max_members && $project->is_close);
     }
 
     /**

@@ -4,6 +4,9 @@ namespace App\Repositories;
 
 use App\Models\Vacancy;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class VacancyRepository
 {
@@ -24,5 +27,48 @@ class VacancyRepository
             )
             ->paginate(10)
             ->withQueryString();
+    }
+
+    public function create(int $projectId, array $data): Vacancy
+    {
+        try {
+            return DB::transaction(function () use ($projectId, $data) {
+                return Vacancy::create([
+                    'project_id' => $projectId,
+                    'name' => $data['name'],
+                    'description' => $data['description'],
+                ]);
+            });
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания вакансии для проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function update(int $vacancyId, array $data): Vacancy
+    {
+        try {
+            return DB::transaction(function () use ($vacancyId, $data) {
+                $vacancy = Vacancy::findOrFail($vacancyId);
+                $vacancy->update($data);
+                return $vacancy->fresh();
+            });
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления вакансии [$vacancyId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function delete(int $vacancyId): void
+    {
+        try {
+            DB::transaction(function () use ($vacancyId) {
+                $vacancy = Vacancy::findOrFail($vacancyId);
+                $vacancy->delete();
+            });
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления вакансии [$vacancyId]: " . $e->getMessage());
+            throw $e;
+        }
     }
 }

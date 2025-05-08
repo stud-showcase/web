@@ -28,10 +28,15 @@ Route::prefix('projects')->group(function () {
 
     Route::middleware('auth')->group(function () {
         Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
+        Route::put('/{id}', [ProjectController::class, 'update'])->name('projects.update');
+        Route::post('/{id}/files', [ProjectController::class, 'uploadFiles'])->name('projects.files.upload');
+
         Route::post('/invite-request', [ProjectController::class, 'createInvite'])->name('projects.invite.request');
         Route::post('/accept-invite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
-        Route::post('/{id}/files', [ProjectController::class, 'uploadFiles'])->name('projects.files.upload');
-        Route::put('/{id}', [ProjectController::class, 'update'])->name('projects.update');
+
+        Route::post('/{id}/vacancy', [VacancyController::class, 'store'])->name('projects.vacancy.create');
+        Route::put('/{projectId}/vacancy/{vacancyId}', [VacancyController::class, 'update'])->name('projects.vacancy.update');
+        Route::delete('/{projectId}/vacancy/{vacancyId}', [VacancyController::class, 'delete'])->name('projects.vacancy.delete');
     });
 });
 
