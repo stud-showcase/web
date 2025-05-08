@@ -89,9 +89,6 @@ class TaskController extends Controller
             }
         }
 
-        return response()->json([
-            'message' => 'Заявка успешно создана',
-            'taskRequest' => $taskRequest,
-        ], 201);
+        return response()->json(['message' => 'Заявка успешно создана']);
     }
 }

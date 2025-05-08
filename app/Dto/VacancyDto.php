@@ -11,7 +11,7 @@ class VacancyDto
         public string $name,
         public ?string $description,
         public ?array $project,
-        public ?string $taskTitle
+        public ?array $task,
     ) {}
 
     public static function fromModel(Vacancy $vacancy): self
@@ -23,10 +23,15 @@ class VacancyDto
             project: $vacancy->relationLoaded('project') ? [
                 'id' => $vacancy->project->id,
                 'name' => $vacancy->project->name,
+                'isHiring' => $vacancy->project->users->count() < $vacancy->project->task->max_members,
             ] : null,
-            taskTitle: $vacancy->relationLoaded('project') && $vacancy->project->relationLoaded('task')
-                ? $vacancy->project->task->title ?? null
-                : null
+            task: $vacancy->project->relationLoaded('task') ? [
+                'title' => $vacancy->project->task->title ?? null,
+                'tags' => $vacancy->project->task->tags->map(fn($tag) => [
+                    'id' => $tag->id,
+                    'name' => $tag->name,
+                ])->toArray(),
+            ] : null
         );
     }
 
@@ -37,7 +42,7 @@ class VacancyDto
             'name' => $this->name,
             'description' => $this->description,
             'project' => $this->project,
-            'taskTitle' => $this->taskTitle,
+            'task' => $this->task,
         ], fn($value) => $value !== null);
     }
 }

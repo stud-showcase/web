@@ -3,6 +3,7 @@
 namespace App\Dto;
 
 use App\Models\Task;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class TaskDto
@@ -14,6 +15,7 @@ class TaskDto
         public string $customer,
         public int $maxMembers,
         public string $createdAt,
+        public string $deadline,
         public array $tags,
         public array $complexity,
         public string $customerEmail,
@@ -36,6 +38,7 @@ class TaskDto
             description: $task->description,
             customer: $task->customer,
             maxMembers: $task->max_members,
+            deadline: Carbon::parse($task->deadline)->format('Y-m-d'),
             createdAt: $task->created_at->format('Y-m-d'),
             tags: $task->tags->map(fn($tag) => [
                 'id' => $tag->id,
@@ -76,6 +79,7 @@ class TaskDto
             'customerEmail' => $this->customerEmail,
             'customerPhone' => $this->customerPhone,
             'maxMembers' => $this->maxMembers,
+            'deadline' => $this->deadline,
             'createdAt' => $this->createdAt,
             'tags' => $this->tags,
             'complexity' => $this->complexity,
@@ -93,6 +97,7 @@ class TaskDto
             'customerEmail' => $this->customerEmail,
             'customerPhone' => $this->customerPhone,
             'maxMembers' => $this->maxMembers,
+            'deadline' => $this->deadline,
             'createdAt' => $this->createdAt,
             'tags' => $this->tags,
             'complexity' => $this->complexity,
