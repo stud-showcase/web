@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Repositories\ProjectInviteRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Throwable;
 
 class ProjectService
@@ -108,6 +109,28 @@ class ProjectService
             return $this->projectRepository->update($projectId, $filteredData);
         } catch (Throwable $e) {
             throw new \Exception("Не удалось обновить проект: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function uploadFiles(int $projectId, array $files): void
+    {
+        try {
+            $fileData = [];
+            foreach ($files as $file) {
+                $extension = $file->getClientOriginalExtension();
+                $uniqueName = Str::uuid() . '.' . $extension;
+                $directory = 'project_files/' . $projectId;
+                $path = $file->storeAs($directory, $uniqueName, 'public');
+
+                $fileData[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => str_replace('public/', '', $path),
+                ];
+            }
+
+            $this->projectRepository->createFiles($projectId, $fileData);
+        } catch (Throwable $e) {
+            throw new \Exception("Не удалось загрузить файлы: {$e->getMessage()}", 0, $e);
         }
     }
 }

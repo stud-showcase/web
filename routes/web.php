@@ -30,6 +30,7 @@ Route::prefix('projects')->group(function () {
         Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
         Route::post('/invite-request', [ProjectController::class, 'createInvite'])->name('projects.invite.request');
         Route::post('/accept-invite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
+        Route::post('/{id}/files', [ProjectController::class, 'uploadFiles'])->name('projects.files.upload');
         Route::put('/{id}', [ProjectController::class, 'update'])->name('projects.update');
     });
 });

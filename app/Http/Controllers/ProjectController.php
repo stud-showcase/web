@@ -6,6 +6,7 @@ use App\Http\Requests\AcceptInviteRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\InviteRequestRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Http\Requests\UploadProjectFileRequest;
 use App\Models\Tag;
 use App\Services\ProjectService;
 use Illuminate\Http\Request;
@@ -105,6 +106,20 @@ class ProjectController extends Controller
         try {
             $projectId = $this->projectService->acceptInvite($validated['invite_id']);
             return to_route('projects.show', $projectId);
+        } catch (Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function uploadFiles(UploadProjectFileRequest $request, int|string $id)
+    {
+        try {
+            $this->projectService->uploadFiles(
+                $id,
+                $request->file('files')
+            );
+
+            return to_route('projects.show', $id);
         } catch (Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

@@ -35,8 +35,8 @@ return new class extends Migration
 
         Schema::create('vacancies', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('description')->nullable();
+            $table->string('name');
+            $table->string('description');
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->timestamps();
         });

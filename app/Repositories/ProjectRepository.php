@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use App\Models\ProjectFile;
 use App\Models\ProjectStatus;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -175,6 +176,24 @@ class ProjectRepository
             });
         } catch (Throwable $e) {
             Log::error("Ошибка обновления проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function createFiles(int $projectId, array $fileData): void
+    {
+        try {
+            DB::transaction(function () use ($projectId, $fileData) {
+                foreach ($fileData as $data) {
+                    ProjectFile::create([
+                        'project_id' => $projectId,
+                        'name' => $data['name'],
+                        'path' => $data['path'],
+                    ]);
+                }
+            });
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания файлов для проекта [$projectId]: " . $e->getMessage());
             throw $e;
         }
     }

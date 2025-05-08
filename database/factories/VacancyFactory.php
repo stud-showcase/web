@@ -10,7 +10,7 @@ class VacancyFactory extends Factory
     {
         return [
             'name' => $this->faker->jobTitle(),
-            'description' => $this->faker->optional()->sentence(),
+            'description' => $this->faker->sentence(),
             'project_id' => null,
             'created_at' => now(),
             'updated_at' => now(),

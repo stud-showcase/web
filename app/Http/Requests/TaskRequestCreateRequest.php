@@ -32,7 +32,7 @@ class TaskRequestCreateRequest extends FormRequest
             'customerPhone' => 'nullable|string|max:20',
             'withProject' => 'nullable|boolean',
             'projectName' => 'nullable|required_if:withProject,true|string|max:255',
-            'files.*' => ['nullable', 'file', 'max:10240'],
+            'files.*' => 'nullable|file|max:10240',
         ];
     }
 
