@@ -38,6 +38,16 @@ class AdminController extends Controller
         ]);
     }
 
+    public function tasks(Request $request): \Inertia\Response
+    {
+        $filters = $request->only(['search']);
+        $tasks = $this->taskService->getAdminTasks($filters);
+        return Inertia::render('admin/TaskBank', [
+            'tasks' => $tasks,
+            'filters' => $filters,
+        ]);
+    }
+
     public function taskRequests(Request $request): \Inertia\Response
     {
         $filters = $request->only(['search']);

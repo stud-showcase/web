@@ -54,4 +54,21 @@ class TaskService
             'links' => $paginator->links()->elements[0] ?? [],
         ];
     }
+
+    public function getAdminTasks(array $filters = []): array
+    {
+        $paginator = $this->taskRepository->getAdminTasks($filters);
+        $paginator->setCollection(
+            $paginator->getCollection()->map(fn($task) => TaskDto::fromModel($task)->toArrayForAdmin())
+        );
+
+        return [
+            'data' => $paginator->items(),
+            'currentPage' => $paginator->currentPage(),
+            'lastPage' => $paginator->lastPage(),
+            'perPage' => $paginator->perPage(),
+            'total' => $paginator->total(),
+            'links' => $paginator->links()->elements[0] ?? [],
+        ];
+    }
 }

@@ -73,4 +73,17 @@ class TaskRepository
             ->paginate(10)
             ->withQueryString();
     }
+
+    public function getAdminTasks(array $filters): LengthAwarePaginator
+    {
+        return Task::query()
+            ->with(['complexity'])
+            ->when(
+                isset($filters['search']) && !empty($filters['search']),
+                fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
+                    ->orWhere('description', 'LIKE', '%' . $filters['search'] . '%')
+            )
+            ->paginate(10)
+            ->withQueryString();
+    }
 }

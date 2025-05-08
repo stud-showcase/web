@@ -62,10 +62,7 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
         return Inertia::render('admin/Application');
     });
 
-    Route::get('/tasks', function () {
-        return Inertia::render('admin/TaskBank');
-    });
-
+    Route::get('/tasks', [AdminController::class, 'tasks'])->name('admin.tasks.index');
     Route::get('/tasks/{id}', function () {
         return Inertia::render('admin/Task');
     });

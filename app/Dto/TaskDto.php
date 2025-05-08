@@ -101,4 +101,18 @@ class TaskDto
             'canTake' => $this->canTake,
         ];
     }
+
+    public function toArrayForAdmin(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'customer' => $this->customer,
+            'customerEmail' => $this->customerEmail,
+            'customerPhone' => $this->customerPhone,
+            'maxMembers' => $this->maxMembers,
+            'deadline' => $this->deadline,
+            'complexity' => $this->complexity,
+        ];
+    }
 }
