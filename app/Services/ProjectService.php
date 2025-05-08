@@ -60,7 +60,7 @@ class ProjectService
         return ProjectDto::fromModel($project)->toArray();
     }
 
-    public function createInvite(int $userId, int $projectId, ?int $vacancyId): bool
+    public function createInvite(int $userId, int $projectId, ?int $vacancyId): void
     {
         try {
             $this->inviteRepository->create($userId, $projectId, $vacancyId);
@@ -99,5 +99,15 @@ class ProjectService
     public function createProject(int $taskId, string $name, User $user): Project
     {
         return $this->projectRepository->create($taskId, $name, $user);
+    }
+
+    public function updateProject(int $projectId, array $data): Project
+    {
+        try {
+            $filteredData = array_filter($data, fn($key) => in_array($key, ['name', 'annotation', 'status_id']), ARRAY_FILTER_USE_KEY);
+            return $this->projectRepository->update($projectId, $filteredData);
+        } catch (Throwable $e) {
+            throw new \Exception("Не удалось обновить проект: {$e->getMessage()}", 0, $e);
+        }
     }
 }
