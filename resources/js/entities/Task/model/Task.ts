@@ -10,7 +10,7 @@ export type Task = {
   customerEmail: string;
   customerPhone: string;
   maxMembers: number;
-  deadline: Date;
+  deadline: string;
   complexity: TaskComplexity;
   tags: TaskTag[];
   files?: { name: string; url: string }[];

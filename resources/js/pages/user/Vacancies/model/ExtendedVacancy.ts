@@ -1,9 +1,8 @@
+import { Project } from "@/entities/Project";
+import { Task } from "@/entities/Task";
 import { Vacancy } from "@/entities/Vacancy";
 
 export type ExtendedVacancy = Vacancy & {
-  project: {
-    id: number;
-    name: string;
-  };
-  taskTitle: string;
+  project: Project;
+  task: Task;
 };

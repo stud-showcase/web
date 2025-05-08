@@ -8,7 +8,7 @@ import { useAuth } from "@/shared/hooks/useAuth";
 
 function Title({ project, task }: { project: Project; task: Task }) {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center gap-2">
       <span className="text-xl font-bold leading-none tracking-tight">
         {project.name}
       </span>

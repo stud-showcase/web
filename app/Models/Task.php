@@ -47,7 +47,7 @@ class Task extends Model
         return $this->belongsToMany(Group::class, 'group_task');
     }
 
-    public function canTake(User $user): bool
+    public function canTake(?User $user): bool
     {
         if (!$user) {
             return false;

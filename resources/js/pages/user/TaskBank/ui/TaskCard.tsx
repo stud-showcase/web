@@ -17,18 +17,16 @@ function Badges({ task }: { task: Task }) {
   return (
     <>
       <TaskMembersBadge maxMembers={task.maxMembers} />
-      {/* TODO: вернуть */}
-      {/* <TaskDeadlineBadge deadline={task.deadline} /> */}
+      <TaskDeadlineBadge deadline={task.deadline} />
       <TaskComplexityBadge complexity={task.complexity} />
     </>
   );
 }
 
 function Content({ task }: { task: Task }) {
-  // TODO: убрать мок описание
   return (
     <Text variant="small" className="line-clamp-2">
-      {task.description || "Это описание является моком! Убрать его, когда станет обязательным полем"}
+      {task.description}
     </Text>
   );
 }
