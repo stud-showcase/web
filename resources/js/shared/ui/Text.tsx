@@ -19,7 +19,7 @@ const variantToElement: Record<Variant, keyof JSX.IntrinsicElements> = {
 const textStyles: Record<Variant, string> = {
   default: "leading-7",
   lead: "text-xl text-muted-foreground",
-  large: "text-lg font-semibold",
+  large: "text-lg font-medium tracking-normal",
   small: "text-sm font-medium",
   muted: "text-sm text-muted-foreground",
 };
