@@ -12,7 +12,7 @@ import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
 
 function ProjectsCards({ projects }: { projects: ExtendedProject[] }) {
   return (
-    <div className="grid mt-6 lg:grid-cols-2 grid-cols-1 gap-6">
+    <div className="flex flex-col mt-6 gap-6">
       {projects.map((project) => (
         <ProjectCard project={project} task={project.task} key={project.id} />
       ))}

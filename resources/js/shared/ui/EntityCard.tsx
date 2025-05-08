@@ -26,7 +26,7 @@ export function EntityCard({
   footer,
 }: Props) {
   return (
-    <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ">
+    <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {subtitle && <CardDescription>{subtitle}</CardDescription>}
@@ -40,8 +40,8 @@ export function EntityCard({
       </CardContent>
 
       {footer && (
-        <CardFooter>
-          <div className="flex gap-2 flex-1">{footer}</div>
+        <CardFooter className="border-t py-3">
+          <div className="flex gap-2 flex-1 justify-end">{footer}</div>
         </CardFooter>
       )}
     </Card>

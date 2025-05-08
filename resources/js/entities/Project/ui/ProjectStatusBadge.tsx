@@ -4,9 +4,9 @@ import { CheckCircle, Clock, Settings } from "lucide-react";
 import { ReactNode } from "react";
 
 const statusIcons: Record<number, ReactNode> = {
-  1: <Clock className="w-3 h-3" />,
-  2: <Settings className="w-3 h-3" />,
-  3: <CheckCircle className="w-3 h-3" />,
+  1: <Clock className="w-3.5 h-3.5" />,
+  2: <Settings className="w-3.5 h-3.5" />,
+  3: <CheckCircle className="w-3.5 h-3.5" />,
 };
 
 export function ProjectStatusBadge({ status }: { status: ProjectStatus }) {

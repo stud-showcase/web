@@ -2,9 +2,14 @@ import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { ArrowRight, UserPlus, Users } from "lucide-react";
 import { EntityCard } from "@/shared/ui/EntityCard";
-import { ProjectStatusBadge, ProjectHiringBadge, Project } from "@/entities/Project";
+import {
+  ProjectStatusBadge,
+  ProjectHiringBadge,
+  Project,
+} from "@/entities/Project";
 import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { Text } from "@/shared/ui/Text";
 
 function Title({ project, task }: { project: Project; task: Task }) {
   return (
@@ -34,18 +39,25 @@ function Tags({ task }: { task: Task }) {
   return task.tags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
 
+export function Content({ project }: { project: Project }) {
+  if (project.annotation) {
+    return <Text variant="small">{project.annotation}</Text>;
+  }
+  return;
+}
+
 function Footer({ project }: { project: Project }) {
   const { user } = useAuth();
 
   return (
     <>
       {project.isHiring && user && (
-        <Button variant="outline" size="sm" className="flex-1">
+        <Button variant="outline" size="sm">
           <UserPlus />
           Вступить
         </Button>
       )}
-      <Button asChild size="sm" className="flex-1">
+      <Button asChild size="sm">
         <Link href={`/projects/${project.id}`}>
           Подробнее
           <ArrowRight />
@@ -66,6 +78,7 @@ export function ProjectCard({
     <EntityCard
       title={<Title project={project} task={task} />}
       subtitle={task.title}
+      content={<Content project={project} />}
       badges={<Badges project={project} task={task} />}
       tags={<Tags task={task} />}
       footer={<Footer project={project} />}

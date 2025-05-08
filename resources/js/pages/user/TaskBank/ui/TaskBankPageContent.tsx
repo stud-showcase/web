@@ -29,7 +29,7 @@ export function TaskBankPageContent({
         onChange={handleChange}
         onSearch={handleSearch}
       />
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex flex-col mt-6 gap-6">
         {tasks.data.map((task) => (
           <TaskCard task={task} key={task.id} />
         ))}

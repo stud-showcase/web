@@ -5,9 +5,19 @@ import { Button } from "@/shared/ui/Button";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { ExtendedVacancy } from "../model/ExtendedVacancy";
 import { Task, TaskTagBadge } from "@/entities/Task";
+import { Text } from "@/shared/ui/Text";
 
 function Tags({ task }: { task: Task }) {
   return task.tags.map((tag) => <TaskTagBadge tag={tag} />);
+}
+
+function Content({ vacancy }: { vacancy: ExtendedVacancy }) {
+  return (
+    // TODO: убрать
+    <Text variant="small" className="line-clamp-1">
+      {vacancy.description || "Тестовое описание вакансии. Убрать когда будет обязательным полем"}
+    </Text>
+  );
 }
 
 function Footer({ vacancy }: { vacancy: ExtendedVacancy }) {
@@ -21,8 +31,8 @@ function Footer({ vacancy }: { vacancy: ExtendedVacancy }) {
           Вступить
         </Button>
       )}
-      <Button asChild size="sm" className="flex-1">
-        <Link href={`/projects/${vacancy.project.id}`}>
+      <Button asChild size="sm">
+        <Link href={`/projects/${vacancy.project.id}`} className="flex-1">
           Подробнее
           <ArrowRight />
         </Link>
@@ -36,6 +46,7 @@ export function VacancyCard({ vacancy }: { vacancy: ExtendedVacancy }) {
     <EntityCard
       title={vacancy.name}
       subtitle={vacancy.project.name}
+      content={<Content vacancy={vacancy} />}
       tags={<Tags task={vacancy.task} />}
       footer={<Footer vacancy={vacancy} />}
     />

@@ -6,12 +6,12 @@ export function ProjectHiringBadge({ isHiring }: { isHiring: boolean }) {
     <Badge variant="outline" className="flex items-center gap-1 w-fit">
       {isHiring ? (
         <>
-          <Users className="w-3 h-3" />
+          <Users className="w-3.5 h-3.5" />
           Набор открыт
         </>
       ) : (
         <>
-          <XCircle className="w-3 h-3" />
+          <XCircle className="w-3.5 h-3.5" />
           Набор закрыт
         </>
       )}

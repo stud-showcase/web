@@ -41,12 +41,12 @@ function Footer({ task }: { task: Task }) {
   return (
     <>
       {user && task.canTake && (
-        <Button variant="outline" size="sm" className="flex-1">
+        <Button variant="outline" size="sm">
           <ClipboardCheck />
           Взять задачу
         </Button>
       )}
-      <Button asChild size="sm" className="flex-1">
+      <Button asChild size="sm">
         <Link href={`/tasks/${task.id}`}>
           Подробнее
           <ArrowRight />

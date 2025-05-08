@@ -20,7 +20,7 @@ const textStyles: Record<Variant, string> = {
   default: "leading-7",
   lead: "text-xl text-muted-foreground",
   large: "text-lg font-semibold",
-  small: "text-sm font-medium leading-none",
+  small: "text-sm font-medium",
   muted: "text-sm text-muted-foreground",
 };
 
