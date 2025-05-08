@@ -31,7 +31,7 @@ return new class extends Migration
             $table->primary(['user_id', 'role_id']);
         });
 
-        Schema::create('project_invite', function (Blueprint $table) {
+        Schema::create('project_invites', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
@@ -66,7 +66,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('task_request_files');
         Schema::dropIfExists('task_requests');
-        Schema::dropIfExists('project_invite');
+        Schema::dropIfExists('project_invites');
         Schema::dropIfExists('user_role');
         Schema::dropIfExists('user_project');
         Schema::dropIfExists('group_task');

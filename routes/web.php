@@ -27,6 +27,7 @@ Route::prefix('projects')->group(function () {
     Route::get('/{id}', [ProjectController::class, 'show'])->name('projects.show');
 
     Route::middleware('auth')->group(function () {
+        Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
         Route::post('/invite-request', [ProjectController::class, 'createInvite'])->name('projects.invite.request');
         Route::post('/accept-invite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
     });

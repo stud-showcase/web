@@ -9,6 +9,8 @@ class Setting extends Model
 {
     use HasFactory;
 
+    protected $table = 'settings';
+
     public $timestamps = false;
 
     protected $fillable = [

@@ -5,10 +5,11 @@ namespace App\Services;
 use App\Repositories\ProjectRepository;
 use App\Dto\ProjectDto;
 use App\Models\Project;
-use App\Models\ProjectInvite;
+use App\Models\User;
 use App\Repositories\ProjectInviteRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ProjectService
 {
@@ -62,24 +63,18 @@ class ProjectService
     public function createInvite(int $userId, int $projectId, ?int $vacancyId): bool
     {
         try {
-            $project = Project::withCount('users')->with('task')->findOrFail($projectId);
-
-            if ($project->users->count() >= $project->task->max_members) {
-                return false;
-            }
-
             $this->inviteRepository->create($userId, $projectId, $vacancyId);
-            return true;
         } catch (\Throwable $e) {
             Log::error("Ошибка создания запроса на вступление в проект [$projectId]: " . $e->getMessage(), ['exception' => $e]);
-            return false;
+            throw $e;
         }
     }
 
-    public function acceptInvite(int $inviteId): ProjectInvite|bool
+    public function acceptInvite(int $inviteId): int
     {
         try {
             $invite = $this->inviteRepository->findWithRelations($inviteId);
+            $inviteProjectId = $invite->project_id;
 
             DB::transaction(function () use ($invite) {
                 DB::table('user_project')->insert([
@@ -94,10 +89,15 @@ class ProjectService
                 $invite->delete();
             });
 
-            return $invite;
+            return $inviteProjectId;
         } catch (\Throwable $e) {
             Log::error("Ошибка принятия запроса [$inviteId] на вступление в проект: " . $e->getMessage(), ['exception' => $e]);
-            return false;
+            throw $e;
         }
+    }
+
+    public function createProject(int $taskId, string $name, User $user): Project
+    {
+        return $this->projectRepository->create($taskId, $name, $user);
     }
 }

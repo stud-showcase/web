@@ -3,8 +3,13 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use App\Models\ProjectStatus;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ProjectRepository
 {
@@ -129,5 +134,32 @@ class ProjectRepository
                 'vacancy' => fn($q2) => $q2->select('id', 'name'),
             ]),
         ])->findOrFail($id);
+    }
+
+    public function create(int $taskId, string $name, User $user): Project
+    {
+        try {
+            $project = DB::transaction(function () use ($taskId, $name, $user) {
+                $isPrivileged = $user->hasPrivilegedRole();
+
+                $project = Project::create([
+                    'task_id' => $taskId,
+                    'status_id' => ProjectStatus::STATUS_COMPLETED,
+                    'name' => $name,
+                    'mentor_id' => $isPrivileged ? $user->id : null,
+                ]);
+
+                if (!$isPrivileged) {
+                    $project->users()->attach($user->id, ['is_creator' => true]);
+                }
+
+                return $project;
+            });
+
+            return $project;
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания проекта. Задача - [$taskId]. Пользователь - [$user->id]: " . $e->getMessage());
+            throw $e;
+        }
     }
 }

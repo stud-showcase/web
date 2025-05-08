@@ -9,7 +9,7 @@ class ProjectInvite extends Model
 {
     use HasFactory;
 
-    protected $table = 'project_invite';
+    protected $table = 'project_invites';
 
     protected $fillable = [
         'user_id',

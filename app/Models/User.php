@@ -25,6 +25,8 @@ class User extends Authenticatable
         'admin'   => ['student', 'mentor'],
     ];
 
+    public const PRIVILEGED_ROLES = ['admin', 'mentor'];
+
     public function group()
     {
         return $this->belongsTo(Group::class);
@@ -55,6 +57,11 @@ class User extends Authenticatable
     public function taskRequests()
     {
         return $this->hasMany(TaskRequest::class);
+    }
+
+    public function hasPrivilegedRole(): bool
+    {
+        return $this->roles->pluck('name')->intersect(self::PRIVILEGED_ROLES)->isNotEmpty();
     }
 
     public function hasAnyRole($roles): bool

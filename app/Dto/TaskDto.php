@@ -27,11 +27,6 @@ class TaskDto
 
     public static function fromModel(Task $task): self
     {
-        $user = Auth::user();
-        $hasProjectWithTask = $user
-            ? $task->projects()->whereHas('users', fn($q) => $q->where('users.id', $user->id))->exists()
-            : false;
-
         return new self(
             id: $task->id,
             title: $task->title,
@@ -65,7 +60,7 @@ class TaskDto
                     'isHiring' => $project->users->count() < $task->max_members,
                 ])->toArray()
                 : null,
-            canTake: $task->max_projects > $task->projects->count() && Auth::check() && !$hasProjectWithTask
+            canTake: $task->canTake(Auth::user())
         );
     }
 

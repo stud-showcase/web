@@ -13,22 +13,16 @@ class AcceptInviteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $invite = ProjectInvite::find($this->input('invite_id'));
+        $invite = ProjectInvite::find($this->input('inviteId'));
+        $currentUser = Auth::user();
 
-        if (!$invite) {
-            return false;
-        }
-
-        $project = $invite->project;
-
-        if (!$project) {
-            return false;
-        }
-
-        return $project->users()
-            ->where('user_id', Auth::id())
+        $isPrivileged = $currentUser->hasPrivilegedRole();
+        $isTeamCreator = $invite->project->users()
+            ->where('user_id', $currentUser->id)
             ->wherePivot('is_creator', true)
             ->exists();
+
+        return $isPrivileged || $isTeamCreator;
     }
 
     /**
@@ -39,7 +33,7 @@ class AcceptInviteRequest extends FormRequest
     public function rules()
     {
         return [
-            'invite_id' => 'required|exists:project_invite,id',
+            'inviteId' => 'required|exists:project_invites,id',
         ];
     }
 }

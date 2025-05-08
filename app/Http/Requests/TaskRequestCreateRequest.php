@@ -28,10 +28,10 @@ class TaskRequestCreateRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'customer' => 'required|string|max:255',
-            'customer_email' => 'required|email|max:255',
-            'customer_phone' => 'nullable|string|max:20',
-            'with_project' => 'nullable|boolean',
-            'project_name' => 'nullable|required_if:with_project,true|string|max:255',
+            'customerEmail' => 'required|email|max:255',
+            'customerPhone' => 'nullable|string|max:20',
+            'withProject' => 'nullable|boolean',
+            'projectName' => 'nullable|required_if:withProject,true|string|max:255',
             'files.*' => ['nullable', 'file', 'max:10240'],
         ];
     }
@@ -44,7 +44,7 @@ class TaskRequestCreateRequest extends FormRequest
     public function messages()
     {
         return [
-            'project_name.required_if' => 'Название проекта обязательно, если выбрана опция "Создать проект".',
+            'projectName.required_if' => 'Название проекта обязательно, если выбрана опция "Создать проект".',
         ];
     }
 }

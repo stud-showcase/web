@@ -53,7 +53,7 @@ class TaskController extends Controller
 
     public function createRequest(TaskRequestCreateRequest $request)
     {
-        if ($request->input('with_project') && !Auth::check()) {
+        if ($request->input('withProject') && !Auth::check()) {
             return response()->json([
                 'message' => 'Для заявки с проектом необходимо авторизоваться',
             ], 403);

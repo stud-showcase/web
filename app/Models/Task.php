@@ -46,4 +46,37 @@ class Task extends Model
     {
         return $this->belongsToMany(Group::class, 'group_task');
     }
+
+    public function canTake(User $user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+
+        if (!$user->hasPrivilegedRole()) {
+            $hasProjectWithTask = $this->projects()
+                ->whereHas('users', fn($q) => $q->where('users.id', $user->id))
+                ->exists();
+
+            if ($hasProjectWithTask) {
+                return false;
+            }
+
+            if ($this->projects()->count() >= $this->max_projects) {
+                return false;
+            }
+
+            $settings = Setting::first();
+            $now = now();
+
+            if (
+                (!is_null($settings?->start_date) && $now->lt($settings->start_date)) ||
+                (!is_null($settings?->end_date) && $now->gt($settings->end_date))
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

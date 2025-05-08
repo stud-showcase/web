@@ -9,6 +9,10 @@ class ProjectStatus extends Model
 {
     use HasFactory;
 
+    public const STATUS_WAITING = 1;
+    public const STATUS_PROGRESS = 2;
+    public const STATUS_COMPLETED = 3;
+
     protected $table = 'project_status';
 
     public $timestamps = false;
