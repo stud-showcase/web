@@ -7,10 +7,13 @@ import { RadioGroup, RadioGroupItem } from "@/shared/ui/RadioGroup";
 import { Text } from "@/shared/ui/Text";
 import { Upload } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 import "./leave-request-form.css";
 
 export function LeaveRequestForm() {
+  const { user } = useAuth();
+
   const [requestType, setRequestType] = useState<"task" | "project">("task");
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -113,32 +116,36 @@ export function LeaveRequestForm() {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label>Тип заявки *</Label>
-          <RadioGroup
-            value={requestType}
-            onValueChange={(value: "task" | "project") => setRequestType(value)}
-            className="flex space-x-4"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="task" id="task" />
-              <Label htmlFor="task" className="cursor-pointer">
-                Добавить задачу в банк
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="project" id="project" />
-              <Label htmlFor="project" className="cursor-pointer">
-                Создать проект
-              </Label>
-            </div>
-          </RadioGroup>
-          <Text variant="muted">
-            {requestType === "task"
-              ? "Предложите задачу для студентов в банк задач"
-              : "Создайте проект с собственной темой для реализации"}
-          </Text>
-        </div>
+        {user && (
+          <div className="space-y-2">
+            <Label>Тип заявки *</Label>
+            <RadioGroup
+              value={requestType}
+              onValueChange={(value: "task" | "project") =>
+                setRequestType(value)
+              }
+              className="flex space-x-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="task" id="task" />
+                <Label htmlFor="task" className="cursor-pointer">
+                  Добавить задачу в банк
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="project" id="project" />
+                <Label htmlFor="project" className="cursor-pointer">
+                  Создать проект
+                </Label>
+              </div>
+            </RadioGroup>
+            <Text variant="muted">
+              {requestType === "task"
+                ? "Предложите задачу для студентов в банк задач"
+                : "Создайте проект с собственной темой для реализации"}
+            </Text>
+          </div>
+        )}
       </form>
     </div>
   );
