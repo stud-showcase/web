@@ -1,8 +1,6 @@
 import { Button } from "@/shared/ui/Button";
 import {
   FileIcon,
-  MailIcon,
-  PhoneIcon,
   CalendarIcon,
   UsersIcon,
   Files,
@@ -22,34 +20,28 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/shared/ui/Breadcrumb";
-import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
-import { useToast } from "@/shared/hooks/useToast";
-import { Project } from "@/entities/Project";
+import {
+  getMemberLabel,
+  TaskComplexityBadge,
+  TaskTagBadge,
+} from "@/entities/Task";
 import { SimpleProjectCard } from "./SimpleProjectCard";
-import { project, task } from "@/shared/mocks";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { ExtendedTask } from "../model/ExtendedTask";
 
-export default function TaskPage({}: { task: Task; projects: Project[] }) {
+export default function TaskPage({ task }: { task: ExtendedTask }) {
   const { user } = useAuth();
-  const projects = Array(5).fill(project);
+  // const { toast } = useToast();
 
-  const formattedDeadline = task.deadline.toLocaleDateString("ru-RU", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  const { toast } = useToast();
-
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      toast({
-        title: "Скопировано!",
-        description: `${text} теперь в буфере обмена.`,
-        duration: 2000,
-      });
-    });
-  };
+  // const copyToClipboard = (text: string) => {
+  //   navigator.clipboard.writeText(text).then(() => {
+  //     toast({
+  //       title: "Скопировано!",
+  //       description: `${text} теперь в буфере обмена.`,
+  //       duration: 2000,
+  //     });
+  //   });
+  // };
 
   return (
     <>
@@ -84,46 +76,51 @@ export default function TaskPage({}: { task: Task; projects: Project[] }) {
                   </div>
                 )}
               </div>
-              <div className="mt-4 flex flex-wrap gap-3">
-                <TaskComplexityBadge complexity={task.complexity} />
-                {task.tags.map((tag) => (
-                  <TaskTagBadge value={tag} />
-                ))}
-              </div>
-            </header>
-
-            <section className="mt-8 pl-6 border-l-4 border-primary">
-              <Text variant="muted">{task.description}</Text>
-              {task.files && (
-                <div className="mt-6">
-                  <div className="flex items-center gap-2">
-                    <Files className="h-5 w-5" />
-                    <Text variant="small">Файлы к описанию</Text>
-                  </div>
-                  <div className="flex items-center justify-between mt-4">
-                    <div className="flex flex-wrap gap-3">
-                      {task.files?.map((file) => (
-                        <Button
-                          key={file.name}
-                          variant="outline"
-                          size="sm"
-                          asChild
-                        >
-                          <a
-                            href={file.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2"
-                          >
-                            <FileIcon className="h-4 w-4" />
-                            {file.name}
-                          </a>
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
+              {task.tags && task.tags.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <TaskComplexityBadge complexity={task.complexity} />
+                  {task.tags.map((tag) => (
+                    <TaskTagBadge tag={tag} />
+                  ))}
                 </div>
               )}
+            </header>
+
+            <section className="mt-8 ">
+              <Heading level={3}>Описание задачи</Heading>
+              <div className="mt-4 pl-6 border-l-4 border-primary">
+                <Text variant="muted">{task.description}</Text>
+                {task.files && task.files.length > 0 && (
+                  <div className="mt-6">
+                    <div className="flex items-center gap-2">
+                      <Files className="h-5 w-5" />
+                      <Text variant="small">Файлы к описанию</Text>
+                    </div>
+                    <div className="flex items-center justify-between mt-4">
+                      <div className="flex flex-wrap gap-3">
+                        {task.files?.map((file) => (
+                          <Button
+                            key={file.name}
+                            variant="outline"
+                            size="sm"
+                            asChild
+                          >
+                            <a
+                              href={file.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2"
+                            >
+                              <FileIcon className="h-4 w-4" />
+                              {file.name}
+                            </a>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </section>
 
             <section className="mt-10">
@@ -133,7 +130,7 @@ export default function TaskPage({}: { task: Task; projects: Project[] }) {
                   <CalendarIcon className="h-6 w-6" />
                   <div>
                     <Text variant="muted">Дедлайн</Text>
-                    <Text>{formattedDeadline}</Text>
+                    <Text>{task.deadline}</Text>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px]">
@@ -141,8 +138,8 @@ export default function TaskPage({}: { task: Task; projects: Project[] }) {
                   <div>
                     <Text variant="muted">Команда</Text>
                     <Text>
-                      До {task.maxMembers}{" "}
-                      {task.maxMembers === 1 ? "участника" : "участников"}
+                      Максимально {task.maxMembers}{" "}
+                      {getMemberLabel(task.maxMembers)}
                     </Text>
                   </div>
                 </div>
@@ -156,7 +153,8 @@ export default function TaskPage({}: { task: Task; projects: Project[] }) {
               </div>
             </section>
 
-            {((user && task.customerEmail) || task.customerPhone) && (
+            {/* TODO: перенести на страницу проекта */}
+            {/* {((user && task.customerEmail) || task.customerPhone) && (
               <section className="mt-10">
                 <Heading level={3} className="mb-4">
                   Контакты заказчика
@@ -184,13 +182,13 @@ export default function TaskPage({}: { task: Task; projects: Project[] }) {
                   )}
                 </div>
               </section>
-            )}
+            )} */}
 
-            {projects?.length > 0 && (
+            {task.projects?.length > 0 && (
               <section className="mt-10">
                 <Heading level={3}>Проекты</Heading>
-                <ul className="space-y-3 mt-6">
-                  {projects.map((project) => (
+                <ul className="space-y-3 mt-4">
+                  {task.projects.map((project) => (
                     <li key={project.id}>
                       <SimpleProjectCard project={project} />
                     </li>
