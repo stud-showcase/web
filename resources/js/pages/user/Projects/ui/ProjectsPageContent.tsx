@@ -54,7 +54,7 @@ export function ProjectsPageContent({
   };
 
   const handleChange = (value: string) => {
-    setFilters({ ...filters, search: value });
+    setFilters({ ...filters, search: value || undefined });
   };
 
   const handleTabChange = (value: string) => {

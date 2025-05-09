@@ -46,7 +46,7 @@ export function ProjectsPageFilterPanel({ tags }: { tags: TaskTag[] }) {
         title="Набор в команду"
         options={["Закрыт", "Открыт"]}
         idPrefix="recruitment"
-        value={filters.isHiring}
+        value={filters.isHiring ?? ""}
         onChange={(isHiring) => {
           setFilters({ ...filters, isHiring });
         }}
