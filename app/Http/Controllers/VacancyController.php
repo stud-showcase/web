@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateVacancyRequest;
 use App\Http\Requests\DeleteVacancyRequest;
 use App\Http\Requests\UpdateVacancyRequest;
-use App\Models\Project;
 use App\Models\Tag;
-use App\Models\Vacancy;
 use App\Services\VacancyService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Throwable;
 
