@@ -10,7 +10,7 @@ import { useContext } from "react";
 import { sendProjectsFilters } from "../util/sendProjectsFilters";
 import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
 import { defaultProjectsFilters } from "../consts/defaultProjectsFilters";
-import { usePage } from "@inertiajs/react";
+import { getCurrentTab } from "../util/getCurrentTab";
 
 function ProjectsCards({
   projects,
@@ -54,16 +54,15 @@ export function ProjectsPageContent({
   const handleTabChange = (value: string) => {
     const clearedFilters = {
       ...defaultProjectsFilters,
-      myProjects: value === "my" ? true : false,
     };
     setFilters(clearedFilters);
-    sendProjectsFilters(clearedFilters);
+    sendProjectsFilters(clearedFilters, value as "my" | "all");
   };
 
   if (user) {
     return (
       <Tabs
-        defaultValue={filters.myProjects ? "my" : "all"}
+        defaultValue={getCurrentTab()}
         className="flex flex-col gap-6"
         onValueChange={handleTabChange}
       >
