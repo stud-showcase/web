@@ -23,6 +23,8 @@ Route::get('/', function () {
     return Inertia::render('user/Main');
 });
 
+Route::get('/myProjects', [ProjectController::class, 'getUserProjects']);
+
 Route::prefix('projects')->group(function () {
     Route::get('/', [ProjectController::class, 'index']);
     Route::get('/{id}', [ProjectController::class, 'show'])->name('projects.show');

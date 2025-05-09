@@ -14,7 +14,7 @@ use Throwable;
 
 class ProjectRepository
 {
-    public function getProjects(array $filters, bool $applyFilters): LengthAwarePaginator
+    public function getProjects(array $filters): LengthAwarePaginator
     {
         $query = Project::query()
             ->with([
@@ -28,50 +28,48 @@ class ProjectRepository
             ])
             ->join('tasks', 'projects.task_id', '=', 'tasks.id');
 
-        if ($applyFilters) {
-            $query
-                ->when(
-                    isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
-                    fn($q) => $q->whereIn('projects.status_id', $filters['status'])
-                )
-                ->when(
-                    isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
-                    fn($q) => $q->whereIn('tasks.complexity_id', $filters['complexity'])
-                )
-                ->when(
-                    isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
-                    fn($q) => $q->whereHas('task.tags', fn($q2) => $q2->whereIn('tags.id', $filters['tags']))
-                )
-                ->when(
-                    isset($filters['isHiring']),
-                    fn($q) => $filters['isHiring']
-                        ? $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members')
-                        ->where('projects.is_closed', false)
-                        : $q->where(function ($subQ) {
-                            $subQ->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
-                                ->orWhere('projects.is_closed', true);
-                        })
-                )
-                ->when(
-                    isset($filters['members']),
-                    fn($q) => $q->where('tasks.max_members', '>=', (int)$filters['members'])
-                )
-                ->when(
-                    isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
-                    fn($q) => $q->whereIn('tasks.customer', $filters['customers'])
-                )
-                ->when(
-                    !empty($filters['search']),
-                    fn($q) => $q->where('projects.name', 'LIKE', '%' . $filters['search'] . '%')
-                );
-        }
+        $query
+            ->when(
+                isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
+                fn($q) => $q->whereIn('projects.status_id', $filters['status'])
+            )
+            ->when(
+                isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
+                fn($q) => $q->whereIn('tasks.complexity_id', $filters['complexity'])
+            )
+            ->when(
+                isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
+                fn($q) => $q->whereHas('task.tags', fn($q2) => $q2->whereIn('tags.id', $filters['tags']))
+            )
+            ->when(
+                isset($filters['isHiring']),
+                fn($q) => $filters['isHiring']
+                    ? $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members')
+                    ->where('projects.is_close', false)
+                    : $q->where(function ($subQ) {
+                        $subQ->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
+                            ->orWhere('projects.is_close', true);
+                    })
+            )
+            ->when(
+                isset($filters['members']),
+                fn($q) => $q->where('tasks.max_members', '>=', (int)$filters['members'])
+            )
+            ->when(
+                isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
+                fn($q) => $q->whereIn('tasks.customer', $filters['customers'])
+            )
+            ->when(
+                !empty($filters['search']),
+                fn($q) => $q->where('projects.name', 'LIKE', '%' . $filters['search'] . '%')
+            );
 
         return $query->select('projects.*')
             ->paginate(10)
             ->withQueryString();
     }
 
-    public function getUserProjects(array $filters, bool $applyFilters): LengthAwarePaginator
+    public function getUserProjects(array $filters): LengthAwarePaginator
     {
         $query = Project::query()
             ->with([
@@ -86,42 +84,40 @@ class ProjectRepository
             ->join('tasks', 'projects.task_id', '=', 'tasks.id')
             ->whereHas('users', fn($q) => $q->where('users.id', Auth::id()));
 
-        if ($applyFilters) {
-            $query->when(
-                isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
-                fn($q) => $q->whereIn('projects.status_id', $filters['status'])
+        $query->when(
+            isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
+            fn($q) => $q->whereIn('projects.status_id', $filters['status'])
+        )
+            ->when(
+                isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
+                fn($q) => $q->whereIn('tasks.complexity_id', $filters['complexity'])
             )
-                ->when(
-                    isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
-                    fn($q) => $q->whereIn('tasks.complexity_id', $filters['complexity'])
-                )
-                ->when(
-                    isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
-                    fn($q) => $q->whereHas('task.tags', fn($q2) => $q2->whereIn('tags.id', $filters['tags']))
-                )
-                ->when(
-                    isset($filters['isHiring']),
-                    fn($q) => $filters['isHiring']
-                        ? $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members')
-                        ->where('projects.is_closed', false)
-                        : $q->where(function ($subQ) {
-                            $subQ->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
-                                ->orWhere('projects.is_closed', true);
-                        })
-                )
-                ->when(
-                    isset($filters['members']),
-                    fn($q) => $q->where('tasks.max_members', '>=', (int)$filters['members'])
-                )
-                ->when(
-                    isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
-                    fn($q) => $q->whereIn('tasks.customer', $filters['customers'])
-                )
-                ->when(
-                    isset($filters['search']) && !empty($filters['search']),
-                    fn($q) => $q->where('projects.name', 'LIKE', '%' . $filters['search'] . '%')
-                );
-        }
+            ->when(
+                isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
+                fn($q) => $q->whereHas('task.tags', fn($q2) => $q2->whereIn('tags.id', $filters['tags']))
+            )
+            ->when(
+                isset($filters['isHiring']),
+                fn($q) => $filters['isHiring']
+                    ? $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members')
+                    ->where('projects.is_close', false)
+                    : $q->where(function ($subQ) {
+                        $subQ->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
+                            ->orWhere('projects.is_close', true);
+                    })
+            )
+            ->when(
+                isset($filters['members']),
+                fn($q) => $q->where('tasks.max_members', '>=', (int)$filters['members'])
+            )
+            ->when(
+                isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
+                fn($q) => $q->whereIn('tasks.customer', $filters['customers'])
+            )
+            ->when(
+                isset($filters['search']) && !empty($filters['search']),
+                fn($q) => $q->where('projects.name', 'LIKE', '%' . $filters['search'] . '%')
+            );
 
         return $query->select('projects.*')
             ->paginate(10)

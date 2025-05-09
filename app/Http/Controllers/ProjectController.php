@@ -29,14 +29,34 @@ class ProjectController extends Controller
             'isHiring',
             'members',
             'search',
-            'userProjects',
         ]);
 
         $projects = $this->projectService->getFilteredProjects($filters);
 
         return Inertia::render('user/Projects', [
-            'projects' => $projects['projects'],
-            'userProjects' => $projects['userProjects'],
+            'projects' => $projects,
+            'filters' => $filters,
+            'availableFilters' => [
+                'tags' => Tag::select('id', 'name')->get()->toArray(),
+            ]
+        ]);
+    }
+
+    public function getUserProjects(Request $request): \Inertia\Response
+    {
+        $filters = $request->only([
+            'status',
+            'complexity',
+            'tags',
+            'isHiring',
+            'members',
+            'search',
+        ]);
+
+        $projects = $this->projectService->getFilteredUserProjects($filters);
+
+        return Inertia::render('user/Projects', [
+            'projects' => $projects,
             'filters' => $filters,
             'availableFilters' => [
                 'tags' => Tag::select('id', 'name')->get()->toArray(),

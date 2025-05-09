@@ -21,35 +21,37 @@ class ProjectService
 
     public function getFilteredProjects(array $filters): array
     {
-        $applyFiltersToUserProjects = isset($filters['userProjects']) && $filters['userProjects'] == true;
-
-        $projectsPaginator = $this->projectRepository->getProjects($filters, !$applyFiltersToUserProjects);
+        $projectsPaginator = $this->projectRepository->getProjects($filters);
         $projectsPaginator->setCollection(
             $projectsPaginator->getCollection()->map(fn($project) => ProjectDto::fromModel($project)->toArray())
         );
 
-        $userProjectsPaginator = $this->projectRepository->getUserProjects($filters, $applyFiltersToUserProjects);
-        $userProjectsPaginator->setCollection(
-            $userProjectsPaginator->getCollection()->map(fn($project) => ProjectDto::fromModel($project)->toArray())
+        $projectsData = [
+            'data' => $projectsPaginator->items(),
+            'currentPage' => $projectsPaginator->currentPage(),
+            'lastPage' => $projectsPaginator->lastPage(),
+            'perPage' => $projectsPaginator->perPage(),
+            'total' => $projectsPaginator->total(),
+            'links' => $projectsPaginator->links()->elements[0] ?? [],
+        ];
+
+        return $projectsData;
+    }
+
+    public function getFilteredUserProjects(array $filters): array
+    {
+        $projectsPaginator = $this->projectRepository->getUserProjects($filters);
+        $projectsPaginator->setCollection(
+            $projectsPaginator->getCollection()->map(fn($project) => ProjectDto::fromModel($project)->toArray())
         );
 
         $projectsData = [
-            'projects' => [
-                'data' => $projectsPaginator->items(),
-                'currentPage' => $projectsPaginator->currentPage(),
-                'lastPage' => $projectsPaginator->lastPage(),
-                'perPage' => $projectsPaginator->perPage(),
-                'total' => $projectsPaginator->total(),
-                'links' => $projectsPaginator->links()->elements[0] ?? [],
-            ],
-            'userProjects' => [
-                'data' => $userProjectsPaginator->items(),
-                'currentPage' => $userProjectsPaginator->currentPage(),
-                'lastPage' => $userProjectsPaginator->lastPage(),
-                'perPage' => $userProjectsPaginator->perPage(),
-                'total' => $userProjectsPaginator->total(),
-                'links' => $userProjectsPaginator->links()->elements[0] ?? [],
-            ],
+            'data' => $projectsPaginator->items(),
+            'currentPage' => $projectsPaginator->currentPage(),
+            'lastPage' => $projectsPaginator->lastPage(),
+            'perPage' => $projectsPaginator->perPage(),
+            'total' => $projectsPaginator->total(),
+            'links' => $projectsPaginator->links()->elements[0] ?? [],
         ];
 
         return $projectsData;
