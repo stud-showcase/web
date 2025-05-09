@@ -22,8 +22,6 @@ export function VacanciesPageContent({
     setFilters({ ...filters, search: value });
   };
 
-  console.log(vacancies)
-
   return (
     <>
       <SearchBar

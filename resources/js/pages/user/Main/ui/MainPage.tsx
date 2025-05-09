@@ -10,7 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/shared/ui/Accordion";
-import { LeaveRequest } from "@/features/LeaveRequest";
+import { SendApplicationModal } from "@/features/SendApplicationModal";
 
 export default function MainPage() {
   return (
@@ -28,9 +28,9 @@ export default function MainPage() {
               Платформа, обеспечивающая взаимодействие заказчиков, студентов и
               преподавателей в рамках образовательного процесса СевГУ.
             </Text>
-            <LeaveRequest>
+            <SendApplicationModal>
               <Button size="lg">Оставить заявку на проект</Button>
-            </LeaveRequest>
+            </SendApplicationModal>
           </section>
 
           <section className="px-6 py-16 w-full bg-muted/60">

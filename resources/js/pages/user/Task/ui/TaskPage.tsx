@@ -28,7 +28,7 @@ import {
 import { SimpleProjectCard } from "./SimpleProjectCard";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { ExtendedTask } from "../model/ExtendedTask";
-import { ProjectCreationModal } from "./ProjectCreationModal";
+import { CreateProjectModal } from "@/features/CreateProjectModal";
 
 export default function TaskPage({ task }: { task: ExtendedTask }) {
   const { user } = useAuth();
@@ -69,14 +69,14 @@ export default function TaskPage({ task }: { task: ExtendedTask }) {
               <div className="mt-6 flex flex-col sm:flex-row justify-between sm:items-center items-start gap-6">
                 <Heading level={1}>{task.title}</Heading>
                 {user && task.canTake && (
-                  <ProjectCreationModal task={task}>
+                  <CreateProjectModal task={task}>
                     <div className="flex flex-row w-full sm:w-auto gap-3">
                       <Button className="flex-1 sm:flex-none" size="sm">
                         <ClipboardCheck />
                         Взять задачу
                       </Button>
                     </div>
-                  </ProjectCreationModal>
+                  </CreateProjectModal>
                 )}
               </div>
               {task.tags && task.tags.length > 0 && (

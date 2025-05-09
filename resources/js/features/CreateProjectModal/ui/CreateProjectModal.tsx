@@ -18,11 +18,11 @@ import { Button } from "@/shared/ui/Button";
 import { useForm } from "@inertiajs/react";
 import { Task } from "@/entities/Task";
 
-export function ProjectCreationModal({
+export function CreateProjectModal({
   task,
   children,
 }: PropsWithChildren<{ task: Task }>) {
-  const { data, setData, post, processing, errors } = useForm({
+  const { data, setData, post, errors } = useForm({
     taskId: task.id,
     projectName: "",
   });
@@ -53,6 +53,7 @@ export function ProjectCreationModal({
               value={data.projectName}
               onChange={(e) => setData("projectName", e.target.value)}
             />
+            {/* TODO: убедиться, что сообщения с сервера отображаются */}
             {errors.projectName && (
               <div className="text-destructive">{errors.projectName}</div>
             )}

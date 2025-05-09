@@ -9,10 +9,10 @@ import {
   DialogTrigger,
 } from "@/shared/ui/Dialog";
 import { ReactNode } from "react";
-import { LeaveRequestForm } from "./LeaveRequestForm";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { SendApplicationForm } from "./SendApplicationForm";
 
-export function LeaveRequest({ children }: { children: ReactNode }) {
+export function SendApplicationModal({ children }: { children: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -23,7 +23,7 @@ export function LeaveRequest({ children }: { children: ReactNode }) {
             Заполните форму для подачи заявки
           </DialogDescription>
         </DialogHeader>
-        <LeaveRequestForm />
+        <SendApplicationForm />
         <DialogFooter>
           <div className="flex flex-col gap-2 sm:flex-row">
             <DialogClose asChild>

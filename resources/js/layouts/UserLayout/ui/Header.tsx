@@ -1,5 +1,5 @@
 import { NavLinks } from "./NavLinks";
-import { LeaveRequestButton } from "./LeaveRequestButton";
+import { SendApplicationButton } from "./SendApplicationButton";
 import { ProfileIcon } from "./ProfileIcon";
 import { Link } from "@inertiajs/react";
 import { SevSULogo } from "@/shared/ui/SevSULogo";
@@ -25,7 +25,7 @@ export function Header() {
           </nav>
         </div>
         <div className="lg:flex gap-4 items-center hidden">
-          <LeaveRequestButton />
+          <SendApplicationButton />
           {user ? <ProfileIcon /> : <SignInButton />}
         </div>
         <div className="flex lg:hidden">

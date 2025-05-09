@@ -9,9 +9,9 @@ import { Upload } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { useAuth } from "@/shared/hooks/useAuth";
 
-import "./leave-request-form.css";
+import "./send-application-form.css";
 
-export function LeaveRequestForm() {
+export function SendApplicationForm() {
   const { user } = useAuth();
 
   const [requestType, setRequestType] = useState<"task" | "project">("task");

@@ -39,7 +39,6 @@ function getFullName(
 
 export default function ProjectPage({ project }: { project: ExtendedProject }) {
   const { user } = useAuth();
-  console.log(project);
 
   return (
     <>

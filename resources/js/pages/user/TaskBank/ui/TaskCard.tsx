@@ -11,9 +11,9 @@ import {
   TaskTagBadge,
 } from "@/entities/Task";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { CreateProjectModal } from "@/features/CreateProjectModal";
 
 function Badges({ task }: { task: Task }) {
-  console.log(task);
   return (
     <>
       <TaskMembersBadge maxMembers={task.maxMembers} />
@@ -41,10 +41,12 @@ function Footer({ task }: { task: Task }) {
   return (
     <>
       {user && task.canTake && (
-        <Button variant="outline" size="sm">
-          <ClipboardCheck />
-          Взять задачу
-        </Button>
+        <CreateProjectModal task={task}>
+          <Button variant="outline" size="sm">
+            <ClipboardCheck />
+            Взять задачу
+          </Button>
+        </CreateProjectModal>
       )}
       <Button asChild size="sm">
         <Link href={`/tasks/${task.id}`}>
