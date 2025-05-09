@@ -2,7 +2,6 @@ import { Link } from "@inertiajs/react";
 import { ArrowRight, UserPlus } from "lucide-react";
 import { EntityCard } from "@/shared/ui/EntityCard";
 import { Button } from "@/shared/ui/Button";
-import { useAuth } from "@/shared/hooks/useAuth";
 import { ExtendedVacancy } from "../model/ExtendedVacancy";
 import { Task, TaskTagBadge } from "@/entities/Task";
 import { Text } from "@/shared/ui/Text";
@@ -20,12 +19,9 @@ function Content({ vacancy }: { vacancy: ExtendedVacancy }) {
 }
 
 function Footer({ vacancy }: { vacancy: ExtendedVacancy }) {
-  const { user } = useAuth();
-
   return (
     <>
-      {/* TODO: заменить на canJoin */}
-      {false && (
+      {vacancy.canJoin && (
         <Button variant="outline" size="sm" className="flex-1">
           <UserPlus />
           Вступить

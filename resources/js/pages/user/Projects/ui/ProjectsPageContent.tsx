@@ -28,11 +28,7 @@ function ProjectsCards({
       ) : (
         <div className="flex flex-col gap-6">
           {projects.data.map((project) => (
-            <ProjectCard
-              project={project}
-              task={project.task}
-              key={project.id}
-            />
+            <ProjectCard project={project} key={project.id} />
           ))}
         </div>
       )}
@@ -67,10 +63,7 @@ export function ProjectsPageContent({
 
   if (user) {
     return (
-      <Tabs
-        defaultValue={getCurrentTab()}
-        onValueChange={handleTabChange}
-      >
+      <Tabs defaultValue={getCurrentTab()} onValueChange={handleTabChange}>
         <div className="flex lg:flex-row flex-col gap-4">
           <TabsList className="w-fit">
             <TabsTrigger value="all">Все проекты</TabsTrigger>

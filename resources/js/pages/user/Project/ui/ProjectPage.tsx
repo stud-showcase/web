@@ -84,8 +84,7 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                       <LinkIcon /> К задаче
                     </Link>
                   </Button>
-                  {/* TODO: поменять на canJoin */}
-                  {false && (
+                  {project.canJoin && (
                     <Button className="flex-1 sm:flex-none" size="sm">
                       <UserPlus />
                       Вступить

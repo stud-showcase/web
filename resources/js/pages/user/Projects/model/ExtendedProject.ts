@@ -3,4 +3,5 @@ import { Task } from "@/entities/Task";
 
 export type ExtendedProject = Project & {
   task: Task;
+  canJoin: boolean;
 };

@@ -8,10 +8,10 @@ import {
   Project,
 } from "@/entities/Project";
 import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
-import { useAuth } from "@/shared/hooks/useAuth";
 import { Text } from "@/shared/ui/Text";
+import { ExtendedProject } from "../model/ExtendedProject";
 
-function Title({ project, task }: { project: Project; task: Task }) {
+function Title({ project }: { project: ExtendedProject }) {
   return (
     <div className="flex justify-between items-center gap-2">
       <span className="text-xl font-bold leading-none tracking-tight">
@@ -19,18 +19,18 @@ function Title({ project, task }: { project: Project; task: Task }) {
       </span>
       <span className="text-sm flex gap-2 items-center">
         <Users className="w-4 h-4 " />
-        {project.members.length}/{task.maxMembers}
+        {project.members.length}/{project.task.maxMembers}
       </span>
     </div>
   );
 }
 
-function Badges({ project, task }: { project: Project; task: Task }) {
+function Badges({ project }: { project: ExtendedProject }) {
   return (
     <>
       <ProjectHiringBadge isHiring={project.isHiring} />
       <ProjectStatusBadge status={project.status} />
-      <TaskComplexityBadge complexity={task.complexity} />
+      <TaskComplexityBadge complexity={project.task.complexity} />
     </>
   );
 }
@@ -39,20 +39,17 @@ function Tags({ task }: { task: Task }) {
   return task.tags?.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
 
-export function Content({ project }: { project: Project }) {
+export function Content({ project }: { project: ExtendedProject }) {
   if (project.annotation) {
     return <Text variant="small">{project.annotation}</Text>;
   }
   return;
 }
 
-function Footer({ project }: { project: Project }) {
-  const { user } = useAuth();
-
+function Footer({ project }: { project: ExtendedProject }) {
   return (
     <>
-      {/* TODO: заменить на canJoin */}
-      {false && (
+      {project.canJoin && (
         <Button variant="outline" size="sm">
           <UserPlus />
           Вступить
@@ -70,18 +67,16 @@ function Footer({ project }: { project: Project }) {
 
 export function ProjectCard({
   project,
-  task,
 }: {
-  project: Project;
-  task: Task;
+  project: ExtendedProject;
 }) {
   return (
     <EntityCard
-      title={<Title project={project} task={task} />}
-      subtitle={task.title}
+      title={<Title project={project} />}
+      subtitle={project.task.title}
       content={<Content project={project} />}
-      badges={<Badges project={project} task={task} />}
-      tags={<Tags task={task} />}
+      badges={<Badges project={project} />}
+      tags={<Tags task={project.task} />}
       footer={<Footer project={project} />}
     />
   );

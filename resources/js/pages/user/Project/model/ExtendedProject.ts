@@ -4,5 +4,6 @@ import { Vacancy } from "@/entities/Vacancy";
 
 export type ExtendedProject = Project & {
   task: Task;
+  canJoin: boolean;
   vacancies: Vacancy[];
 }
