@@ -12,26 +12,32 @@ import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
 import { defaultProjectsFilters } from "../consts/defaultProjectsFilters";
 import { getCurrentTab } from "../util/getCurrentTab";
 
+function NoProjectsText() {
+  return <Text variant="large">Не было найдено проектов</Text>;
+}
+
 function ProjectsCards({
   projects,
 }: {
   projects: ServerPaginatedData<ExtendedProject>;
 }) {
   return (
-    <div className="flex flex-col gap-6">
-      {projects.data.map((project) => (
-        <ProjectCard project={project} task={project.task} key={project.id} />
-      ))}
+    <div className="mt-6">
+      {projects.data.length === 0 ? (
+        <NoProjectsText />
+      ) : (
+        <div className="flex flex-col gap-6">
+          {projects.data.map((project) => (
+            <ProjectCard
+              project={project}
+              task={project.task}
+              key={project.id}
+            />
+          ))}
+        </div>
+      )}
       <DataPagination paginatedData={projects} className="mt-6" />
     </div>
-  );
-}
-
-function NoProjectsText() {
-  return (
-    <Text variant="large" className="mt-6">
-      Нет проектов
-    </Text>
   );
 }
 
@@ -63,7 +69,6 @@ export function ProjectsPageContent({
     return (
       <Tabs
         defaultValue={getCurrentTab()}
-        className="flex flex-col gap-6"
         onValueChange={handleTabChange}
       >
         <div className="flex lg:flex-row flex-col gap-4">
@@ -78,18 +83,10 @@ export function ProjectsPageContent({
           />
         </div>
         <TabsContent value="all">
-          {projects.data.length === 0 ? (
-            <NoProjectsText />
-          ) : (
-            <ProjectsCards projects={projects} />
-          )}
+          <ProjectsCards projects={projects} />
         </TabsContent>
         <TabsContent value="my">
-          {projects.data.length === 0 ? (
-            <NoProjectsText />
-          ) : (
-            <ProjectsCards projects={projects} />
-          )}
+          <ProjectsCards projects={projects} />
         </TabsContent>
       </Tabs>
     );
@@ -102,13 +99,7 @@ export function ProjectsPageContent({
         onSearch={handleSearch}
         onChange={handleChange}
       />
-      {projects.data.length === 0 ? (
-        <NoProjectsText />
-      ) : (
-        <div className="mt-6">
-          <ProjectsCards projects={projects} />
-        </div>
-      )}
+      <ProjectsCards projects={projects} />
     </div>
   );
 }
