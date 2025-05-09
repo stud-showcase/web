@@ -4,5 +4,5 @@ export const defaultTaskBankFilters: TaskBankFilters = {
   complexity: [],
   customers: [],
   tags: [],
-  search: "",
+  search: undefined,
 };

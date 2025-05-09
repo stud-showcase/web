@@ -6,6 +6,11 @@ import { TaskBankFiltersContext } from "../context/TaskBankFiltersContext";
 import { sendTaskBankFilters } from "../util/sendTaskBankFilters";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { DataPagination } from "@/shared/ui/DataPagination";
+import { Text } from "@/shared/ui/Text";
+
+function NoTasksText() {
+  return <Text variant="large">Не было найдено задач</Text>;
+}
 
 export function TaskBankPageContent({
   tasks,
@@ -19,20 +24,22 @@ export function TaskBankPageContent({
   };
 
   const handleChange = (value: string) => {
-    setFilters({ ...filters, search: value });
+    setFilters({ ...filters, search: value || undefined });
   };
 
   return (
     <>
       <SearchBar
-        value={filters.search}
+        value={filters.search ?? ""}
         onChange={handleChange}
         onSearch={handleSearch}
       />
       <div className="flex flex-col mt-6 gap-6">
-        {tasks.data.map((task) => (
-          <TaskCard task={task} key={task.id} />
-        ))}
+        {tasks.data.length === 0 ? (
+          <NoTasksText />
+        ) : (
+          tasks.data.map((task) => <TaskCard task={task} key={task.id} />)
+        )}
       </div>
       <DataPagination paginatedData={tasks} className="mt-6" />
     </>
