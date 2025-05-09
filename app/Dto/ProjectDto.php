@@ -3,6 +3,8 @@
 namespace App\Dto;
 
 use App\Models\Project;
+use App\Models\UserProject;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectDto
 {
@@ -17,11 +19,13 @@ class ProjectDto
         public bool $isHiring,
         public TaskDto $task,
         public ?array $vacancies,
-        public ?array $invites
+        public ?array $invites,
+        public bool $canJoin,
     ) {}
 
     public static function fromModel(Project $project): self
     {
+        $userId = Auth::id();
         return new self(
             id: $project->id,
             name: $project->name,
@@ -57,7 +61,10 @@ class ProjectDto
                         'vacancyName' => $invite->vacancy->name ?? null,
                     ];
                 })->toArray()
-                : null
+                : null,
+            canJoin: !$userId || !UserProject::where('project_id', $project->id)
+                ->where('user_id', $userId)
+                ->exists()
         );
     }
 
@@ -75,6 +82,7 @@ class ProjectDto
             'task' => $this->task->toArray(),
             'vacancies' => $this->vacancies,
             'invites' => $this->invites,
+            'canJoin' => $this->canJoin,
         ];
     }
 
@@ -86,6 +94,7 @@ class ProjectDto
             'annotation' => $this->annotation,
             'mentor' => $this->mentor,
             'status' => $this->status,
+            'canJoin' => $this->canJoin,
         ];
     }
 }

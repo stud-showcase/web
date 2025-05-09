@@ -2,7 +2,9 @@
 
 namespace App\Dto;
 
+use App\Models\UserProject;
 use App\Models\Vacancy;
+use Illuminate\Support\Facades\Auth;
 
 class VacancyDto
 {
@@ -12,10 +14,12 @@ class VacancyDto
         public ?string $description,
         public ?array $project,
         public ?array $task,
+        public bool $canJoin,
     ) {}
 
     public static function fromModel(Vacancy $vacancy): self
     {
+        $userId = Auth::id();
         return new self(
             id: $vacancy->id,
             name: $vacancy->name,
@@ -31,19 +35,23 @@ class VacancyDto
                     'id' => $tag->id,
                     'name' => $tag->name,
                 ])->toArray(),
-            ] : null
+            ] : null,
+            canJoin: !$userId || !UserProject::where('project_id', $vacancy->project_id)
+                ->where('user_id', $userId)
+                ->exists()
         );
     }
 
     public function toArray(): array
     {
-        return array_filter([
+        return [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
             'project' => $this->project,
             'task' => $this->task,
-        ], fn($value) => $value !== null);
+            'canJoin' => $this->canJoin,
+        ];
     }
 
     public function toArrayForAdmin(): array
@@ -53,6 +61,7 @@ class VacancyDto
             'name' => $this->name,
             'description' => $this->description,
             'project' => $this->project,
+            'canJoin' => $this->canJoin,
         ];
     }
 }
