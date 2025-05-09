@@ -11,12 +11,7 @@ class CreateProjectRequest extends FormRequest
     public function authorize(): bool
     {
         $task = Task::findOrFail($this->input('taskId'));
-
-        if (!$task->canTake(Auth::user())) {
-            return false;
-        }
-
-        return true;
+        return $task->canTake(Auth::user());
     }
 
     public function rules(): array

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Project;
 use App\Models\ProjectFile;
+use App\Models\ProjectInvite;
 use App\Models\ProjectStatus;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -149,7 +150,7 @@ class ProjectRepository
 
                 $project = Project::create([
                     'task_id' => $taskId,
-                    'status_id' => ProjectStatus::STATUS_COMPLETED,
+                    'status_id' => ProjectStatus::STATUS_WAITING,
                     'name' => $name,
                     'mentor_id' => $isPrivileged ? $user->id : null,
                 ]);
@@ -175,6 +176,11 @@ class ProjectRepository
                 $project = Project::findOrFail($projectId);
 
                 $project->update($data);
+
+                if (isset($data['isClose']) && $data['isClose'] == true) {
+                    $deleted = ProjectInvite::where('project_id', $projectId)->delete();
+                    Log::info("Удалено {$deleted} приглашений для проекта [$projectId] при закрытии.");
+                }
 
                 return $project->fresh();
             });

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AcceptInviteRequest;
 use App\Http\Requests\CreateProjectRequest;
-use App\Http\Requests\InviteRequestRequest;
+use App\Http\Requests\CreateInviteRequest;
+use App\Http\Requests\DeleteProjectMemberRequest;
+use App\Http\Requests\UpdateProjectMemberRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Requests\UploadProjectFileRequest;
 use App\Models\Tag;
@@ -74,10 +76,12 @@ class ProjectController extends Controller
 
     public function store(CreateProjectRequest $request)
     {
+        $validated = $request->validated();
+
         try {
             $project = $this->projectService->createProject(
-                $request->input('taskId'),
-                $request->input('projectName'),
+                $validated['taskId'],
+                $validated['projectName'],
                 Auth::user()
             );
 
@@ -102,30 +106,30 @@ class ProjectController extends Controller
     }
 
 
-    public function inviteRequest(InviteRequestRequest $request)
+    public function createInvite(CreateInviteRequest $request, int|string $id)
     {
         $validated = $request->validated();
 
         try {
             $this->projectService->createInvite(
                 Auth::id(),
-                $validated['project_id'],
-                $validated['vacancy_id'] ?? null
+                $id,
+                $validated['vacancyId'] ?? null
             );
 
-            return to_route('projects.show', $validated['project_id']);
+            return to_route('projects.show', $id);
         } catch (Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function acceptInvite(AcceptInviteRequest $request)
+    public function acceptInvite(AcceptInviteRequest $request, int|string $id)
     {
         $validated = $request->validated();
 
         try {
-            $projectId = $this->projectService->acceptInvite($validated['invite_id']);
-            return to_route('projects.show', $projectId);
+            $this->projectService->acceptInvite($validated['inviteId']);
+            return to_route('projects.show', $id);
         } catch (Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -141,6 +145,28 @@ class ProjectController extends Controller
 
             return to_route('projects.show', $id);
         } catch (Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateMember(UpdateProjectMemberRequest $request, int $projectId, string $memberId)
+    {
+        $validated = $request->validated();
+
+        try {
+            $this->projectService->updateMember($projectId, $memberId, $validated);
+            return to_route('projects.show', $projectId);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteMember(DeleteProjectMemberRequest $request, int $projectId, string $memberId)
+    {
+        try {
+            $this->projectService->deleteMember($projectId, $memberId);
+            return to_route('projects.show', $projectId);
+        } catch (\Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
