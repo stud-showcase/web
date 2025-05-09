@@ -21,6 +21,7 @@ export function ProjectsPageFilterPanel({ tags }: { tags: TaskTag[] }) {
     const clearedFilters = {
       ...defaultProjectsFilters,
       search: filters.search,
+      myProjects: window.location.pathname === "/myProjects" ? true : false,
     };
     setFilters(clearedFilters);
     sendProjectsFilters(clearedFilters);

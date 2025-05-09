@@ -9,13 +9,20 @@ import { SearchBar } from "@/shared/ui/SearchBar";
 import { useContext } from "react";
 import { sendProjectsFilters } from "../util/sendProjectsFilters";
 import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
+import { defaultProjectsFilters } from "../consts/defaultProjectsFilters";
+import { usePage } from "@inertiajs/react";
 
-function ProjectsCards({ projects }: { projects: ExtendedProject[] }) {
+function ProjectsCards({
+  projects,
+}: {
+  projects: ServerPaginatedData<ExtendedProject>;
+}) {
   return (
-    <div className="flex flex-col mt-6 gap-6">
-      {projects.map((project) => (
+    <div className="flex flex-col gap-6">
+      {projects.data.map((project) => (
         <ProjectCard project={project} task={project.task} key={project.id} />
       ))}
+      <DataPagination paginatedData={projects} className="mt-6" />
     </div>
   );
 }
@@ -30,10 +37,8 @@ function NoProjectsText() {
 
 export function ProjectsPageContent({
   projects,
-  userProjects,
 }: {
   projects: ServerPaginatedData<ExtendedProject>;
-  userProjects: ServerPaginatedData<ExtendedProject>;
 }) {
   const { user } = useAuth();
   const { filters, setFilters } = useContext(ProjectsFiltersContext);
@@ -46,30 +51,49 @@ export function ProjectsPageContent({
     setFilters({ ...filters, search: value });
   };
 
+  const handleTabChange = (value: string) => {
+    const clearedFilters = {
+      ...defaultProjectsFilters,
+      myProjects: value === "my" ? true : false,
+    };
+    setFilters(clearedFilters);
+    sendProjectsFilters(clearedFilters);
+  };
+
   if (user) {
-    <Tabs defaultValue="all" className="flex flex-col gap-6">
-      <div className="flex lg:flex-row flex-col gap-4">
-        <TabsList className="w-fit">
-          <TabsTrigger value="all">Все проекты</TabsTrigger>
-          <TabsTrigger value="my">Мои проекты</TabsTrigger>
-        </TabsList>
-        <SearchBar
-          value={filters.search ?? ""}
-          onSearch={handleSearch}
-          onChange={handleChange}
-        />
-      </div>
-      <TabsContent value="all">
-        <ProjectsCards projects={projects.data} />
-      </TabsContent>
-      <TabsContent value="my">
-        {userProjects.data.length === 0 ? (
-          <NoProjectsText />
-        ) : (
-          <ProjectsCards projects={userProjects.data} />
-        )}
-      </TabsContent>
-    </Tabs>;
+    return (
+      <Tabs
+        defaultValue={filters.myProjects ? "my" : "all"}
+        className="flex flex-col gap-6"
+        onValueChange={handleTabChange}
+      >
+        <div className="flex lg:flex-row flex-col gap-4">
+          <TabsList className="w-fit">
+            <TabsTrigger value="all">Все проекты</TabsTrigger>
+            <TabsTrigger value="my">Мои проекты</TabsTrigger>
+          </TabsList>
+          <SearchBar
+            value={filters.search ?? ""}
+            onSearch={handleSearch}
+            onChange={handleChange}
+          />
+        </div>
+        <TabsContent value="all">
+          {projects.data.length === 0 ? (
+            <NoProjectsText />
+          ) : (
+            <ProjectsCards projects={projects} />
+          )}
+        </TabsContent>
+        <TabsContent value="my">
+          {projects.data.length === 0 ? (
+            <NoProjectsText />
+          ) : (
+            <ProjectsCards projects={projects} />
+          )}
+        </TabsContent>
+      </Tabs>
+    );
   }
 
   return (
@@ -82,10 +106,9 @@ export function ProjectsPageContent({
       {projects.data.length === 0 ? (
         <NoProjectsText />
       ) : (
-        <>
-          <ProjectsCards projects={projects.data} />
-          <DataPagination paginatedData={projects} className="mt-6" />
-        </>
+        <div className="mt-6">
+          <ProjectsCards projects={projects} />
+        </div>
       )}
     </div>
   );

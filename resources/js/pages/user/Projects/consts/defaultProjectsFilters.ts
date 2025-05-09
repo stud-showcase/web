@@ -5,5 +5,6 @@ export const defaultProjectsFilters: ProjectsFilters = {
   status: [],
   tags: [],
   isHiring: "",
+  myProjects: undefined,
   search: "",
 };

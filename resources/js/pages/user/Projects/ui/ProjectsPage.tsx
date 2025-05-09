@@ -1,5 +1,5 @@
 import { UserLayout } from "@/layouts/UserLayout";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import { ProjectsPageFilterPanel } from "./ProjectsPageFilterPanel";
 import { ProjectsPageContent } from "./ProjectsPageContent";
 import { ExtendedProject } from "../model/ExtendedProject";
@@ -19,17 +19,15 @@ type Props = {
 };
 
 export default function ProjectsPage(props: Props) {
-  const {
-    projects,
-    userProjects,
-    availableFilters,
-    filters: appliedFilters,
-  } = props;
+  const { projects, availableFilters, filters: appliedFilters } = props;
 
   const [filters, setFilters] = useState<ProjectsFilters>({
     ...defaultProjectsFilters,
     ...appliedFilters,
+    myProjects: window.location.pathname === "/myProjects" ? true : false,
   });
+
+  console.log(filters);
 
   return (
     <>
@@ -43,12 +41,7 @@ export default function ProjectsPage(props: Props) {
             filtersSlot={
               <ProjectsPageFilterPanel tags={availableFilters.tags} />
             }
-            contentSlot={
-              <ProjectsPageContent
-                projects={projects}
-                userProjects={userProjects}
-              />
-            }
+            contentSlot={<ProjectsPageContent projects={projects} />}
           />
         </ProjectsFiltersContext.Provider>
       </UserLayout>

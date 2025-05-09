@@ -17,7 +17,10 @@ export function NavLinks({ mobile }: Props) {
       <NavLink
         href="/projects"
         withUnderline={!mobile}
-        isActive={window.location.pathname.startsWith("/projects")}
+        isActive={
+          window.location.pathname.startsWith("/projects") ||
+          window.location.pathname.startsWith("/myProjects")
+        }
       >
         Проекты
       </NavLink>
