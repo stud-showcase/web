@@ -1,4 +1,4 @@
 export type VacanciesFilters = {
   tags: string[];
-  search: string;
+  search: string | undefined;
 }
