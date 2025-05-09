@@ -1,10 +1,6 @@
 import { User } from "@/entities/User";
 import { ProjectStatus } from "./ProjectStatus";
-
-type ProjectMember = User & {
-  position: string;
-  isCreator: boolean;
-}
+import { ProjectMember } from "./ProjectMember";
 
 export type Project = {
   id: number;

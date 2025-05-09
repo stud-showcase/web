@@ -49,9 +49,9 @@ export const columns: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => {
       console.log(row);
-      const { lastName, firstName, middleName } = row.original;
+      const { firstName, secondName, lastName } = row.original;
 
-      const fullName = `${lastName} ${firstName} ${middleName || ""}`.trim();
+      const fullName = `${secondName} ${firstName} ${lastName ?? ""}`.trim();
 
       return <div>{fullName}</div>;
     },

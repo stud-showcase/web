@@ -36,7 +36,7 @@ function Badges({ project, task }: { project: Project; task: Task }) {
 }
 
 function Tags({ task }: { task: Task }) {
-  return task.tags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
+  return task.tags?.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
 
 export function Content({ project }: { project: Project }) {

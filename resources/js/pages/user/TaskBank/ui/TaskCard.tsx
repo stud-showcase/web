@@ -32,7 +32,7 @@ function Content({ task }: { task: Task }) {
 }
 
 function Tags({ task }: { task: Task }) {
-  return task.tags.map((tag) => <TaskTagBadge tag={tag} />);
+  return task.tags?.map((tag) => <TaskTagBadge tag={tag} />);
 }
 
 function Footer({ task }: { task: Task }) {

@@ -8,14 +8,13 @@ import { Task, TaskTagBadge } from "@/entities/Task";
 import { Text } from "@/shared/ui/Text";
 
 function Tags({ task }: { task: Task }) {
-  return task.tags.map((tag) => <TaskTagBadge tag={tag} />);
+  return task.tags?.map((tag) => <TaskTagBadge tag={tag} />);
 }
 
 function Content({ vacancy }: { vacancy: ExtendedVacancy }) {
   return (
-    // TODO: убрать
     <Text variant="small" className="line-clamp-1">
-      {vacancy.description || "Тестовое описание вакансии. Убрать когда будет обязательным полем"}
+      {vacancy.description}
     </Text>
   );
 }

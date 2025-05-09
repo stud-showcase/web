@@ -87,7 +87,7 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Дедлайн" />
     ),
     cell: ({ row }) => {
-      const deadline = row.getValue("deadline") as Date;
+      const deadline = row.getValue("deadline") as string;
       return <TaskDeadlineBadge deadline={deadline} />;
     },
   },

@@ -1,5 +1,6 @@
 export type { Project } from "./model/Project";
 export type { ProjectStatus } from "./model/ProjectStatus";
+export type { ProjectMember } from "./model/ProjectMember";
 
 export { STATUSES } from "./consts/statuses";
 
