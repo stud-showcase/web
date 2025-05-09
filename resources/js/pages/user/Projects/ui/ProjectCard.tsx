@@ -51,7 +51,8 @@ function Footer({ project }: { project: Project }) {
 
   return (
     <>
-      {project.isHiring && user && (
+      {/* TODO: заменить на canJoin */}
+      {false && (
         <Button variant="outline" size="sm">
           <UserPlus />
           Вступить

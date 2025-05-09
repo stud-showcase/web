@@ -62,8 +62,8 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                       {project.task.title}
                     </Link>
                   </BreadcrumbLink>
-                  <BreadcrumbSeparator />
                 </BreadcrumbItem>
+                <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbPage>{project.name}</BreadcrumbPage>
                 </BreadcrumbItem>
@@ -80,11 +80,12 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                     className="flex-1 sm:flex-none"
                     size="sm"
                   >
-                     <Link href={`/tasks/${project.task.id}`}>
+                    <Link href={`/tasks/${project.task.id}`}>
                       <LinkIcon /> К задаче
                     </Link>
                   </Button>
-                  {user && project.isHiring && (
+                  {/* TODO: поменять на canJoin */}
+                  {false && (
                     <Button className="flex-1 sm:flex-none" size="sm">
                       <UserPlus />
                       Вступить
@@ -98,7 +99,9 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                 <ProjectHiringBadge isHiring={project.isHiring} />
                 {project.task.tags &&
                   project.task.tags.length > 0 &&
-                  project.task.tags.map((tag) => <TaskTagBadge tag={tag} />)}
+                  project.task.tags.map((tag) => (
+                    <TaskTagBadge tag={tag} key={tag.id} />
+                  ))}
               </div>
             </div>
           </header>

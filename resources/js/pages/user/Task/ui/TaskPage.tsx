@@ -83,7 +83,7 @@ export default function TaskPage({ task }: { task: ExtendedTask }) {
                 <div className="mt-4 flex flex-wrap gap-3">
                   <TaskComplexityBadge complexity={task.complexity} />
                   {task.tags.map((tag) => (
-                    <TaskTagBadge tag={tag} />
+                    <TaskTagBadge tag={tag} key={tag.id} />
                   ))}
                 </div>
               )}
