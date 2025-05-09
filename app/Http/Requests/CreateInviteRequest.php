@@ -5,16 +5,16 @@ namespace App\Http\Requests;
 use App\Models\Project;
 use Illuminate\Foundation\Http\FormRequest;
 
-class InviteRequestRequest extends FormRequest
+class CreateInviteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize()
     {
-        $project = Project::withCount('users')->with('task')->findOrFail($this->input('projectId'));
+        $project = Project::withCount('users')->with('task')->findOrFail($this->route('id'));
 
-        return !($project->users->count() >= $project->task->max_members && $project->is_close);
+        return !($project->users_count >= $project->task->max_members && $project->is_close);
     }
 
     /**
@@ -25,7 +25,6 @@ class InviteRequestRequest extends FormRequest
     public function rules()
     {
         return [
-            'projectId' => 'required|exists:projects,id',
             'vacancyId' => 'nullable|exists:vacancies,id',
         ];
     }

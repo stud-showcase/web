@@ -7,7 +7,7 @@ use App\Dto\ProjectDto;
 use App\Models\Project;
 use App\Models\User;
 use App\Repositories\ProjectInviteRepository;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\UserProjectRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Throwable;
@@ -16,7 +16,8 @@ class ProjectService
 {
     public function __construct(
         private ProjectRepository $projectRepository,
-        private ProjectInviteRepository $inviteRepository
+        private ProjectInviteRepository $inviteRepository,
+        private UserProjectRepository $userProjectRepository,
     ) {}
 
     public function getFilteredProjects(array $filters): array
@@ -73,26 +74,11 @@ class ProjectService
         }
     }
 
-    public function acceptInvite(int $inviteId): int
+    public function acceptInvite(int $inviteId): void
     {
         try {
             $invite = $this->inviteRepository->findWithRelations($inviteId);
-            $inviteProjectId = $invite->project_id;
-
-            DB::transaction(function () use ($invite) {
-                DB::table('user_project')->insert([
-                    'user_id' => $invite->user_id,
-                    'project_id' => $invite->project_id,
-                    'position' => $invite->vacancy?->name,
-                    'is_creator' => null,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-
-                $invite->delete();
-            });
-
-            return $inviteProjectId;
+            $this->inviteRepository->acceptInvite($invite);
         } catch (\Throwable $e) {
             Log::error("Ошибка принятия запроса [$inviteId] на вступление в проект: " . $e->getMessage(), ['exception' => $e]);
             throw $e;
@@ -151,5 +137,25 @@ class ProjectService
             'total' => $paginator->total(),
             'links' => $paginator->links()->elements[0] ?? [],
         ];
+    }
+
+    public function updateMember(int $projectId, string $memberId, array $data): void
+    {
+        try {
+            $this->userProjectRepository->update($projectId, $memberId, $data);
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления участника [$memberId] проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function deleteMember(int $projectId, string $memberId): void
+    {
+        try {
+            $this->userProjectRepository->delete($projectId, $memberId);
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления участника [$memberId] из проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
     }
 }

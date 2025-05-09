@@ -10,20 +10,31 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
+Route::get('/', function () {
+    return Inertia::render('user/Main');
+});
+
 Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/{provider}/redirect', [SocialController::class, 'redirectToProvider'])->name('login');
     Route::get('/{provider}/callback', [SocialController::class, 'handleProviderCallback']);
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/myProjects', [ProjectController::class, 'getUserProjects']);
     Route::get('/logout', [SocialController::class, 'logout'])->name('logout');
 });
 
-Route::get('/', function () {
-    return Inertia::render('user/Main');
-});
 
-Route::get('/myProjects', [ProjectController::class, 'getUserProjects']);
+Route::get('/download/{path}', [FileController::class, 'download'])->name('files.download')->where('path', '.*');
+
+Route::get('/vacancies', [VacancyController::class, 'index']);
+
+Route::post('/taskRequest', [TaskController::class, 'createRequest']);
+
+Route::prefix('tasks')->group(function () {
+    Route::get('/', [TaskController::class, 'index']);
+    Route::get('/{id}', [TaskController::class, 'show']);
+});
 
 Route::prefix('projects')->group(function () {
     Route::get('/', [ProjectController::class, 'index']);
@@ -34,25 +45,17 @@ Route::prefix('projects')->group(function () {
         Route::put('/{id}', [ProjectController::class, 'update'])->name('projects.update');
         Route::post('/{id}/files', [ProjectController::class, 'uploadFiles'])->name('projects.files.upload');
 
-        Route::post('/invite-request', [ProjectController::class, 'createInvite'])->name('projects.invite.request');
-        Route::post('/accept-invite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
+        Route::post('{id}/create-invite', [ProjectController::class, 'createInvite'])->name('projects.invite.create');
+        Route::post('{id}/accept-invite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
 
         Route::post('/{id}/vacancy', [VacancyController::class, 'store'])->name('projects.vacancy.create');
         Route::put('/{projectId}/vacancy/{vacancyId}', [VacancyController::class, 'update'])->name('projects.vacancy.update');
         Route::delete('/{projectId}/vacancy/{vacancyId}', [VacancyController::class, 'delete'])->name('projects.vacancy.delete');
+
+        Route::put('/{projectId}/member/{memberId}', [ProjectController::class, 'updateMember'])->name('projects.member.update');
+        Route::delete('/{projectId}/member/{memberId}', [ProjectController::class, 'deleteMember'])->name('projects.member.delete');
     });
 });
-
-Route::prefix('tasks')->group(function () {
-    Route::get('/', [TaskController::class, 'index']);
-    Route::get('/{id}', [TaskController::class, 'show']);
-});
-
-Route::post('/taskRequest', [TaskController::class, 'createRequest']);
-
-Route::get('/download/{path}', [FileController::class, 'download'])->name('files.download')->where('path', '.*');
-
-Route::get('/vacancies', [VacancyController::class, 'index']);
 
 Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(function () {
     Route::get('/dashboard', function () {

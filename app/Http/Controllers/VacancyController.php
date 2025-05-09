@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateVacancyRequest;
+use App\Http\Requests\DeleteVacancyRequest;
 use App\Http\Requests\UpdateVacancyRequest;
 use App\Models\Project;
 use App\Models\Tag;
@@ -46,49 +47,24 @@ class VacancyController extends Controller
         }
     }
 
-    public function update(UpdateVacancyRequest $request)
+    public function update(UpdateVacancyRequest $request, int|string $projectId, int|string $vacancyId)
     {
         try {
             $this->vacancyService->updateVacancy(
-                $request->route('vacancyId'),
+                $vacancyId,
                 $request->validated()
             );
 
-            return to_route('projects.show', $request->route('projectId'));
+            return to_route('projects.show', $projectId);
         } catch (Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function delete(Request $request)
+    public function delete(DeleteVacancyRequest $request, int|string $projectId, int|string $vacancyId)
     {
         try {
-            $projectId = $request->route('projectId');
-            $vacancyId = $request->route('vacancyId');
-
-            $project = Project::find($projectId);
-            $vacancy = Vacancy::find($vacancyId);
-
-            if (!$project || !$vacancy) {
-                throw new \Exception('Проект или вакансия не найдены');
-            }
-
-            if ($vacancy->project_id != $project->id) {
-                throw new \Exception('Вакансия не относится к указанному проекту');
-            }
-
-            $isMentor = $project->mentor_id == Auth::id();
-            $isTeamCreator = $project->users()
-                ->where('user_id', Auth::id())
-                ->wherePivot('is_creator', true)
-                ->exists();
-
-            if (!$isMentor && !$isTeamCreator) {
-                throw new \Exception('У вас нет прав для удаления вакансии');
-            }
-
-            $this->vacancyService->deleteVacancy($request->route('vacancyId'));
-
+            $this->vacancyService->deleteVacancy($vacancyId);
             return to_route('projects.show', $projectId);
         } catch (Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
