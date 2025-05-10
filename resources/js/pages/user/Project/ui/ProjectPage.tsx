@@ -1,7 +1,15 @@
 import { Head, Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Avatar, AvatarFallback } from "@/shared/ui/Avatar";
-import { Check, FileIcon, Link as LinkIcon, UserPlus, X } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  FileIcon,
+  Link as LinkIcon,
+  UserPlus,
+  X,
+} from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,6 +28,9 @@ import { Container } from "@/shared/ui/Container";
 import { ExtendedProject } from "../model/ExtendedProject";
 import { JoinProjectModal } from "@/features/JoinProjectModal";
 import { mockVacancies } from "@/shared/mocks";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
+import { Badge } from "@/shared/ui/Badge";
+import { useState } from "react";
 
 function getAvatartName(firstName: string, lastName: string | null) {
   if (lastName) {
@@ -87,7 +98,10 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                     </Link>
                   </Button>
                   {user && project.canJoin && (
-                    <JoinProjectModal projectId={project.id} vacancies={mockVacancies}>
+                    <JoinProjectModal
+                      projectId={project.id}
+                      vacancies={mockVacancies}
+                    >
                       <Button className="flex-1 sm:flex-none" size="sm">
                         <UserPlus />
                         Вступить
@@ -143,52 +157,58 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
 
           <section className="mt-10">
             <Heading level={3}>Проектная команда</Heading>
-            <div className="mt-4 flex flex-wrap gap-4">
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {project.mentor && (
-                <div className="flex items-center gap-2 border p-4 rounded-lg">
-                  <Avatar>
-                    <AvatarFallback className="bg-muted">
-                      {getAvatartName(
-                        project.mentor.firstName,
-                        project.mentor.lastName
-                      )}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col">
-                    <Text>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Avatar>
+                        <AvatarFallback className="bg-muted">
+                          {getAvatartName(
+                            project.mentor.firstName,
+                            project.mentor.lastName
+                          )}
+                        </AvatarFallback>
+                      </Avatar>
                       {getFullName(
                         project.mentor.firstName,
                         project.mentor.secondName,
                         project.mentor.lastName
                       )}
-                    </Text>
-                    <Text variant="muted">Наставник проекта</Text>
-                  </div>
-                </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge variant="secondary">Наставник проекта</Badge>
+                  </CardContent>
+                </Card>
               )}
               {project.members.map((member) => (
-                <div
-                  key={member.id}
-                  className="flex items-center gap-2 border p-4 rounded-lg"
-                >
-                  <Avatar>
-                    <AvatarFallback className="bg-muted">
-                      {getAvatartName(member.firstName, member.lastName)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col">
-                    <Text>
+                <Card key={member.id}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Avatar>
+                        <AvatarFallback className="bg-muted">
+                          {getAvatartName(member.firstName, member.lastName)}
+                        </AvatarFallback>
+                      </Avatar>
                       {getFullName(
                         member.firstName,
                         member.secondName,
                         member.lastName
                       )}
-                    </Text>
-                    {member.position && (
-                      <Text variant="muted">{member.position}</Text>
-                    )}
-                  </div>
-                </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-row gap-2">
+                      {member.isCreator && (
+                        <Badge variant="secondary">Руководитель проекта</Badge>
+                      )}
+                      {member.position && (
+                        <Badge variant="outline">{member.position}</Badge>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </section>
@@ -196,24 +216,50 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
           {/* TODO: подать заявку должно быть только если user && canJoin */}
           {project.vacancies && project.vacancies.length > 0 && (
             <section className="mt-10">
-              <div className="flex gap-1 items-center">
-                <Heading level={3}>Вакансии</Heading>
-              </div>
-              <div className="mt-4 space-y-3">
-                {project.vacancies.map((vacancy) => (
-                  <div
-                    key={vacancy.id}
-                    className="flex items-center justify-between  border p-4 rounded-lg"
-                  >
-                    <div>
-                      <Text className="font-medium">{vacancy.name}</Text>
-                      <Text variant="muted">{vacancy.description}</Text>
-                    </div>
-                    <Button size="sm" variant="secondary">
-                      Подать заявку
-                    </Button>
-                  </div>
-                ))}
+              <Heading level={3}>Вакансии</Heading>
+              <div className="mt-4 space-y-4">
+                {/* TODO: убрать мок вакансии */}
+                {mockVacancies.map((vacancy) => {
+                  const [isExpanded, setIsExpanded] = useState(false);
+
+                  return (
+                    <Card key={vacancy.id}>
+                      <CardHeader>
+                        <CardTitle title={vacancy.name}>
+                          {vacancy.name}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div>
+                          <Text
+                            variant="muted"
+                            className={isExpanded ? "" : "line-clamp-2"}
+                          >
+                            {vacancy.description}
+                          </Text>
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsExpanded(!isExpanded)}
+                          className="mt-2"
+                        >
+                          {isExpanded ? (
+                            <>
+                              <ChevronUp className="h-4 w-4" />
+                              Скрыть
+                            </>
+                          ) : (
+                            <>
+                              <ChevronDown className="h-4 w-4" />
+                              Показать полностью
+                            </>
+                          )}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             </section>
           )}

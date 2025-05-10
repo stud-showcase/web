@@ -129,14 +129,14 @@ export default function TaskPage({ task }: { task: ExtendedTask }) {
             <section className="mt-10">
               <Heading level={3}>Информация о задаче</Heading>
               <div className="mt-4 flex flex-wrap gap-6">
-                <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px]">
+                <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px] shadow-sm">
                   <CalendarIcon className="h-6 w-6" />
                   <div>
                     <Text variant="muted">Дедлайн</Text>
                     <Text>{task.deadline}</Text>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px]">
+                <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px] shadow-sm">
                   <UsersIcon className="h-6 w-6" />
                   <div>
                     <Text variant="muted">Команда</Text>
@@ -146,7 +146,7 @@ export default function TaskPage({ task }: { task: ExtendedTask }) {
                     </Text>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px]">
+                <div className="flex items-center gap-4 bg-white border p-4 rounded-lg flex-1 min-w-[200px] shadow-sm">
                   <Briefcase className="h-6 w-6" />
                   <div>
                     <Text variant="muted">Заказчик</Text>
