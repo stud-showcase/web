@@ -22,7 +22,7 @@ export function CreateProjectModal({
   task,
   children,
 }: PropsWithChildren<{ task: Task }>) {
-  const { data, setData, post, errors } = useForm({
+  const { data, setData, post, errors, clearErrors } = useForm({
     taskId: task.id,
     projectName: "",
   });
@@ -33,7 +33,7 @@ export function CreateProjectModal({
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={(open) => !open && clearErrors()}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
