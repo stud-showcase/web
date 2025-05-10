@@ -11,6 +11,7 @@ import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
 import { Text } from "@/shared/ui/Text";
 import { ExtendedProject } from "../model/ExtendedProject";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { JoinProjectModal } from "@/features/JoinProjectModal";
 
 function Title({ project }: { project: ExtendedProject }) {
   return (
@@ -53,10 +54,12 @@ function Footer({ project }: { project: ExtendedProject }) {
   return (
     <>
       {user && project.canJoin && (
-        <Button variant="outline" size="sm">
-          <UserPlus />
-          Вступить
-        </Button>
+        <JoinProjectModal>
+          <Button variant="outline" size="sm">
+            <UserPlus />
+            Вступить
+          </Button>
+        </JoinProjectModal>
       )}
       <Button asChild size="sm">
         <Link href={`/projects/${project.id}`}>

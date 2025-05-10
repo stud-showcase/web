@@ -18,6 +18,7 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { UserLayout } from "@/layouts/UserLayout";
 import { Container } from "@/shared/ui/Container";
 import { ExtendedProject } from "../model/ExtendedProject";
+import { JoinProjectModal } from "@/features/JoinProjectModal";
 
 function getAvatartName(firstName: string, lastName: string | null) {
   if (lastName) {
@@ -85,10 +86,12 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                     </Link>
                   </Button>
                   {user && project.canJoin && (
-                    <Button className="flex-1 sm:flex-none" size="sm">
-                      <UserPlus />
-                      Вступить
-                    </Button>
+                    <JoinProjectModal>
+                      <Button className="flex-1 sm:flex-none" size="sm">
+                        <UserPlus />
+                        Вступить
+                      </Button>
+                    </JoinProjectModal>
                   )}
                 </div>
               </div>
@@ -189,6 +192,7 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
             </div>
           </section>
 
+          {/* TODO: подать заявку должно быть только если user && canJoin */}
           {project.vacancies && project.vacancies.length > 0 && (
             <section className="mt-10">
               <div className="flex gap-1 items-center">
