@@ -5,13 +5,13 @@ import { EntityCard } from "@/shared/ui/EntityCard";
 import {
   ProjectStatusBadge,
   ProjectHiringBadge,
-  Project,
 } from "@/entities/Project";
 import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
 import { Text } from "@/shared/ui/Text";
 import { ExtendedProject } from "../model/ExtendedProject";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { JoinProjectModal } from "@/features/JoinProjectModal";
+import { mockVacancies } from "@/shared/mocks";
 
 function Title({ project }: { project: ExtendedProject }) {
   return (
@@ -54,7 +54,7 @@ function Footer({ project }: { project: ExtendedProject }) {
   return (
     <>
       {user && project.canJoin && (
-        <JoinProjectModal>
+        <JoinProjectModal projectId={project.id} vacancies={mockVacancies}>
           <Button variant="outline" size="sm">
             <UserPlus />
             Вступить

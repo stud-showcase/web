@@ -7,8 +7,6 @@ import { Text } from "@/shared/ui/Text";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useForm } from "@inertiajs/react";
 
-import "./send-application-form.css";
-
 type ApplicationForm = {
   title: string;
   projectName: string | undefined;

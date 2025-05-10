@@ -33,3 +33,35 @@ export const vacancy: Vacancy = {
   title: "Frontend разработчик",
   description: "Разработка UI для веб-приложения.",
 };
+
+export const mockVacancies: Vacancy[] = [
+  {
+    id: 1,
+    name: "Frontend Developer",
+    description:
+      "Разработка пользовательских интерфейсов с использованием React и TypeScript.",
+  },
+  {
+    id: 2,
+    name: "Backend Developer",
+    description:
+      "Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. Создание и поддержка серверной логики на Node.js и Express. ",
+  },
+  {
+    id: 3,
+    name: "UI/UX Designer",
+    description:
+      "Автоматизация CI/CD процессов и управление облачной инфраструктурой.",
+  },
+  {
+    id: 4,
+    name: "DevOps Engineer",
+    description:
+      "Автоматизация CI/CD процессов и управление облачной инфраструктурой.",
+  },
+  {
+    id: 5,
+    name: "Project Manager",
+    description: "Координация проектов и управление командами разработки.",
+  },
+];

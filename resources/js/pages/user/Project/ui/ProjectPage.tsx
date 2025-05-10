@@ -19,6 +19,7 @@ import { UserLayout } from "@/layouts/UserLayout";
 import { Container } from "@/shared/ui/Container";
 import { ExtendedProject } from "../model/ExtendedProject";
 import { JoinProjectModal } from "@/features/JoinProjectModal";
+import { mockVacancies } from "@/shared/mocks";
 
 function getAvatartName(firstName: string, lastName: string | null) {
   if (lastName) {
@@ -86,7 +87,7 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                     </Link>
                   </Button>
                   {user && project.canJoin && (
-                    <JoinProjectModal>
+                    <JoinProjectModal projectId={project.id} vacancies={mockVacancies}>
                       <Button className="flex-1 sm:flex-none" size="sm">
                         <UserPlus />
                         Вступить
