@@ -67,10 +67,10 @@ class TaskController extends Controller
             'title' => $validated['title'],
             'description' => $validated['description'],
             'customer' => $validated['customer'],
-            'customer_email' => $validated['customer_email'],
-            'customer_phone' => $validated['customer_phone'],
-            'with_project' => $validated['with_project'],
-            'project_name' => $validated['project_name'],
+            'customer_email' => $validated['customerEmail'],
+            'customer_phone' => $validated['customerPhone'],
+            'with_project' => $validated['withProject'],
+            'project_name' => $validated['projectName'],
             'user_id' => $userId,
         ]);
 

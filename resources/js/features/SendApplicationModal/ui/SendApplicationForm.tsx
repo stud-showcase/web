@@ -1,20 +1,43 @@
-import { useState } from "react";
-import { Button } from "@/shared/ui/Button";
+import React, { useState } from "react";
 import { Input } from "@/shared/ui/Input";
 import { Textarea } from "@/shared/ui/Textarea";
 import { Label } from "@/shared/ui/Label";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/RadioGroup";
 import { Text } from "@/shared/ui/Text";
-import { Upload } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { useForm } from "@inertiajs/react";
 
 import "./send-application-form.css";
+
+type ApplicationForm = {
+  title: string;
+  projectName: string | undefined;
+  description: string;
+  customer: string;
+  customerEmail: string;
+  customerPhone: string | undefined;
+  withProject: string | undefined;
+};
 
 export function SendApplicationForm() {
   const { user } = useAuth();
 
-  const [requestType, setRequestType] = useState<"task" | "project">("task");
+  const { data, setData, post, processing, transform, errors } =
+    useForm<ApplicationForm>({
+      title: "",
+      projectName: undefined,
+      description: "",
+      customer: "",
+      customerEmail: "",
+      customerPhone: undefined,
+      withProject: undefined,
+    });
+
+  transform((data) => ({
+    ...data,
+    withProject: data.withProject === "project",
+  }));
+
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -42,45 +65,90 @@ export function SendApplicationForm() {
     setIsDragging(false);
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    post("/taskRequest");
+  };
+
   return (
     <div className="border rounded-lg py-4 px-6">
-      <form id="leave-request-form" className="space-y-6">
+      <form
+        id="leave-request-form"
+        className="space-y-6"
+        onSubmit={handleSubmit}
+      >
         <div className="space-y-2">
-          <Label htmlFor="title">Название проекта *</Label>
+          <Label htmlFor="title">Название задачи *</Label>
           <Input
             id="title"
-            placeholder="Введите название"
+            placeholder="Введите название задачи..."
             type="text"
+            value={data.title}
+            onChange={(e) => setData("title", e.target.value)}
             required
           />
         </div>
+        {data.withProject === "project" && (
+          <div className="space-y-2">
+            <Label htmlFor="projectName">Название проекта *</Label>
+            <Input
+              id="projectName"
+              placeholder="Введите название проекта..."
+              type="text"
+              value={data.projectName}
+              onChange={(e) => setData("projectName", e.target.value)}
+              required
+            />
+          </div>
+        )}
 
         <div className="space-y-2">
           <Label htmlFor="description">Описание проекта *</Label>
-          <Textarea id="description" placeholder="Опишите проект" required />
+          <Textarea
+            id="description"
+            placeholder="Опишите проект..."
+            value={data.description}
+            onChange={(e) => setData("description", e.target.value)}
+            required
+          />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="customer">Заказчик *</Label>
           <Input
             id="customer"
-            placeholder="Введите имя или организацию"
+            placeholder="Введите имя или организацию..."
             type="text"
+            value={data.customer}
+            onChange={(e) => setData("customer", e.target.value)}
             required
           />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="email">Email *</Label>
-          <Input id="email" type="email" placeholder="Введите email" required />
+          <Input
+            id="email"
+            type="email"
+            placeholder="Введите email..."
+            value={data.customerEmail}
+            onChange={(e) => setData("customerEmail", e.target.value)}
+            required
+          />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="phone">Телефон</Label>
-          <Input id="phone" type="tel" placeholder="Введите телефон" />
+          <Input
+            id="phone"
+            type="tel"
+            placeholder="Введите телефон..."
+            value={data.customerPhone}
+            onChange={(e) => setData("customerPhone", e.target.value)}
+          />
         </div>
 
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label htmlFor="files">Прикрепить файлы</Label>
           <div
             className={cn(
@@ -114,17 +182,15 @@ export function SendApplicationForm() {
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {user && (
           <div className="space-y-2">
             <Label>Тип заявки *</Label>
             <RadioGroup
-              value={requestType}
-              onValueChange={(value: "task" | "project") =>
-                setRequestType(value)
-              }
               className="flex space-x-4"
+              value={data.withProject}
+              onValueChange={(value) => setData("withProject", value)}
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="task" id="task" />
@@ -140,9 +206,9 @@ export function SendApplicationForm() {
               </div>
             </RadioGroup>
             <Text variant="muted">
-              {requestType === "task"
-                ? "Предложите задачу для студентов в банк задач"
-                : "Создайте проект с собственной темой для реализации"}
+              {data.withProject === "project"
+                ? "Создайте проект с собственной темой для реализации"
+                : "Предложите задачу для студентов в банк задач"}
             </Text>
           </div>
         )}

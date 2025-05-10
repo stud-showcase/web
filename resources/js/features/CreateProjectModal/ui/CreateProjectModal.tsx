@@ -17,6 +17,7 @@ import { Input } from "@/shared/ui/Input";
 import { Button } from "@/shared/ui/Button";
 import { useForm } from "@inertiajs/react";
 import { Task } from "@/entities/Task";
+import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 
 export function CreateProjectModal({
   task,
@@ -54,7 +55,7 @@ export function CreateProjectModal({
               onChange={(e) => setData("projectName", e.target.value)}
             />
             {errors.projectName && (
-              <div className="mt-2 text-destructive text-xs">{errors.projectName}</div>
+              <ValidationErrorText text={errors.projectName} />
             )}
           </div>
         </form>
