@@ -10,6 +10,7 @@ import {
 import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
 import { Text } from "@/shared/ui/Text";
 import { ExtendedProject } from "../model/ExtendedProject";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 function Title({ project }: { project: ExtendedProject }) {
   return (
@@ -47,9 +48,11 @@ export function Content({ project }: { project: ExtendedProject }) {
 }
 
 function Footer({ project }: { project: ExtendedProject }) {
+  const { user } = useAuth();
+
   return (
     <>
-      {project.canJoin && (
+      {user && project.canJoin && (
         <Button variant="outline" size="sm">
           <UserPlus />
           Вступить
@@ -65,11 +68,7 @@ function Footer({ project }: { project: ExtendedProject }) {
   );
 }
 
-export function ProjectCard({
-  project,
-}: {
-  project: ExtendedProject;
-}) {
+export function ProjectCard({ project }: { project: ExtendedProject }) {
   return (
     <EntityCard
       title={<Title project={project} />}

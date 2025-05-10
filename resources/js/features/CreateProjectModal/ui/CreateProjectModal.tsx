@@ -53,9 +53,8 @@ export function CreateProjectModal({
               value={data.projectName}
               onChange={(e) => setData("projectName", e.target.value)}
             />
-            {/* TODO: убедиться, что сообщения с сервера отображаются */}
             {errors.projectName && (
-              <div className="text-destructive">{errors.projectName}</div>
+              <div className="mt-2 text-destructive text-xs">{errors.projectName}</div>
             )}
           </div>
         </form>
