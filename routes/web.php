@@ -39,6 +39,9 @@ Route::prefix('tasks')->group(function () {
 Route::prefix('projects')->group(function () {
     Route::get('/', [ProjectController::class, 'index']);
     Route::get('/{id}', [ProjectController::class, 'show'])->name('projects.show');
+    Route::get('/{id}/control-panel', function () {
+        return Inertia::render('user/ProjectControlPanel');
+    });
 
     Route::middleware('auth')->group(function () {
         Route::post('/', [ProjectController::class, 'store'])->name('projects.store');

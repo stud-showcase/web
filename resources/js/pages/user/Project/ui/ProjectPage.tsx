@@ -7,6 +7,7 @@ import {
   ChevronUp,
   FileIcon,
   Link as LinkIcon,
+  Settings,
   UserPlus,
   X,
 } from "lucide-react";
@@ -95,6 +96,13 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                   >
                     <Link href={`/tasks/${project.task.id}`}>
                       <LinkIcon /> К задаче
+                    </Link>
+                  </Button>
+                  {/* TODO: добавить проверку на роль пользователя */}
+                  <Button variant={"secondary"} className="flex-1 sm:flex-none" asChild>
+                    <Link href={`/projects/${project.id}/control-panel`}>
+                      <Settings />
+                      Панель управления
                     </Link>
                   </Button>
                   {user && project.canJoin && (
