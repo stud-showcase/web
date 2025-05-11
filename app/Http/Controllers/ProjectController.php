@@ -74,6 +74,15 @@ class ProjectController extends Controller
         ]);
     }
 
+    // FIXME: сделал для теста
+    public function showControlPanel(int|string $id): \Inertia\Response
+    {
+        $project = $this->projectService->getFormattedProjectById($id);
+        return Inertia::render('user/ProjectControlPanel', [
+            'project' => $project,
+        ]);
+    }
+
     public function store(CreateProjectRequest $request)
     {
         $validated = $request->validated();

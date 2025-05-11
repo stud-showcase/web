@@ -71,14 +71,6 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link href={`/tasks/${project.task.id}`}>
-                      {project.task.title}
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
                   <BreadcrumbPage>{project.name}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
