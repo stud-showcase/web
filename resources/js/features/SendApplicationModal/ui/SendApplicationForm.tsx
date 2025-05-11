@@ -5,7 +5,7 @@ import { Label } from "@/shared/ui/Label";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/RadioGroup";
 import { Text } from "@/shared/ui/Text";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 
 type ApplicationForm = {
   title: string;
@@ -65,7 +65,9 @@ export function SendApplicationForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post("/taskRequest");
+    console.log(data);
+    router.post('/taskRequest', data);
+    // post("/taskRequest");
   };
 
   return (
@@ -101,10 +103,10 @@ export function SendApplicationForm() {
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="description">Описание проекта *</Label>
+          <Label htmlFor="description">Описание задачи *</Label>
           <Textarea
             id="description"
-            placeholder="Опишите проект..."
+            placeholder="Опишите задачи..."
             value={data.description}
             onChange={(e) => setData("description", e.target.value)}
             required

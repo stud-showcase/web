@@ -25,7 +25,6 @@ export function Header() {
           </nav>
         </div>
         <div className="lg:flex gap-4 items-center hidden">
-          <SendApplicationButton />
           {user ? <ProfileIcon /> : <SignInButton />}
         </div>
         <div className="flex lg:hidden">
@@ -35,3 +34,4 @@ export function Header() {
     </header>
   );
 }
+

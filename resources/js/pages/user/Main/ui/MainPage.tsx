@@ -28,9 +28,9 @@ export default function MainPage() {
               Платформа, обеспечивающая взаимодействие заказчиков, студентов и
               преподавателей в рамках образовательного процесса СевГУ.
             </Text>
-            <SendApplicationModal>
-              <Button size="lg">Оставить заявку на проект</Button>
-            </SendApplicationModal>
+            <Button size="lg" asChild>
+              <Link href="/application">Оставить заявку на проект</Link>
+            </Button>
           </section>
 
           <section className="px-6 py-16 w-full bg-muted/60">

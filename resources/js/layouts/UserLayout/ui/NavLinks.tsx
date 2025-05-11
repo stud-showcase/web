@@ -38,6 +38,13 @@ export function NavLinks({ mobile }: Props) {
       >
         Вакансии
       </NavLink>
+      <NavLink
+        href="/application"
+        withUnderline={!mobile}
+        isActive={window.location.pathname.startsWith("/application")}
+      >
+        Заявка
+      </NavLink>
     </>
   );
 }

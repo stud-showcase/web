@@ -27,6 +27,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/download/{path}', [FileController::class, 'download'])->name('files.download')->where('path', '.*');
 
 Route::get('/vacancies', [VacancyController::class, 'index']);
+Route::get('/application', function () {
+    return Inertia::render('user/Application');
+});
 
 Route::post('/taskRequest', [TaskController::class, 'createRequest']);
 

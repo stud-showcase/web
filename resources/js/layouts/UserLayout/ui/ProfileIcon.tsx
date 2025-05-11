@@ -7,12 +7,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/DropdownMenu";
-import { ChevronsUpDown, LogOut, Settings } from "lucide-react";
+import {
+  ChevronsUpDown,
+  LogOut,
+  Settings,
+} from "lucide-react";
 import { PropsWithChildren } from "react";
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { hasRole } from "@/entities/User";
+import { Text } from "@/shared/ui/Text";
 
 type Props = {
   mobile?: boolean;
@@ -21,7 +26,7 @@ type Props = {
 export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
   const { user } = useAuth();
 
-  const initials = `${user!.firstName[0]}${user!.secondName[0]}`;
+  const initials = `${user!.firstName[0]}${user!.lastName ? user!.lastName[0] : ""}`;
 
   let fullName = `${user!.secondName} ${user!.firstName[0]}.`;
   if (user!.lastName) {
@@ -32,33 +37,20 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          {mobile ? (
-            <button className="inline-flex items-center justify-between">
-              <div className="inline-flex gap-2 items-center">
-                <Avatar>
-                  <AvatarFallback className="bg-primary text-white">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="font-medium text-primary text-sm">
-                  {fullName}
-                </span>
-              </div>
-              <div className="inline text-primary">
-                <ChevronsUpDown className="h-5 w-5" />
-              </div>
-            </button>
-          ) : (
-            <div className="flex gap-2 items-center">
-              <Button variant="ghost" size={"icon"}>
-                <Avatar>
-                  <AvatarFallback className="bg-primary text-white">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-              </Button>
-            </div>
-          )}
+          <Button
+            variant="ghost"
+            className="h-13 inline-flex items-center justify-between"
+          >
+            <Avatar>
+              <AvatarFallback className="bg-primary text-white">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <Text variant="small" className="font-semibold text-primary">
+              {fullName}
+            </Text>
+            <ChevronsUpDown className="text-primary" />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>{fullName}</DropdownMenuLabel>

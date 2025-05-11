@@ -92,7 +92,7 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                   </Button>
                   {/* TODO: добавить проверку на роль пользователя */}
                   <Button variant={"secondary"} className="flex-1 sm:flex-none" asChild>
-                    <Link href={`/projects/${project.id}/control-panel`}>
+                    <Link href={`/projects/${project.id}/controlPanel`}>
                       <Settings />
                       Панель управления
                     </Link>

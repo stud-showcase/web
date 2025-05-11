@@ -7,7 +7,6 @@ import {
   SheetTrigger,
 } from "@/shared/ui/Sheet";
 import { Menu } from "lucide-react";
-import { SendApplicationButton } from "./SendApplicationButton";
 import { Separator } from "@/shared/ui/Separator";
 import { ProfileIcon } from "./ProfileIcon";
 import { SignInButton } from "./SignInButton";
@@ -35,7 +34,6 @@ export function MobileMenu() {
             </ul>
           </nav>
           <div className="flex flex-col gap-4">
-            <SendApplicationButton />
             <Separator />
             {user ? <ProfileIcon mobile /> : <SignInButton />}
           </div>
