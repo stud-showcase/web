@@ -52,7 +52,7 @@ class TaskController extends Controller
     {
         try {
             $this->taskService->createRequest($request->validated(), $request->file('files') ?? []);
-            return response()->json(['message' => 'Заявка успешно создана']);
+            return Inertia::render('user/Application');
         } catch (Throwable $e) {
             return to_route('tasks.index')->withErrors(['error' => $e->getMessage()]);
         }

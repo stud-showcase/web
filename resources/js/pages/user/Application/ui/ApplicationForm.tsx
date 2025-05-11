@@ -5,7 +5,8 @@ import { Label } from "@/shared/ui/Label";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/RadioGroup";
 import { Text } from "@/shared/ui/Text";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { router, useForm } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
+import { Button } from "@/shared/ui/Button";
 
 type ApplicationForm = {
   title: string;
@@ -17,10 +18,10 @@ type ApplicationForm = {
   withProject: string | undefined;
 };
 
-export function SendApplicationForm() {
+export function ApplicationForm() {
   const { user } = useAuth();
 
-  const { data, setData, post, processing, transform, errors } =
+  const { data, setData, post, processing, transform, errors, reset} =
     useForm<ApplicationForm>({
       title: "",
       projectName: undefined,
@@ -65,10 +66,13 @@ export function SendApplicationForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(data);
-    router.post('/taskRequest', data);
-    // post("/taskRequest");
+    post("/application");
   };
+
+  const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    reset();
+  }
 
   return (
     <div className="border rounded-lg py-4 px-6">
@@ -76,6 +80,7 @@ export function SendApplicationForm() {
         id="leave-request-form"
         className="space-y-6"
         onSubmit={handleSubmit}
+        onReset={handleReset}
       >
         <div className="space-y-2">
           <Label htmlFor="title">Название задачи *</Label>
@@ -106,7 +111,7 @@ export function SendApplicationForm() {
           <Label htmlFor="description">Описание задачи *</Label>
           <Textarea
             id="description"
-            placeholder="Опишите задачи..."
+            placeholder="Опишите задачу..."
             value={data.description}
             onChange={(e) => setData("description", e.target.value)}
             required
@@ -212,6 +217,11 @@ export function SendApplicationForm() {
             </Text>
           </div>
         )}
+
+        <div className="flex gap-2">
+          <Button variant={"outline"} type="reset">Сбросить</Button>
+          <Button type="submit">Отправить</Button>
+        </div>
       </form>
     </div>
   );

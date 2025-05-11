@@ -1,5 +1,4 @@
 import { NavLinks } from "./NavLinks";
-import { SendApplicationButton } from "./SendApplicationButton";
 import { ProfileIcon } from "./ProfileIcon";
 import { Link } from "@inertiajs/react";
 import { SevSULogo } from "@/shared/ui/SevSULogo";

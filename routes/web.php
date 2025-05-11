@@ -31,7 +31,7 @@ Route::get('/application', function () {
     return Inertia::render('user/Application');
 });
 
-Route::post('/taskRequest', [TaskController::class, 'createRequest']);
+Route::post('/application', [TaskController::class, 'createRequest']);
 
 Route::prefix('tasks')->group(function () {
     Route::get('/', [TaskController::class, 'index'])->name('tasks.index');

@@ -10,7 +10,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/shared/ui/Accordion";
-import { SendApplicationModal } from "@/features/SendApplicationModal";
 
 export default function MainPage() {
   return (
