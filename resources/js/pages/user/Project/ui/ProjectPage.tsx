@@ -61,7 +61,7 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
       </Head>
       <UserLayout>
         <Container withVerticalPaddings>
-          <header className="border-b pb-8  bg-background">
+          <header className="border-b pb-8">
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
