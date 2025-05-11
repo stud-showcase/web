@@ -23,6 +23,7 @@ return new class extends Migration
             $table->uuid('mentor_id')->nullable();
             $table->foreign('mentor_id')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
+            $table->index('is_close');
         });
 
         Schema::create('project_files', function (Blueprint $table) {
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('path');
             $table->timestamps();
+            $table->index('path');
         });
 
         Schema::create('vacancies', function (Blueprint $table) {

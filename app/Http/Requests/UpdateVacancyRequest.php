@@ -2,39 +2,25 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Project;
 use App\Models\Vacancy;
+use App\Traits\AuthorizesProjectActions;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class UpdateVacancyRequest extends FormRequest
 {
-    public function authorize()
+    use AuthorizesProjectActions;
+
+    public function authorize(): bool
     {
-        $projectId = $this->route('projectId');
-        $vacancyId = $this->route('vacancyId');
-
-        $project = Project::find($projectId);
-        $vacancy = Vacancy::find($vacancyId);
-
-        if (!$project || !$vacancy) {
+        $vacancy = Vacancy::select(['id', 'project_id'])->find($this->route('vacancyId'));
+        if (!$vacancy || $vacancy->project_id != $this->route('projectId')) {
             return false;
         }
 
-        if ($vacancy->project_id != $project->id) {
-            return false;
-        }
-
-        $isMentor = $project->mentor_id == Auth::id();
-        $isTeamCreator = $project->users()
-            ->where('user_id', Auth::id())
-            ->wherePivot('is_creator', true)
-            ->exists();
-
-        return $isMentor || $isTeamCreator;
+        return $this->authorizeProject($this->route('projectId'));
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|string|max:255',
@@ -42,15 +28,13 @@ class UpdateVacancyRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'name.required' => 'Название вакансии обязательно.',
-            'name.string' => 'Название вакансии должно быть строкой.',
-            'name.max' => 'Название вакансии не может превышать 255 символов.',
-            'description.required' => 'Описание вакансии обязательно.',
-            'description.string' => 'Описание вакансии должно быть строкой.',
-            'description.max' => 'Описание вакансии не может превышать 1000 символов.',
+            'name.required' => 'Название вакансии обязательно',
+            'name.max' => 'Название вакансии не может превышать 255 символов',
+            'description.required' => 'Описание вакансии обязательно',
+            'description.max' => 'Описание вакансии не может превышать 1000 символов',
         ];
     }
 }

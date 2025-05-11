@@ -6,7 +6,10 @@ use App\Http\Requests\TaskRequestCreateRequest;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Services\TaskService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Throwable;
 
@@ -39,7 +42,6 @@ class TaskController extends Controller
         ]);
     }
 
-
     public function show(int $id): \Inertia\Response
     {
         $task = $this->taskService->getFormattedTaskById($id);
@@ -48,13 +50,14 @@ class TaskController extends Controller
         ]);
     }
 
-    public function createRequest(TaskRequestCreateRequest $request)
+    public function createRequest(TaskRequestCreateRequest $request): JsonResponse|RedirectResponse
     {
         try {
             $this->taskService->createRequest($request->validated(), $request->file('files') ?? []);
             return Inertia::render('user/Application');
         } catch (Throwable $e) {
-            return to_route('tasks.index')->withErrors(['error' => $e->getMessage()]);
+            Log::error("Ошибка создания заявки: " . $e->getMessage(), ['data' => $request->validated()]);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 }

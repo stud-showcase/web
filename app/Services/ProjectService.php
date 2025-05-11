@@ -2,75 +2,58 @@
 
 namespace App\Services;
 
-use App\Repositories\ProjectRepository;
 use App\Dto\ProjectDto;
 use App\Models\Project;
 use App\Models\User;
 use App\Repositories\ProjectInviteRepository;
+use App\Repositories\ProjectRepository;
 use App\Repositories\UserProjectRepository;
-use Illuminate\Support\Facades\Log;
+use App\Traits\PaginatesCollections;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class ProjectService
 {
+    use PaginatesCollections;
+
     public function __construct(
         private ProjectRepository $projectRepository,
         private ProjectInviteRepository $inviteRepository,
         private UserProjectRepository $userProjectRepository,
     ) {}
 
-    public function getFilteredProjects(array $filters): array
+    public function getProjects(array $filters = []): array
     {
-        $projectsPaginator = $this->projectRepository->getProjects($filters);
-        $projectsPaginator->setCollection(
-            $projectsPaginator->getCollection()->map(fn($project) => ProjectDto::fromModel($project)->toArray())
-        );
-
-        $projectsData = [
-            'data' => $projectsPaginator->items(),
-            'currentPage' => $projectsPaginator->currentPage(),
-            'lastPage' => $projectsPaginator->lastPage(),
-            'perPage' => $projectsPaginator->perPage(),
-            'total' => $projectsPaginator->total(),
-            'links' => $projectsPaginator->links()->elements[0] ?? [],
-        ];
-
-        return $projectsData;
+        $paginator = $this->projectRepository->getProjects($filters);
+        return $this->formatPaginatedData($paginator, fn($project) => ProjectDto::fromModel($project)->toArray());
     }
 
-    public function getFilteredUserProjects(array $filters): array
+    public function getUserProjects(array $filters = []): array
     {
-        $projectsPaginator = $this->projectRepository->getUserProjects($filters);
-        $projectsPaginator->setCollection(
-            $projectsPaginator->getCollection()->map(fn($project) => ProjectDto::fromModel($project)->toArray())
-        );
-
-        $projectsData = [
-            'data' => $projectsPaginator->items(),
-            'currentPage' => $projectsPaginator->currentPage(),
-            'lastPage' => $projectsPaginator->lastPage(),
-            'perPage' => $projectsPaginator->perPage(),
-            'total' => $projectsPaginator->total(),
-            'links' => $projectsPaginator->links()->elements[0] ?? [],
-        ];
-
-        return $projectsData;
+        $paginator = $this->projectRepository->getProjects($filters, true);
+        return $this->formatPaginatedData($paginator, fn($project) => ProjectDto::fromModel($project)->toArray());
     }
 
-    public function getFormattedProjectById(int $id): array
+    public function getProjectById(int $id): array
     {
-        $project = $this->projectRepository->getByIdWithRelations($id);
-        return ProjectDto::fromModel($project)->toArray();
+        try {
+            $project = $this->projectRepository->getByIdWithRelations($id);
+            return ProjectDto::fromModel($project)->toArray();
+        } catch (Throwable $e) {
+            Log::error("Ошибка получения проекта [$id]: " . $e->getMessage());
+            throw new \Exception("Не удалось получить проект: {$e->getMessage()}", 0, $e);
+        }
     }
 
     public function createInvite(int $userId, int $projectId, ?int $vacancyId): void
     {
         try {
             $this->inviteRepository->create($userId, $projectId, $vacancyId);
-        } catch (\Throwable $e) {
-            Log::error("Ошибка создания запроса на вступление в проект [$projectId]: " . $e->getMessage(), ['exception' => $e]);
-            throw $e;
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания приглашения в проект [$projectId]: " . $e->getMessage(), ['user_id' => $userId, 'vacancy_id' => $vacancyId]);
+            throw new \Exception("Не удалось создать приглашение: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -79,23 +62,29 @@ class ProjectService
         try {
             $invite = $this->inviteRepository->findWithRelations($inviteId);
             $this->inviteRepository->acceptInvite($invite);
-        } catch (\Throwable $e) {
-            Log::error("Ошибка принятия запроса [$inviteId] на вступление в проект: " . $e->getMessage(), ['exception' => $e]);
-            throw $e;
+        } catch (Throwable $e) {
+            Log::error("Ошибка принятия приглашения [$inviteId]: " . $e->getMessage());
+            throw new \Exception("Не удалось принять приглашение: {$e->getMessage()}", 0, $e);
         }
     }
 
     public function createProject(int $taskId, string $name, User $user): Project
     {
-        return $this->projectRepository->create($taskId, $name, $user);
+        try {
+            return $this->projectRepository->create($taskId, $name, $user);
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания проекта: " . $e->getMessage(), ['task_id' => $taskId, 'name' => $name, 'user_id' => $user->id]);
+            throw new \Exception("Не удалось создать проект: {$e->getMessage()}", 0, $e);
+        }
     }
 
     public function updateProject(int $projectId, array $data): Project
     {
         try {
-            $filteredData = array_filter($data, fn($key) => in_array($key, ['name', 'annotation', 'statusId', 'isClose']), ARRAY_FILTER_USE_KEY);
+            $filteredData = Arr::only($data, ['name', 'annotation', 'statusId', 'isClose']);
             return $this->projectRepository->update($projectId, $filteredData);
         } catch (Throwable $e) {
+            Log::error("Ошибка обновления проекта [$projectId]: " . $e->getMessage(), ['data' => $data]);
             throw new \Exception("Не удалось обновить проект: {$e->getMessage()}", 0, $e);
         }
     }
@@ -118,6 +107,7 @@ class ProjectService
 
             $this->projectRepository->createFiles($projectId, $fileData);
         } catch (Throwable $e) {
+            Log::error("Ошибка загрузки файлов для проекта [$projectId]: " . $e->getMessage(), ['files_count' => count($files)]);
             throw new \Exception("Не удалось загрузить файлы: {$e->getMessage()}", 0, $e);
         }
     }
@@ -127,6 +117,7 @@ class ProjectService
         try {
             $this->projectRepository->deleteFile($projectId, $fileId);
         } catch (Throwable $e) {
+            Log::error("Ошибка удаления файла [$fileId] для проекта [$projectId]: " . $e->getMessage());
             throw new \Exception("Не удалось удалить файл: {$e->getMessage()}", 0, $e);
         }
     }
@@ -134,18 +125,7 @@ class ProjectService
     public function getAdminProjects(array $filters = []): array
     {
         $paginator = $this->projectRepository->getAdminProjects($filters);
-        $paginator->setCollection(
-            $paginator->getCollection()->map(fn($project) => ProjectDto::fromModel($project)->toArrayForAdmin())
-        );
-
-        return [
-            'data' => $paginator->items(),
-            'currentPage' => $paginator->currentPage(),
-            'lastPage' => $paginator->lastPage(),
-            'perPage' => $paginator->perPage(),
-            'total' => $paginator->total(),
-            'links' => $paginator->links()->elements[0] ?? [],
-        ];
+        return $this->formatPaginatedData($paginator, fn($project) => ProjectDto::fromModel($project)->toArrayForAdmin());
     }
 
     public function updateMember(int $projectId, string $memberId, array $data): void
@@ -153,8 +133,8 @@ class ProjectService
         try {
             $this->userProjectRepository->update($projectId, $memberId, $data);
         } catch (Throwable $e) {
-            Log::error("Ошибка обновления участника [$memberId] проекта [$projectId]: " . $e->getMessage());
-            throw $e;
+            Log::error("Ошибка обновления участника [$memberId] проекта [$projectId]: " . $e->getMessage(), ['data' => $data]);
+            throw new \Exception("Не удалось обновить участника: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -164,7 +144,7 @@ class ProjectService
             $this->userProjectRepository->delete($projectId, $memberId);
         } catch (Throwable $e) {
             Log::error("Ошибка удаления участника [$memberId] из проекта [$projectId]: " . $e->getMessage());
-            throw $e;
+            throw new \Exception("Не удалось удалить участника: {$e->getMessage()}", 0, $e);
         }
     }
 }

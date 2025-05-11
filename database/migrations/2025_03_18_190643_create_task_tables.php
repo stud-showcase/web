@@ -20,6 +20,9 @@ return new class extends Migration
             $table->dateTime('deadline');
             $table->foreignId('complexity_id')->constrained('complexity');
             $table->timestamps();
+            $table->index('max_members');
+            $table->index('customer');
+            $table->index('deadline');
         });
 
         Schema::create('tags', function (Blueprint $table) {
@@ -39,6 +42,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('path');
             $table->timestamps();
+            $table->index('path');
         });
     }
 

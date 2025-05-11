@@ -2,43 +2,26 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Project;
 use App\Models\Vacancy;
+use App\Traits\AuthorizesProjectActions;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class DeleteVacancyRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    use AuthorizesProjectActions;
+
     public function authorize(): bool
     {
-        $project = Project::find($this->route('projectId'));
-        $vacancy = Vacancy::find($this->route('vacancyId'));
-
-        if (!$project || !$vacancy || $vacancy->project_id != $project->id) {
+        $vacancy = Vacancy::select(['id', 'project_id'])->find($this->route('vacancyId'));
+        if (!$vacancy || $vacancy->project_id != $this->route('projectId')) {
             return false;
         }
 
-        $isMentor = $project->mentor_id == Auth::id();
-        $isTeamCreator = $project->users()
-            ->where('user_id', Auth::id())
-            ->wherePivot('is_creator', true)
-            ->exists();
-
-        return $isMentor || $isTeamCreator;
+        return $this->authorizeProject($this->route('projectId'));
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 }

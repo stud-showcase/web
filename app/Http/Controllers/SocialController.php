@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -44,15 +45,22 @@ class SocialController extends Controller
                 ]
             );
 
+            $shouldInvalidateCache = $user->wasRecentlyCreated || $user->wasChanged();
+
             if ($user->roles()->count() === 0) {
                 $studentRole = Role::where('name', 'student')->firstOrFail();
                 $user->roles()->attach($studentRole->id);
+                $shouldInvalidateCache = true;
+            }
+
+            if ($shouldInvalidateCache) {
+                Cache::tags(['users'])->flush();
             }
 
             Auth::login($user);
 
             return redirect('/projects');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error('Ошибка авторизации: ' . $e->getMessage());
             return redirect('/')->with('error', 'Ошибка авторизации: ' . $e->getMessage());
         }

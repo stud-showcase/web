@@ -9,6 +9,7 @@ services:
       - ..:/var/www
     depends_on:
       - db
+      - redis
     environment:
       - APP_ENV=local
       - DB_HOST=db
@@ -16,10 +17,14 @@ services:
       - DB_DATABASE=showcase
       - DB_USERNAME=root
       - DB_PASSWORD=root
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     command: >
       sh -c "chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
              chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
              composer install --no-scripts --no-interaction &&
+             php artisan config:clear &&
+             php artisan cache:clear &&
              php-fpm"
 
   nginx:
@@ -73,5 +78,16 @@ services:
     depends_on:
       - db
 
+  redis:
+    image: redis:7.0
+    container_name: showcase_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
 volumes:
   mysql_data:
+  redis_data:

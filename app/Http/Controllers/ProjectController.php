@@ -13,8 +13,9 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Requests\UploadProjectFileRequest;
 use App\Models\Tag;
 use App\Services\ProjectService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Throwable;
 
@@ -35,7 +36,7 @@ class ProjectController extends Controller
             'search',
         ]);
 
-        $projects = $this->projectService->getFilteredProjects($filters);
+        $projects = $this->projectService->getProjects($filters);
 
         return Inertia::render('user/Projects', [
             'projects' => $projects,
@@ -57,7 +58,7 @@ class ProjectController extends Controller
             'search',
         ]);
 
-        $projects = $this->projectService->getFilteredUserProjects($filters);
+        $projects = $this->projectService->getUserProjects($filters);
 
         return Inertia::render('user/Projects', [
             'projects' => $projects,
@@ -70,7 +71,7 @@ class ProjectController extends Controller
 
     public function show(int|string $id): \Inertia\Response
     {
-        $project = $this->projectService->getFormattedProjectById($id);
+        $project = $this->projectService->getProjectById($id);
         return Inertia::render('user/Project', [
             'project' => $project,
         ]);
@@ -78,116 +79,98 @@ class ProjectController extends Controller
 
     public function showControlPanel(ShowControlPanelRequest $request, int|string $id): \Inertia\Response
     {
-        $project = $this->projectService->getFormattedProjectById($id);
+        $project = $this->projectService->getProjectById($id);
         return Inertia::render('user/ProjectControlPanel', [
             'project' => $project,
         ]);
     }
 
-    public function store(CreateProjectRequest $request)
-    {
-        $validated = $request->validated();
-
-        try {
-            $project = $this->projectService->createProject(
-                $validated['taskId'],
-                $validated['projectName'],
-                Auth::user()
-            );
-
-            return to_route('projects.show', $project->id);
-        } catch (Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function update(UpdateProjectRequest $request, int|string $id)
+    public function store(CreateProjectRequest $request): RedirectResponse
     {
         try {
-            $project = $this->projectService->updateProject(
-                $id,
-                $request->validated()
-            );
-
-            return to_route('projects.show', $project->id);
+            $data = $request->validated();
+            $project = $this->projectService->createProject($data['taskId'], $data['projectName'], auth()->user());
+            return redirect()->route('projects.show', $project->id)->with('success', 'Проект успешно создан.');
         } catch (Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-
-    public function createInvite(CreateInviteRequest $request, int|string $id)
-    {
-        $validated = $request->validated();
-
-        try {
-            $this->projectService->createInvite(
-                Auth::id(),
-                $id,
-                $validated['vacancyId'] ?? null
-            );
-
-            return to_route('projects.show', $id);
-        } catch (Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function acceptInvite(AcceptInviteRequest $request, int|string $id)
-    {
-        $validated = $request->validated();
-
-        try {
-            $this->projectService->acceptInvite($validated['inviteId']);
-            return to_route('projects.show', $id);
-        } catch (Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function uploadFiles(UploadProjectFileRequest $request, int|string $id)
-    {
-        try {
-            $this->projectService->uploadFiles(
-                $id,
-                $request->file('files')
-            );
-
-            return to_route('projects.show', $id);
-        } catch (Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function deleteFile(DeleteProjectFileRequest $request, int|string $projectId, int|string $fileId)
-    {
-        try {
-            $this->projectService->deleteFile($projectId, $fileId);
-            return to_route('projects.show', $projectId);
-        } catch (Throwable $e) {
+            Log::error("Ошибка создания проекта: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
-    public function updateMember(UpdateProjectMemberRequest $request, int $projectId, string $memberId)
+    public function update(UpdateProjectRequest $request, int|string $id): RedirectResponse
     {
-        $validated = $request->validated();
-
         try {
-            $this->projectService->updateMember($projectId, $memberId, $validated);
-            return to_route('projects.show', $projectId);
-        } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            $project = $this->projectService->updateProject($id, $request->validated());
+            return redirect()->route('projects.show', $project->id)->with('success', 'Проект успешно обновлён.');
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления проекта [$id]: " . $e->getMessage(), ['data' => $request->validated()]);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
-    public function deleteMember(DeleteProjectMemberRequest $request, int $projectId, string $memberId)
+    public function createInvite(CreateInviteRequest $request, int|string $id): RedirectResponse
+    {
+        try {
+            $this->projectService->createInvite(auth()->id(), $id, $request->validated()['vacancyId'] ?? null);
+            return redirect()->route('projects.show', $id)->with('success', 'Приглашение создано.');
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания приглашения для проекта [$id]: " . $e->getMessage(), ['data' => $request->validated()]);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function acceptInvite(AcceptInviteRequest $request, int|string $id): RedirectResponse
+    {
+        try {
+            $this->projectService->acceptInvite($request->validated()['inviteId']);
+            return redirect()->route('projects.show', $id)->with('success', 'Приглашение принято.');
+        } catch (Throwable $e) {
+            Log::error("Ошибка принятия приглашения для проекта [$id]: " . $e->getMessage(), ['data' => $request->validated()]);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function uploadFiles(UploadProjectFileRequest $request, int|string $id): RedirectResponse
+    {
+        try {
+            $this->projectService->uploadFiles($id, $request->file('files'));
+            return redirect()->route('projects.show', $id)->with('success', 'Файлы загружены.');
+        } catch (Throwable $e) {
+            Log::error("Ошибка загрузки файлов для проекта [$id]: " . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function deleteFile(DeleteProjectFileRequest $request, int|string $projectId, int|string $fileId): RedirectResponse
+    {
+        try {
+            $this->projectService->deleteFile($projectId, $fileId);
+            return redirect()->route('projects.show', $projectId)->with('success', 'Файл удалён.');
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления файла [$fileId] для проекта [$projectId]: " . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function updateMember(UpdateProjectMemberRequest $request, int $projectId, string $memberId): RedirectResponse
+    {
+        try {
+            $this->projectService->updateMember($projectId, $memberId, $request->validated());
+            return redirect()->route('projects.show', $projectId)->with('success', 'Участник обновлён.');
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления участника [$memberId] для проекта [$projectId]: " . $e->getMessage(), ['data' => $request->validated()]);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function deleteMember(DeleteProjectMemberRequest $request, int $projectId, string $memberId): RedirectResponse
     {
         try {
             $this->projectService->deleteMember($projectId, $memberId);
-            return to_route('projects.show', $projectId);
-        } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return redirect()->route('projects.show', $projectId)->with('success', 'Участник удалён.');
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления участника [$memberId] для проекта [$projectId]: " . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 }

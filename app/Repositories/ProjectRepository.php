@@ -7,140 +7,111 @@ use App\Models\ProjectFile;
 use App\Models\ProjectInvite;
 use App\Models\ProjectStatus;
 use App\Models\User;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Throwable;
 
 class ProjectRepository
 {
-    public function getProjects(array $filters): LengthAwarePaginator
+    public function __construct(
+        private FileRepository $fileRepository
+    ) {}
+
+    public function getProjects(array $filters, bool $forUser = false): LengthAwarePaginator
     {
-        $query = Project::query()
-            ->with([
-                'users',
-                'mentor',
-                'files',
-                'status',
-                'task.complexity',
-                'task.tags',
-                'vacancies',
-            ])
-            ->join('tasks', 'projects.task_id', '=', 'tasks.id');
-
-        $query
-            ->when(
-                isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
-                fn($q) => $q->whereIn('projects.status_id', $filters['status'])
-            )
-            ->when(
-                isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
-                fn($q) => $q->whereIn('tasks.complexity_id', $filters['complexity'])
-            )
-            ->when(
-                isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
-                fn($q) => $q->whereHas('task.tags', fn($q2) => $q2->whereIn('tags.id', $filters['tags']))
-            )
-            ->when(
-                isset($filters['isHiring']),
-                fn($q) => $filters['isHiring']
-                    ? $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members')
-                    ->where('projects.is_close', false)
-                    : $q->where(function ($subQ) {
-                        $subQ->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
-                            ->orWhere('projects.is_close', true);
-                    })
-            )
-            ->when(
-                isset($filters['members']),
-                fn($q) => $q->where('tasks.max_members', '>=', (int)$filters['members'])
-            )
-            ->when(
-                isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
-                fn($q) => $q->whereIn('tasks.customer', $filters['customers'])
-            )
-            ->when(
-                !empty($filters['search']),
-                fn($q) => $q->where('projects.name', 'LIKE', '%' . $filters['search'] . '%')
-            );
-
-        return $query->select('projects.*')
-            ->paginate(10)
-            ->withQueryString();
+        $cacheKey = 'projects:filtered:' . md5(json_encode($filters) . ':' . ($forUser ? 'user:' . Auth::id() : 'all')) . ':page_' . request()->query('page', 1);
+        try {
+            return Cache::tags(['projects'])->remember($cacheKey, 300, function () use ($filters, $forUser) {
+                $projects = $this->buildProjectQuery($filters, $forUser)
+                    ->paginate(10)
+                    ->withQueryString();
+                return $projects;
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
+        }
     }
 
-    public function getUserProjects(array $filters): LengthAwarePaginator
+    protected function buildProjectQuery(array $filters, bool $forUser): Builder
     {
-        $query = Project::query()
-            ->with([
-                'users',
-                'mentor',
-                'files',
-                'status',
-                'task.complexity',
-                'task.tags',
-                'vacancies',
-            ])
-            ->join('tasks', 'projects.task_id', '=', 'tasks.id')
-            ->whereHas('users', fn($q) => $q->where('users.id', Auth::id()));
-
-        $query->when(
-            isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
-            fn($q) => $q->whereIn('projects.status_id', $filters['status'])
-        )
-            ->when(
-                isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
-                fn($q) => $q->whereIn('tasks.complexity_id', $filters['complexity'])
-            )
-            ->when(
-                isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
-                fn($q) => $q->whereHas('task.tags', fn($q2) => $q2->whereIn('tags.id', $filters['tags']))
-            )
-            ->when(
-                isset($filters['isHiring']),
-                fn($q) => $filters['isHiring']
-                    ? $q->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members')
-                    ->where('projects.is_close', false)
-                    : $q->where(function ($subQ) {
-                        $subQ->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members')
-                            ->orWhere('projects.is_close', true);
-                    })
-            )
-            ->when(
-                isset($filters['members']),
-                fn($q) => $q->where('tasks.max_members', '>=', (int)$filters['members'])
-            )
-            ->when(
-                isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
-                fn($q) => $q->whereIn('tasks.customer', $filters['customers'])
-            )
-            ->when(
-                isset($filters['search']) && !empty($filters['search']),
-                fn($q) => $q->where('projects.name', 'LIKE', '%' . $filters['search'] . '%')
-            );
-
-        return $query->select('projects.*')
-            ->paginate(10)
-            ->withQueryString();
-    }
-
-    public function getByIdWithRelations(int $id): Project
-    {
-        return Project::with([
+        $query = Project::query()->with([
             'task.complexity',
             'task.tags',
             'status',
             'mentor',
-            'users' => fn($q) => $q->select('users.id', 'users.first_name', 'users.second_name', 'users.last_name', 'users.email')->with('roles'),
-            'files',
+            'users',
             'vacancies',
-            'invites' => fn($q) => $q->with([
-                'user' => fn($q2) => $q2->select('id', 'first_name', 'second_name', 'last_name'),
-                'vacancy' => fn($q2) => $q2->select('id', 'name'),
-            ]),
-        ])->findOrFail($id);
+        ]);
+
+        if ($forUser) {
+            $query->whereHas('users', fn($q2) => $q2->where('users.id', Auth::id()));
+        }
+
+        $this->applyFilters($query, $filters);
+
+        return $query;
+    }
+
+    protected function applyFilters(Builder $query, array $filters): void
+    {
+        $query->when(
+            isset($filters['search']) && !empty($filters['search']),
+            fn($q) => $q->where(function ($subQ) use ($filters) {
+                $subQ->where('name', 'LIKE', '%' . $filters['search'] . '%')
+                    ->orWhere('annotation', 'LIKE', '%' . $filters['search'] . '%');
+            })
+        )
+            ->when(
+                isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
+                fn($q) => $q->whereIn('status_id', $filters['status'])
+            )
+            ->when(
+                isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
+                fn($q) => $q->whereHas('task', fn($q2) => $q2->whereIn('complexity_id', $filters['complexity']))
+            )
+            ->when(
+                isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
+                fn($q) => $q->whereHas('task.tags', fn($q2) => $q2->whereIn('tags.id', $filters['tags']))
+            )
+            ->when(
+                isset($filters['isHiring']),
+                fn($q) => $filters['isHiring']
+                    ? $q->whereHas('task', fn($q2) => $q2->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members'))
+                    ->where('projects.is_close', false)
+                    : $q->where(function ($subQ) {
+                        $subQ->whereHas('task', fn($q2) => $q2->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members'))
+                            ->orWhere('projects.is_close', true);
+                    })
+            );
+    }
+
+    public function getByIdWithRelations(int $id): Project
+    {
+        $cacheKey = "project:{$id}";
+        try {
+            return Cache::tags(['projects'])->remember($cacheKey, 3600, function () use ($id) {
+                $project = Project::with([
+                    'task.complexity',
+                    'task.tags',
+                    'status',
+                    'mentor',
+                    'users' => fn($q) => $q->select('users.id', 'users.first_name', 'users.second_name', 'users.last_name', 'users.email')->with('roles'),
+                    'files',
+                    'vacancies',
+                    'invites' => fn($q) => $q->with([
+                        'user' => fn($q2) => $q2->select('id', 'first_name', 'second_name', 'last_name'),
+                        'vacancy' => fn($q2) => $q2->select('id', 'name'),
+                    ]),
+                ])->findOrFail($id);
+
+                return $project;
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось получить проект: {$e->getMessage()}", 0, $e);
+        }
     }
 
     public function create(int $taskId, string $name, User $user): Project
@@ -148,7 +119,6 @@ class ProjectRepository
         try {
             $project = DB::transaction(function () use ($taskId, $name, $user) {
                 $isPrivileged = $user->hasPrivilegedRole();
-
                 $project = Project::create([
                     'task_id' => $taskId,
                     'status_id' => ProjectStatus::STATUS_WAITING,
@@ -163,49 +133,61 @@ class ProjectRepository
                 return $project;
             });
 
+            Cache::tags(['projects', 'user_projects'])->flush();
             return $project;
         } catch (Throwable $e) {
-            Log::error("Ошибка создания проекта. Задача - [$taskId]. Пользователь - [$user->id]: " . $e->getMessage());
-            throw $e;
+            throw new \RuntimeException("Не удалось создать проект: {$e->getMessage()}", 0, $e);
         }
     }
 
     public function update(int $projectId, array $data): Project
     {
         try {
-            return DB::transaction(function () use ($projectId, $data) {
+            $project = DB::transaction(function () use ($projectId, $data) {
                 $project = Project::findOrFail($projectId);
-
                 $project->update($data);
 
-                if (isset($data['isClose']) && $data['isClose'] == true) {
-                    $deleted = ProjectInvite::where('project_id', $projectId)->delete();
-                    Log::info("Удалено {$deleted} приглашений для проекта [$projectId] при закрытии.");
+                if (isset($data['isClose']) && $data['isClose']) {
+                    ProjectInvite::where('project_id', $projectId)->delete();
                 }
 
                 return $project->fresh();
             });
+
+            Cache::tags(['projects', 'user_projects'])->flush();
+            Cache::tags(['projects'])->forget("project:{$projectId}");
+            return $project;
         } catch (Throwable $e) {
-            Log::error("Ошибка обновления проекта [$projectId]: " . $e->getMessage());
-            throw $e;
+            throw new \RuntimeException("Не удалось обновить проект: {$e->getMessage()}", 0, $e);
         }
     }
 
-    public function createFiles(int $projectId, array $fileData): void
+    public function delete(int $id): void
     {
         try {
-            DB::transaction(function () use ($projectId, $fileData) {
-                foreach ($fileData as $data) {
-                    ProjectFile::create([
-                        'project_id' => $projectId,
-                        'name' => $data['name'],
-                        'path' => $data['path'],
-                    ]);
-                }
+            DB::transaction(function () use ($id) {
+                $project = Project::findOrFail($id);
+                $project->delete();
+
+                Cache::tags(['projects'])->forget("project:{$id}");
+                Cache::tags(['projects'])->flush();
             });
         } catch (Throwable $e) {
-            Log::error("Ошибка создания файлов для проекта [$projectId]: " . $e->getMessage());
-            throw $e;
+            throw new \RuntimeException("Не удалось удалить проект: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function createFiles(int $projectId, array $files): void
+    {
+        try {
+            DB::transaction(function () use ($projectId, $files) {
+                foreach ($files as $file) {
+                    $this->fileRepository->saveFile($file, 'project_files', $projectId, ProjectFile::class);
+                }
+            });
+            Cache::tags(['projects'])->forget("project:{$projectId}");
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось создать файлы: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -216,32 +198,34 @@ class ProjectRepository
                 $file = ProjectFile::where('project_id', $projectId)
                     ->where('id', $fileId)
                     ->firstOrFail();
-
-                if (Storage::disk('public')->exists($file->path)) {
-                    Storage::disk('public')->delete($file->path);
-                }
-
-                $file->delete();
+                $this->fileRepository->deleteFile($file);
             });
+            Cache::tags(['projects'])->forget("project:{$projectId}");
         } catch (Throwable $e) {
-            Log::error("Ошибка удаления файла [$fileId] для проекта [$projectId]: " . $e->getMessage());
-            throw $e;
+            throw new \RuntimeException("Не удалось удалить файл: {$e->getMessage()}", 0, $e);
         }
     }
 
     public function getAdminProjects(array $filters): LengthAwarePaginator
     {
-        return Project::query()
-            ->with([
-                'mentor' => fn($q) => $q->select('users.id', 'first_name', 'second_name', 'last_name', 'email'),
-                'status'
-            ])
-            ->when(
-                isset($filters['search']) && !empty($filters['search']),
-                fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
-                    ->orWhere('annotation', 'LIKE', '%' . $filters['search'] . '%')
-            )
-            ->paginate(10)
-            ->withQueryString();
+        $cacheKey = 'admin_projects:filtered:' . md5(json_encode($filters)) . ':page_' . request()->query('page', 1);
+        try {
+            return Cache::tags(['projects'])->remember($cacheKey, 300, function () use ($filters) {
+                return Project::query()
+                    ->with([
+                        'mentor' => fn($q) => $q->select('users.id', 'first_name', 'second_name', 'last_name', 'email'),
+                        'status'
+                    ])
+                    ->when(
+                        isset($filters['search']) && !empty($filters['search']),
+                        fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
+                            ->orWhere('annotation', 'LIKE', '%' . $filters['search'] . '%')
+                    )
+                    ->paginate(10)
+                    ->withQueryString();
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
+        }
     }
 }

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->foreignId('group_id')->nullable()->constrained('groups')->nullOnDelete();
             $table->timestamps();
+            $table->index('group_id');
         });
 
         Schema::create('roles', function (Blueprint $table) {

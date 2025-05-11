@@ -2,13 +2,18 @@
 
 namespace App\Services;
 
-use App\Repositories\VacancyRepository;
 use App\Dto\VacancyDto;
 use App\Models\Vacancy;
+use App\Repositories\VacancyRepository;
+use App\Traits\PaginatesCollections;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class VacancyService
 {
+    use PaginatesCollections;
+
     public function __construct(
         private VacancyRepository $vacancyRepository
     ) {}
@@ -16,29 +21,16 @@ class VacancyService
     public function getFormattedVacancies(array $filters = []): array
     {
         $paginator = $this->vacancyRepository->getFilteredVacancies($filters);
-
-        $paginator->setCollection(
-            $paginator->getCollection()->map(fn($vacancy) => VacancyDto::fromModel($vacancy)->toArray())
-        );
-
-        $vacanciesData = [
-            'data' => $paginator->items(),
-            'currentPage' => $paginator->currentPage(),
-            'lastPage' => $paginator->lastPage(),
-            'perPage' => $paginator->perPage(),
-            'total' => $paginator->total(),
-            'links' => $paginator->links()->elements[0] ?? [],
-        ];
-
-        return $vacanciesData;
+        return $this->formatPaginatedData($paginator, fn($vacancy) => VacancyDto::fromModel($vacancy)->toArray());
     }
 
     public function createVacancy(int $projectId, array $data): Vacancy
     {
         try {
-            $filteredData = array_filter($data, fn($key) => in_array($key, ['name', 'description']), ARRAY_FILTER_USE_KEY);
+            $filteredData = Arr::only($data, ['name', 'description']);
             return $this->vacancyRepository->create($projectId, $filteredData);
         } catch (Throwable $e) {
+            Log::error("Ошибка создания вакансии для проекта [$projectId]: " . $e->getMessage(), ['data' => $data]);
             throw new \Exception("Не удалось создать вакансию: {$e->getMessage()}", 0, $e);
         }
     }
@@ -46,9 +38,10 @@ class VacancyService
     public function updateVacancy(int $vacancyId, array $data): Vacancy
     {
         try {
-            $filteredData = array_filter($data, fn($key) => in_array($key, ['name', 'description']), ARRAY_FILTER_USE_KEY);
+            $filteredData = Arr::only($data, ['name', 'description']);
             return $this->vacancyRepository->update($vacancyId, $filteredData);
         } catch (Throwable $e) {
+            Log::error("Ошибка обновления вакансии [$vacancyId]: " . $e->getMessage(), ['data' => $data]);
             throw new \Exception("Не удалось обновить вакансию: {$e->getMessage()}", 0, $e);
         }
     }
@@ -58,6 +51,7 @@ class VacancyService
         try {
             $this->vacancyRepository->delete($vacancyId);
         } catch (Throwable $e) {
+            Log::error("Ошибка удаления вакансии [$vacancyId]: " . $e->getMessage());
             throw new \Exception("Не удалось удалить вакансию: {$e->getMessage()}", 0, $e);
         }
     }
@@ -65,17 +59,6 @@ class VacancyService
     public function getAdminVacancies(array $filters = []): array
     {
         $paginator = $this->vacancyRepository->getAdminVacancies($filters);
-        $paginator->setCollection(
-            $paginator->getCollection()->map(fn($vacancy) => VacancyDto::fromModel($vacancy)->toArrayForAdmin())
-        );
-
-        return [
-            'data' => $paginator->items(),
-            'currentPage' => $paginator->currentPage(),
-            'lastPage' => $paginator->lastPage(),
-            'perPage' => $paginator->perPage(),
-            'total' => $paginator->total(),
-            'links' => $paginator->links()->elements[0] ?? [],
-        ];
+        return $this->formatPaginatedData($paginator, fn($vacancy) => VacancyDto::fromModel($vacancy)->toArrayForAdmin());
     }
 }

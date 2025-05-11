@@ -7,26 +7,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskRequestCreateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
-        if ($this->input('withProject') && !Auth::check()) {
-            return false;
-        }
-
-        return true;
+        return !$this->input('withProject') || Auth::check();
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             'title' => 'required|string|max:255',
@@ -40,15 +26,10 @@ class TaskRequestCreateRequest extends FormRequest
         ];
     }
 
-    /**
-     * Customize the error messages.
-     *
-     * @return array
-     */
-    public function messages()
+    public function messages(): array
     {
         return [
-            'projectName.required_if' => 'Название проекта обязательно, если выбрана опция "Создать проект".',
+            'projectName.required_if' => 'Название проекта обязательно, если выбрана опция "Создать проект"',
         ];
     }
 }

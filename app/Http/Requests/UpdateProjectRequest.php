@@ -2,34 +2,19 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Project;
+use App\Traits\AuthorizesProjectActions;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class UpdateProjectRequest extends FormRequest
 {
-    public function authorize()
+    use AuthorizesProjectActions;
+
+    public function authorize(): bool
     {
-        $project = Project::find($this->route('id'));
-
-        if (!$project) {
-            return false;
-        }
-
-        $isMentor = $project->mentor_id == Auth::id();
-        $isTeamCreator = $project->users()
-            ->where('user_id', Auth::id())
-            ->wherePivot('is_creator', true)
-            ->exists();
-
-        if ($this->has('statusId') && !$isMentor) {
-            return false;
-        }
-
-        return $isMentor || $isTeamCreator;
+        return $this->authorizeProject($this->route('id'), true);
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'sometimes|string|max:255',
@@ -39,14 +24,12 @@ class UpdateProjectRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'name.string' => 'Название проекта должно быть строкой.',
-            'name.max' => 'Название проекта не может превышать 255 символов.',
-            'annotation.string' => 'Аннотация должна быть строкой.',
-            'annotation.max' => 'Аннотация не может превышать 1000 символов.',
-            'status_id.exists' => 'Указанный статус не существует.',
+            'name.max' => 'Название проекта не может превышать 255 символов',
+            'annotation.max' => 'Аннотация не может превышать 1000 символов',
+            'statusId.exists' => 'Указанный статус не существует',
         ];
     }
 }

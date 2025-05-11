@@ -4,27 +4,26 @@ namespace App\Services;
 
 use App\Dto\UserDto;
 use App\Repositories\UserRepository;
+use App\Traits\PaginatesCollections;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class UserService
 {
+    use PaginatesCollections;
+
     public function __construct(
         private UserRepository $userRepository
     ) {}
 
     public function getAdminUsers(array $filters = []): array
     {
-        $paginator = $this->userRepository->getFilteredUsers($filters);
-        $paginator->setCollection(
-            $paginator->getCollection()->map(fn($user) => UserDto::fromModel($user)->toArray())
-        );
-
-        return [
-            'data' => $paginator->items(),
-            'currentPage' => $paginator->currentPage(),
-            'lastPage' => $paginator->lastPage(),
-            'perPage' => $paginator->perPage(),
-            'total' => $paginator->total(),
-            'links' => $paginator->links()->elements[0] ?? [],
-        ];
+        try {
+            $paginator = $this->userRepository->getFilteredUsers($filters);
+            return $this->formatPaginatedData($paginator, fn($user) => UserDto::fromModel($user)->toArray());
+        } catch (Throwable $e) {
+            Log::error("Ошибка получения пользователей: " . $e->getMessage(), ['filters' => $filters]);
+            throw new \Exception("Не удалось получить пользователей: {$e->getMessage()}", 0, $e);
+        }
     }
 }

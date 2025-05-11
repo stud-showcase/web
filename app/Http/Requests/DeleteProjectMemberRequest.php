@@ -3,47 +3,25 @@
 namespace App\Http\Requests;
 
 use App\Models\Project;
-use App\Models\UserProject;
+use App\Traits\AuthorizesProjectActions;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class DeleteProjectMemberRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    use AuthorizesProjectActions;
+
     public function authorize(): bool
     {
-        $projectId = $this->route('projectId');
-        $user = Auth::user();
-
-        $project = Project::find($projectId);
-        if (!$project) {
-            return false;
+        if ($this->has('isCreator')) {
+            $project = Project::select(['id', 'mentor_id'])->find($this->route('projectId'));
+            return $project && $project->mentor_id == $this->user()->id;
         }
 
-        $isMentor = $project->mentor_id == $user->id;
-        $isCreator = UserProject::where('project_id', $projectId)
-            ->where('user_id', $user->id)
-            ->where('is_creator', true)
-            ->exists();
-
-        if ($this->has('isCreator') && !$isMentor) {
-            return false;
-        }
-
-        return $isMentor || $isCreator;
+        return $this->authorizeProject($this->route('projectId'));
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 }

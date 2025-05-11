@@ -10,8 +10,8 @@ class CreateProjectRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $task = Task::findOrFail($this->input('taskId'));
-        return $task->canTake(Auth::user());
+        $task = Task::find($this->input('taskId'));
+        return $task && $task->canTake(Auth::user());
     }
 
     public function rules(): array
@@ -22,10 +22,13 @@ class CreateProjectRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
+            'taskId.required' => 'Выберите задачу',
+            'taskId.exists' => 'Выбранная задача не найдена',
             'projectName.required' => 'Название проекта обязательно',
+            'projectName.max' => 'Название проекта не может превышать 255 символов',
         ];
     }
 }

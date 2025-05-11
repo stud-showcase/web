@@ -12,6 +12,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.18",
         "laravel/tinker": "^2.9",
+        "predis/predis": "^3.0",
         "socialiteproviders/keycloak": "^5.3",
         "tightenco/ziggy": "^2.0"
     },

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->primary(['user_id', 'project_id']);
             $table->timestamps();
+            $table->index('is_creator');
         });
 
         Schema::create('user_role', function (Blueprint $table) {
@@ -38,6 +39,7 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained('projects');
             $table->foreignId('vacancy_id')->nullable()->constrained('vacancies')->nullOnDelete();
             $table->timestamps();
+            $table->index(['user_id', 'project_id']);
         });
 
         Schema::create('task_requests', function (Blueprint $table) {
@@ -49,7 +51,7 @@ return new class extends Migration
             $table->string('customer_phone')->nullable();
             $table->boolean('with_project')->default(false);
             $table->string('project_name')->nullable();
-            $table->uuid('user_id');
+            $table->uuid('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
@@ -58,7 +60,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_request_id')->constrained('task_requests');
             $table->string('path');
+            $table->string('name');
             $table->timestamps();
+            $table->index('path');
         });
     }
 
