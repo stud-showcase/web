@@ -4,7 +4,13 @@ namespace App\Repositories;
 
 use App\Models\Task;
 use App\Models\TaskRequest;
+use App\Models\TaskRequestFile;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Throwable;
 
 class TaskRepository
 {
@@ -85,5 +91,41 @@ class TaskRepository
             )
             ->paginate(10)
             ->withQueryString();
+    }
+
+    public function createRequest(array $data, array $files): void
+    {
+        try {
+            DB::transaction(function () use ($data, $files) {
+                $taskRequest = TaskRequest::create([
+                    'title' => $data['title'],
+                    'description' => $data['description'],
+                    'customer' => $data['customer'],
+                    'customer_email' => $data['customerEmail'],
+                    'customer_phone' => $data['customerPhone'] ?? null,
+                    'with_project' => $data['withProject'] ?? false,
+                    'project_name' => $data['projectName'] ?? null,
+                    'user_id' => Auth::check() ? Auth::id() : null,
+                ]);
+
+                foreach ($files as $file) {
+                    $extension = $file->getClientOriginalExtension();
+                    $uniqueName = Str::uuid() . '.' . $extension;
+                    $directory = 'task_requests/' . $taskRequest->id;
+                    $path = $file->storeAs($directory, $uniqueName, 'public');
+
+                    TaskRequestFile::create([
+                        'task_request_id' => $taskRequest->id,
+                        'name' => $file->getClientOriginalName(),
+                        'path' => $path,
+                    ]);
+                }
+
+                Log::info("Заявка [$taskRequest->id] создана.", ['files' => count($files)]);
+            });
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания заявки: " . $e->getMessage(), ['data' => $data]);
+            throw $e;
+        }
     }
 }

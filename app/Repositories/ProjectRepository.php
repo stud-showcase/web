@@ -11,6 +11,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class ProjectRepository
@@ -204,6 +205,26 @@ class ProjectRepository
             });
         } catch (Throwable $e) {
             Log::error("Ошибка создания файлов для проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function deleteFile(int $projectId, int $fileId): void
+    {
+        try {
+            DB::transaction(function () use ($projectId, $fileId) {
+                $file = ProjectFile::where('project_id', $projectId)
+                    ->where('id', $fileId)
+                    ->firstOrFail();
+
+                if (Storage::disk('public')->exists($file->path)) {
+                    Storage::disk('public')->delete($file->path);
+                }
+
+                $file->delete();
+            });
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления файла [$fileId] для проекта [$projectId]: " . $e->getMessage());
             throw $e;
         }
     }

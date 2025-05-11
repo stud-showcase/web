@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AcceptInviteRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\CreateInviteRequest;
+use App\Http\Requests\DeleteProjectFileRequest;
 use App\Http\Requests\DeleteProjectMemberRequest;
+use App\Http\Requests\ShowControlPanelRequest;
 use App\Http\Requests\UpdateProjectMemberRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Requests\UploadProjectFileRequest;
@@ -74,8 +76,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    // FIXME: сделал для теста
-    public function showControlPanel(int|string $id): \Inertia\Response
+    public function showControlPanel(ShowControlPanelRequest $request, int|string $id): \Inertia\Response
     {
         $project = $this->projectService->getFormattedProjectById($id);
         return Inertia::render('user/ProjectControlPanel', [
@@ -155,6 +156,16 @@ class ProjectController extends Controller
             return to_route('projects.show', $id);
         } catch (Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteFile(DeleteProjectFileRequest $request, int|string $projectId, int|string $fileId)
+    {
+        try {
+            $this->projectService->deleteFile($projectId, $fileId);
+            return to_route('projects.show', $projectId);
+        } catch (Throwable $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 

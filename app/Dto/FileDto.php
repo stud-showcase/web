@@ -9,6 +9,7 @@ use App\Models\TaskRequestFile;
 class FileDto
 {
     public function __construct(
+        public int $id,
         public string $name,
         public string $path
     ) {}
@@ -16,6 +17,7 @@ class FileDto
     public static function fromModel(TaskFile|ProjectFile|TaskRequestFile $file): self
     {
         return new self(
+            id: $file->id,
             name: $file->name,
             path: asset("storage/{$file->path}")
         );

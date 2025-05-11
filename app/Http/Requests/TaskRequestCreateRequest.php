@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TaskRequestCreateRequest extends FormRequest
 {
@@ -13,7 +14,10 @@ class TaskRequestCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        // Вы можете добавить логику проверки авторизации пользователя
+        if ($this->input('withProject') && !Auth::check()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -26,7 +30,7 @@ class TaskRequestCreateRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'customer' => 'required|string|max:255',
             'customerEmail' => 'required|email|max:255',
             'customerPhone' => 'nullable|string|max:20',

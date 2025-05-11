@@ -19,6 +19,7 @@ class TaskRequest extends Model
         'customer_email',
         'customer_phone',
         'with_project',
+        'project_name',
         'user_id',
     ];
 
