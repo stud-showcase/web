@@ -22,7 +22,7 @@ class UpdateProjectRequest extends FormRequest
             ->wherePivot('is_creator', true)
             ->exists();
 
-        if ($this->has('status_id') && !$isMentor) {
+        if ($this->has('statusId') && !$isMentor) {
             return false;
         }
 

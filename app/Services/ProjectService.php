@@ -122,6 +122,15 @@ class ProjectService
         }
     }
 
+    public function deleteFile(int $projectId, int $fileId): void
+    {
+        try {
+            $this->projectRepository->deleteFile($projectId, $fileId);
+        } catch (Throwable $e) {
+            throw new \Exception("Не удалось удалить файл: {$e->getMessage()}", 0, $e);
+        }
+    }
+
     public function getAdminProjects(array $filters = []): array
     {
         $paginator = $this->projectRepository->getAdminProjects($filters);

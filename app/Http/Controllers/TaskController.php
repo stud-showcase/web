@@ -5,13 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TaskRequestCreateRequest;
 use App\Models\Tag;
 use App\Models\Task;
-use App\Models\TaskRequest;
-use App\Models\TaskRequestFile;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Throwable;
 
 class TaskController extends Controller
 {
@@ -53,42 +50,11 @@ class TaskController extends Controller
 
     public function createRequest(TaskRequestCreateRequest $request)
     {
-        if ($request->input('withProject') && !Auth::check()) {
-            return response()->json([
-                'message' => 'Для заявки с проектом необходимо авторизоваться',
-            ], 403);
+        try {
+            $this->taskService->createRequest($request->validated(), $request->file('files') ?? []);
+            return response()->json(['message' => 'Заявка успешно создана']);
+        } catch (Throwable $e) {
+            return to_route('tasks.index')->withErrors(['error' => $e->getMessage()]);
         }
-
-        $validated = $request->validated();
-
-        $userId = Auth::check() ? Auth::id() : null;
-
-        $taskRequest = TaskRequest::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'customer' => $validated['customer'],
-            'customer_email' => $validated['customerEmail'],
-            'customer_phone' => $validated['customerPhone'],
-            'with_project' => $validated['withProject'],
-            'project_name' => $validated['projectName'],
-            'user_id' => $userId,
-        ]);
-
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
-                $extension = $file->getClientOriginalExtension();
-                $uniqueName = Str::uuid() . '.' . $extension;
-                $directory = 'task_requests/' . $taskRequest->id;
-                $path = $file->storeAs($directory, $uniqueName, 'public');
-
-                TaskRequestFile::create([
-                    'task_request_id' => $taskRequest->id,
-                    'name' => $file->getClientOriginalName(),
-                    'path' => $path,
-                ]);
-            }
-        }
-
-        return response()->json(['message' => 'Заявка успешно создана']);
     }
 }

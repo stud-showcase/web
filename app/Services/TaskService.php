@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Repositories\TaskRepository;
 use App\Dto\TaskDto;
 use App\Dto\TaskRequestDto;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class TaskService
 {
@@ -70,5 +72,15 @@ class TaskService
             'total' => $paginator->total(),
             'links' => $paginator->links()->elements[0] ?? [],
         ];
+    }
+
+    public function createRequest(array $data, array $files): void
+    {
+        try {
+            $this->taskRepository->createRequest($data, $files);
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания заявки: " . $e->getMessage());
+            throw new \Exception("Не удалось создать заявку: {$e->getMessage()}", 0, $e);
+        }
     }
 }

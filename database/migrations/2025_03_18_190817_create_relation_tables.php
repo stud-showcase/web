@@ -48,7 +48,7 @@ return new class extends Migration
             $table->string('customer_email');
             $table->string('customer_phone')->nullable();
             $table->boolean('with_project')->default(false);
-            $table->string('project_name');
+            $table->string('project_name')->nullable();
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

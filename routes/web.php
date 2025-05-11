@@ -24,7 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [SocialController::class, 'logout'])->name('logout');
 });
 
-
 Route::get('/download/{path}', [FileController::class, 'download'])->name('files.download')->where('path', '.*');
 
 Route::get('/vacancies', [VacancyController::class, 'index']);
@@ -32,22 +31,23 @@ Route::get('/vacancies', [VacancyController::class, 'index']);
 Route::post('/taskRequest', [TaskController::class, 'createRequest']);
 
 Route::prefix('tasks')->group(function () {
-    Route::get('/', [TaskController::class, 'index']);
+    Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('/{id}', [TaskController::class, 'show']);
 });
 
 Route::prefix('projects')->group(function () {
     Route::get('/', [ProjectController::class, 'index']);
     Route::get('/{id}', [ProjectController::class, 'show'])->name('projects.show');
-    Route::get('/{id}/control-panel', [ProjectController::class, 'showControlPanel'])->name('projects.control-panel.show');
+    Route::get('/{id}/controlPanel', [ProjectController::class, 'showControlPanel'])->name('projects.controlPanel.show');
 
     Route::middleware('auth')->group(function () {
         Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
         Route::put('/{id}', [ProjectController::class, 'update'])->name('projects.update');
         Route::post('/{id}/files', [ProjectController::class, 'uploadFiles'])->name('projects.files.upload');
+        Route::delete('/{projectId}/files/{fileId}', [ProjectController::class, 'deleteFile'])->name('projects.files.delete');
 
-        Route::post('{id}/create-invite', [ProjectController::class, 'createInvite'])->name('projects.invite.create');
-        Route::post('{id}/accept-invite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
+        Route::post('{id}/createInvite', [ProjectController::class, 'createInvite'])->name('projects.invite.create');
+        Route::post('{id}/acceptInvite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
 
         Route::post('/{id}/vacancy', [VacancyController::class, 'store'])->name('projects.vacancy.create');
         Route::put('/{projectId}/vacancy/{vacancyId}', [VacancyController::class, 'update'])->name('projects.vacancy.update');

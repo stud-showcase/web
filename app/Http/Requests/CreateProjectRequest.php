@@ -21,4 +21,11 @@ class CreateProjectRequest extends FormRequest
             'projectName' => 'required|string|max:255',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'projectName.required' => 'Название проекта обязательно',
+        ];
+    }
 }
