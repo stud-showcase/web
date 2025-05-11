@@ -7,6 +7,7 @@ import { Text } from "@/shared/ui/Text";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useForm } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
+import { useToast } from "@/shared/hooks/useToast";
 
 type ApplicationForm = {
   title: string;
@@ -21,7 +22,7 @@ type ApplicationForm = {
 export function ApplicationForm() {
   const { user } = useAuth();
 
-  const { data, setData, post, processing, transform, errors, reset} =
+  const { data, setData, post, processing, transform, errors, reset } =
     useForm<ApplicationForm>({
       title: "",
       projectName: undefined,
@@ -37,43 +38,61 @@ export function ApplicationForm() {
     withProject: data.withProject === "project",
   }));
 
-  const [files, setFiles] = useState<File[]>([]);
-  const [isDragging, setIsDragging] = useState(false);
+  const { toast } = useToast();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(Array.from(e.target.files));
-    }
-  };
+  // const [files, setFiles] = useState<File[]>([]);
+  // const [isDragging, setIsDragging] = useState(false);
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files) {
-      setFiles(Array.from(e.dataTransfer.files));
-    }
-  };
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files) {
+  //     setFiles(Array.from(e.target.files));
+  //   }
+  // };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
+  // const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  //   e.preventDefault();
+  //   setIsDragging(false);
+  //   if (e.dataTransfer.files) {
+  //     setFiles(Array.from(e.dataTransfer.files));
+  //   }
+  // };
 
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
+  // const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+  //   e.preventDefault();
+  //   setIsDragging(true);
+  // };
+
+  // const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+  //   e.preventDefault();
+  //   setIsDragging(false);
+  // };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post("/application");
+    post("/application", {
+      onSuccess: () => {
+        reset();
+        toast({
+          title: "Заявка успешно отправлена",
+          description: `Ваша заявка успешно отправлена и будет рассмотрена администратором.`,
+        });
+      },
+      onError: () => {
+        toast({
+          title: "Не удалось отправить заявку",
+          description: `Произошла ошибка в ходе отправки заявки. Повторите еще раз или попробуйте позже`,
+          variant: "destructive",
+        });
+      },
+    });
   };
 
   const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     reset();
-  }
+  };
 
+  // TODO: добавить ошибки валидации
   return (
     <div className="border rounded-lg py-4 px-6">
       <form
@@ -219,7 +238,9 @@ export function ApplicationForm() {
         )}
 
         <div className="flex gap-2">
-          <Button variant={"outline"} type="reset">Сбросить</Button>
+          <Button variant={"outline"} type="reset">
+            Сбросить
+          </Button>
           <Button type="submit">Отправить</Button>
         </div>
       </form>
