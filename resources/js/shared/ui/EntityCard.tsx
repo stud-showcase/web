@@ -26,7 +26,7 @@ export function EntityCard({
   footer,
 }: Props) {
   return (
-    <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+    <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md bg-background">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {subtitle && <CardDescription>{subtitle}</CardDescription>}

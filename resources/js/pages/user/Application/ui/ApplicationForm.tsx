@@ -12,6 +12,7 @@ import { Heading } from "@/shared/ui/Heading";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { cn } from "@/shared/lib/utils";
 import { Upload } from "lucide-react";
+import { Separator } from "@/shared/ui/Separator";
 
 type ApplicationForm = {
   title: string;
@@ -101,9 +102,14 @@ export function ApplicationForm() {
   };
 
   return (
-    <form id="leave-request-form" onSubmit={handleSubmit} onReset={handleReset}>
+    <form
+      id="leave-request-form"
+      onSubmit={handleSubmit}
+      onReset={handleReset}
+      className="border rounded-lg p-4 shadow-sm"
+    >
       <Heading level={3}>Общая информация</Heading>
-      <div className="mt-3 border rounded-lg p-4 shadow-sm space-y-6">
+      <div className="mt-3 space-y-6">
         <div className="space-y-2">
           <Label htmlFor="title">Название задачи *</Label>
           <Input
@@ -151,7 +157,7 @@ export function ApplicationForm() {
           <Label htmlFor="files">Прикрепить файлы</Label>
           <div
             className={cn(
-              "border-2 border-input border-dashed rounded-lg p-8 text-center transition-colors",
+              "border-2 border-input border-dashed rounded-lg p-8 text-center transition-colors bg-background",
               {
                 "border-primary bg-muted/20": isDragging,
               }
@@ -215,11 +221,10 @@ export function ApplicationForm() {
           </div>
         )}
       </div>
-
       <Heading level={3} className="mt-8">
         Контактная информация
       </Heading>
-      <div className="mt-3 border rounded-lg p-4 shadow-sm space-y-6">
+      <div className="mt-3 space-y-6">
         <div className="space-y-2">
           <Label htmlFor="customer">Заказчик *</Label>
           <Input
@@ -263,7 +268,7 @@ export function ApplicationForm() {
         </div>
       </div>
 
-      <div className="flex gap-2 mt-5">
+      <div className="flex gap-2 mt-6">
         <Button variant={"outline"} type="reset">
           Сбросить
         </Button>

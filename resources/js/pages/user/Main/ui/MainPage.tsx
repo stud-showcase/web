@@ -32,7 +32,7 @@ export default function MainPage() {
             </Button>
           </section>
 
-          <section className="px-6 py-16 w-full bg-muted/60">
+          <section className="px-6 py-16 w-full bg-muted/40 border-y">
             <Heading level={2} className="mb-6 text-center">
               Для кого
             </Heading>
@@ -125,7 +125,7 @@ export default function MainPage() {
             </Accordion>
           </section>
 
-          <section className="px-6 py-16 w-full bg-muted/60">
+          <section className="px-6 py-16 w-full bg-muted/40 border-y">
             <Heading level={2} className="mb-6 text-center">
               Функции
             </Heading>

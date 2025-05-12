@@ -167,7 +167,7 @@ export function FilterPanel({
   onReset: () => void;
 }>) {
   return (
-    <div className="lg:col-span-1 bg-white border rounded-lg p-4">
+    <div className="lg:col-span-1 bg-background border rounded-lg p-4">
       <div className="sticky top-0 left-0">
         <div className="space-y-3">{children}</div>
         <div className="flex flex-col xl:flex-row gap-2 mt-4">
