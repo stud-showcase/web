@@ -50,11 +50,11 @@ class TaskController extends Controller
         ]);
     }
 
-    public function createRequest(TaskRequestCreateRequest $request): JsonResponse|RedirectResponse
+    public function createRequest(TaskRequestCreateRequest $request): \Inertia\Response|RedirectResponse
     {
         try {
             $this->taskService->createRequest($request->validated(), $request->file('files') ?? []);
-            return Inertia::render('user/Application');
+            return Inertia::render('user/Application')->with('success', 'Заявка успешно отправлена.');
         } catch (Throwable $e) {
             Log::error("Ошибка создания заявки: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

@@ -8,29 +8,31 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { useForm } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { useToast } from "@/shared/hooks/useToast";
+import { Heading } from "@/shared/ui/Heading";
+import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 
 type ApplicationForm = {
   title: string;
-  projectName: string | undefined;
+  projectName: string;
   description: string;
   customer: string;
   customerEmail: string;
-  customerPhone: string | undefined;
-  withProject: string | undefined;
+  customerPhone: string;
+  withProject: string;
 };
 
 export function ApplicationForm() {
   const { user } = useAuth();
 
-  const { data, setData, post, processing, transform, errors, reset } =
+  const { data, setData, post, transform, errors, reset, clearErrors } =
     useForm<ApplicationForm>({
       title: "",
-      projectName: undefined,
+      projectName: "",
       description: "",
       customer: "",
       customerEmail: "",
-      customerPhone: undefined,
-      withProject: undefined,
+      customerPhone: "",
+      withProject: "",
     });
 
   transform((data) => ({
@@ -78,6 +80,7 @@ export function ApplicationForm() {
         });
       },
       onError: () => {
+        reset();
         toast({
           title: "Не удалось отправить заявку",
           description: `Произошла ошибка в ходе отправки заявки. Повторите еще раз или попробуйте позже`,
@@ -89,18 +92,14 @@ export function ApplicationForm() {
 
   const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    clearErrors();
     reset();
   };
 
-  // TODO: добавить ошибки валидации
   return (
-    <div className="border rounded-lg py-4 px-6">
-      <form
-        id="leave-request-form"
-        className="space-y-6"
-        onSubmit={handleSubmit}
-        onReset={handleReset}
-      >
+    <form id="leave-request-form" onSubmit={handleSubmit} onReset={handleReset}>
+      <Heading level={3}>Общая информация</Heading>
+      <div className="mt-3 border rounded-lg p-4 shadow-sm space-y-6">
         <div className="space-y-2">
           <Label htmlFor="title">Название задачи *</Label>
           <Input
@@ -111,6 +110,7 @@ export function ApplicationForm() {
             onChange={(e) => setData("title", e.target.value)}
             required
           />
+          {errors.title && <ValidationErrorText text={errors.title} />}
         </div>
         {data.withProject === "project" && (
           <div className="space-y-2">
@@ -123,6 +123,9 @@ export function ApplicationForm() {
               onChange={(e) => setData("projectName", e.target.value)}
               required
             />
+            {errors.projectName && (
+              <ValidationErrorText text={errors.projectName} />
+            )}
           </div>
         )}
 
@@ -135,41 +138,9 @@ export function ApplicationForm() {
             onChange={(e) => setData("description", e.target.value)}
             required
           />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="customer">Заказчик *</Label>
-          <Input
-            id="customer"
-            placeholder="Введите имя или организацию..."
-            type="text"
-            value={data.customer}
-            onChange={(e) => setData("customer", e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="email">Email *</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="Введите email..."
-            value={data.customerEmail}
-            onChange={(e) => setData("customerEmail", e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="phone">Телефон</Label>
-          <Input
-            id="phone"
-            type="tel"
-            placeholder="Введите телефон..."
-            value={data.customerPhone}
-            onChange={(e) => setData("customerPhone", e.target.value)}
-          />
+          {errors.description && (
+            <ValidationErrorText text={errors.description} />
+          )}
         </div>
 
         {/* <div className="space-y-2">
@@ -214,16 +185,18 @@ export function ApplicationForm() {
             <RadioGroup
               className="flex space-x-4"
               value={data.withProject}
+              name="withProject"
+              required
               onValueChange={(value) => setData("withProject", value)}
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="task" id="task" />
+                <RadioGroupItem value="task" id="task"/>
                 <Label htmlFor="task" className="cursor-pointer">
                   Добавить задачу в банк
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="project" id="project" />
+                <RadioGroupItem value="project" id="project"/>
                 <Label htmlFor="project" className="cursor-pointer">
                   Создать проект
                 </Label>
@@ -236,14 +209,61 @@ export function ApplicationForm() {
             </Text>
           </div>
         )}
+      </div>
 
-        <div className="flex gap-2">
-          <Button variant={"outline"} type="reset">
-            Сбросить
-          </Button>
-          <Button type="submit">Отправить</Button>
+      <Heading level={3} className="mt-8">
+        Контактная информация
+      </Heading>
+      <div className="mt-3 border rounded-lg p-4 shadow-sm space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="customer">Заказчик *</Label>
+          <Input
+            id="customer"
+            placeholder="Введите имя или организацию..."
+            type="text"
+            value={data.customer}
+            onChange={(e) => setData("customer", e.target.value)}
+            required
+          />
+          {errors.customer && <ValidationErrorText text={errors.customer} />}
         </div>
-      </form>
-    </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="email">Email *</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="Введите email..."
+            value={data.customerEmail}
+            onChange={(e) => setData("customerEmail", e.target.value)}
+            required
+          />
+          {errors.customerEmail && (
+            <ValidationErrorText text={errors.customerEmail} />
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="phone">Телефон</Label>
+          <Input
+            id="phone"
+            type="tel"
+            placeholder="Введите телефон..."
+            value={data.customerPhone}
+            onChange={(e) => setData("customerPhone", e.target.value)}
+          />
+          {errors.customerPhone && (
+            <ValidationErrorText text={errors.customerPhone} />
+          )}
+        </div>
+      </div>
+
+      <div className="flex gap-2 mt-5">
+        <Button variant={"outline"} type="reset">
+          Сбросить
+        </Button>
+        <Button type="submit">Оставить заявку</Button>
+      </div>
+    </form>
   );
 }
