@@ -54,8 +54,9 @@ class FileRepository
             $uniqueName = Str::uuid() . '.' . $extension;
             $path = $file->storeAs($directory . '/' . $entityId, $uniqueName, 'public');
 
+            // FIXME: поменял $modelClass::getForeignKey() => $entityId на 'task_request_id' => $entityId
             $modelClass::create([
-                $modelClass::getForeignKey() => $entityId,
+                'task_request_id' => $entityId,
                 'name' => $file->getClientOriginalName(),
                 'path' => $path,
             ]);

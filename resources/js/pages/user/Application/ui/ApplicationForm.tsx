@@ -10,6 +10,8 @@ import { Button } from "@/shared/ui/Button";
 import { useToast } from "@/shared/hooks/useToast";
 import { Heading } from "@/shared/ui/Heading";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
+import { cn } from "@/shared/lib/utils";
+import { Upload } from "lucide-react";
 
 type ApplicationForm = {
   title: string;
@@ -19,6 +21,7 @@ type ApplicationForm = {
   customerEmail: string;
   customerPhone: string;
   withProject: string;
+  files: File[];
 };
 
 export function ApplicationForm() {
@@ -33,6 +36,7 @@ export function ApplicationForm() {
       customerEmail: "",
       customerPhone: "",
       withProject: "",
+      files: [],
     });
 
   transform((data) => ({
@@ -42,32 +46,32 @@ export function ApplicationForm() {
 
   const { toast } = useToast();
 
-  // const [files, setFiles] = useState<File[]>([]);
-  // const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
-  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files) {
-  //     setFiles(Array.from(e.target.files));
-  //   }
-  // };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setData("files", Array.from(e.target.files));
+    }
+  };
 
-  // const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-  //   e.preventDefault();
-  //   setIsDragging(false);
-  //   if (e.dataTransfer.files) {
-  //     setFiles(Array.from(e.dataTransfer.files));
-  //   }
-  // };
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
 
-  // const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-  //   e.preventDefault();
-  //   setIsDragging(true);
-  // };
+    if (e.dataTransfer.files) {
+      setData("files", Array.from(e.dataTransfer.files));
+    }
+  };
 
-  // const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-  //   e.preventDefault();
-  //   setIsDragging(false);
-  // };
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -143,11 +147,11 @@ export function ApplicationForm() {
           )}
         </div>
 
-        {/* <div className="space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="files">Прикрепить файлы</Label>
           <div
             className={cn(
-              "border-2 border-input border-dashed rounded-lg p-4 text-center transition-colors",
+              "border-2 border-input border-dashed rounded-lg p-8 text-center transition-colors",
               {
                 "border-primary bg-muted/20": isDragging,
               }
@@ -166,8 +170,8 @@ export function ApplicationForm() {
             <div className="space-y-2">
               <Upload className="h-6 w-6 mx-auto text-muted-foreground" />
               <Text variant="muted">
-                {files.length > 0
-                  ? `${files.length} файл(ов) выбрано`
+                {data.files.length > 0
+                  ? `${data.files.length} файл(ов) выбрано`
                   : "Перетащите файлы сюда или"}
               </Text>
               <Button variant="outline" asChild className="mt-2">
@@ -177,7 +181,8 @@ export function ApplicationForm() {
               </Button>
             </div>
           </div>
-        </div> */}
+          {errors.files && <ValidationErrorText text={errors.files} />}
+        </div>
 
         {user && (
           <div className="space-y-2">
@@ -190,13 +195,13 @@ export function ApplicationForm() {
               onValueChange={(value) => setData("withProject", value)}
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="task" id="task"/>
+                <RadioGroupItem value="task" id="task" />
                 <Label htmlFor="task" className="cursor-pointer">
                   Добавить задачу в банк
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="project" id="project"/>
+                <RadioGroupItem value="project" id="project" />
                 <Label htmlFor="project" className="cursor-pointer">
                   Создать проект
                 </Label>
