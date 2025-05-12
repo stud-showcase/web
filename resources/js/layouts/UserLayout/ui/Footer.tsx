@@ -31,6 +31,36 @@ export function Footer() {
           <SevSULogo width={200} height={60} color="white" />
           <div className="flex flex-col md:flex-row justify-between mt-6 space-y-6 md:space-y-0 md:space-x-8 text-sm">
             <div>
+              <Text className="font-semibold">КАРТА САЙТА</Text>
+              <ul className="mt-2 space-y-2">
+                <li className="text-xs">
+                  <a href="/" className="hover:underline">
+                    Главная
+                  </a>
+                </li>
+                <li className="text-xs">
+                  <a href="/projects" className="hover:underline">
+                    Проекты
+                  </a>
+                </li>
+                <li className="text-xs">
+                  <a href="/tasks" className="hover:underline">
+                    Банк задач
+                  </a>
+                </li>
+                <li className="text-xs">
+                  <a href="/vacancies" className="hover:underline">
+                    Вакансии
+                  </a>
+                </li>
+                <li className="text-xs">
+                  <a href="/application" className="hover:underline">
+                    Заявка
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
               <Text className="font-semibold">ЦИФРОВАЯ ЭКОСИСТЕМА</Text>
               <ul className="mt-2 space-y-2">
                 <li className="text-xs">
@@ -78,18 +108,8 @@ export function Footer() {
                     Rocket Chat
                   </a>
                 </li>
-                <li className="text-xs">
-                  <a
-                    target="_blank"
-                    href="https://iot.sevsu.ru"
-                    className="hover:underline"
-                  >
-                    ИОТ
-                  </a>
-                </li>
               </ul>
             </div>
-
             <div>
               <Text className="font-semibold">СОЦСЕТИ</Text>
               <ul className="mt-2 space-y-2">
@@ -140,7 +160,6 @@ export function Footer() {
                 </li>
               </ul>
             </div>
-
             <div>
               <Text className="font-semibold">КОНТАКТЫ</Text>
               <ul className="mt-2 space-y-2">
@@ -150,38 +169,21 @@ export function Footer() {
                     href="tel:+79781234567"
                     className="hover:underline"
                   >
-                    +7 (978) 123-45-67
+                    +7 (978) 777-77-77
                   </a>
                 </li>
                 <li className="text-xs">
                   <a
                     target="_blank"
-                    href="mailto:info@sevsu.ru"
+                    href="mailto:proektika@mail.sevsu.ru"
                     className="hover:underline"
                   >
-                    info@sevsu.ru
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <Text className="font-semibold">ПОМОЩЬ</Text>
-              <ul className="mt-2 space-y-2">
-                <li className="text-xs">
-                  <a target="_blank" href="#" className="hover:underline">
-                    Студенту
-                  </a>
-                </li>
-                <li className="text-xs">
-                  <a target="_blank" href="#" className="hover:underline">
-                    Заказчику
+                    proektika@mail.sevsu.ru
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-
           <p className="mt-10 text-center text-xs">
             Все права защищены © «Севастопольский государственный университет»,{" "}
             {new Date().getFullYear()}
