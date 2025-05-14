@@ -35,7 +35,7 @@ export function MobileMenu() {
           </nav>
           <div className="flex flex-col gap-4">
             <Separator />
-            {user ? <ProfileIcon mobile /> : <SignInButton />}
+            {user ? <ProfileIcon /> : <SignInButton />}
           </div>
         </div>
       </SheetContent>

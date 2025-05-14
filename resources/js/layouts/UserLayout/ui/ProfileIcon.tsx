@@ -7,31 +7,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/DropdownMenu";
-import {
-  ChevronsUpDown,
-  LogOut,
-  Settings,
-} from "lucide-react";
-import { PropsWithChildren } from "react";
+import { ChevronsUpDown, LogOut, Settings } from "lucide-react";
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { hasRole } from "@/entities/User";
+import {
+  getAvatartName,
+  getShortName,
+  isAdmin,
+  isMentor,
+} from "@/entities/User";
 import { Text } from "@/shared/ui/Text";
 
-type Props = {
-  mobile?: boolean;
-};
-
-export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
+export function ProfileIcon() {
   const { user } = useAuth();
 
-  const initials = `${user!.firstName[0]}${user!.lastName ? user!.lastName[0] : ""}`;
-
-  let fullName = `${user!.secondName} ${user!.firstName[0]}.`;
-  if (user!.lastName) {
-    fullName += `${user!.lastName[0]}.`;
-  }
+  const avatarName = getAvatartName(user!.firstName, user!.lastName);
+  const shortName = getShortName(user!.firstName, user!.secondName, user!.lastName);
 
   return (
     <>
@@ -43,18 +35,18 @@ export function ProfileIcon({ mobile }: PropsWithChildren<Props>) {
           >
             <Avatar>
               <AvatarFallback className="bg-primary text-white">
-                {initials}
+                {avatarName}
               </AvatarFallback>
             </Avatar>
             <Text variant="small" className="font-semibold text-primary">
-              {fullName}
+              {shortName}
             </Text>
             <ChevronsUpDown className="text-primary" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel>{fullName}</DropdownMenuLabel>
-          {(hasRole(user, "mentor") || hasRole(user, "admin")) && (
+          <DropdownMenuLabel>{shortName}</DropdownMenuLabel>
+          {(isMentor(user) || isAdmin(user)) && (
             <DropdownMenuItem asChild>
               <Link href="/admin/dashboard">
                 <Settings className="mr-2 h-4 w-4" />

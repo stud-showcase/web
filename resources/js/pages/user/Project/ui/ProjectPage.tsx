@@ -26,29 +26,10 @@ import { UserLayout } from "@/layouts/UserLayout";
 import { Container } from "@/shared/ui/Container";
 import { ExtendedProject } from "../model/ExtendedProject";
 import { JoinProjectModal } from "./JoinProjectModal";
-import { mockVacancies } from "@/shared/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
 import { Badge } from "@/shared/ui/Badge";
 import { useState } from "react";
-import { hasRole } from "@/entities/User";
-
-function getAvatartName(firstName: string, lastName: string | null) {
-  if (lastName) {
-    return `${firstName[0]}${lastName[0]}`;
-  }
-  return firstName[0];
-}
-
-function getFullName(
-  firstName: string,
-  secondName: string,
-  lastName: string | null
-) {
-  if (lastName) {
-    return `${secondName} ${firstName} ${lastName}`;
-  }
-  return `${secondName} ${firstName}`;
-}
+import { getAvatartName, getFullName } from "@/entities/User";
 
 export default function ProjectPage({ project }: { project: ExtendedProject }) {
   const { user } = useAuth();
@@ -90,16 +71,18 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                     </Link>
                   </Button>
                   {/* TODO: добавить проверку на роль пользователя */}
-                  <Button
-                    variant={"secondary"}
-                    className="flex-1 sm:flex-none"
-                    asChild
-                  >
-                    <Link href={`/projects/${project.id}/controlPanel`}>
-                      <Settings />
-                      Панель управления
-                    </Link>
-                  </Button>
+                  {user && (
+                    <Button
+                      variant={"secondary"}
+                      className="flex-1 sm:flex-none"
+                      asChild
+                    >
+                      <Link href={`/projects/${project.id}/controlPanel`}>
+                        <Settings />
+                        Панель управления
+                      </Link>
+                    </Button>
+                  )}
                   {user && project.canJoin && (
                     <JoinProjectModal
                       projectId={project.id}
