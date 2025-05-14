@@ -1,17 +1,11 @@
 import { Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
-import { ArrowRight, UserPlus, Users } from "lucide-react";
+import { ArrowRight, Users } from "lucide-react";
 import { EntityCard } from "@/shared/ui/EntityCard";
-import {
-  ProjectStatusBadge,
-  ProjectHiringBadge,
-} from "@/entities/Project";
+import { ProjectStatusBadge, ProjectHiringBadge } from "@/entities/Project";
 import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
 import { Text } from "@/shared/ui/Text";
 import { ExtendedProject } from "../model/ExtendedProject";
-import { useAuth } from "@/shared/hooks/useAuth";
-import { JoinProjectModal } from "@/features/JoinProjectModal";
-import { mockVacancies } from "@/shared/mocks";
 
 function Title({ project }: { project: ExtendedProject }) {
   return (
@@ -49,25 +43,13 @@ export function Content({ project }: { project: ExtendedProject }) {
 }
 
 function Footer({ project }: { project: ExtendedProject }) {
-  const { user } = useAuth();
-
   return (
-    <>
-      {user && project.canJoin && (
-        <JoinProjectModal projectId={project.id} vacancies={mockVacancies}>
-          <Button variant="outline" size="sm">
-            <UserPlus />
-            Вступить
-          </Button>
-        </JoinProjectModal>
-      )}
-      <Button asChild size="sm">
-        <Link href={`/projects/${project.id}`}>
-          Подробнее
-          <ArrowRight />
-        </Link>
-      </Button>
-    </>
+    <Button asChild size="sm">
+      <Link href={`/projects/${project.id}`}>
+        Подробнее
+        <ArrowRight />
+      </Link>
+    </Button>
   );
 }
 

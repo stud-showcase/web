@@ -2,7 +2,7 @@ import { EntityCard } from "@/shared/ui/EntityCard";
 import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
-import { ArrowRight, ClipboardCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Task } from "@/entities/Task/model/Task";
 import {
   TaskComplexityBadge,
@@ -10,8 +10,6 @@ import {
   TaskMembersBadge,
   TaskTagBadge,
 } from "@/entities/Task";
-import { useAuth } from "@/shared/hooks/useAuth";
-import { CreateProjectModal } from "@/features/CreateProjectModal";
 
 function Badges({ task }: { task: Task }) {
   return (
@@ -36,25 +34,13 @@ function Tags({ task }: { task: Task }) {
 }
 
 function Footer({ task }: { task: Task }) {
-  const { user } = useAuth();
-
   return (
-    <>
-      {user && task.canTake && (
-        <CreateProjectModal task={task}>
-          <Button variant="outline" size="sm">
-            <ClipboardCheck />
-            Взять задачу
-          </Button>
-        </CreateProjectModal>
-      )}
-      <Button asChild size="sm">
-        <Link href={`/tasks/${task.id}`}>
-          Подробнее
-          <ArrowRight />
-        </Link>
-      </Button>
-    </>
+    <Button asChild size="sm">
+      <Link href={`/tasks/${task.id}`}>
+        Подробнее
+        <ArrowRight />
+      </Link>
+    </Button>
   );
 }
 

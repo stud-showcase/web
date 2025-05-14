@@ -9,7 +9,8 @@ use Throwable;
 
 class ProjectInviteRepository
 {
-    public function create(int $userId, int $projectId, ?int $vacancyId): void
+    // FIXME: поменял int $userId на string $userId
+    public function create(string $userId, int $projectId, ?int $vacancyId): void
     {
         try {
             ProjectInvite::create([

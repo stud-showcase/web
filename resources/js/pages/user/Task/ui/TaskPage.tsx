@@ -28,7 +28,7 @@ import {
 import { SimpleProjectCard } from "./SimpleProjectCard";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { ExtendedTask } from "../model/ExtendedTask";
-import { CreateProjectModal } from "@/features/CreateProjectModal";
+import { CreateProjectModal } from "./CreateProjectModal";
 
 export default function TaskPage({ task }: { task: ExtendedTask }) {
   const { user } = useAuth();

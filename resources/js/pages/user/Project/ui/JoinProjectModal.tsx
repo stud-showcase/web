@@ -1,4 +1,5 @@
 import { Vacancy } from "@/entities/Vacancy";
+import { toast } from "@/shared/hooks/useToast";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,19 +15,41 @@ import { Button } from "@/shared/ui/Button";
 import { Label } from "@/shared/ui/Label";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/RadioGroup";
 import { Text } from "@/shared/ui/Text";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { PropsWithChildren, useState } from "react";
 
-// TODO: убрать моки вакансий
+function sendJoinProjectRequest(projectId: number, vacancyId?: string) {
+  router.post(
+    `/projects/${projectId}/createInvite`,
+    { vacancyId },
+    {
+      onSuccess: () => {
+        toast({
+          title: "Заявка успешно отправлена",
+          description: `Ваша заявка успешно отправлена и будет рассмотрена руководителем команды.`,
+        });
+      },
+      onError: () => {
+        toast({
+          title: "Не удалось отправить заявку",
+          description: `Произошла ошибка в ходе отправки заявки. Повторите еще раз или попробуйте позже.`,
+          variant: "destructive",
+        });
+      },
+    }
+  );
+}
+
 function JoinProjectVacanciesModal({
   projectId,
   vacancies,
   children,
 }: PropsWithChildren<{ projectId: number; vacancies: Vacancy[] }>) {
-  const [selectedVacancyId, setSelectedVacancyId] = useState<string | null>(
-    null
-  );
-  const handleApply = () => {};
+  const [selectedVacancyId, setSelectedVacancyId] = useState<string>();
+
+  const handleApply = () => {
+    sendJoinProjectRequest(projectId, selectedVacancyId);
+  };
 
   return (
     <AlertDialog>
@@ -94,7 +117,14 @@ function JoinProjectVacanciesModal({
   );
 }
 
-function JoinProjectConfirmationModal({ children }: PropsWithChildren) {
+function JoinProjectConfirmationModal({
+  projectId,
+  children,
+}: PropsWithChildren<{ projectId: number }>) {
+  const handleApply = () => {
+    sendJoinProjectRequest(projectId);
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -109,7 +139,9 @@ function JoinProjectConfirmationModal({ children }: PropsWithChildren) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Отменить</AlertDialogCancel>
-          <AlertDialogAction>Подать заявку</AlertDialogAction>
+          <AlertDialogAction onClick={handleApply}>
+            Подать заявку
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -129,6 +161,8 @@ export function JoinProjectModal({
     );
   }
   return (
-    <JoinProjectConfirmationModal>{children}</JoinProjectConfirmationModal>
+    <JoinProjectConfirmationModal projectId={projectId}>
+      {children}
+    </JoinProjectConfirmationModal>
   );
 }

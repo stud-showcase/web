@@ -47,7 +47,8 @@ class ProjectService
         }
     }
 
-    public function createInvite(int $userId, int $projectId, ?int $vacancyId): void
+    // FIXME: поменял int $userId на string $userId
+    public function createInvite(string $userId, int $projectId, ?int $vacancyId): void
     {
         try {
             $this->inviteRepository->create($userId, $projectId, $vacancyId);

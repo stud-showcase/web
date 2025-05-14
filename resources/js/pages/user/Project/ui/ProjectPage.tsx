@@ -2,14 +2,12 @@ import { Head, Link } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Avatar, AvatarFallback } from "@/shared/ui/Avatar";
 import {
-  Check,
   ChevronDown,
   ChevronUp,
   FileIcon,
   Link as LinkIcon,
   Settings,
   UserPlus,
-  X,
 } from "lucide-react";
 import {
   Breadcrumb,
@@ -27,11 +25,12 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { UserLayout } from "@/layouts/UserLayout";
 import { Container } from "@/shared/ui/Container";
 import { ExtendedProject } from "../model/ExtendedProject";
-import { JoinProjectModal } from "@/features/JoinProjectModal";
+import { JoinProjectModal } from "./JoinProjectModal";
 import { mockVacancies } from "@/shared/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
 import { Badge } from "@/shared/ui/Badge";
 import { useState } from "react";
+import { hasRole } from "@/entities/User";
 
 function getAvatartName(firstName: string, lastName: string | null) {
   if (lastName) {
@@ -91,7 +90,11 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                     </Link>
                   </Button>
                   {/* TODO: добавить проверку на роль пользователя */}
-                  <Button variant={"secondary"} className="flex-1 sm:flex-none" asChild>
+                  <Button
+                    variant={"secondary"}
+                    className="flex-1 sm:flex-none"
+                    asChild
+                  >
                     <Link href={`/projects/${project.id}/controlPanel`}>
                       <Settings />
                       Панель управления
@@ -100,7 +103,7 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                   {user && project.canJoin && (
                     <JoinProjectModal
                       projectId={project.id}
-                      vacancies={mockVacancies}
+                      vacancies={project.vacancies}
                     >
                       <Button className="flex-1 sm:flex-none" size="sm">
                         <UserPlus />
@@ -213,13 +216,11 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
             </div>
           </section>
 
-          {/* TODO: подать заявку должно быть только если user && canJoin */}
           {project.vacancies && project.vacancies.length > 0 && (
             <section className="mt-10">
               <Heading level={3}>Вакансии</Heading>
               <div className="mt-4 space-y-4">
-                {/* TODO: убрать мок вакансии */}
-                {mockVacancies.map((vacancy) => {
+                {project.vacancies.map((vacancy) => {
                   const [isExpanded, setIsExpanded] = useState(false);
 
                   return (
@@ -258,42 +259,6 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                         </Button>
                       </CardContent>
                     </Card>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
-          {user && project.invites && project.invites.length > 0 && (
-            <section className="mt-10">
-              <Heading level={3}>Заявки</Heading>
-              <div className="mt-4 border p-4 rounded-lg">
-                {project.invites.map((invite) => {
-                  return (
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Text>{invite.name}</Text>
-                        {invite.role && (
-                          <Text variant="muted">{invite.role}</Text>
-                        )}
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          className="text-success"
-                        >
-                          <Check />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          className="text-destructive"
-                        >
-                          <X />
-                        </Button>
-                      </div>
-                    </div>
                   );
                 })}
               </div>
