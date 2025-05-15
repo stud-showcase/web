@@ -16,15 +16,14 @@ import { Label } from "@/shared/ui/Label";
 import { Input } from "@/shared/ui/Input";
 import { Button } from "@/shared/ui/Button";
 import { useForm } from "@inertiajs/react";
-import { Task } from "@/entities/Task";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 
 export function CreateProjectModal({
-  task,
+  taskId,
   children,
-}: PropsWithChildren<{ task: Task }>) {
+}: PropsWithChildren<{ taskId: number }>) {
   const { data, setData, post, errors, clearErrors } = useForm({
-    taskId: task.id,
+    taskId,
     projectName: "",
   });
 

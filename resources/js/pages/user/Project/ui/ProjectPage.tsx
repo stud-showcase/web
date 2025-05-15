@@ -33,7 +33,6 @@ import { getAvatartName, getFullName } from "@/entities/User";
 
 export default function ProjectPage({ project }: { project: ExtendedProject }) {
   const { user } = useAuth();
-  console.log(project);
 
   return (
     <>
@@ -71,6 +70,7 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                       <LinkIcon /> К задаче
                     </Link>
                   </Button>
+
                   {/* TODO: добавить проверку на роль пользователя */}
                   {user && (
                     <Button
