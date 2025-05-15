@@ -47,7 +47,6 @@ class ProjectService
         }
     }
 
-    // FIXME: поменял int $userId на string $userId
     public function createInvite(string $userId, int $projectId, ?int $vacancyId): void
     {
         try {

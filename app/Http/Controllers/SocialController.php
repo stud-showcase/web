@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Group;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
@@ -32,7 +31,6 @@ class SocialController extends Controller
         try {
             $socialUser = Socialite::driver($provider)->user();
             $userData = $socialUser->user;
-            $group = $this->checkGroup($userData['syncable_cohorts']);
 
             $user = User::updateOrCreate(
                 ['email' => $userData['email']],
@@ -41,7 +39,7 @@ class SocialController extends Controller
                     'first_name' => $userData['first_name'],
                     'second_name' => $userData['family_name'],
                     'last_name' => $userData['middle_name'] ?? '',
-                    'group_id' => $group->id,
+                    'group' => $userData['syncable_cohorts'] ?? '',
                 ]
             );
 
@@ -81,18 +79,5 @@ class SocialController extends Controller
             Log::error('Ошибка при выходе из системы: ' . $e->getMessage());
             return redirect('/')->with('error', 'Ошибка при выходе из системы');
         }
-    }
-
-    private function checkGroup(string $groupName)
-    {
-        $group = Group::where('name', $groupName)->first();
-
-        if (!$group) {
-            $group = Group::create([
-                'name' => $groupName,
-            ]);
-        }
-
-        return $group;
     }
 }

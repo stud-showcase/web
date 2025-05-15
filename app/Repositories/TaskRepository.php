@@ -69,7 +69,6 @@ class TaskRepository
                 return Task::with([
                     'complexity',
                     'tags',
-                    'groups',
                     'files',
                     'projects' => fn($query) => $query->with([
                         'status',

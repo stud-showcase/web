@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Group;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -16,7 +15,7 @@ class UserFactory extends Factory
             'second_name' => $this->faker->lastName(),
             'last_name' => $this->faker->optional()->lastName(),
             'email' => $this->faker->unique()->safeEmail(),
-            'group_id' => fn() => Group::inRandomOrder()->first()->id,
+            'group' => strtoupper($this->faker->bothify('??-##')),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -48,6 +48,7 @@ class ProjectRepository
 
         if ($forUser) {
             $query->whereHas('users', fn($q2) => $q2->where('users.id', Auth::id()));
+            $query->where('mentor_id', '=', Auth::id());
         }
 
         $this->applyFilters($query, $filters);

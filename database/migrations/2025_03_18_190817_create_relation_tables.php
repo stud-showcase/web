@@ -8,12 +8,6 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('group_task', function (Blueprint $table) {
-            $table->foreignId('group_id')->constrained('groups')->cascadeOnDelete();
-            $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
-            $table->primary(['group_id', 'task_id']);
-        });
-
         Schema::create('user_project', function (Blueprint $table) {
             $table->foreignId('project_id')->constrained('projects');
             $table->uuid('user_id');
@@ -73,6 +67,5 @@ return new class extends Migration
         Schema::dropIfExists('project_invites');
         Schema::dropIfExists('user_role');
         Schema::dropIfExists('user_project');
-        Schema::dropIfExists('group_task');
     }
 };

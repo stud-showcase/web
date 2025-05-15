@@ -24,11 +24,7 @@ class ProjectSeeder extends Seeder
             }
 
             $task = $availableTasks->random();
-            $mentor = User::whereNull('group_id')->inRandomOrder()->first();
-
-            if (!$mentor) {
-                $mentor = User::factory()->create(['group_id' => null]);
-            }
+            $mentor = User::inRandomOrder()->first();
 
             $project = Project::factory()->create([
                 'task_id' => $task->id,
@@ -39,7 +35,7 @@ class ProjectSeeder extends Seeder
 
             $maxMembers = $task->max_members;
             $participantsCount = rand(1, $maxMembers);
-            $participants = User::whereNotNull('group_id')
+            $participants = User::query()
                 ->where('id', '!=', $mentor->id)
                 ->inRandomOrder()
                 ->limit($participantsCount)

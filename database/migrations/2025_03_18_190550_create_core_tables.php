@@ -13,20 +13,14 @@ return new class extends Migration
             $table->string('name');
         });
 
-        Schema::create('groups', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-        });
-
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('first_name');
             $table->string('second_name');
             $table->string('last_name')->nullable();
             $table->string('email')->unique();
-            $table->foreignId('group_id')->nullable()->constrained('groups')->nullOnDelete();
+            $table->string('group')->nullable();
             $table->timestamps();
-            $table->index('group_id');
         });
 
         Schema::create('roles', function (Blueprint $table) {
@@ -38,7 +32,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('groups');
         Schema::dropIfExists('complexity');
         Schema::dropIfExists('roles');
     }

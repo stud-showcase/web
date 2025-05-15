@@ -17,7 +17,7 @@ class User extends Authenticatable
         'second_name',
         'last_name',
         'email',
-        'group_id',
+        'group',
     ];
 
     private const ROLE_ACCESS_MAP = [
@@ -26,11 +26,6 @@ class User extends Authenticatable
     ];
 
     public const PRIVILEGED_ROLES = ['admin', 'mentor'];
-
-    public function group()
-    {
-        return $this->belongsTo(Group::class);
-    }
 
     public function roles()
     {

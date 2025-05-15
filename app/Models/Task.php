@@ -42,11 +42,6 @@ class Task extends Model
         return $this->hasMany(TaskFile::class);
     }
 
-    public function groups()
-    {
-        return $this->belongsToMany(Group::class, 'group_task');
-    }
-
     public function canTake(?User $user): bool
     {
         if (!$user) {

@@ -15,7 +15,7 @@ class UserRepository
         try {
             return Cache::tags(['users'])->remember($cacheKey, 300, function () use ($filters) {
                 return User::query()
-                    ->with(['roles', 'group' => fn($q) => $q->select('id', 'name')])
+                    ->with('roles')
                     ->when(
                         !empty($filters['search']),
                         fn($q) => $q->where(function ($query) use ($filters) {

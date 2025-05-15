@@ -26,9 +26,8 @@ class ProjectInvite extends Model
         return $this->belongsTo(Project::class);
     }
 
-    // FIXME: добавил этот метод
     public function vacancy()
     {
-        return $this->belongsTo(\App\Models\Vacancy::class);
+        return $this->belongsTo(Vacancy::class);
     }
 }
