@@ -1,0 +1,32 @@
+import { Button } from "@/shared/ui/Button";
+import { Heading } from "@/shared/ui/Heading";
+import { FileIcon } from "lucide-react";
+
+export function FilesSection({
+  files,
+}: {
+  files: { name: string; url: string }[];
+}) {
+  if (files.length === 0) return;
+
+  return (
+    <section className="mt-10">
+      <Heading level={3}>Дополнительные материалы</Heading>
+      <div className="mt-4 flex flex-wrap gap-3">
+        {files.map((file) => (
+          <Button key={file.name} variant="outline" size="sm" asChild>
+            <a
+              href={file.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
+            >
+              <FileIcon className="h-4 w-4" />
+              {file.name}
+            </a>
+          </Button>
+        ))}
+      </div>
+    </section>
+  );
+}

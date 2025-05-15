@@ -8,10 +8,10 @@ function Tags({ taskTags }: { taskTags: TaskTag[] }) {
   return taskTags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
 
-function Content({ vacancyDescription }: { vacancyDescription: string }) {
+function Content({ description }: { description: string }) {
   return (
     <Text variant="small" className="line-clamp-1">
-      {vacancyDescription}
+      {description}
     </Text>
   );
 }
@@ -21,7 +21,7 @@ export function VacancyCard({ vacancy }: { vacancy: ExtendedVacancy }) {
     <EntityCard
       title={vacancy.name}
       subtitle={vacancy.project.name}
-      content={<Content vacancyDescription={vacancy.description} />}
+      content={<Content description={vacancy.description} />}
       tags={
         vacancy.task.tags.length > 0 && <Tags taskTags={vacancy.task.tags} />
       }

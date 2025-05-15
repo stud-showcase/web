@@ -11,27 +11,27 @@ import {
 } from "@/entities/Task";
 
 function Badges({
-  taskMaxMembers,
-  taskDeadline,
-  taskComplexity,
+  maxMembers,
+  deadline,
+  complexity,
 }: {
-  taskMaxMembers: number;
-  taskDeadline: string;
-  taskComplexity: TaskComplexity;
+  maxMembers: number;
+  deadline: string;
+  complexity: TaskComplexity;
 }) {
   return (
     <>
-      <TaskMembersBadge maxMembers={taskMaxMembers} />
-      <TaskDeadlineBadge deadline={taskDeadline} />
-      <TaskComplexityBadge complexity={taskComplexity} />
+      <TaskMembersBadge maxMembers={maxMembers} />
+      <TaskDeadlineBadge deadline={deadline} />
+      <TaskComplexityBadge complexity={complexity} />
     </>
   );
 }
 
-function Content({ taskDescription }: { taskDescription: string }) {
+function Content({ description }: { description: string }) {
   return (
     <Text variant="small" className="line-clamp-3">
-      {taskDescription}
+      {description}
     </Text>
   );
 }
@@ -47,12 +47,12 @@ export function TaskCard({ task }: { task: Task }) {
       subtitle={task.customer}
       badges={
         <Badges
-          taskComplexity={task.complexity}
-          taskDeadline={task.deadline}
-          taskMaxMembers={task.maxMembers}
+          complexity={task.complexity}
+          deadline={task.deadline}
+          maxMembers={task.maxMembers}
         />
       }
-      content={<Content taskDescription={task.description} />}
+      content={<Content description={task.description} />}
       tags={task.tags.length > 0 && <Tags taskTags={task.tags} />}
       href={`/tasks/${task.id}`}
     />

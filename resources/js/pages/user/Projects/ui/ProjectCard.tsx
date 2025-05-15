@@ -15,41 +15,41 @@ import { Text } from "@/shared/ui/Text";
 import { ExtendedProject } from "../model/ExtendedProject";
 
 function Title({
-  projectName,
-  projectMembersCount,
-  taskMaxMembers,
+  name,
+  membersCount,
+  maxMembers,
 }: {
-  projectName: string;
-  projectMembersCount: number;
-  taskMaxMembers: number;
+  name: string;
+  membersCount: number;
+  maxMembers: number;
 }) {
   return (
     <div className="flex justify-between items-center gap-2">
       <span className="text-xl font-bold leading-none tracking-tight">
-        {projectName}
+        {name}
       </span>
       <span className="text-sm flex gap-2 items-center">
         <Users className="w-4 h-4 " />
-        {projectMembersCount}/{taskMaxMembers}
+        {membersCount}/{maxMembers}
       </span>
     </div>
   );
 }
 
 function Badges({
-  projectIsHiring,
-  projectStatus,
-  taskComplexity,
+  isHiring,
+  status,
+  complexity,
 }: {
-  projectIsHiring: boolean;
-  projectStatus: ProjectStatus;
-  taskComplexity: TaskComplexity;
+  isHiring: boolean;
+  status: ProjectStatus;
+  complexity: TaskComplexity;
 }) {
   return (
     <>
-      <ProjectHiringBadge isHiring={projectIsHiring} />
-      <ProjectStatusBadge status={projectStatus} />
-      <TaskComplexityBadge complexity={taskComplexity} />
+      <ProjectHiringBadge isHiring={isHiring} />
+      <ProjectStatusBadge status={status} />
+      <TaskComplexityBadge complexity={complexity} />
     </>
   );
 }
@@ -58,10 +58,10 @@ function Tags({ taskTags }: { taskTags: TaskTag[] }) {
   return taskTags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
 
-function Content({ projectAnnotation }: { projectAnnotation: string }) {
+function Content({ annotation }: { annotation: string }) {
   return (
     <Text variant="small" className="line-clamp-3">
-      {projectAnnotation}
+      {annotation}
     </Text>
   );
 }
@@ -71,20 +71,20 @@ export function ProjectCard({ project }: { project: ExtendedProject }) {
     <EntityCard
       title={
         <Title
-          projectName={project.name}
-          projectMembersCount={project.members.length}
-          taskMaxMembers={project.task.maxMembers}
+          name={project.name}
+          membersCount={project.members.length}
+          maxMembers={project.task.maxMembers}
         />
       }
       subtitle={project.task.title}
       content={
-        project.annotation && <Content projectAnnotation={project.annotation} />
+        project.annotation && <Content annotation={project.annotation} />
       }
       badges={
         <Badges
-          projectIsHiring={project.isHiring}
-          projectStatus={project.status}
-          taskComplexity={project.task.complexity}
+          isHiring={project.isHiring}
+          status={project.status}
+          complexity={project.task.complexity}
         />
       }
       tags={
