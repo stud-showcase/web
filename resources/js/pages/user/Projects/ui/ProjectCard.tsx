@@ -1,67 +1,96 @@
-import { Link } from "@inertiajs/react";
-import { Button } from "@/shared/ui/Button";
-import { ArrowRight, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { EntityCard } from "@/shared/ui/EntityCard";
-import { ProjectStatusBadge, ProjectHiringBadge } from "@/entities/Project";
-import { TaskComplexityBadge, Task, TaskTagBadge } from "@/entities/Task";
+import {
+  ProjectStatusBadge,
+  ProjectHiringBadge,
+  ProjectStatus,
+} from "@/entities/Project";
+import {
+  TaskComplexityBadge,
+  TaskTagBadge,
+  TaskComplexity,
+  TaskTag,
+} from "@/entities/Task";
 import { Text } from "@/shared/ui/Text";
 import { ExtendedProject } from "../model/ExtendedProject";
 
-function Title({ project }: { project: ExtendedProject }) {
+function Title({
+  projectName,
+  projectMembersCount,
+  taskMaxMembers,
+}: {
+  projectName: string;
+  projectMembersCount: number;
+  taskMaxMembers: number;
+}) {
   return (
     <div className="flex justify-between items-center gap-2">
       <span className="text-xl font-bold leading-none tracking-tight">
-        {project.name}
+        {projectName}
       </span>
       <span className="text-sm flex gap-2 items-center">
         <Users className="w-4 h-4 " />
-        {project.members.length}/{project.task.maxMembers}
+        {projectMembersCount}/{taskMaxMembers}
       </span>
     </div>
   );
 }
 
-function Badges({ project }: { project: ExtendedProject }) {
+function Badges({
+  projectIsHiring,
+  projectStatus,
+  taskComplexity,
+}: {
+  projectIsHiring: boolean;
+  projectStatus: ProjectStatus;
+  taskComplexity: TaskComplexity;
+}) {
   return (
     <>
-      <ProjectHiringBadge isHiring={project.isHiring} />
-      <ProjectStatusBadge status={project.status} />
-      <TaskComplexityBadge complexity={project.task.complexity} />
+      <ProjectHiringBadge isHiring={projectIsHiring} />
+      <ProjectStatusBadge status={projectStatus} />
+      <TaskComplexityBadge complexity={taskComplexity} />
     </>
   );
 }
 
-function Tags({ task }: { task: Task }) {
-  return task.tags?.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
+function Tags({ taskTags }: { taskTags: TaskTag[] }) {
+  return taskTags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
 
-export function Content({ project }: { project: ExtendedProject }) {
-  if (project.annotation) {
-    return <Text variant="small">{project.annotation}</Text>;
-  }
-  return;
-}
-
-function Footer({ project }: { project: ExtendedProject }) {
+function Content({ projectAnnotation }: { projectAnnotation: string }) {
   return (
-    <Button asChild size="sm">
-      <Link href={`/projects/${project.id}`}>
-        Подробнее
-        <ArrowRight />
-      </Link>
-    </Button>
+    <Text variant="small" className="line-clamp-3">
+      {projectAnnotation}
+    </Text>
   );
 }
 
 export function ProjectCard({ project }: { project: ExtendedProject }) {
   return (
     <EntityCard
-      title={<Title project={project} />}
+      title={
+        <Title
+          projectName={project.name}
+          projectMembersCount={project.members.length}
+          taskMaxMembers={project.task.maxMembers}
+        />
+      }
       subtitle={project.task.title}
-      content={<Content project={project} />}
-      badges={<Badges project={project} />}
-      tags={<Tags task={project.task} />}
-      footer={<Footer project={project} />}
+      content={
+        project.annotation && <Content projectAnnotation={project.annotation} />
+      }
+      badges={
+        <Badges
+          projectIsHiring={project.isHiring}
+          projectStatus={project.status}
+          taskComplexity={project.task.complexity}
+        />
+      }
+      tags={
+        project.task.tags.length > 0 && <Tags taskTags={project.task.tags} />
+      }
+      href={`/projects/${project.id}`}
     />
   );
 }

@@ -1,47 +1,43 @@
 import { EntityCard } from "@/shared/ui/EntityCard";
-import { Button } from "@/shared/ui/Button";
 import { Text } from "@/shared/ui/Text";
-import { Link } from "@inertiajs/react";
-import { ArrowRight } from "lucide-react";
 import { Task } from "@/entities/Task/model/Task";
 import {
+  TaskComplexity,
   TaskComplexityBadge,
   TaskDeadlineBadge,
   TaskMembersBadge,
+  TaskTag,
   TaskTagBadge,
 } from "@/entities/Task";
 
-function Badges({ task }: { task: Task }) {
+function Badges({
+  taskMaxMembers,
+  taskDeadline,
+  taskComplexity,
+}: {
+  taskMaxMembers: number;
+  taskDeadline: string;
+  taskComplexity: TaskComplexity;
+}) {
   return (
     <>
-      <TaskMembersBadge maxMembers={task.maxMembers} />
-      <TaskDeadlineBadge deadline={task.deadline} />
-      <TaskComplexityBadge complexity={task.complexity} />
+      <TaskMembersBadge maxMembers={taskMaxMembers} />
+      <TaskDeadlineBadge deadline={taskDeadline} />
+      <TaskComplexityBadge complexity={taskComplexity} />
     </>
   );
 }
 
-function Content({ task }: { task: Task }) {
+function Content({ taskDescription }: { taskDescription: string }) {
   return (
-    <Text variant="small" className="line-clamp-2">
-      {task.description}
+    <Text variant="small" className="line-clamp-3">
+      {taskDescription}
     </Text>
   );
 }
 
-function Tags({ task }: { task: Task }) {
-  return task.tags?.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
-}
-
-function Footer({ task }: { task: Task }) {
-  return (
-    <Button asChild size="sm">
-      <Link href={`/tasks/${task.id}`}>
-        Подробнее
-        <ArrowRight />
-      </Link>
-    </Button>
-  );
+function Tags({ taskTags }: { taskTags: TaskTag[] }) {
+  return taskTags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
 
 export function TaskCard({ task }: { task: Task }) {
@@ -49,10 +45,16 @@ export function TaskCard({ task }: { task: Task }) {
     <EntityCard
       title={task.title}
       subtitle={task.customer}
-      badges={<Badges task={task} />}
-      content={<Content task={task} />}
-      tags={<Tags task={task} />}
-      footer={<Footer task={task} />}
+      badges={
+        <Badges
+          taskComplexity={task.complexity}
+          taskDeadline={task.deadline}
+          taskMaxMembers={task.maxMembers}
+        />
+      }
+      content={<Content taskDescription={task.description} />}
+      tags={task.tags.length > 0 && <Tags taskTags={task.tags} />}
+      href={`/tasks/${task.id}`}
     />
   );
 }

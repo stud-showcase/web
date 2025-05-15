@@ -7,6 +7,9 @@ import {
   CardTitle,
 } from "@/shared/ui/Card";
 import { ReactNode } from "react";
+import { Button } from "./Button";
+import { Link } from "@inertiajs/react";
+import { ArrowRight } from "lucide-react";
 
 type Props = {
   title: ReactNode | string;
@@ -14,7 +17,7 @@ type Props = {
   badges?: ReactNode;
   tags?: ReactNode;
   content?: ReactNode;
-  footer?: ReactNode;
+  href: string;
 };
 
 export function EntityCard({
@@ -23,7 +26,7 @@ export function EntityCard({
   badges,
   tags,
   content,
-  footer,
+  href,
 }: Props) {
   return (
     <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md bg-background">
@@ -39,11 +42,16 @@ export function EntityCard({
         {tags && <div className="flex gap-2">{tags}</div>}
       </CardContent>
 
-      {footer && (
-        <CardFooter className="border-t py-3">
-          <div className="flex gap-2 flex-1 justify-end">{footer}</div>
-        </CardFooter>
-      )}
+      <CardFooter className="border-t py-3">
+        <div className="flex gap-2 flex-1 justify-end">
+          <Button asChild size="sm">
+            <Link href={href}>
+              Подробнее
+              <ArrowRight />
+            </Link>
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   );
 }
