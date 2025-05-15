@@ -41,9 +41,9 @@ Route::prefix('tasks')->group(function () {
 Route::prefix('projects')->group(function () {
     Route::get('/', [ProjectController::class, 'index']);
     Route::get('/{id}', [ProjectController::class, 'show'])->name('projects.show');
-    Route::get('/{id}/controlPanel', [ProjectController::class, 'showControlPanel'])->name('projects.controlPanel.show');
 
     Route::middleware('auth')->group(function () {
+        Route::get('/{id}/controlPanel', [ProjectController::class, 'showControlPanel'])->name('projects.controlPanel.show');
         Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
         Route::put('/{id}', [ProjectController::class, 'update'])->name('projects.update');
         Route::post('/{id}/files', [ProjectController::class, 'uploadFiles'])->name('projects.files.upload');

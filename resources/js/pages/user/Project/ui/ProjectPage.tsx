@@ -33,6 +33,7 @@ import { getAvatartName, getFullName } from "@/entities/User";
 
 export default function ProjectPage({ project }: { project: ExtendedProject }) {
   const { user } = useAuth();
+  console.log(project);
 
   return (
     <>
@@ -186,9 +187,9 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-row gap-2">
-                      {member.isCreator && (
-                        <Badge variant="secondary">Руководитель проекта</Badge>
-                      )}
+                      <Badge variant="secondary">
+                        {member.isCreator ? "Руководитель проекта" : "Участник проекта"}
+                      </Badge>
                       {member.position && (
                         <Badge variant="outline">{member.position}</Badge>
                       )}

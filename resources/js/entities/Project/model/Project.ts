@@ -1,15 +1,16 @@
 import { User } from "@/entities/User";
 import { ProjectStatus } from "./ProjectStatus";
 import { ProjectMember } from "./ProjectMember";
+import { ProjectInvite } from "./ProjectInvite";
 
 export type Project = {
   id: number;
   name: string;
-  annotation?: string;
+  annotation: string | null;
   members: ProjectMember[];
-  mentor?: User;
-  files?: { name: string; url: string }[];
+  mentor: User | null;
+  files: { name: string; url: string }[];
   status: ProjectStatus;
   isHiring: boolean;
-  invites?: { name: string; role?: string }[];
+  invites: ProjectInvite[];
 };

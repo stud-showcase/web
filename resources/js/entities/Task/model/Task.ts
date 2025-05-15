@@ -12,6 +12,6 @@ export type Task = {
   maxMembers: number;
   deadline: string;
   complexity: TaskComplexity;
-  tags?: TaskTag[];
-  files?: { name: string; url: string }[];
+  tags: TaskTag[];
+  files: { name: string; url: string }[];
 };
