@@ -51,7 +51,7 @@ export function InvitesSection({ invites }: { invites: ProjectInvite[] }) {
                       invite.lastName
                     )}
                   </TableCell>
-                  <TableCell>{invite.vacancyName ?? "-"}</TableCell>
+                  <TableCell>{invite.vacancyName}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <ConfirmationDialog

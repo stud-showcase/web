@@ -8,8 +8,31 @@ import {
   CardTitle,
 } from "@/shared/ui/Card";
 import { Textarea } from "@/shared/ui/Textarea";
+import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
+import { useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
+import { showToast } from "../util/showToast";
 
-export function DescriptionSection({ description }: { description: string | null }) {
+export function DescriptionSection({
+  id,
+  description,
+}: {
+  id: number;
+  description: string | null;
+}) {
+  const { put, errors, data, setData } = useForm({
+    annotation: description,
+  });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    put(`/projects/${id}`, {
+      onSuccess: () => showToast("Вы успешно изменили описание проекта"),
+      onError: () =>
+        showToast("Произошла ошибка в ходе обновления описания проекта"),
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -19,13 +42,21 @@ export function DescriptionSection({ description }: { description: string | null
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Textarea
-          value={description ?? ""}
-          placeholder="Введите описание проекта..."
-        />
+        <form onSubmit={handleSubmit} id="projectDescription">
+          <Textarea
+            value={data.annotation ?? ""}
+            onChange={(e) => setData("annotation", e.target.value)}
+            placeholder="Введите описание проекта..."
+          />
+          {errors.annotation && (
+            <ValidationErrorText text={errors.annotation} />
+          )}
+        </form>
       </CardContent>
       <CardFooter className="border-t px-6 py-4">
-        <Button size="sm">Сохранить</Button>
+        <Button size="sm" form="projectDescription">
+          Сохранить
+        </Button>
       </CardFooter>
     </Card>
   );

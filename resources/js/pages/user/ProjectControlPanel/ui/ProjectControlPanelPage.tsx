@@ -59,9 +59,9 @@ export default function ProjectControlPanel({
           </header>
 
           <div className="mt-8 flex flex-col gap-6">
-            <NameSection name={project.name} />
-            <DescriptionSection description={project.annotation} />
-            <HiringSection isHiring={project.isHiring} />
+            <NameSection id={project.id} name={project.name} />
+            <DescriptionSection id={project.id} description={project.annotation} />
+            <HiringSection id={project.id} isHiring={project.isHiring} />
             <FilesSection files={project.files} />
             <MembersSection mentor={project.mentor} members={project.members} />
             <VacanciesSection vacancies={project.vacancies} />

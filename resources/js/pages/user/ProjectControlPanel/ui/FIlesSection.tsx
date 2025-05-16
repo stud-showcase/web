@@ -18,7 +18,7 @@ import {
 } from "@/shared/ui/Dialog";
 import { Input } from "@/shared/ui/Input";
 import { PropsWithChildren } from "react";
-import { FolderOpen, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,

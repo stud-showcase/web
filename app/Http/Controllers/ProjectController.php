@@ -101,7 +101,7 @@ class ProjectController extends Controller
     {
         try {
             $project = $this->projectService->updateProject($id, $request->validated());
-            return redirect()->route('projects.show', $project->id)->with('success', 'Проект успешно обновлён.');
+            return redirect()->route('projects.controlPanel.show', $project->id)->with('success', 'Проект успешно обновлён.');
         } catch (Throwable $e) {
             Log::error("Ошибка обновления проекта [$id]: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
