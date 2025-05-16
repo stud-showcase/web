@@ -123,7 +123,7 @@ function MemberRow({
     ? "Руководитель проекта"
     : "Участник проекта";
 
-  const handleDelete = (projectId: number, memberId: string) => {
+  const handleDelete = (memberId: string) => {
     router.delete(`/projects/${projectId}/member/${memberId}`, {
       onSuccess: () =>
         showSuccessToast("Вы успешно удалили участника проекта"),
@@ -161,7 +161,7 @@ function MemberRow({
             <ConfirmationDialog
               title="Подтверждение удаления участника команды"
               description="Вы уверены, что хотите исключить участника проектной команды? Это действие нельзя отменить."
-              onAction={() => handleDelete(projectId, member.id)}
+              onAction={() => handleDelete(member.id)}
             >
               <Button size="icon" variant="outline">
                 <Trash2 />

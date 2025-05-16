@@ -31,7 +31,7 @@ import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
 import { Textarea } from "@/shared/ui/Textarea";
 import { Vacancy } from "@/entities/Vacancy";
 import { Text } from "@/shared/ui/Text";
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { showErrorToast, showSuccessToast } from "../util/showToast";
 
@@ -75,7 +75,7 @@ function CreateVacancyDialog({
         >
           <div>
             <Input
-              placeholder="Название вакансии"
+              placeholder="Введите название вакансии..."
               value={data.name}
               onChange={(e) => setData("name", e.target.value)}
               required
@@ -84,7 +84,7 @@ function CreateVacancyDialog({
           </div>
           <div>
             <Textarea
-              placeholder="Описание вакансии"
+              placeholder="Введите описание вакансии..."
               value={data.description}
               onChange={(e) => setData("description", e.target.value)}
               required
@@ -138,6 +138,14 @@ export function VacanciesSection({
 }) {
   const hasVacancies = vacancies.length > 0;
 
+  const handleDelete = (vacancyId: number) => {
+    router.delete(`/projects/${id}/vacancy/${vacancyId}`, {
+      onSuccess: () => showSuccessToast("Вы успешно удалили вакансию"),
+      onError: () =>
+        showErrorToast("Произошла ошибка в ходе удаления вакансии"),
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -175,6 +183,7 @@ export function VacanciesSection({
                       <ConfirmationDialog
                         title="Подтверждение удаления вакансии"
                         description="Вы уверены, что хотите удалить вакансию? Это действие нельзя отменить."
+                        onAction={() => handleDelete(vacancy.id)}
                       >
                         <Button size="icon" variant="outline">
                           <Trash2 />

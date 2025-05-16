@@ -58,7 +58,7 @@ class VacancyController extends Controller
     {
         try {
             $this->vacancyService->deleteVacancy($vacancyId);
-            return redirect()->route('projects.show', $projectId)->with('success', 'Вакансия удалена.');
+            return redirect()->route('projects.controlPanel.show', $projectId)->with('success', 'Вакансия удалена.');
         } catch (Throwable $e) {
             Log::error("Ошибка удаления вакансии [$vacancyId] для проекта [$projectId]: " . $e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
