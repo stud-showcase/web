@@ -16,8 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/Dialog";
-import { Input } from "@/shared/ui/Input";
-import { PropsWithChildren } from "react";
+import { FormEvent, PropsWithChildren } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import {
   Table,
@@ -30,8 +29,29 @@ import {
 import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
 import { Text } from "@/shared/ui/Text";
 import { FileUpload } from "@/shared/ui/FileUpload";
+import { useForm } from "@inertiajs/react";
+import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
+import { showErrorToast, showSuccessToast } from "../util/showToast";
 
-function FileUploadDialog({ children }: PropsWithChildren) {
+function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
+  const { data, setData, errors, post, reset } = useForm<{ files: File[] }>({
+    files: [],
+  });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    post(`/projects/${id}/files`, {
+      onSuccess: () => {
+        reset();
+        showSuccessToast("Файлы успешно загружены");
+      },
+      onError: () => {
+        reset();
+        showErrorToast("Произошла ошибка в ходе загрузки файлов");
+      },
+    });
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -42,14 +62,20 @@ function FileUploadDialog({ children }: PropsWithChildren) {
             Выберите файл для загрузки в проект.
           </DialogDescription>
         </DialogHeader>
-        <form id="project-files">
-          <FileUpload  />
+        <form id="project-files" onSubmit={handleSubmit}>
+          <FileUpload
+            files={data.files}
+            onFilesChange={(files) => setData("files", files)}
+          />
+          {errors.files && <ValidationErrorText text={errors.files} />}
         </form>
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Отмена</Button>
           </DialogClose>
-          <Button>Загрузить</Button>
+          <Button form="project-files" disabled={data.files.length === 0}>
+            Загрузить
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -57,8 +83,10 @@ function FileUploadDialog({ children }: PropsWithChildren) {
 }
 
 export function FilesSection({
+  id,
   files,
 }: {
+  id: number;
   files: { name: string; url: string }[];
 }) {
   const hasFiles = files.length > 0;
@@ -72,7 +100,7 @@ export function FilesSection({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <FileUploadDialog>
+        <FileUploadDialog id={id}>
           <Button size="sm">
             <Plus />
             Добавить файл

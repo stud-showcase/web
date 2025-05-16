@@ -11,7 +11,7 @@ import { Text } from "@/shared/ui/Text";
 import { Button } from "@/shared/ui/Button";
 import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
-import { showToast } from "../util/showToast";
+import { showErrorToast, showSuccessToast } from "../util/showToast";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 
 export function HiringSection({
@@ -29,11 +29,11 @@ export function HiringSection({
     e.preventDefault();
     put(`/projects/${id}`, {
       onSuccess: () =>
-        showToast(
+        showSuccessToast(
           `Вы успешно ${data.isHiring ? "открыли" : "закрыли"} набор в проект`
         ),
       onError: () =>
-        showToast("Произошла ошибка при изменении статуса набора в проект"),
+        showErrorToast("Произошла ошибка при изменении статуса набора в проект"),
     });
   };
 

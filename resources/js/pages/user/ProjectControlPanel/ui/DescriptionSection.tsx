@@ -11,7 +11,7 @@ import { Textarea } from "@/shared/ui/Textarea";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
-import { showToast } from "../util/showToast";
+import { showErrorToast, showSuccessToast } from "../util/showToast";
 
 export function DescriptionSection({
   id,
@@ -31,9 +31,9 @@ export function DescriptionSection({
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     put(`/projects/${id}`, {
-      onSuccess: () => showToast("Вы успешно изменили описание проекта"),
+      onSuccess: () => showSuccessToast("Вы успешно изменили описание проекта"),
       onError: () =>
-        showToast("Произошла ошибка в ходе обновления описания проекта"),
+        showErrorToast("Произошла ошибка в ходе обновления описания проекта"),
     });
   };
 
@@ -51,6 +51,7 @@ export function DescriptionSection({
             value={data.description ?? ""}
             onChange={(e) => setData("description", e.target.value)}
             placeholder="Введите описание проекта..."
+            required
           />
           {errors.description && (
             <ValidationErrorText text={errors.description} />

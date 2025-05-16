@@ -63,7 +63,7 @@ export function CreateProjectModal({
             <DialogClose asChild>
               <Button variant="outline">Отменить</Button>
             </DialogClose>
-            <Button type="submit" form="project-creation-form">
+            <Button type="submit" form="project-creation-form" disabled={!data.projectName}>
               Отправить
             </Button>
           </div>
