@@ -10,6 +10,8 @@ export function MembersSection({
   mentor: User | null;
   members: ProjectMember[];
 }) {
+  if (!mentor && members.length === 0) return;
+
   return (
     <section className="mt-10">
       <Heading level={3}>Проектная команда</Heading>

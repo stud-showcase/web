@@ -24,6 +24,8 @@ export default function ProjectControlPanel({
 }: {
   project: ExtendedProject;
 }) {
+  console.log(project)
+
   return (
     <>
       <Head>
@@ -61,7 +63,7 @@ export default function ProjectControlPanel({
             <DescriptionSection description={project.annotation} />
             <HiringSection isHiring={project.isHiring} />
             <FilesSection files={project.files} />
-            <MembersSection members={project.members} />
+            <MembersSection mentor={project.mentor} members={project.members} />
             <VacanciesSection vacancies={project.vacancies} />
             <InvitesSection invites={project.invites} />
           </div>

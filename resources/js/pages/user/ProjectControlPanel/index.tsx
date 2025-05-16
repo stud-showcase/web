@@ -1,1 +1,1 @@
-export { default } from "./ui/ProjectControlPanel";
+export { default } from "./ui/ProjectControlPanelPage";
