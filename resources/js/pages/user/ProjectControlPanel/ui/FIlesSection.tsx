@@ -29,9 +29,10 @@ import {
 import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
 import { Text } from "@/shared/ui/Text";
 import { FileUpload } from "@/shared/ui/FileUpload";
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { showErrorToast, showSuccessToast } from "../util/showToast";
+import { ServerFile } from "@/shared/types/ServerFile";
 
 function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
   const { data, setData, errors, post, reset } = useForm<{ files: File[] }>({
@@ -87,9 +88,16 @@ export function FilesSection({
   files,
 }: {
   id: number;
-  files: { name: string; url: string }[];
+  files: ServerFile[];
 }) {
   const hasFiles = files.length > 0;
+
+  const handleDelete = (fileId: number) => {
+    router.delete(`/projects/${id}/files/${fileId}`, {
+      onSuccess: () => showSuccessToast("Файл был успешно удален"),
+      onError: () => showErrorToast("Произошла ошибка в ходе удаления файла"),
+    });
+  };
 
   return (
     <Card>
@@ -122,7 +130,8 @@ export function FilesSection({
                   <TableCell>
                     <ConfirmationDialog
                       title="Подтверждение удаления файла"
-                      description="Вы уверены, что хотите удалить этот файл? Это действие нельзя отменить."
+                      description={`Вы уверены, что хотите удалить файл "${file.name}"? Это действие нельзя отменить.`}
+                      onAction={() => handleDelete(file.id)}
                     >
                       <Button variant="outline" size="icon">
                         <Trash2 />

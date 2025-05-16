@@ -14,8 +14,13 @@ import { PropsWithChildren } from "react";
 export function ConfirmationDialog({
   title,
   description,
+  onAction,
   children,
-}: PropsWithChildren<{ title: string; description: string }>) {
+}: PropsWithChildren<{
+  title: string;
+  description: string;
+  onAction?: () => void;
+}>) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -26,7 +31,7 @@ export function ConfirmationDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Отмена</AlertDialogCancel>
-          <AlertDialogAction>Удалить</AlertDialogAction>
+          <AlertDialogAction onClick={onAction}>Удалить</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

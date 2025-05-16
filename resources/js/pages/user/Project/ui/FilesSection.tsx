@@ -1,3 +1,4 @@
+import { ServerFile } from "@/shared/types/ServerFile";
 import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import { FileIcon } from "lucide-react";
@@ -5,7 +6,7 @@ import { FileIcon } from "lucide-react";
 export function FilesSection({
   files,
 }: {
-  files: { name: string; url: string }[];
+  files: ServerFile[];
 }) {
   if (files.length === 0) return;
 

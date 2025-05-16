@@ -2,13 +2,14 @@ import { Heading } from "@/shared/ui/Heading";
 import { Text } from "@/shared/ui/Text";
 import { FileIcon, Files } from "lucide-react";
 import { Button } from "@/shared/ui/Button";
+import { ServerFile } from "@/shared/types/ServerFile";
 
 export function DescriptionSection({
   description,
   files,
 }: {
   description: string;
-  files: { name: string; url: string }[];
+  files: ServerFile[];
 }) {
   return (
     <section className="mt-8">

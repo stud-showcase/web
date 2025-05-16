@@ -1,3 +1,4 @@
+import { ServerFile } from "@/shared/types/ServerFile";
 import { TaskComplexity } from "./TaskCompexity";
 import { TaskTag } from "./TaskTag";
 
@@ -13,5 +14,5 @@ export type Task = {
   deadline: string;
   complexity: TaskComplexity;
   tags: TaskTag[];
-  files: { name: string; url: string }[];
+  files: ServerFile[];
 };
