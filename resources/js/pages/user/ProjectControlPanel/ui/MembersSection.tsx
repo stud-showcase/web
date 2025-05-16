@@ -34,7 +34,7 @@ import { ProjectMember } from "@/entities/Project";
 import { getFullName, User } from "@/entities/User";
 import { Badge } from "@/shared/ui/Badge";
 import { Text } from "@/shared/ui/Text";
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { showErrorToast, showSuccessToast } from "../util/showToast";
 
@@ -123,6 +123,17 @@ function MemberRow({
     ? "Руководитель проекта"
     : "Участник проекта";
 
+  const handleDelete = (projectId: number, memberId: string) => {
+    router.delete(`/projects/${projectId}/member/${memberId}`, {
+      onSuccess: () =>
+        showSuccessToast("Вы успешно удалили участника проекта"),
+      onError: () =>
+        showErrorToast(
+          "Произошла ошибка в ходе удаления участника проекта"
+        ),
+    })
+  }
+
   return (
     <TableRow key={member.id}>
       <TableCell>
@@ -150,6 +161,7 @@ function MemberRow({
             <ConfirmationDialog
               title="Подтверждение удаления участника команды"
               description="Вы уверены, что хотите исключить участника проектной команды? Это действие нельзя отменить."
+              onAction={() => handleDelete(projectId, member.id)}
             >
               <Button size="icon" variant="outline">
                 <Trash2 />

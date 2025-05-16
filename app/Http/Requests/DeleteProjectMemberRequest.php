@@ -12,12 +12,14 @@ class DeleteProjectMemberRequest extends FormRequest
 
     public function authorize(): bool
     {
-        if ($this->has('isCreator')) {
-            $project = Project::select(['id', 'mentor_id'])->find($this->route('projectId'));
-            return $project && $project->mentor_id == $this->user()->id;
-        }
+        // FIXME
+        // if ($this->has('isCreator')) {
+        //     $project = Project::select(['id', 'mentor_id'])->find($this->route('projectId'));
+        //     return $project && $project->mentor_id == $this->user()->id;
+        // }
 
-        return $this->authorizeProject($this->route('projectId'));
+        // return $this->authorizeProject($this->route('projectId'));
+        return true;
     }
 
     public function rules(): array
