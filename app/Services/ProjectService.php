@@ -9,6 +9,7 @@ use App\Repositories\ProjectInviteRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\UserProjectRepository;
 use App\Traits\PaginatesCollections;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -92,22 +93,28 @@ class ProjectService
     public function uploadFiles(int $projectId, array $files): void
     {
         try {
-            $fileData = [];
+            $filesData = [];
             foreach ($files as $file) {
+                if (!$file instanceof UploadedFile) {
+                    throw new \InvalidArgumentException('Недопустимый тип файла');
+                }
+
                 $extension = $file->getClientOriginalExtension();
                 $uniqueName = Str::uuid() . '.' . $extension;
                 $directory = 'project_files/' . $projectId;
                 $path = $file->storeAs($directory, $uniqueName, 'public');
 
-                $fileData[] = [
+                $filesData[] = [
                     'name' => $file->getClientOriginalName(),
                     'path' => str_replace('public/', '', $path),
                 ];
             }
 
-            $this->projectRepository->createFiles($projectId, $fileData);
-        } catch (Throwable $e) {
-            Log::error("Ошибка загрузки файлов для проекта [$projectId]: " . $e->getMessage(), ['files_count' => count($files)]);
+            $this->projectRepository->createFiles($projectId, $filesData);
+        } catch (\Throwable $e) {
+            Log::error("Ошибка загрузки файлов для проекта [$projectId]: " . $e->getMessage(), [
+                'files_count' => count($files),
+            ]);
             throw new \Exception("Не удалось загрузить файлы: {$e->getMessage()}", 0, $e);
         }
     }

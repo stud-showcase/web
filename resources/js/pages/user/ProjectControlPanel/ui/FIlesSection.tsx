@@ -125,7 +125,7 @@ export function FilesSection({
             </TableHeader>
             <TableBody>
               {files.map((file) => (
-                <TableRow key={file.url}>
+                <TableRow key={file.path}>
                   <TableCell>{file.name}</TableCell>
                   <TableCell>
                     <ConfirmationDialog

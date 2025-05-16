@@ -27,7 +27,7 @@ export function DescriptionSection({
               {files.map((file) => (
                 <Button key={file.name} variant="outline" size="sm" asChild>
                   <a
-                    href={file.url}
+                    href={file.path}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2"

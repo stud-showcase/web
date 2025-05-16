@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('project_status', function (Blueprint $table) {
+        Schema::create('project_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
         });
@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_id')->constrained('tasks');
-            $table->foreignId('status_id')->constrained('project_status');
+            $table->foreignId('status_id')->constrained('project_statuses');
             $table->string('name');
             $table->text('annotation')->nullable();
             $table->boolean('is_close')->default(false);
@@ -48,7 +48,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('project_files');
         Schema::dropIfExists('projects');
-        Schema::dropIfExists('project_status');
+        Schema::dropIfExists('project_statuses');
         Schema::dropIfExists('vacancies');
     }
 };

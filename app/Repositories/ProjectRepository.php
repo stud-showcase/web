@@ -24,7 +24,7 @@ class ProjectRepository
     {
         $cacheKey = 'projects:filtered:' . md5(json_encode($filters) . ':' . ($forUser ? 'user:' . Auth::id() : 'all')) . ':page_' . request()->query('page', 1);
         try {
-            return Cache::tags(['projects'])->remember($cacheKey, 300, function () use ($filters, $forUser) {
+            return Cache::tags(['projects'])->remember($cacheKey, 1, function () use ($filters, $forUser) {
                 $projects = $this->buildProjectQuery($filters, $forUser)
                     ->paginate(10)
                     ->withQueryString();
@@ -47,8 +47,11 @@ class ProjectRepository
         ]);
 
         if ($forUser) {
-            $query->whereHas('users', fn($q2) => $q2->where('users.id', Auth::id()));
-            $query->where('mentor_id', '=', Auth::id());
+            $userId = Auth::id();
+            $query->where(function ($q) use ($userId) {
+                $q->whereHas('users', fn($q2) => $q2->where('users.id', $userId))
+                    ->orWhere('mentor_id', $userId);
+            });
         }
 
         $this->applyFilters($query, $filters);
@@ -183,12 +186,12 @@ class ProjectRepository
         try {
             DB::transaction(function () use ($projectId, $files) {
                 foreach ($files as $file) {
-                    $this->fileRepository->saveFile($file, 'project_files', $projectId, ProjectFile::class);
+                    $this->fileRepository->saveFile($file, 'project', $projectId);
                 }
             });
             Cache::tags(['projects'])->forget("project:{$projectId}");
-        } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось создать файлы: {$e->getMessage()}", 0, $e);
+        } catch (\Throwable $e) {
+            throw new \RuntimeException("Не удалось создать файлы для проекта [$projectId]: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -198,7 +201,7 @@ class ProjectRepository
             DB::transaction(function () use ($projectId, $fileId) {
                 $file = ProjectFile::where('project_id', $projectId)
                     ->where('id', $fileId)
-                    ->firstOrFail();
+                    ->first();
                 $this->fileRepository->deleteFile($file);
             });
             Cache::tags(['projects'])->forget("project:{$projectId}");

@@ -17,9 +17,8 @@ export function FilesSection({
         {files.map((file) => (
           <Button key={file.name} variant="outline" size="sm" asChild>
             <a
-              href={file.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`/download/${encodeURIComponent(file.path)}`}
+              download
               className="flex items-center gap-2"
             >
               <FileIcon className="h-4 w-4" />

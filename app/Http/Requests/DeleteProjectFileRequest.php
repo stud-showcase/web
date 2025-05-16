@@ -16,16 +16,11 @@ class DeleteProjectFileRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'fileId' => 'required|exists:project_files,id',
-        ];
+        return [];
     }
 
     public function messages(): array
     {
-        return [
-            'fileId.required' => 'Файл не был загружен',
-            'fileId.exists' => 'Файл не найден',
-        ];
+        return [];
     }
 }

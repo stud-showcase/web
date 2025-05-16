@@ -13,7 +13,7 @@ class ProjectStatus extends Model
     public const STATUS_PROGRESS = 2;
     public const STATUS_COMPLETED = 3;
 
-    protected $table = 'project_status';
+    protected $table = 'project_statuses';
 
     public $timestamps = false;
 

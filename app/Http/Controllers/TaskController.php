@@ -6,7 +6,6 @@ use App\Http\Requests\TaskRequestCreateRequest;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Services\TaskService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -50,14 +49,20 @@ class TaskController extends Controller
         ]);
     }
 
-    public function createRequest(TaskRequestCreateRequest $request): \Inertia\Response|RedirectResponse
+    public function createRequest(TaskRequestCreateRequest $request): RedirectResponse
     {
         try {
-            $this->taskService->createRequest($request->validated(), $request->file('files') ?? []);
-            return Inertia::render('user/Application')->with('success', 'Заявка успешно отправлена.');
+            $this->taskService->createRequest(
+                $request->validated(),
+                $request->file('files') ?? []
+            );
+            return redirect()->back()->with('success', 'Заявка успешно отправлена.');
         } catch (Throwable $e) {
-            Log::error("Ошибка создания заявки: " . $e->getMessage(), ['data' => $request->validated()]);
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            Log::error("Ошибка создания заявки: " . $e->getMessage(), [
+                'data' => $request->validated(),
+                'files_count' => count($request->file('files') ?? []),
+            ]);
+            return redirect()->back()->withErrors(['error' => 'Не удалось создать заявку.',]);
         }
     }
 }

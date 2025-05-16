@@ -9,21 +9,23 @@ return new class extends Migration
     public function up()
     {
         Schema::create('user_project', function (Blueprint $table) {
-            $table->foreignId('project_id')->constrained('projects');
+            $table->id();
             $table->uuid('user_id');
             $table->string('position')->nullable();
             $table->boolean('is_creator')->nullable();
+            $table->foreignId('project_id')->constrained('projects');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->primary(['user_id', 'project_id']);
+            $table->unique(['user_id', 'project_id']);
             $table->timestamps();
             $table->index('is_creator');
         });
 
         Schema::create('user_role', function (Blueprint $table) {
+            $table->id();
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreignId('role_id')->constrained('roles');
-            $table->primary(['user_id', 'role_id']);
+            $table->unique(['user_id', 'role_id']);
         });
 
         Schema::create('project_invites', function (Blueprint $table) {

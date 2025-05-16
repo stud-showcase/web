@@ -32,7 +32,10 @@ class UserProjectRepository
         try {
             DB::transaction(function () use ($projectId, $userId, $data) {
                 $userProject = $this->findByProjectAndUser($projectId, $userId);
-                $userProject->update($data);
+                $userProject->update([
+                    'position' => $data['position'] ?? '',
+                    'is_creator' => $data['isCreator'] ?? 0
+                ]);
             });
             Cache::tags(['projects', 'user_projects'])->flush();
             Cache::tags(['projects'])->forget("project:{$projectId}");

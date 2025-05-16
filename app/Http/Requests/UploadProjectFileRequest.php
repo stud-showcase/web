@@ -19,7 +19,7 @@ class UploadProjectFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'files' => 'required|array',
+            'files' => 'required|array|max:10',
             'files.*' => 'file|max:10240',
         ];
     }

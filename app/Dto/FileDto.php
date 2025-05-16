@@ -19,7 +19,7 @@ class FileDto
         return new self(
             id: $file->id,
             name: $file->name,
-            path: asset("storage/{$file->path}")
+            path: $file->path
         );
     }
 

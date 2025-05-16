@@ -32,7 +32,6 @@ class ProjectController extends Controller
             'complexity',
             'tags',
             'isHiring',
-            'members',
             'search',
         ]);
 
@@ -54,7 +53,6 @@ class ProjectController extends Controller
             'complexity',
             'tags',
             'isHiring',
-            'members',
             'search',
         ]);
 
@@ -134,10 +132,10 @@ class ProjectController extends Controller
     {
         try {
             $this->projectService->uploadFiles($id, $request->file('files'));
-            return redirect()->route('projects.show', $id)->with('success', 'Файлы загружены.');
+            return redirect()->route('projects.show', $id)->with('success', 'Файлы успешно загружены.');
         } catch (Throwable $e) {
             Log::error("Ошибка загрузки файлов для проекта [$id]: " . $e->getMessage());
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => 'Не удалось загрузить файлы.']);
         }
     }
 

@@ -6,6 +6,7 @@ use App\Dto\TaskDto;
 use App\Dto\TaskRequestDto;
 use App\Repositories\TaskRepository;
 use App\Traits\PaginatesCollections;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -46,12 +47,21 @@ class TaskService
         return $this->formatPaginatedData($paginator, fn($task) => TaskDto::fromModel($task)->toArrayForAdmin());
     }
 
-    public function createRequest(array $data, array $files): void
+    public function createRequest(array $data, array $files): int
     {
         try {
-            $this->taskRepository->createRequest($data, $files);
-        } catch (Throwable $e) {
-            Log::error("Ошибка создания заявки: " . $e->getMessage(), ['data' => $data, 'files_count' => count($files)]);
+            return DB::transaction(function () use ($data, $files) {
+                $taskRequestId = $this->taskRepository->createRequest($data);
+                if (!empty($files)) {
+                    $this->taskRepository->uploadFiles($taskRequestId, $files);
+                }
+                return $taskRequestId;
+            });
+        } catch (\Throwable $e) {
+            Log::error("Ошибка создания заявки: " . $e->getMessage(), [
+                'data' => $data,
+                'files_count' => count($files),
+            ]);
             throw new \Exception("Не удалось создать заявку: {$e->getMessage()}", 0, $e);
         }
     }

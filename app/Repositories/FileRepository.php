@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\ProjectFile;
 use App\Models\TaskFile;
 use App\Models\TaskRequestFile;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -47,18 +46,30 @@ class FileRepository
         return response()->download($filePath, $file->name);
     }
 
-    public function saveFile(UploadedFile $file, string $directory, int $entityId, string $modelClass): void
+    public function saveFile(array $file, string $entityType, int $entityId): void
     {
         try {
-            $extension = $file->getClientOriginalExtension();
-            $uniqueName = Str::uuid() . '.' . $extension;
-            $path = $file->storeAs($directory . '/' . $entityId, $uniqueName, 'public');
+            $data = [
+                'name' => $file['name'],
+                'path' => $file['path'],
+            ];
 
-            $modelClass::create([
-                'task_request_id' => $entityId,
-                'name' => $file->getClientOriginalName(),
-                'path' => $path,
-            ]);
+            switch ($entityType) {
+                case 'project':
+                    $data['project_id'] = $entityId;
+                    ProjectFile::create($data);
+                    break;
+                case 'task':
+                    $data['task_id'] = $entityId;
+                    TaskFile::create($data);
+                    break;
+                case 'task_request':
+                    $data['task_request_id'] = $entityId;
+                    TaskRequestFile::create($data);
+                    break;
+                default:
+                    throw new \InvalidArgumentException("Неподдерживаемый тип сущности: {$entityType}");
+            }
         } catch (\Throwable $e) {
             throw new \RuntimeException("Не удалось сохранить файл: {$e->getMessage()}", 0, $e);
         }

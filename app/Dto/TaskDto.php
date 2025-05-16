@@ -57,7 +57,7 @@ class TaskDto
                         'id' => $project->status->id,
                         'name' => $project->status->name,
                     ],
-                    'isHiring' => $project->users->count() < $task->max_members  && !$project->is_close,
+                    'isHiring' => $project->users->count() < $task->max_members && !$project->is_close,
                 ])->toArray()
                 : null,
             canTake: $task->canTake(Auth::user())

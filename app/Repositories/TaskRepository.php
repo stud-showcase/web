@@ -4,11 +4,12 @@ namespace App\Repositories;
 
 use App\Models\Task;
 use App\Models\TaskRequest;
-use App\Models\TaskRequestFile;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Throwable;
 
 class TaskRepository
@@ -121,10 +122,10 @@ class TaskRepository
         }
     }
 
-    public function createRequest(array $data, array $files): void
+    public function createRequest(array $data): int
     {
         try {
-            DB::transaction(function () use ($data, $files) {
+            return DB::transaction(function () use ($data) {
                 $taskRequest = TaskRequest::create([
                     'title' => $data['title'],
                     'description' => $data['description'],
@@ -136,13 +137,43 @@ class TaskRepository
                     'user_id' => Auth::check() ? Auth::id() : null,
                 ]);
 
-                foreach ($files as $file) {
-                    $this->fileRepository->saveFile($file, 'task_requests', $taskRequest->id, TaskRequestFile::class);
-                }
+                return $taskRequest->id;
             });
-            Cache::tags(['task_requests'])->flush();
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось создать заявку: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function uploadFiles(int $taskRequestId, array $files): void
+    {
+        try {
+            DB::transaction(function () use ($taskRequestId, $files) {
+                $fileData = [];
+                foreach ($files as $file) {
+                    if (!$file instanceof UploadedFile) {
+                        throw new \InvalidArgumentException('Недопустимый тип файла');
+                    }
+
+                    $extension = $file->getClientOriginalExtension();
+                    $uniqueName = Str::uuid() . '.' . $extension;
+                    $directory = 'task_request_files/' . $taskRequestId;
+                    $path = $file->storeAs($directory, $uniqueName, 'public');
+
+                    $fileData[] = [
+                        'name' => $file->getClientOriginalName(),
+                        'path' => str_replace('public/', '', $path),
+                    ];
+                }
+
+                foreach ($fileData as $file) {
+                    $this->fileRepository->saveFile($file, 'task_request', $taskRequestId);
+                }
+            });
+
+            Cache::tags(['task_requests'])->forget("task_request:{$taskRequestId}");
+            Cache::tags(['task_requests'])->forget('task_requests:list');
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось загрузить файлы: {$e->getMessage()}", 0, $e);
         }
     }
 }
