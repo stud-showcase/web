@@ -18,6 +18,7 @@ import { FilesSection } from "./FIlesSection";
 import { MembersSection } from "./MembersSection";
 import { VacanciesSection } from "./VacanciesSection";
 import { InvitesSection } from "./InvitesSection";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
 
 export default function ProjectControlPanel({
   project,
@@ -58,18 +59,39 @@ export default function ProjectControlPanel({
             </Heading>
           </header>
 
-          <div className="mt-8 flex flex-col gap-6">
-            <NameSection id={project.id} name={project.name} />
-            <DescriptionSection
-              id={project.id}
-              description={project.annotation}
-            />
-            <HiringSection id={project.id} isHiring={project.isHiring} />
-            <FilesSection id={project.id} files={project.files} />
-            <MembersSection mentor={project.mentor} members={project.members} />
-            <VacanciesSection vacancies={project.vacancies} />
-            <InvitesSection invites={project.invites} />
-          </div>
+          <Tabs defaultValue="project" className="mt-8">
+            <TabsList>
+              <TabsTrigger value="project">Проект</TabsTrigger>
+              <TabsTrigger value="vacancies">Вакансии</TabsTrigger>
+              <TabsTrigger value="applications">Заявки</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="project">
+              <div className="mt-6 flex flex-col gap-6">
+                <NameSection id={project.id} name={project.name} />
+                <DescriptionSection
+                  id={project.id}
+                  description={project.annotation}
+                />
+                <FilesSection id={project.id} files={project.files} />
+                <MembersSection
+                  mentor={project.mentor}
+                  members={project.members}
+                />
+              </div>
+            </TabsContent>
+            <TabsContent value="vacancies">
+              <div className="mt-6 flex flex-col gap-6">
+                <VacanciesSection vacancies={project.vacancies} />
+              </div>
+            </TabsContent>
+            <TabsContent value="applications">
+              <div className="mt-6 flex flex-col gap-6">
+                <HiringSection id={project.id} isHiring={project.isHiring} />
+                <InvitesSection invites={project.invites} />
+              </div>
+            </TabsContent>
+          </Tabs>
         </Container>
       </UserLayout>
     </>
