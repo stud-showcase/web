@@ -44,9 +44,9 @@ export function CreateProjectModal({
         </DialogHeader>
         <form id="project-creation-form" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <Label htmlFor="title">Название проекта *</Label>
+            <Label htmlFor="project-name">Название проекта *</Label>
             <Input
-              id="projectName"
+              id="project-name"
               placeholder="Введите название"
               type="text"
               required

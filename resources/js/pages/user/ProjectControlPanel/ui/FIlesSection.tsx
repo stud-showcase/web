@@ -29,6 +29,7 @@ import {
 } from "@/shared/ui/Table";
 import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
 import { Text } from "@/shared/ui/Text";
+import { FileUpload } from "@/shared/ui/FileUpload";
 
 function FileUploadDialog({ children }: PropsWithChildren) {
   return (
@@ -41,7 +42,9 @@ function FileUploadDialog({ children }: PropsWithChildren) {
             Выберите файл для загрузки в проект.
           </DialogDescription>
         </DialogHeader>
-        <Input type="file" />
+        <form id="project-files">
+          <FileUpload  />
+        </form>
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Отмена</Button>

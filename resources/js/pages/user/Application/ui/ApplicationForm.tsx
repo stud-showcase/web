@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Input } from "@/shared/ui/Input";
 import { Textarea } from "@/shared/ui/Textarea";
 import { Label } from "@/shared/ui/Label";
@@ -7,12 +7,10 @@ import { Text } from "@/shared/ui/Text";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useForm } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
-import { useToast } from "@/shared/hooks/useToast";
 import { Heading } from "@/shared/ui/Heading";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
-import { cn } from "@/shared/lib/utils";
-import { Upload } from "lucide-react";
-import { Separator } from "@/shared/ui/Separator";
+import { FileUpload } from "@/shared/ui/FileUpload";
+import { toast } from "@/shared/hooks/useToast";
 
 type ApplicationForm = {
   title: string;
@@ -44,35 +42,6 @@ export function ApplicationForm() {
     ...data,
     withProject: data.withProject === "project",
   }));
-
-  const { toast } = useToast();
-
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setData("files", Array.from(e.target.files));
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    if (e.dataTransfer.files) {
-      setData("files", Array.from(e.dataTransfer.files));
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -124,9 +93,9 @@ export function ApplicationForm() {
         </div>
         {data.withProject === "project" && (
           <div className="space-y-2">
-            <Label htmlFor="projectName">Название проекта *</Label>
+            <Label htmlFor="project-name">Название проекта *</Label>
             <Input
-              id="projectName"
+              id="project-name"
               placeholder="Введите название проекта..."
               type="text"
               value={data.projectName}
@@ -155,38 +124,11 @@ export function ApplicationForm() {
 
         <div className="space-y-2">
           <Label htmlFor="files">Прикрепить файлы</Label>
-          <div
-            className={cn(
-              "border-2 border-input border-dashed rounded-lg p-8 text-center transition-colors bg-background",
-              {
-                "border-primary bg-muted/20": isDragging,
-              }
-            )}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-          >
-            <input
-              id="files"
-              type="file"
-              multiple
-              className="hidden"
-              onChange={handleFileChange}
-            />
-            <div className="space-y-2">
-              <Upload className="h-6 w-6 mx-auto text-muted-foreground" />
-              <Text variant="muted">
-                {data.files.length > 0
-                  ? `${data.files.length} файл(ов) выбрано`
-                  : "Перетащите файлы сюда или"}
-              </Text>
-              <Button variant="outline" asChild className="mt-2">
-                <label htmlFor="files" className="cursor-pointer">
-                  Выбрать файлы
-                </label>
-              </Button>
-            </div>
-          </div>
+          <FileUpload
+            name="files"
+            files={data.files}
+            onFilesChange={(files) => setData("files", files)}
+          />
           {errors.files && <ValidationErrorText text={errors.files} />}
         </div>
 

@@ -20,9 +20,13 @@ export function DescriptionSection({
   id: number;
   description: string | null;
 }) {
-  const { put, errors, data, setData } = useForm({
-    annotation: description,
+  const { put, errors, data, setData, transform } = useForm({
+    description,
   });
+
+  transform((data) => ({
+    annotation: data.description,
+  }));
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,19 +46,19 @@ export function DescriptionSection({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} id="projectDescription">
+        <form onSubmit={handleSubmit} id="project-description">
           <Textarea
-            value={data.annotation ?? ""}
-            onChange={(e) => setData("annotation", e.target.value)}
+            value={data.description ?? ""}
+            onChange={(e) => setData("description", e.target.value)}
             placeholder="Введите описание проекта..."
           />
-          {errors.annotation && (
-            <ValidationErrorText text={errors.annotation} />
+          {errors.description && (
+            <ValidationErrorText text={errors.description} />
           )}
         </form>
       </CardContent>
       <CardFooter className="border-t px-6 py-4">
-        <Button size="sm" form="projectDescription">
+        <Button size="sm" form="project-description">
           Сохранить
         </Button>
       </CardFooter>

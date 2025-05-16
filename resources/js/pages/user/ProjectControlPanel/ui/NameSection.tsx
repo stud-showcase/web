@@ -36,7 +36,7 @@ export function NameSection({ id, name }: { id: number; name: string }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} id="projectName">
+        <form onSubmit={handleSubmit} id="project-name">
           <Input
             value={data.name}
             onChange={(e) => setData("name", e.target.value)}
@@ -46,7 +46,7 @@ export function NameSection({ id, name }: { id: number; name: string }) {
         </form>
       </CardContent>
       <CardFooter className="border-t px-6 py-4">
-        <Button size="sm" form="projectName" type="submit">
+        <Button size="sm" form="project-name" type="submit">
           Сохранить
         </Button>
       </CardFooter>

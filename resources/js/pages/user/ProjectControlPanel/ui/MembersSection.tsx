@@ -48,8 +48,8 @@ function EditMemberDialog({ children }: PropsWithChildren) {
         </DialogHeader>
         <Input placeholder="Новая позиция" />
         <div className="flex items-center gap-2">
-          <Checkbox id="team_leader" defaultChecked />
-          <Label htmlFor="team_leader">Дать права руководителя команды.</Label>
+          <Checkbox id="team-leader" defaultChecked />
+          <Label htmlFor="team-leader">Дать права руководителя команды.</Label>
         </div>
         <DialogFooter>
           <DialogClose asChild>

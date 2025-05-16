@@ -22,7 +22,7 @@ export function HiringSection({
   isHiring: boolean;
 }) {
   const { put, errors, data, setData, transform } = useForm({
-    isClose: isHiring,
+    isHiring,
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -30,7 +30,7 @@ export function HiringSection({
     put(`/projects/${id}`, {
       onSuccess: () =>
         showToast(
-          `Вы успешно ${data.isClose ? "открыли" : "закрыли"} набор в проект`
+          `Вы успешно ${data.isHiring ? "открыли" : "закрыли"} набор в проект`
         ),
       onError: () =>
         showToast("Произошла ошибка при изменении статуса набора в проект"),
@@ -38,7 +38,7 @@ export function HiringSection({
   };
 
   transform((data) => ({
-    isClose: data.isClose ? 1 : 0,
+    isClose: !data.isHiring ? 1 : 0,
   }));
 
   return (
@@ -46,26 +46,26 @@ export function HiringSection({
       <CardHeader>
         <CardTitle>Набор в проектную команду</CardTitle>
         <CardDescription>
-          {data.isClose
+          {data.isHiring
             ? "Новые участники могут подавать заявки"
             : "Набор закрыт — заявки не принимаются"}
         </CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit} id="projectHiring">
+      <form onSubmit={handleSubmit} id="project-hiring">
         <CardContent>
           <div className="flex items-center gap-3">
             <Switch
-              checked={data.isClose}
-              onCheckedChange={(checked) => setData("isClose", checked)}
+              checked={data.isHiring}
+              onCheckedChange={(checked) => setData("isHiring", checked)}
             />
             <Text variant="muted">
-              {data.isClose ? "Набор открыт" : "Набор закрыт"}
+              {data.isHiring ? "Набор открыт" : "Набор закрыт"}
             </Text>
           </div>
-          {errors.isClose && <ValidationErrorText text={errors.isClose} />}
+          {errors.isHiring && <ValidationErrorText text={errors.isHiring} />}
         </CardContent>
         <CardFooter className="border-t px-6 py-4">
-          <Button size="sm" form="projectHiring">
+          <Button size="sm" form="project-hiring">
             Сохранить
           </Button>
         </CardFooter>
