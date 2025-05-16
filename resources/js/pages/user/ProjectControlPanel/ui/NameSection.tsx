@@ -32,7 +32,7 @@ export function NameSection({ id, name }: { id: number; name: string }) {
       <CardHeader>
         <CardTitle>Название проекта</CardTitle>
         <CardDescription>
-          Является публичным именем вашего проекта
+          Публичное имя вашего проекта
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -42,7 +42,7 @@ export function DescriptionSection({
       <CardHeader>
         <CardTitle>Описание проекта</CardTitle>
         <CardDescription>
-          Описание является публичной аннотацией к вашему проекту
+          Публичная аннотация к вашему проекту
         </CardDescription>
       </CardHeader>
       <CardContent>

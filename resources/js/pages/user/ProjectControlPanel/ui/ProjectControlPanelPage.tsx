@@ -19,6 +19,7 @@ import { MembersSection } from "./MembersSection";
 import { VacanciesSection } from "./VacanciesSection";
 import { InvitesSection } from "./InvitesSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
+import { StatusSection } from "./StatusSection";
 
 export default function ProjectControlPanel({
   project,
@@ -73,6 +74,7 @@ export default function ProjectControlPanel({
                   id={project.id}
                   description={project.annotation}
                 />
+                <StatusSection id={project.id} status={project.status} />
                 <FilesSection id={project.id} files={project.files} />
                 <MembersSection
                   mentor={project.mentor}
