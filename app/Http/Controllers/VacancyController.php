@@ -47,7 +47,7 @@ class VacancyController extends Controller
     {
         try {
             $this->vacancyService->updateVacancy($vacancyId, $request->validated());
-            return redirect()->route('projects.show', $projectId)->with('success', 'Вакансия обновлена.');
+            return redirect()->route('projects.controlPanel.show', $projectId)->with('success', 'Вакансия обновлена.');
         } catch (Throwable $e) {
             Log::error("Ошибка обновления вакансии [$vacancyId] для проекта [$projectId]: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

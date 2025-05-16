@@ -105,7 +105,29 @@ function CreateVacancyDialog({
   );
 }
 
-function EditVacancyDialog({ children }: PropsWithChildren) {
+function EditVacancyDialog({
+  projectId,
+  vacancy,
+  children,
+}: PropsWithChildren<{ projectId: number; vacancy: Vacancy }>) {
+  const { data, setData, errors, put, reset } = useForm({
+    name: vacancy.name,
+    description: vacancy.description,
+  });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    put(`/projects/${projectId}/vacancy/${vacancy.id}`, {
+      onSuccess: () => {
+        reset();
+        showSuccessToast("Вы успешно отредактировали вакансию");
+      },
+      onError: () => {
+        reset();
+        showErrorToast("Произошла ошибка в ходе редактирования вакансии");
+      },
+    });
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -114,15 +136,37 @@ function EditVacancyDialog({ children }: PropsWithChildren) {
           <DialogTitle>Редактирование вакансии</DialogTitle>
           <DialogDescription>Измените данные вакансии.</DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-4">
-          <Input placeholder="Название вакансии" />
-          <Textarea placeholder="Описание вакансии" />
-        </div>
+        <form
+          className="flex flex-col gap-4"
+          id="vacancy-edit"
+          onSubmit={handleSubmit}
+        >
+          <div>
+            <Input
+              placeholder="Введите название вакансии..."
+              value={data.name}
+              onChange={(e) => setData("name", e.target.value)}
+              required
+            />
+            {errors.name && <ValidationErrorText text={errors.name} />}
+          </div>
+          <div>
+            <Textarea
+              placeholder="Введите описание вакансии..."
+              value={data.description}
+              onChange={(e) => setData("description", e.target.value)}
+              required
+            />
+            {errors.description && (
+              <ValidationErrorText text={errors.description} />
+            )}
+          </div>
+        </form>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="outline">Отмена</Button>
           </DialogClose>
-          <Button>Сохранить</Button>
+          <Button form="vacancy-edit">Сохранить</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -175,7 +219,7 @@ export function VacanciesSection({
                   <TableCell>{vacancy.description}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      <EditVacancyDialog>
+                      <EditVacancyDialog projectId={id} vacancy={vacancy}>
                         <Button size="icon" variant="outline">
                           <Edit />
                         </Button>
