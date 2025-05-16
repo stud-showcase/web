@@ -36,7 +36,7 @@ class VacancyController extends Controller
     {
         try {
             $this->vacancyService->createVacancy($request->route('id'), $request->validated());
-            return redirect()->route('projects.show', $request->route('id'))->with('success', 'Вакансия создана.');
+            return redirect()->route('projects.controlPanel.show', $request->route('id'))->with('success', 'Вакансия создана.');
         } catch (Throwable $e) {
             Log::error("Ошибка создания вакансии для проекта [{$request->route('id')}]: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

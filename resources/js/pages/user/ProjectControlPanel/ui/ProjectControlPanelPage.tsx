@@ -85,7 +85,7 @@ export default function ProjectControlPanel({
             </TabsContent>
             <TabsContent value="vacancies">
               <div className="mt-6 flex flex-col gap-6">
-                <VacanciesSection vacancies={project.vacancies} />
+                <VacanciesSection id={project.id} vacancies={project.vacancies} />
               </div>
             </TabsContent>
             <TabsContent value="applications">
