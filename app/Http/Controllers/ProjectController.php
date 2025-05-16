@@ -156,7 +156,7 @@ class ProjectController extends Controller
     {
         try {
             $this->projectService->updateMember($projectId, $memberId, $request->validated());
-            return redirect()->route('projects.show', $projectId)->with('success', 'Участник обновлён.');
+            return redirect()->route('projects.controlPanel.show', $projectId)->with('success', 'Участник обновлён.');
         } catch (Throwable $e) {
             Log::error("Ошибка обновления участника [$memberId] для проекта [$projectId]: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

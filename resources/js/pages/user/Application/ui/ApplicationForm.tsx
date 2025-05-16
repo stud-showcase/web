@@ -1,4 +1,4 @@
-import React from "react";
+import { FormEvent } from "react";
 import { Input } from "@/shared/ui/Input";
 import { Textarea } from "@/shared/ui/Textarea";
 import { Label } from "@/shared/ui/Label";
@@ -43,7 +43,7 @@ export function ApplicationForm() {
     withProject: data.withProject === "project",
   }));
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     post("/application", {
       onSuccess: () => {
@@ -64,7 +64,7 @@ export function ApplicationForm() {
     });
   };
 
-  const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleReset = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     clearErrors();
     reset();

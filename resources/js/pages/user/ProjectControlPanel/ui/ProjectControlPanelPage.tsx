@@ -77,6 +77,7 @@ export default function ProjectControlPanel({
                 <StatusSection id={project.id} status={project.status} />
                 <FilesSection id={project.id} files={project.files} />
                 <MembersSection
+                  id={project.id}
                   mentor={project.mentor}
                   members={project.members}
                 />

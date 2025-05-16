@@ -2,6 +2,7 @@ import { CalendarIcon, UsersIcon, Briefcase } from "lucide-react";
 import { Heading } from "@/shared/ui/Heading";
 import { Text } from "@/shared/ui/Text";
 import { getMemberLabel } from "@/entities/Task";
+import { ReactNode } from "react";
 
 export function InfoSection({
   deadline,
@@ -33,7 +34,7 @@ function InfoCard({
   label,
   value,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string;
 }) {

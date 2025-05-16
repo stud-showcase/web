@@ -17,7 +17,7 @@ import {
   DialogTrigger,
 } from "@/shared/ui/Dialog";
 import { Input } from "@/shared/ui/Input";
-import { PropsWithChildren } from "react";
+import { FormEvent, PropsWithChildren } from "react";
 import { Edit, Trash2 } from "lucide-react";
 import {
   Table,
@@ -34,28 +34,74 @@ import { ProjectMember } from "@/entities/Project";
 import { getFullName, User } from "@/entities/User";
 import { Badge } from "@/shared/ui/Badge";
 import { Text } from "@/shared/ui/Text";
+import { useForm } from "@inertiajs/react";
+import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
+import { showErrorToast, showSuccessToast } from "../util/showToast";
 
-function EditMemberDialog({ children }: PropsWithChildren) {
+function EditMemberDialog({
+  projectId,
+  memberId,
+  position,
+  isCreator,
+  children,
+}: PropsWithChildren<{
+  projectId: number;
+  memberId: string;
+  position: string | null;
+  isCreator: boolean;
+}>) {
+  const { data, setData, errors, put, transform } = useForm({
+    position,
+    isCreator,
+  });
+
+  transform((data) => ({
+    isCreator: data.isCreator ? 1 : 0,
+  }));
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    put(`/projects/${projectId}/member/${memberId}`, {
+      onSuccess: () =>
+        showSuccessToast("Вы успешно отредактировали участника проекта"),
+      onError: () =>
+        showErrorToast(
+          "Произошла ошибка в ходе редактирования участника проекта"
+        ),
+    });
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Изменение позиции</DialogTitle>
+          <DialogTitle>Изменение позиции и роли</DialogTitle>
           <DialogDescription>
-            Введите новую позицию для участника.
+            Введите новую позицию для участника или измените роль.
           </DialogDescription>
         </DialogHeader>
-        <Input placeholder="Новая позиция" />
-        <div className="flex items-center gap-2">
-          <Checkbox id="team-leader" defaultChecked />
-          <Label htmlFor="team-leader">Дать права руководителя команды.</Label>
-        </div>
+        <form id="project-member" onSubmit={handleSubmit}>
+          <Input
+            placeholder="Введите новую позицию..."
+            value={data.position ?? ""}
+            onChange={(e) => setData("position", e.target.value)}
+          />
+          {errors.position && <ValidationErrorText text={errors.position} />}
+          <div className="mt-4 flex items-center gap-2">
+            <Checkbox
+              id="team-leader"
+              checked={data.isCreator}
+              onCheckedChange={(value) => setData("isCreator", value === true)}
+            />
+            <Label htmlFor="team-leader">Руководитель команды</Label>
+          </div>
+        </form>
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Отмена</Button>
           </DialogClose>
-          <Button>Сохранить</Button>
+          <Button form="project-member">Сохранить</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -63,9 +109,11 @@ function EditMemberDialog({ children }: PropsWithChildren) {
 }
 
 function MemberRow({
+  projectId,
   member,
   isMentor = false,
 }: {
+  projectId: number;
   member: ProjectMember;
   isMentor?: boolean;
 }) {
@@ -89,7 +137,12 @@ function MemberRow({
       <TableCell>
         {!isMentor && (
           <div className="flex gap-2">
-            <EditMemberDialog>
+            <EditMemberDialog
+              projectId={projectId}
+              memberId={member.id}
+              position={member.position}
+              isCreator={member.isCreator}
+            >
               <Button size="icon" variant="outline">
                 <Edit />
               </Button>
@@ -110,9 +163,11 @@ function MemberRow({
 }
 
 export function MembersSection({
+  id,
   mentor,
   members,
 }: {
+  id: number;
   mentor: User | null;
   members: ProjectMember[];
 }) {
@@ -140,10 +195,15 @@ export function MembersSection({
               </TableHeader>
               <TableBody>
                 {mentor && (
-                  <MemberRow member={mentor as ProjectMember} isMentor />
+                  <MemberRow
+                    projectId={id}
+                    member={mentor as ProjectMember}
+                    isMentor
+                    key={mentor.id}
+                  />
                 )}
                 {members.map((member) => (
-                  <MemberRow member={member} />
+                  <MemberRow projectId={id} member={member} key={member.id} />
                 ))}
               </TableBody>
             </Table>

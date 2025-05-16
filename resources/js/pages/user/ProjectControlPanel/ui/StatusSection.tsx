@@ -51,7 +51,10 @@ export function StatusSection({
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} id="project-status">
-          <Select value={data.statusId} onValueChange={(value) => setData("statusId", value)}>
+          <Select
+            value={data.statusId}
+            onValueChange={(value) => setData("statusId", value)}
+          >
             <SelectTrigger className="w-[270px]">
               <SelectValue placeholder="Выберите статус проекта" />
             </SelectTrigger>
@@ -59,7 +62,9 @@ export function StatusSection({
               <SelectGroup>
                 <SelectLabel>Статусы</SelectLabel>
                 {STATUSES.map((status) => (
-                  <SelectItem value={status.id.toString()}>{status.name}</SelectItem>
+                  <SelectItem value={status.id.toString()} key={status.id}>
+                    {status.name}
+                  </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
