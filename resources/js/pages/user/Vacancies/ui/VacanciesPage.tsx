@@ -1,6 +1,5 @@
 import { UserLayout } from "@/layouts/UserLayout";
 import { Head } from "@inertiajs/react";
-import { FiltersItemsLayout } from "@/layouts/FiltersItemsLayout";
 import { VacanciesPageContent } from "./VacanciesPageContent";
 import { ExtendedVacancy } from "../model/ExtendedVacancy";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
@@ -8,6 +7,8 @@ import { VacanciesFilters } from "../model/VacanciesFilters";
 import { VacanciesFiltersContext } from "../context/VacanciesFiltersContext";
 import { useState } from "react";
 import { defaultVacanciesFilters } from "../consts/defaultVacanciesFilters";
+import { Container } from "@/shared/ui/Container";
+import { Heading } from "@/shared/ui/Heading";
 
 type Props = {
   filters: VacanciesFilters;
@@ -29,10 +30,10 @@ export default function VacanciesPage(props: Props) {
       </Head>
       <UserLayout>
         <VacanciesFiltersContext.Provider value={{ filters, setFilters }}>
-          <FiltersItemsLayout
-            heading="Вакансии"
-            contentSlot={<VacanciesPageContent vacancies={vacancies} />}
-          />
+          <Container withVerticalPaddings>
+            <Heading level={1}>Вакансии</Heading>
+            <VacanciesPageContent vacancies={vacancies} />
+          </Container>
         </VacanciesFiltersContext.Provider>
       </UserLayout>
     </>

@@ -22,7 +22,7 @@ function ProjectsCards({
   projects: ServerPaginatedData<ExtendedProject>;
 }) {
   return (
-    <div className="mt-6">
+    <div className="mt-4">
       {projects.data.length === 0 ? (
         <NoProjectsText />
       ) : (

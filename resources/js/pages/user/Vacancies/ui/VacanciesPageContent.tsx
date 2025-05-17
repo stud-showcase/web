@@ -28,13 +28,13 @@ export function VacanciesPageContent({
   };
 
   return (
-    <>
+    <div className="mt-6 flex flex-col">
       <SearchBar
         value={filters.search ?? ""}
         onChange={handleChange}
         onSearch={handleSearch}
       />
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {vacancies.data.length === 0 ? (
           <NoVacanciesText />
         ) : (
@@ -44,6 +44,6 @@ export function VacanciesPageContent({
         )}
       </div>
       <DataPagination paginatedData={vacancies} className="mt-6" />
-    </>
+    </div>
   );
 }

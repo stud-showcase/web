@@ -34,7 +34,7 @@ export function TaskBankPageContent({
         onChange={handleChange}
         onSearch={handleSearch}
       />
-      <div className="flex flex-col mt-6 gap-6">
+      <div className="flex flex-col mt-4 gap-6">
         {tasks.data.length === 0 ? (
           <NoTasksText />
         ) : (
