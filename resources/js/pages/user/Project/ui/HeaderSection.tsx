@@ -19,6 +19,16 @@ import { ExtendedProject } from "../model/ExtendedProject";
 export function HeaderSection({ project }: { project: ExtendedProject }) {
   const { user } = useAuth();
 
+  const isProjectCreator = () => {
+    return project.members.find(
+      (member) => user?.id === member.id && member.isCreator
+    );
+  };
+
+  const isProjectMentor = () => {
+    return user?.id === project.mentor?.id;
+  };
+
   return (
     <header className="border-b pb-8">
       <Breadcrumb>
@@ -48,7 +58,7 @@ export function HeaderSection({ project }: { project: ExtendedProject }) {
                 <LinkIcon /> К задаче
               </Link>
             </Button>
-            {user && (
+            {user && (isProjectCreator() || isProjectMentor()) && (
               <Button
                 variant="secondary"
                 className="flex-1 sm:flex-none"

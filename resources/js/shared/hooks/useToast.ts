@@ -192,5 +192,3 @@ function useToast() {
 }
 
 export { useToast, toast }
-
-// TODO: привести тосты к одному API
