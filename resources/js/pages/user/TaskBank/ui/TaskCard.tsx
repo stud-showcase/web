@@ -1,5 +1,4 @@
 import { EntityCard } from "@/shared/ui/EntityCard";
-import { Text } from "@/shared/ui/Text";
 import { Task } from "@/entities/Task/model/Task";
 import {
   TaskComplexity,
@@ -9,6 +8,7 @@ import {
   TaskTag,
   TaskTagBadge,
 } from "@/entities/Task";
+import { ExpandableText } from "@/shared/ui/ExpandableText";
 
 function Badges({
   maxMembers,
@@ -28,14 +28,6 @@ function Badges({
   );
 }
 
-function Content({ description }: { description: string }) {
-  return (
-    <Text variant="small" className="line-clamp-3">
-      {description}
-    </Text>
-  );
-}
-
 function Tags({ taskTags }: { taskTags: TaskTag[] }) {
   return taskTags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
@@ -52,7 +44,7 @@ export function TaskCard({ task }: { task: Task }) {
           maxMembers={task.maxMembers}
         />
       }
-      content={<Content description={task.description} />}
+      content={<ExpandableText text={task.description} maxLength={160} />}
       tags={task.tags.length > 0 && <Tags taskTags={task.tags} />}
       href={`/tasks/${task.id}`}
     />

@@ -11,8 +11,8 @@ import {
   TaskComplexity,
   TaskTag,
 } from "@/entities/Task";
-import { Text } from "@/shared/ui/Text";
 import { ExtendedProject } from "../model/ExtendedProject";
+import { ExpandableText } from "@/shared/ui/ExpandableText";
 
 function Title({
   name,
@@ -58,14 +58,6 @@ function Tags({ taskTags }: { taskTags: TaskTag[] }) {
   return taskTags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
 }
 
-function Content({ annotation }: { annotation: string }) {
-  return (
-    <Text variant="small" className="line-clamp-3">
-      {annotation}
-    </Text>
-  );
-}
-
 export function ProjectCard({ project }: { project: ExtendedProject }) {
   return (
     <EntityCard
@@ -78,7 +70,7 @@ export function ProjectCard({ project }: { project: ExtendedProject }) {
       }
       subtitle={project.task.title}
       content={
-        project.annotation && <Content annotation={project.annotation} />
+        project.annotation && <ExpandableText text={project.annotation} maxLength={160} />
       }
       badges={
         <Badges

@@ -31,7 +31,7 @@ export function ExpandableText({
       {shouldTruncate && (
         <button
           onClick={toggleExpand}
-          className="flex items-center gap-1 text-sm text-primary hover:text-primary transition-colors duration-200 group w-fit"
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 group w-fit"
         >
           {isExpanded ? (
             <>
