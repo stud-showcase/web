@@ -11,7 +11,7 @@ import { Text } from "@/shared/ui/Text";
 import { Button } from "@/shared/ui/Button";
 import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
-import { showErrorToast, showSuccessToast } from "../util/showToast";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 
 export function HiringSection({

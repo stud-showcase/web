@@ -9,7 +9,7 @@ import {
 } from "@/shared/ui/Card";
 import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
-import { showErrorToast, showSuccessToast } from "../util/showToast";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 import { ProjectStatus, STATUSES } from "@/entities/Project";
 import {
   Select,
@@ -35,6 +35,7 @@ export function StatusSection({
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     put(`/projects/${id}`, {
+      preserveScroll: true,
       onSuccess: () => showSuccessToast("Вы успешно изменили статус проекта"),
       onError: () =>
         showErrorToast("Произошла ошибка в ходе обновления статуса проекта"),

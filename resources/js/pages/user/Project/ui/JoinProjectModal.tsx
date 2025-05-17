@@ -1,5 +1,5 @@
 import { Vacancy } from "@/entities/Vacancy";
-import { toast } from "@/shared/hooks/useToast";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,32 +11,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/AlertDialog";
-import { Button } from "@/shared/ui/Button";
 import { Label } from "@/shared/ui/Label";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/RadioGroup";
-import { Text } from "@/shared/ui/Text";
-import { Link, router } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { PropsWithChildren, useState } from "react";
 
 // TODO: разобраться, почему не отправляется или не сохраняется вакансия
-
 function sendJoinProjectRequest(projectId: number, vacancyId?: string) {
   router.post(
     `/projects/${projectId}/createInvite`,
     { vacancyId },
     {
       onSuccess: () => {
-        toast({
-          title: "Заявка успешно отправлена",
-          description: `Ваша заявка успешно отправлена и будет рассмотрена руководителем команды.`,
-        });
+        showSuccessToast(
+          `Ваша заявка успешно отправлена и будет рассмотрена руководителем команды.`
+        );
       },
       onError: () => {
-        toast({
-          title: "Не удалось отправить заявку",
-          description: `Произошла ошибка в ходе отправки заявки. Повторите еще раз или попробуйте позже.`,
-          variant: "destructive",
-        });
+        showErrorToast(
+          `Произошла ошибка в ходе отправки заявки. Повторите еще раз или попробуйте позже.`
+        );
       },
     }
   );

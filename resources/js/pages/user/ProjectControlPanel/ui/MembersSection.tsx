@@ -7,17 +7,18 @@ import {
 } from "@/shared/ui/Card";
 import { Button } from "@/shared/ui/Button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shared/ui/Dialog";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/ui/AlertDialog";
 import { Input } from "@/shared/ui/Input";
-import { FormEvent, PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import { Edit, Trash2 } from "lucide-react";
 import {
   Table,
@@ -36,7 +37,7 @@ import { Badge } from "@/shared/ui/Badge";
 import { Text } from "@/shared/ui/Text";
 import { router, useForm } from "@inertiajs/react";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
-import { showErrorToast, showSuccessToast } from "../util/showToast";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
 function EditMemberDialog({
   projectId,
@@ -56,12 +57,13 @@ function EditMemberDialog({
   });
 
   transform((data) => ({
+    ...data,
     isCreator: data.isCreator ? 1 : 0,
   }));
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     put(`/projects/${projectId}/member/${memberId}`, {
+      preserveScroll: true,
       onSuccess: () =>
         showSuccessToast("Вы успешно отредактировали участника проекта"),
       onError: () =>
@@ -72,39 +74,40 @@ function EditMemberDialog({
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Изменение позиции и роли</DialogTitle>
-          <DialogDescription>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Изменение позиции и роли</AlertDialogTitle>
+          <AlertDialogDescription>
             Введите новую позицию для участника или измените роль.
-          </DialogDescription>
-        </DialogHeader>
-        <form id="project-member" onSubmit={handleSubmit}>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <div>
           <Input
             placeholder="Введите новую позицию..."
             value={data.position ?? ""}
             onChange={(e) => setData("position", e.target.value)}
+            required
           />
           {errors.position && <ValidationErrorText text={errors.position} />}
-          <div className="mt-4 flex items-center gap-2">
-            <Checkbox
-              id="team-leader"
-              checked={data.isCreator}
-              onCheckedChange={(value) => setData("isCreator", value === true)}
-            />
-            <Label htmlFor="team-leader">Руководитель команды</Label>
-          </div>
-        </form>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Отмена</Button>
-          </DialogClose>
-          <Button form="project-member">Сохранить</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </div>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="team-leader"
+            checked={data.isCreator}
+            onCheckedChange={(value) => setData("isCreator", value === true)}
+          />
+          <Label htmlFor="team-leader">Руководитель команды</Label>
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Отмена</AlertDialogCancel>
+          <AlertDialogAction onClick={handleSubmit} disabled={!data.position}>
+            Сохранить
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 
@@ -125,14 +128,12 @@ function MemberRow({
 
   const handleDelete = (memberId: string) => {
     router.delete(`/projects/${projectId}/member/${memberId}`, {
-      onSuccess: () =>
-        showSuccessToast("Вы успешно удалили участника проекта"),
+      preserveScroll: true,
+      onSuccess: () => showSuccessToast("Вы успешно удалили участника проекта"),
       onError: () =>
-        showErrorToast(
-          "Произошла ошибка в ходе удаления участника проекта"
-        ),
-    })
-  }
+        showErrorToast("Произошла ошибка в ходе удаления участника проекта"),
+    });
+  };
 
   return (
     <TableRow key={member.id}>

@@ -11,7 +11,7 @@ import { Input } from "@/shared/ui/Input";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
-import { showErrorToast, showSuccessToast } from "../util/showToast";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
 export function NameSection({ id, name }: { id: number; name: string }) {
   const { put, errors, data, setData } = useForm({
@@ -21,6 +21,7 @@ export function NameSection({ id, name }: { id: number; name: string }) {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     put(`/projects/${id}`, {
+      preserveScroll: true,
       onSuccess: () => showSuccessToast("Вы успешно изменили название проекта"),
       onError: () =>
         showErrorToast("Произошла ошибка в ходе обновления названия проекта"),

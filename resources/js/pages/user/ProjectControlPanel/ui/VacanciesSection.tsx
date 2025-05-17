@@ -33,7 +33,7 @@ import { Vacancy } from "@/entities/Vacancy";
 import { Text } from "@/shared/ui/Text";
 import { router, useForm } from "@inertiajs/react";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
-import { showErrorToast, showSuccessToast } from "../util/showToast";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
 function CreateVacancyDialog({
   projectId,

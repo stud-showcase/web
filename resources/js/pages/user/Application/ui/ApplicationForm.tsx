@@ -10,7 +10,7 @@ import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { FileUpload } from "@/shared/ui/FileUpload";
-import { toast } from "@/shared/hooks/useToast";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
 type ApplicationForm = {
   title: string;
@@ -48,18 +48,15 @@ export function ApplicationForm() {
     post("/application", {
       onSuccess: () => {
         reset();
-        toast({
-          title: "Заявка успешно отправлена",
-          description: `Ваша заявка успешно отправлена и будет рассмотрена администратором.`,
-        });
+        showSuccessToast(
+          `Ваша заявка успешно отправлена и будет рассмотрена администратором.`
+        );
       },
       onError: () => {
         reset();
-        toast({
-          title: "Не удалось отправить заявку",
-          description: `Произошла ошибка в ходе отправки заявки. Повторите еще раз или попробуйте позже`,
-          variant: "destructive",
-        });
+        showErrorToast(
+          `Произошла ошибка в ходе отправки заявки. Повторите еще раз или попробуйте позже`
+        );
       },
     });
   };

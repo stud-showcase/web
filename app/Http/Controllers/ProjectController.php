@@ -121,7 +121,7 @@ class ProjectController extends Controller
     {
         try {
             $this->projectService->acceptInvite($request->validated()['inviteId']);
-            return redirect()->route('projects.show', $id)->with('success', 'Приглашение принято.');
+            return redirect()->route('projects.conrolPanel.show', $id)->with('success', 'Приглашение принято.');
         } catch (Throwable $e) {
             Log::error("Ошибка принятия приглашения для проекта [$id]: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -132,7 +132,7 @@ class ProjectController extends Controller
     {
         try {
             $this->projectService->uploadFiles($id, $request->file('files'));
-            return redirect()->route('projects.show', $id)->with('success', 'Файлы успешно загружены.');
+            return redirect()->route('projects.controlPanel.show', $id)->with('success', 'Файлы успешно загружены.');
         } catch (Throwable $e) {
             Log::error("Ошибка загрузки файлов для проекта [$id]: " . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Не удалось загрузить файлы.']);
@@ -143,7 +143,7 @@ class ProjectController extends Controller
     {
         try {
             $this->projectService->deleteFile($projectId, $fileId);
-            return redirect()->route('projects.show', $projectId)->with('success', 'Файл удалён.');
+            return redirect()->route('projects.controlPanel.show', $projectId)->with('success', 'Файл удалён.');
         } catch (Throwable $e) {
             Log::error("Ошибка удаления файла [$fileId] для проекта [$projectId]: " . $e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -165,7 +165,7 @@ class ProjectController extends Controller
     {
         try {
             $this->projectService->deleteMember($projectId, $memberId);
-            return redirect()->route('projects.show', $projectId)->with('success', 'Участник удалён.');
+            return redirect()->route('projects.controlPanel.show', $projectId)->with('success', 'Участник удалён.');
         } catch (Throwable $e) {
             Log::error("Ошибка удаления участника [$memberId] для проекта [$projectId]: " . $e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

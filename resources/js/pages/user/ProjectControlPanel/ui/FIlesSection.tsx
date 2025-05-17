@@ -7,16 +7,17 @@ import {
 } from "@/shared/ui/Card";
 import { Button } from "@/shared/ui/Button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shared/ui/Dialog";
-import { FormEvent, PropsWithChildren } from "react";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/ui/AlertDialog";
+import { PropsWithChildren } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import {
   Table,
@@ -31,7 +32,7 @@ import { Text } from "@/shared/ui/Text";
 import { FileUpload } from "@/shared/ui/FileUpload";
 import { router, useForm } from "@inertiajs/react";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
-import { showErrorToast, showSuccessToast } from "../util/showToast";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 import { ServerFile } from "@/shared/types/ServerFile";
 
 function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
@@ -39,9 +40,9 @@ function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
     files: [],
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     post(`/projects/${id}/files`, {
+      preserveScroll: true,
       onSuccess: () => {
         reset();
         showSuccessToast("Файлы успешно загружены");
@@ -54,32 +55,33 @@ function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Загрузка файла</DialogTitle>
-          <DialogDescription>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Загрузка файла</AlertDialogTitle>
+          <AlertDialogDescription>
             Выберите файл для загрузки в проект.
-          </DialogDescription>
-        </DialogHeader>
-        <form id="project-files" onSubmit={handleSubmit}>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <div>
           <FileUpload
             files={data.files}
             onFilesChange={(files) => setData("files", files)}
           />
           {errors.files && <ValidationErrorText text={errors.files} />}
-        </form>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Отмена</Button>
-          </DialogClose>
-          <Button form="project-files" disabled={data.files.length === 0}>
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Отмена</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleSubmit}
+            disabled={data.files.length === 0}
+          >
             Загрузить
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 
@@ -94,6 +96,7 @@ export function FilesSection({
 
   const handleDelete = (fileId: number) => {
     router.delete(`/projects/${id}/files/${fileId}`, {
+      preserveScroll: true,
       onSuccess: () => showSuccessToast("Файл был успешно удален"),
       onError: () => showErrorToast("Произошла ошибка в ходе удаления файла"),
     });

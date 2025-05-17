@@ -8,10 +8,10 @@ import {
   CardTitle,
 } from "@/shared/ui/Card";
 import { Textarea } from "@/shared/ui/Textarea";
-import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
-import { showErrorToast, showSuccessToast } from "../util/showToast";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
+import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 
 export function DescriptionSection({
   id,
@@ -20,17 +20,14 @@ export function DescriptionSection({
   id: number;
   description: string | null;
 }) {
-  const { put, errors, data, setData, transform } = useForm({
-    description,
+  const { put, errors, data, setData } = useForm({
+    annotation: description,
   });
-
-  transform((data) => ({
-    annotation: data.description,
-  }));
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     put(`/projects/${id}`, {
+      preserveScroll: true,
       onSuccess: () => showSuccessToast("Вы успешно изменили описание проекта"),
       onError: () =>
         showErrorToast("Произошла ошибка в ходе обновления описания проекта"),
@@ -41,20 +38,18 @@ export function DescriptionSection({
     <Card>
       <CardHeader>
         <CardTitle>Описание проекта</CardTitle>
-        <CardDescription>
-          Публичная аннотация к вашему проекту
-        </CardDescription>
+        <CardDescription>Публичная аннотация к вашему проекту</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} id="project-description">
           <Textarea
-            value={data.description ?? ""}
-            onChange={(e) => setData("description", e.target.value)}
+            value={data.annotation ?? ""}
+            onChange={(e) => setData("annotation", e.target.value)}
             placeholder="Введите описание проекта..."
             required
           />
-          {errors.description && (
-            <ValidationErrorText text={errors.description} />
+          {errors.annotation && (
+            <ValidationErrorText text={errors.annotation} />
           )}
         </form>
       </CardContent>
