@@ -12,14 +12,12 @@ class UpdateVacancyRequest extends FormRequest
 
     public function authorize(): bool
     {
-        // FIXME
-        // $vacancy = Vacancy::select(['id', 'project_id'])->find($this->route('vacancyId'));
-        // if (!$vacancy || $vacancy->project_id != $this->route('projectId')) {
-        //     return false;
-        // }
+        $vacancy = Vacancy::select(['id', 'project_id'])->find($this->route('vacancyId'));
+        if (!$vacancy || $vacancy->project_id != $this->route('projectId')) {
+            return false;
+        }
 
-        // return $this->authorizeProject($this->route('projectId'));
-        return true;
+        return $this->authorizeProject($this->route('projectId'));
     }
 
     public function rules(): array

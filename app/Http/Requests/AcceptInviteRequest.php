@@ -10,24 +10,22 @@ class AcceptInviteRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // FIXME
-        // $invite = ProjectInvite::find($this->input('inviteId'));
-        // if (!$invite) {
-        //     return false;
-        // }
+        $invite = ProjectInvite::find($this->input('inviteId'));
+        if (!$invite) {
+            return false;
+        }
 
-        // $project = $invite->project;
-        // $user = Auth::user();
+        $project = $invite->project;
+        $user = Auth::user();
 
-        // if ($project->id != $this->route('id')) {
-        //     return false;
-        // }
+        if ($project->id != $this->route('id')) {
+            return false;
+        }
 
-        // return $user->hasPrivilegedRole() || $project->users()
-        //     ->where('user_id', $user->id)
-        //     ->wherePivot('is_creator', true)
-        //     ->exists();
-        return true;
+        return $user->hasPrivilegedRole() || $project->users()
+            ->where('user_id', $user->id)
+            ->wherePivot('is_creator', true)
+            ->exists();
     }
 
     public function rules(): array

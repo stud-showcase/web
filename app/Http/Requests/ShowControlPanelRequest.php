@@ -11,9 +11,7 @@ class ShowControlPanelRequest extends FormRequest
 
     public function authorize(): bool
     {
-        // FIXME
-        // return $this->authorizeProject($this->route('id'));
-        return true;
+        return $this->authorizeProject($this->route('id'));
     }
 
     public function rules(): array

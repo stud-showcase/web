@@ -11,9 +11,7 @@ class UpdateProjectRequest extends FormRequest
 
     public function authorize(): bool
     {
-        // FIXME
-        // return $this->authorizeProject($this->route('id'), true);
-        return true;
+        return $this->authorizeProject($this->route('id'), true);
     }
 
     public function rules(): array
