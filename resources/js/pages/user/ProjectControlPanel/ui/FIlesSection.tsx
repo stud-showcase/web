@@ -31,12 +31,11 @@ import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
 import { Text } from "@/shared/ui/Text";
 import { FileUpload } from "@/shared/ui/FileUpload";
 import { router, useForm } from "@inertiajs/react";
-import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 import { ServerFile } from "@/shared/types/ServerFile";
 
 function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
-  const { data, setData, errors, post, reset } = useForm<{ files: File[] }>({
+  const { data, setData, post, reset } = useForm<{ files: File[] }>({
     files: [],
   });
 
@@ -47,9 +46,9 @@ function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
         reset();
         showSuccessToast("Файлы успешно загружены");
       },
-      onError: () => {
+      onError: (errors) => {
         reset();
-        showErrorToast("Произошла ошибка в ходе загрузки файлов");
+        showErrorToast(errors.files);
       },
     });
   };
@@ -69,7 +68,6 @@ function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
             files={data.files}
             onFilesChange={(files) => setData("files", files)}
           />
-          {errors.files && <ValidationErrorText text={errors.files} />}
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel>Отмена</AlertDialogCancel>

@@ -8,13 +8,12 @@ import {
   CardTitle,
 } from "@/shared/ui/Card";
 import { Input } from "@/shared/ui/Input";
-import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
 export function NameSection({ id, name }: { id: number; name: string }) {
-  const { put, errors, data, setData } = useForm({
+  const { put, data, setData } = useForm({
     name,
   });
 
@@ -23,8 +22,7 @@ export function NameSection({ id, name }: { id: number; name: string }) {
     put(`/projects/${id}`, {
       preserveScroll: true,
       onSuccess: () => showSuccessToast("Вы успешно изменили название проекта"),
-      onError: () =>
-        showErrorToast("Произошла ошибка в ходе обновления названия проекта"),
+      onError: (errors) => showErrorToast(errors.name),
     });
   };
 
@@ -32,9 +30,7 @@ export function NameSection({ id, name }: { id: number; name: string }) {
     <Card>
       <CardHeader>
         <CardTitle>Название проекта</CardTitle>
-        <CardDescription>
-          Публичное имя вашего проекта
-        </CardDescription>
+        <CardDescription>Публичное имя вашего проекта</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} id="project-name">
@@ -44,7 +40,6 @@ export function NameSection({ id, name }: { id: number; name: string }) {
             placeholder="Введите название проекта..."
             required
           />
-          {errors.name && <ValidationErrorText text={errors.name} />}
         </form>
       </CardContent>
       <CardFooter className="border-t px-6 py-4">

@@ -36,9 +36,9 @@ import { getFullName, User } from "@/entities/User";
 import { Badge } from "@/shared/ui/Badge";
 import { Text } from "@/shared/ui/Text";
 import { router, useForm } from "@inertiajs/react";
-import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
+// TODO: проверить права наставника
 function EditMemberDialog({
   projectId,
   memberId,
@@ -51,7 +51,7 @@ function EditMemberDialog({
   position: string | null;
   isCreator: boolean;
 }>) {
-  const { data, setData, errors, put, transform } = useForm({
+  const { data, setData, put, transform } = useForm({
     position,
     isCreator,
   });
@@ -66,10 +66,7 @@ function EditMemberDialog({
       preserveScroll: true,
       onSuccess: () =>
         showSuccessToast("Вы успешно отредактировали участника проекта"),
-      onError: () =>
-        showErrorToast(
-          "Произошла ошибка в ходе редактирования участника проекта"
-        ),
+      onError: (errors) => showErrorToast(errors.position),
     });
   };
 
@@ -88,9 +85,7 @@ function EditMemberDialog({
             placeholder="Введите новую позицию..."
             value={data.position ?? ""}
             onChange={(e) => setData("position", e.target.value)}
-            required
           />
-          {errors.position && <ValidationErrorText text={errors.position} />}
         </div>
         <div className="flex items-center gap-2">
           <Checkbox

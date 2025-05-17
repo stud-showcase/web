@@ -68,7 +68,7 @@ export default function ProjectControlPanel({
             </TabsList>
 
             <TabsContent value="project">
-              <div className="mt-6 flex flex-col gap-6">
+              <div className="mt-4 flex flex-col gap-6">
                 <NameSection id={project.id} name={project.name} />
                 <DescriptionSection
                   id={project.id}
@@ -84,14 +84,14 @@ export default function ProjectControlPanel({
               </div>
             </TabsContent>
             <TabsContent value="vacancies">
-              <div className="mt-6 flex flex-col gap-6">
+              <div className="mt-4 flex flex-col gap-6">
                 <VacanciesSection id={project.id} vacancies={project.vacancies} />
               </div>
             </TabsContent>
             <TabsContent value="applications">
-              <div className="mt-6 flex flex-col gap-6">
+              <div className="mt-4 flex flex-col gap-6">
                 <HiringSection id={project.id} isHiring={project.isHiring} />
-                <InvitesSection invites={project.invites} />
+                <InvitesSection id={project.id} invites={project.invites} />
               </div>
             </TabsContent>
           </Tabs>

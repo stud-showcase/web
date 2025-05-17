@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/Dialog";
-import { Label } from "@/shared/ui/Label";
 import { Input } from "@/shared/ui/Input";
 import { Button } from "@/shared/ui/Button";
 import { useForm } from "@inertiajs/react";
@@ -44,10 +43,8 @@ export function CreateProjectModal({
         </DialogHeader>
         <form id="project-creation-form" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <Label htmlFor="project-name">Название проекта *</Label>
             <Input
-              id="project-name"
-              placeholder="Введите название"
+              placeholder="Введите название проекта..."
               type="text"
               required
               value={data.projectName}

@@ -7,17 +7,18 @@ import {
 } from "@/shared/ui/Card";
 import { Button } from "@/shared/ui/Button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shared/ui/Dialog";
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/ui/AlertDialog";
 import { Input } from "@/shared/ui/Input";
-import { FormEvent, PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import { Edit, Plus, Trash2 } from "lucide-react";
 import {
   Table,
@@ -32,76 +33,70 @@ import { Textarea } from "@/shared/ui/Textarea";
 import { Vacancy } from "@/entities/Vacancy";
 import { Text } from "@/shared/ui/Text";
 import { router, useForm } from "@inertiajs/react";
-import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
+
+function formatErrors(errors: Record<string, string | undefined>): string {
+  return Object.values(errors)
+    .filter((error): error is string => error !== undefined && error !== "")
+    .join(". ");
+}
 
 function CreateVacancyDialog({
   projectId,
   children,
 }: PropsWithChildren<{ projectId: number }>) {
-  const { data, setData, errors, post, reset } = useForm({
+  const { data, setData, post, reset } = useForm({
     name: "",
     description: "",
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     post(`/projects/${projectId}/vacancy`, {
+      preserveScroll: true,
       onSuccess: () => {
         reset();
         showSuccessToast("Вы успешно создали вакансию");
       },
-      onError: () => {
+      onError: (errors) => {
         reset();
-        showErrorToast("Произошла ошибка в ходе создания вакансии");
+        showErrorToast(formatErrors(errors));
       },
     });
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Создание вакансии</DialogTitle>
-          <DialogDescription>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Создание вакансии</AlertDialogTitle>
+          <AlertDialogDescription>
             Введите данные для новой вакансии.
-          </DialogDescription>
-        </DialogHeader>
-        <form
-          className="flex flex-col gap-4"
-          id="vacancy"
-          onSubmit={handleSubmit}
-        >
-          <div>
-            <Input
-              placeholder="Введите название вакансии..."
-              value={data.name}
-              onChange={(e) => setData("name", e.target.value)}
-              required
-            />
-            {errors.name && <ValidationErrorText text={errors.name} />}
-          </div>
-          <div>
-            <Textarea
-              placeholder="Введите описание вакансии..."
-              value={data.description}
-              onChange={(e) => setData("description", e.target.value)}
-              required
-            />
-            {errors.description && (
-              <ValidationErrorText text={errors.description} />
-            )}
-          </div>
-        </form>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Отмена</Button>
-          </DialogClose>
-          <Button form="vacancy">Создать</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <div className="flex flex-col gap-4">
+          <Input
+            placeholder="Введите название вакансии..."
+            value={data.name}
+            onChange={(e) => setData("name", e.target.value)}
+          />
+          <Textarea
+            placeholder="Введите описание вакансии..."
+            value={data.description}
+            onChange={(e) => setData("description", e.target.value)}
+          />
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Отмена</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleSubmit}
+            disabled={!data.name || !data.description}
+          >
+            Создать
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 
@@ -110,66 +105,51 @@ function EditVacancyDialog({
   vacancy,
   children,
 }: PropsWithChildren<{ projectId: number; vacancy: Vacancy }>) {
-  const { data, setData, errors, put, reset } = useForm({
+  const { data, setData, put } = useForm({
     name: vacancy.name,
     description: vacancy.description,
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     put(`/projects/${projectId}/vacancy/${vacancy.id}`, {
-      onSuccess: () => {
-        reset();
-        showSuccessToast("Вы успешно отредактировали вакансию");
-      },
-      onError: () => {
-        reset();
-        showErrorToast("Произошла ошибка в ходе редактирования вакансии");
-      },
+      preserveScroll: true,
+      onSuccess: () => showSuccessToast("Вы успешно отредактировали вакансию"),
+      onError: (errors) => showErrorToast(formatErrors(errors)),
     });
   };
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Редактирование вакансии</DialogTitle>
-          <DialogDescription>Измените данные вакансии.</DialogDescription>
-        </DialogHeader>
-        <form
-          className="flex flex-col gap-4"
-          id="vacancy-edit"
-          onSubmit={handleSubmit}
-        >
-          <div>
-            <Input
-              placeholder="Введите название вакансии..."
-              value={data.name}
-              onChange={(e) => setData("name", e.target.value)}
-              required
-            />
-            {errors.name && <ValidationErrorText text={errors.name} />}
-          </div>
-          <div>
-            <Textarea
-              placeholder="Введите описание вакансии..."
-              value={data.description}
-              onChange={(e) => setData("description", e.target.value)}
-              required
-            />
-            {errors.description && (
-              <ValidationErrorText text={errors.description} />
-            )}
-          </div>
-        </form>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Отмена</Button>
-          </DialogClose>
-          <Button form="vacancy-edit">Сохранить</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Редактирование вакансии</AlertDialogTitle>
+          <AlertDialogDescription>
+            Измените данные вакансии.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <div className="flex flex-col gap-4">
+          <Input
+            placeholder="Введите название вакансии..."
+            value={data.name}
+            onChange={(e) => setData("name", e.target.value)}
+          />
+          <Textarea
+            placeholder="Введите описание вакансии..."
+            value={data.description}
+            onChange={(e) => setData("description", e.target.value)}
+          />
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Отмена</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleSubmit}
+            disabled={!data.name || !data.description}
+          >
+            Сохранить
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

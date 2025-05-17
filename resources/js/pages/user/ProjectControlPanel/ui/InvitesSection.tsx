@@ -19,9 +19,34 @@ import { ProjectInvite } from "@/entities/Project";
 import { getFullName } from "@/entities/User";
 import { Check, X } from "lucide-react";
 import { Text } from "@/shared/ui/Text";
+import { router } from "@inertiajs/react";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
-export function InvitesSection({ invites }: { invites: ProjectInvite[] }) {
+export function InvitesSection({
+  id,
+  invites,
+}: {
+  id: number;
+  invites: ProjectInvite[];
+}) {
   const hasInvites = invites.length > 0;
+
+  const acceptInvite = (inviteId: string) => {
+    router.post(
+      `/projects/${id}/acceptInvite`,
+      { inviteId },
+      {
+        preserveScroll: true,
+        onSuccess: () => showSuccessToast("Вы успешно приняли заявку"),
+        onError: () =>
+          showErrorToast("Произошла ошибка в ходе принятия заявки"),
+      }
+    );
+  };
+
+  const rejectInvite = (inviteId: string) => {
+    // TODO: ...
+  };
 
   return (
     <Card>
@@ -56,7 +81,9 @@ export function InvitesSection({ invites }: { invites: ProjectInvite[] }) {
                     <div className="flex gap-2">
                       <ConfirmationDialog
                         title="Подтверждения принятия заявки"
-                        description="Вы уверены, что хотите принять нового участника в проектную команду? Вы сможете исключить его только в период командообразования."
+                        description="Вы уверены, что хотите принять нового участника в проектную команду?"
+                        actionText="Принять"
+                        onAction={() => acceptInvite(invite.id)}
                       >
                         <Button size="icon" variant="outline">
                           <Check />
@@ -64,7 +91,9 @@ export function InvitesSection({ invites }: { invites: ProjectInvite[] }) {
                       </ConfirmationDialog>
                       <ConfirmationDialog
                         title="Подтверждение отклонения заявки"
-                        description="Вы уверены, что хотите отклонить заявку? Это действие нельзя отменить."
+                        description="Вы уверены, что хотите отклонить заявку?"
+                        actionText="Отклонить"
+                        onAction={() => rejectInvite(invite.id)}
                       >
                         <Button size="icon" variant="outline">
                           <X />
@@ -77,9 +106,7 @@ export function InvitesSection({ invites }: { invites: ProjectInvite[] }) {
             </TableBody>
           </Table>
         ) : (
-          <Text variant="muted">
-            Пока нет заявок
-          </Text>
+          <Text variant="muted">Пока нет заявок</Text>
         )}
       </CardContent>
     </Card>
