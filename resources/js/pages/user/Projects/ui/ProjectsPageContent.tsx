@@ -13,7 +13,7 @@ import { defaultProjectsFilters } from "../consts/defaultProjectsFilters";
 import { getCurrentTab } from "../util/getCurrentTab";
 
 function NoProjectsText() {
-  return <Text variant="large">Не было найдено проектов</Text>;
+  return <Text variant="lead">Не было найдено проектов</Text>;
 }
 
 function ProjectsCards({

@@ -9,7 +9,7 @@ import { DataPagination } from "@/shared/ui/DataPagination";
 import { Text } from "@/shared/ui/Text";
 
 function NoTasksText() {
-  return <Text variant="large">Не было найдено задач</Text>;
+  return <Text variant="lead">Не было найдено задач</Text>;
 }
 
 export function TaskBankPageContent({

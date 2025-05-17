@@ -1,31 +1,26 @@
 import { EntityCard } from "@/shared/ui/EntityCard";
 import { ExtendedVacancy } from "../model/ExtendedVacancy";
-import { TaskTag, TaskTagBadge } from "@/entities/Task";
-import { Text } from "@/shared/ui/Text";
 import { project } from "@/shared/mocks";
+import { Button } from "@/shared/ui/Button";
+import {
+  UserPlus
+} from "lucide-react";
+import { ExpandableText } from "@/shared/ui/ExpandableText";
 
-// function Tags({ taskTags }: { taskTags: TaskTag[] }) {
-//   return taskTags.map((tag) => <TaskTagBadge tag={tag} key={tag.id} />);
-// }
-
-function Content({ description }: { description: string }) {
-  return (
-    <Text variant="small" className="line-clamp-1">
-      {description}
-    </Text>
-  );
-}
-
+// TODO: сделать везде адаптив для тэгов и статусов
+// TODO: сделать отправку заявки с вакансией
 export function VacancyCard({ vacancy }: { vacancy: ExtendedVacancy }) {
   return (
     <EntityCard
       title={vacancy.name}
       subtitle={vacancy.project.name}
-      content={<Content description={vacancy.description} />}
-      // TODO: ?
-      // tags={
-      //   vacancy.task.tags.length > 0 && <Tags taskTags={vacancy.task.tags} />
-      // }
+      content={<ExpandableText text={vacancy.description} />}
+      footer={
+        <Button variant={"outline"} size="sm">
+          <UserPlus />
+          Подать заявку
+        </Button>
+      }
       href={`/projects/${project.id}`}
     />
   );

@@ -12,7 +12,6 @@ export function SimpleProjectCard({ project }: { project: Project }) {
     <Link href={`/projects/${project.id}`} className="block">
       <div className="flex flex-col md:flex-row justify-between gap-3 py-3 border-b">
         <Text variant="large">{project.name}</Text>
-
         <div className="grid grid-cols-[120px_120px_auto] items-center gap-4 text-left">
           <div>
             <ProjectHiringBadge isHiring={project.isHiring} />

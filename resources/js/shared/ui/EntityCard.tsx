@@ -17,6 +17,7 @@ type Props = {
   badges?: ReactNode;
   tags?: ReactNode;
   content?: ReactNode;
+  footer?: ReactNode;
   href: string;
 };
 
@@ -26,6 +27,7 @@ export function EntityCard({
   badges,
   tags,
   content,
+  footer,
   href,
 }: Props) {
   return (
@@ -42,8 +44,9 @@ export function EntityCard({
         {tags && <div className="flex gap-2">{tags}</div>}
       </CardContent>
 
-      <CardFooter className="border-t py-3">
-        <div className="flex gap-2 flex-1 justify-end">
+      <CardFooter>
+        <div className="flex gap-2">
+          {footer}
           <Button asChild size="sm">
             <Link href={href}>
               Подробнее

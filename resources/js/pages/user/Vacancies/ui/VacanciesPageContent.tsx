@@ -9,7 +9,7 @@ import { DataPagination } from "@/shared/ui/DataPagination";
 import { Text } from "@/shared/ui/Text";
 
 function NoVacanciesText() {
-  return <Text variant="large">Не было найдено вакансий</Text>;
+  return <Text variant="lead">Не было найдено вакансий</Text>;
 }
 
 export function VacanciesPageContent({

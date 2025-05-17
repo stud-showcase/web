@@ -83,23 +83,9 @@ function JoinProjectVacanciesModal({
                 />
                 <Label
                   htmlFor={`vacancy-${vacancy.id}`}
-                  className="cursor-pointer flex-1"
+                  className="cursor-pointer flex-1 p-1"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex-1">
-                      <Text>{vacancy.name}</Text>
-                      {vacancy.description && (
-                        <Text variant="muted" className="line-clamp-1">
-                          {vacancy.description}
-                        </Text>
-                      )}
-                    </div>
-                    {vacancy.description && (
-                      <Button variant="link" asChild>
-                        <Link href={`/projects/${projectId}`}>Подробнее</Link>
-                      </Button>
-                    )}
-                  </div>
+                  {vacancy.name}
                 </Label>
               </div>
             ))}
