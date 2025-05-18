@@ -51,6 +51,7 @@ Route::prefix('projects')->group(function () {
 
         Route::post('{id}/createInvite', [ProjectController::class, 'createInvite'])->name('projects.invite.create');
         Route::post('{id}/acceptInvite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
+        Route::post('{id}/rejectInvite', [ProjectController::class, 'rejectInvite'])->name('projects.invite.reject');
 
         Route::post('/{id}/vacancy', [VacancyController::class, 'store'])->name('projects.vacancy.create');
         Route::put('/{projectId}/vacancy/{vacancyId}', [VacancyController::class, 'update'])->name('projects.vacancy.update');

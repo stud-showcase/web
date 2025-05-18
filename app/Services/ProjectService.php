@@ -48,7 +48,7 @@ class ProjectService
         }
     }
 
-    public function createInvite(string $userId, int $projectId, ?int $vacancyId): void
+    public function createInvite(string $userId, int $projectId, int|string|null $vacancyId): void
     {
         try {
             $this->inviteRepository->create($userId, $projectId, $vacancyId);
@@ -69,6 +69,17 @@ class ProjectService
         }
     }
 
+    public function rejectInvite(int $inviteId): void
+    {
+        try {
+            $invite = $this->inviteRepository->find($inviteId);
+            $this->inviteRepository->rejectInvite($invite);
+        } catch (Throwable $e) {
+            Log::error("Ошибка отклонения приглашения [$inviteId]: " . $e->getMessage());
+            throw new \Exception("Не удалось отклонить приглашение: {$e->getMessage()}", 0, $e);
+        }
+    }
+
     public function createProject(int $taskId, string $name, User $user): Project
     {
         try {
@@ -82,8 +93,7 @@ class ProjectService
     public function updateProject(int $projectId, array $data): Project
     {
         try {
-            $filteredData = Arr::only($data, ['name', 'annotation', 'statusId', 'isClose']);
-            return $this->projectRepository->update($projectId, $filteredData);
+            return $this->projectRepository->update($projectId, $data);
         } catch (Throwable $e) {
             Log::error("Ошибка обновления проекта [$projectId]: " . $e->getMessage(), ['data' => $data]);
             throw new \Exception("Не удалось обновить проект: {$e->getMessage()}", 0, $e);

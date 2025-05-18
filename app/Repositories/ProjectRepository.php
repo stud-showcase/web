@@ -35,63 +35,6 @@ class ProjectRepository
         }
     }
 
-    protected function buildProjectQuery(array $filters, bool $forUser): Builder
-    {
-        $query = Project::query()->with([
-            'task.complexity',
-            'task.tags',
-            'status',
-            'mentor',
-            'users',
-            'vacancies',
-        ]);
-
-        if ($forUser) {
-            $userId = Auth::id();
-            $query->where(function ($q) use ($userId) {
-                $q->whereHas('users', fn($q2) => $q2->where('users.id', $userId))
-                    ->orWhere('mentor_id', $userId);
-            });
-        }
-
-        $this->applyFilters($query, $filters);
-
-        return $query;
-    }
-
-    protected function applyFilters(Builder $query, array $filters): void
-    {
-        $query->when(
-            isset($filters['search']) && !empty($filters['search']),
-            fn($q) => $q->where(function ($subQ) use ($filters) {
-                $subQ->where('name', 'LIKE', '%' . $filters['search'] . '%')
-                    ->orWhere('annotation', 'LIKE', '%' . $filters['search'] . '%');
-            })
-        )
-            ->when(
-                isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
-                fn($q) => $q->whereIn('status_id', $filters['status'])
-            )
-            ->when(
-                isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
-                fn($q) => $q->whereHas('task', fn($q2) => $q2->whereIn('complexity_id', $filters['complexity']))
-            )
-            ->when(
-                isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
-                fn($q) => $q->whereHas('task.tags', fn($q2) => $q2->whereIn('tags.id', $filters['tags']))
-            )
-            ->when(
-                isset($filters['isHiring']),
-                fn($q) => $filters['isHiring']
-                    ? $q->whereHas('task', fn($q2) => $q2->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members'))
-                    ->where('projects.is_close', false)
-                    : $q->where(function ($subQ) {
-                        $subQ->whereHas('task', fn($q2) => $q2->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members'))
-                            ->orWhere('projects.is_close', true);
-                    })
-            );
-    }
-
     public function getByIdWithRelations(int $id): Project
     {
         $cacheKey = "project:{$id}";
@@ -149,10 +92,31 @@ class ProjectRepository
         try {
             $project = DB::transaction(function () use ($projectId, $data) {
                 $project = Project::findOrFail($projectId);
-                $project->update($data);
 
-                if (isset($data['isClose']) && $data['isClose']) {
-                    ProjectInvite::where('project_id', $projectId)->delete();
+                $updateData = [];
+
+                if (isset($data['name'])) {
+                    $updateData['name'] = $data['name'];
+                }
+
+                if (isset($data['annotation'])) {
+                    $updateData['annotation'] = $data['annotation'];
+                }
+
+                if (isset($data['statusId'])) {
+                    $updateData['status_id'] = $data['statusId'];
+                }
+
+                if (isset($data['isClose'])) {
+                    $updateData['is_close'] = $data['isClose'];
+
+                    if ($data['isClose']) {
+                        ProjectInvite::where('project_id', $projectId)->delete();
+                    }
+                }
+
+                if (!empty($updateData)) {
+                    $project->update($updateData);
                 }
 
                 return $project->fresh();
@@ -231,5 +195,62 @@ class ProjectRepository
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
         }
+    }
+
+    protected function buildProjectQuery(array $filters, bool $forUser): Builder
+    {
+        $query = Project::query()->with([
+            'task.complexity',
+            'task.tags',
+            'status',
+            'mentor',
+            'users',
+            'vacancies',
+        ]);
+
+        if ($forUser) {
+            $userId = Auth::id();
+            $query->where(function ($q) use ($userId) {
+                $q->whereHas('users', fn($q2) => $q2->where('users.id', $userId))
+                    ->orWhere('mentor_id', $userId);
+            });
+        }
+
+        $this->applyFilters($query, $filters);
+
+        return $query;
+    }
+
+    protected function applyFilters(Builder $query, array $filters): void
+    {
+        $query->when(
+            isset($filters['search']) && !empty($filters['search']),
+            fn($q) => $q->where(function ($subQ) use ($filters) {
+                $subQ->where('name', 'LIKE', '%' . $filters['search'] . '%')
+                    ->orWhere('annotation', 'LIKE', '%' . $filters['search'] . '%');
+            })
+        )
+            ->when(
+                isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
+                fn($q) => $q->whereIn('status_id', $filters['status'])
+            )
+            ->when(
+                isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
+                fn($q) => $q->whereHas('task', fn($q2) => $q2->whereIn('complexity_id', $filters['complexity']))
+            )
+            ->when(
+                isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
+                fn($q) => $q->whereHas('task.tags', fn($q2) => $q2->whereIn('tags.id', $filters['tags']))
+            )
+            ->when(
+                isset($filters['isHiring']),
+                fn($q) => $filters['isHiring']
+                    ? $q->whereHas('task', fn($q2) => $q2->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members'))
+                    ->where('projects.is_close', false)
+                    : $q->where(function ($subQ) {
+                        $subQ->whereHas('task', fn($q2) => $q2->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members'))
+                            ->orWhere('projects.is_close', true);
+                    })
+            );
     }
 }

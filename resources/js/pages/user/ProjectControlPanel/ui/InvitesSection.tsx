@@ -45,7 +45,16 @@ export function InvitesSection({
   };
 
   const rejectInvite = (inviteId: string) => {
-    // TODO: ...
+    router.post(
+      `/projects/${id}/rejectInvite`,
+      { inviteId },
+      {
+        preserveScroll: true,
+        onSuccess: () => showSuccessToast("Вы успешно отклонили заявку"),
+        onError: () =>
+          showErrorToast("Произошла ошибка в ходе отклонения заявки"),
+      }
+    );
   };
 
   return (

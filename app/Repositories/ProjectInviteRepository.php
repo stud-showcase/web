@@ -9,7 +9,7 @@ use Throwable;
 
 class ProjectInviteRepository
 {
-    public function create(string $userId, int $projectId, ?int $vacancyId): void
+    public function create(string $userId, int $projectId, int|string|null $vacancyId): void
     {
         try {
             ProjectInvite::create([
@@ -45,10 +45,32 @@ class ProjectInviteRepository
         }
     }
 
+    public function rejectInvite(ProjectInvite $invite): void
+    {
+        try {
+            DB::transaction(function () use ($invite) {
+                $invite->delete();
+            });
+
+            Cache::tags(['projects'])->forget("project:{$invite->project_id}");
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось отклонить приглашение: {$e->getMessage()}", 0, $e);
+        }
+    }
+
     public function findWithRelations(int $inviteId): ProjectInvite
     {
         try {
             return ProjectInvite::with(['user', 'project', 'vacancy'])->findOrFail($inviteId);
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function find(int $inviteId): ProjectInvite
+    {
+        try {
+            return ProjectInvite::findOrFail($inviteId);
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
         }

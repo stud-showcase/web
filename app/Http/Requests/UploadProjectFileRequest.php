@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\MaxTotalFileSize;
 use App\Traits\AuthorizesProjectActions;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class UploadProjectFileRequest extends FormRequest
 {
@@ -17,8 +19,7 @@ class UploadProjectFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'files' => 'required|array|max:10',
-            'files.*' => 'file|max:10240',
+            'files' => ['required', 'array', 'max:10', new MaxTotalFileSize()],
         ];
     }
 
@@ -26,7 +27,7 @@ class UploadProjectFileRequest extends FormRequest
     {
         return [
             'files.required' => 'Файлы обязательны для загрузки',
-            'files.*.max' => 'Размер каждого файла не может превышать 10 МБ',
+            'files.max' => 'Можно загрузить не более 10 файлов',
         ];
     }
 }

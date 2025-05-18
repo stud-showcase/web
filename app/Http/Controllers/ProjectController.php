@@ -7,6 +7,7 @@ use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\CreateInviteRequest;
 use App\Http\Requests\DeleteProjectFileRequest;
 use App\Http\Requests\DeleteProjectMemberRequest;
+use App\Http\Requests\RejectInviteRequest;
 use App\Http\Requests\ShowControlPanelRequest;
 use App\Http\Requests\UpdateProjectMemberRequest;
 use App\Http\Requests\UpdateProjectRequest;
@@ -109,7 +110,8 @@ class ProjectController extends Controller
     public function createInvite(CreateInviteRequest $request, int|string $id): RedirectResponse
     {
         try {
-            $this->projectService->createInvite(auth()->id(), $id, $request->validated()['vacancyId'] ?? null);
+            $data = $request->validated();
+            $this->projectService->createInvite(auth()->id(), $id, $data['vacancyId'] ?? null);
             return redirect()->route('projects.show', $id)->with('success', 'Приглашение создано.');
         } catch (Throwable $e) {
             Log::error("Ошибка создания приглашения для проекта [$id]: " . $e->getMessage(), ['data' => $request->validated()]);
@@ -120,10 +122,23 @@ class ProjectController extends Controller
     public function acceptInvite(AcceptInviteRequest $request, int|string $id): RedirectResponse
     {
         try {
-            $this->projectService->acceptInvite($request->validated()['inviteId']);
-            return redirect()->route('projects.conrolPanel.show', $id)->with('success', 'Приглашение принято.');
+            $data = $request->validated();
+            $this->projectService->acceptInvite($data['inviteId']);
+            return redirect()->route('projects.show', $id)->with('success', 'Приглашение принято.');
         } catch (Throwable $e) {
             Log::error("Ошибка принятия приглашения для проекта [$id]: " . $e->getMessage(), ['data' => $request->validated()]);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function rejectInvite(RejectInviteRequest $request, int|string $id): RedirectResponse
+    {
+        try {
+            $data = $request->validated();
+            $this->projectService->rejectInvite($data['inviteId']);
+            return redirect()->route('projects.show', $id)->with('success', 'Приглашение отклонено.');
+        } catch (Throwable $e) {
+            Log::error("Ошибка отклонения приглашения для проекта [$id]: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }

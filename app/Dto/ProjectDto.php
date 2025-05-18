@@ -53,7 +53,7 @@ class ProjectDto
             invites: isset($project->invites)
                 ? $project->invites->map(function ($invite) {
                     return [
-                        'id' => $invite->user->id,
+                        'id' => $invite->id,
                         'firstName' => $invite->user->first_name,
                         'secondName' => $invite->user->second_name,
                         'lastName' => $invite->user->last_name,
@@ -62,9 +62,10 @@ class ProjectDto
                     ];
                 })->toArray()
                 : null,
-            canJoin: !$userId || !UserProject::where('project_id', $project->id)
-                ->where('user_id', $userId)
-                ->exists()
+            canJoin: !$userId || (
+                !$project->users->contains('id', $userId) &&
+                !$project->invites->contains('user_id', $userId)
+            )
         );
     }
 

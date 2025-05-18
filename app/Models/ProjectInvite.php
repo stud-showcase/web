@@ -14,6 +14,7 @@ class ProjectInvite extends Model
     protected $fillable = [
         'user_id',
         'project_id',
+        'vacancy_id'
     ];
 
     public function user()

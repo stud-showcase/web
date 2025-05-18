@@ -41,7 +41,7 @@ return new class extends Migration
         Schema::create('task_requests', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
+            $table->string('description', 1000);
             $table->string('customer');
             $table->string('customer_email');
             $table->string('customer_phone')->nullable();

@@ -36,9 +36,10 @@ class VacancyDto
                     'name' => $tag->name,
                 ])->toArray(),
             ] : null,
-            canJoin: !$userId || !UserProject::where('project_id', $vacancy->project_id)
-                ->where('user_id', $userId)
-                ->exists()
+            canJoin: !$userId || (
+                !$vacancy->project->users->contains('id', $userId) &&
+                !$vacancy->projectInvites->contains('user_id', $userId)
+            )
         );
     }
 

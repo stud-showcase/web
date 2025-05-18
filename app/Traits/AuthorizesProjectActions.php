@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 trait AuthorizesProjectActions
 {
-    protected function authorizeProject(int $projectId, bool $restrictStatusChange = false): bool
+    protected function authorizeProject(int $projectId): bool
     {
         $project = Project::find($projectId);
         if (!$project) {
@@ -20,10 +20,6 @@ trait AuthorizesProjectActions
             ->where('user_id', $user->id)
             ->wherePivot('is_creator', true)
             ->exists();
-
-        if ($restrictStatusChange && $this->has('statusId') && !$isMentor) {
-            return false;
-        }
 
         return $isMentor || $isCreator;
     }
