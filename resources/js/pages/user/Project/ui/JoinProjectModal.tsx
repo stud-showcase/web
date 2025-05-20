@@ -16,7 +16,6 @@ import { RadioGroup, RadioGroupItem } from "@/shared/ui/RadioGroup";
 import { router } from "@inertiajs/react";
 import { PropsWithChildren, useState } from "react";
 
-// TODO: разобраться, почему не отправляется или не сохраняется вакансия
 function sendJoinProjectRequest(projectId: number, vacancyId?: string) {
   router.post(
     `/projects/${projectId}/createInvite`,

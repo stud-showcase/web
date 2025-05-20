@@ -1,11 +1,11 @@
 import { NavLinks } from "./NavLinks";
-import { ProfileIcon } from "./ProfileIcon";
 import { Link } from "@inertiajs/react";
 import { SevSULogo } from "@/shared/ui/SevSULogo";
 import { SignInButton } from "./SignInButton";
 import { MobileMenu } from "./MobileMenu";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { Container } from "@/shared/ui/Container";
+import { ProfileIcon } from "@/entities/User";
 
 export function Header() {
   const { user } = useAuth();
@@ -24,7 +24,7 @@ export function Header() {
           </nav>
         </div>
         <div className="lg:flex gap-4 items-center hidden">
-          {user ? <ProfileIcon /> : <SignInButton />}
+          {user ? <ProfileIcon variant="user" /> : <SignInButton />}
         </div>
         <div className="flex lg:hidden">
           <MobileMenu />

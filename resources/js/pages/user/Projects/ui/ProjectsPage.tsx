@@ -20,7 +20,6 @@ type Props = {
 
 export default function ProjectsPage(props: Props) {
   const { projects, availableFilters, filters: appliedFilters } = props;
-  console.log(projects) // TODO: разобраться почему нет данных для "Мои проекты"
 
   const [filters, setFilters] = useState<ProjectsFilters>({
     ...defaultProjectsFilters,

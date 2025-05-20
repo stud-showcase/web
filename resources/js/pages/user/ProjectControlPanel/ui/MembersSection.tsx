@@ -38,7 +38,6 @@ import { Text } from "@/shared/ui/Text";
 import { router, useForm } from "@inertiajs/react";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
-// TODO: проверить права наставника?
 function EditMemberDialog({
   projectId,
   memberId,

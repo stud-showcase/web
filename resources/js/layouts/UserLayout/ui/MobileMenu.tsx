@@ -8,10 +8,10 @@ import {
 } from "@/shared/ui/Sheet";
 import { Menu } from "lucide-react";
 import { Separator } from "@/shared/ui/Separator";
-import { ProfileIcon } from "./ProfileIcon";
 import { SignInButton } from "./SignInButton";
 import { NavLinks } from "./NavLinks";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { ProfileIcon } from "@/entities/User";
 
 export function MobileMenu() {
   const { user } = useAuth();
@@ -35,7 +35,7 @@ export function MobileMenu() {
           </nav>
           <div className="flex flex-col gap-4">
             <Separator />
-            {user ? <ProfileIcon /> : <SignInButton />}
+            {user ? <ProfileIcon variant="user" /> : <SignInButton />}
           </div>
         </div>
       </SheetContent>

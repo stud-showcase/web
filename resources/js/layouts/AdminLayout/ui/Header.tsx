@@ -1,6 +1,6 @@
-import { ProfileIcon } from "./ProfileIcon";
 import { MobileMenu } from "./MobileMenu";
 import { CommandMenu } from "./CommandMenu";
+import { ProfileIcon } from "@/entities/User";
 
 export function Header() {
   return (
@@ -9,7 +9,7 @@ export function Header() {
       <div className="w-full flex-1">
        <CommandMenu />
       </div>
-      <ProfileIcon />
+      <ProfileIcon variant="admin" />
     </header>
   );
 }
