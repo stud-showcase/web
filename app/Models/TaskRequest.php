@@ -21,7 +21,7 @@ class TaskRequest extends Model
         'with_project',
         'project_name',
         'user_id',
-        'mentor_id',
+        'responsible_user_id',
     ];
 
     public function user()
@@ -29,9 +29,9 @@ class TaskRequest extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function mentor()
+    public function responsibleUser()
     {
-        return $this->belongsTo(User::class, 'mentor_id');
+        return $this->belongsTo(User::class, 'responsible_user_id');
     }
 
     public function files()

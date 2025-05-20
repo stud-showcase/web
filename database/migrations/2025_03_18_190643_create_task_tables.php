@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('customer_email');
             $table->string('customer_phone')->nullable();
             $table->dateTime('deadline');
-            $table->foreignId('complexity_id')->constrained('complexity');
+            $table->foreignId('complexity_id')->constrained('complexities');
             $table->timestamps();
             $table->index('max_members');
             $table->index('customer');

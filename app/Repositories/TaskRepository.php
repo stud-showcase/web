@@ -2,13 +2,17 @@
 
 namespace App\Repositories;
 
+use App\Models\Project;
+use App\Models\ProjectStatus;
 use App\Models\Task;
 use App\Models\TaskRequest;
+use App\Models\UserProject;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -82,13 +86,26 @@ class TaskRepository
         }
     }
 
+    public function getTaskRequestById(int|string $id): TaskRequest
+    {
+        $cacheKey = "task_request:{$id}";
+        try {
+            return Cache::tags(['task_requests'])->remember($cacheKey, 3600, function () use ($id) {
+                return TaskRequest::with(['user', 'responsibleUser', 'files'])
+                    ->findOrFail($id);
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось получить заявку: {$e->getMessage()}", 0, $e);
+        }
+    }
+
     public function getFilteredTaskRequests(array $filters, bool $forUser = false): LengthAwarePaginator
     {
         $cacheKey = 'task_requests:filtered:' . md5(json_encode($filters) . ':' . ($forUser ? 'user:' . Auth::id() : 'all')) . ':page_' . request()->query('page', 1);
         try {
             return Cache::tags(['task_requests'])->remember($cacheKey, 300, function () use ($filters, $forUser) {
                 return TaskRequest::query()
-                    ->with(['user', 'mentor'])
+                    ->with(['user', 'responsibleUser'])
                     ->when(
                         !empty($filters['search']),
                         fn($q) => $q->where('title', 'LIKE', '%' . $filters['search'] . '%')
@@ -97,8 +114,8 @@ class TaskRepository
                     )
                     ->when(
                         $forUser,
-                        fn($q) => $q->whereNotNull('mentor_id')
-                            ->where('mentor_id', Auth::id())
+                        fn($q) => $q->whereNotNull('responsible_user_id')
+                            ->where('responsible_user_id', Auth::id())
                     )
                     ->paginate(10)
                     ->withQueryString();
@@ -182,6 +199,112 @@ class TaskRepository
             Cache::tags(['task_requests'])->forget('task_requests:list');
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось загрузить файлы: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function deleteTaskRequest(int $id): void
+    {
+        try {
+            DB::transaction(function () use ($id) {
+                $taskRequest = TaskRequest::findOrFail($id);
+                $files = $taskRequest->files;
+
+                foreach ($files as $file) {
+                    Storage::disk('public')->delete($file->path);
+                    $file->delete();
+                }
+
+                $taskRequest->delete();
+
+                Cache::tags(['task_requests'])->flush();
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось удалить заявку: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function approveTaskRequest(int $id, array $data, array $files = []): int
+    {
+        try {
+            return DB::transaction(function () use ($id, $data, $files) {
+                $taskRequest = TaskRequest::with('files')->findOrFail($id);
+
+                $task = Task::create([
+                    'title' => $data['title'] ?? $taskRequest->title,
+                    'description' => $data['description'] ?? $taskRequest->description,
+                    'customer' => $data['customer'] ?? $taskRequest->customer,
+                    'customer_email' => $data['customerEmail'] ?? $taskRequest->customer_email,
+                    'customer_phone' => $data['customerPhone'] ?? $taskRequest->customer_phone,
+                    'max_projects' => $data['maxProjects'],
+                    'max_members' => $data['maxMembers'],
+                    'deadline' => $data['deadline'],
+                    'complexity_id' => $data['complexityId'],
+                ]);
+
+                foreach ($taskRequest->files as $file) {
+                    $newPath = 'task_files/' . $task->id . '/' . basename($file->path);
+                    Storage::disk('public')->move($file->path, $newPath);
+                    $this->fileRepository->saveFile([
+                        'name' => $file->name,
+                        'path' => $newPath,
+                    ], 'task', $task->id);
+                }
+
+                foreach ($files as $file) {
+                    if (!$file instanceof UploadedFile) {
+                        throw new \InvalidArgumentException('Недопустимый тип файла');
+                    }
+                    $extension = $file->getClientOriginalExtension();
+                    $uniqueName = Str::uuid() . '.' . $extension;
+                    $directory = 'task_files/' . $task->id;
+                    $path = $file->storeAs($directory, $uniqueName, 'public');
+                    $this->fileRepository->saveFile([
+                        'name' => $file->getClientOriginalName(),
+                        'path' => str_replace('public/', '', $path),
+                    ], 'task', $task->id);
+                }
+
+                if ($taskRequest->with_project || ($data['withProject'] ?? false)) {
+                    $project = Project::create([
+                        'task_id' => $task->id,
+                        'status_id' => ProjectStatus::STATUS_WAITING,
+                        'name' => $data['projectName'] ?? $taskRequest->project_name,
+                    ]);
+
+                    UserProject::create([
+                        'user_id' => $taskRequest->user_id,
+                        'project_id' => $project->id,
+                        'is_creator' => true,
+                    ]);
+                }
+
+                foreach ($taskRequest->files as $file) {
+                    Storage::disk('public')->delete($file->path);
+                    $file->delete();
+                }
+
+                $taskRequest->delete();
+
+                Cache::tags(['task_requests', 'tasks'])->flush();
+
+                return $task->id;
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось одобрить заявку: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function updateTaskRequestResponsibleUser(int $id, int $responsibleUserId): void
+    {
+        try {
+            DB::transaction(function () use ($id, $responsibleUserId) {
+                $taskRequest = TaskRequest::findOrFail($id);
+                $taskRequest->update(['responsible_user_id' => $responsibleUserId]);
+
+                Cache::tags(['task_requests'])->flush();
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось обновить ответственного: {$e->getMessage()}", 0, $e);
         }
     }
 }

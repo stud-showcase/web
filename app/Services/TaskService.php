@@ -41,10 +41,21 @@ class TaskService
         return $this->formatPaginatedData($paginator, fn($taskRequest) => TaskRequestDto::fromModel($taskRequest)->toArrayForAdmin());
     }
 
-    public function getMentorTaskRequests(array $filters = []): array
+    public function getResponsibleUserTaskRequests(array $filters = []): array
     {
         $paginator = $this->taskRepository->getFilteredTaskRequests($filters, true);
         return $this->formatPaginatedData($paginator, fn($taskRequest) => TaskRequestDto::fromModel($taskRequest)->toArrayForAdmin());
+    }
+
+    public function getTaskRequestById(int|string $id): array
+    {
+        try {
+            $taskRequest = $this->taskRepository->getTaskRequestById($id);
+            return TaskRequestDto::fromModel($taskRequest)->toArray();
+        } catch (Throwable $e) {
+            Log::error("Ошибка получения заявки [$id]: " . $e->getMessage());
+            throw new \Exception("Не удалось получить заявку: {$e->getMessage()}", 0, $e);
+        }
     }
 
     public function getAdminTasks(array $filters = []): array
@@ -69,6 +80,39 @@ class TaskService
                 'files_count' => count($files),
             ]);
             throw new \Exception("Не удалось создать заявку: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function deleteTaskRequest(int $id): void
+    {
+        try {
+            $this->taskRepository->deleteTaskRequest($id);
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления заявки [$id]: " . $e->getMessage());
+            throw new \Exception("Не удалось удалить заявку: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function approveTaskRequest(int $id, array $data, array $files = []): int
+    {
+        try {
+            return $this->taskRepository->approveTaskRequest($id, $data, $files);
+        } catch (Throwable $e) {
+            Log::error("Ошибка одобрения заявки [$id]: " . $e->getMessage(), [
+                'data' => $data,
+                'files_count' => count($files),
+            ]);
+            throw new \Exception("Не удалось одобрить заявку: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function updateTaskRequestResponsibleUser(int $id, int $mentorId): void
+    {
+        try {
+            $this->taskRepository->updateTaskRequestResponsibleUser($id, $mentorId);
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления ответственного для заявки [$id]: " . $e->getMessage());
+            throw new \Exception("Не удалось обновить ответственного: {$e->getMessage()}", 0, $e);
         }
     }
 }

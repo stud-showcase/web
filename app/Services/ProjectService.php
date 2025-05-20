@@ -37,7 +37,7 @@ class ProjectService
         return $this->formatPaginatedData($paginator, fn($project) => ProjectDto::fromModel($project)->toArray());
     }
 
-    public function getProjectById(int $id): array
+    public function getProjectById(int|string $id): array
     {
         try {
             $project = $this->projectRepository->getByIdWithRelations($id);

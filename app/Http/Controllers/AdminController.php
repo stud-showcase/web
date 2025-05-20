@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ApproveTaskRequestRequest;
+use App\Http\Requests\UpdateTaskRequestMentorRequest;
 use App\Services\ProjectService;
 use App\Services\UserService;
 use App\Services\TaskService;
 use App\Services\VacancyService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -58,10 +61,18 @@ class AdminController extends Controller
         ]);
     }
 
-    public function getMentorTaskRequests(Request $request): \Inertia\Response
+    public function showTaskRequest(int|string $id): \Inertia\Response
+    {
+        $taskRequest = $this->taskService->getTaskRequestById($id);
+        return Inertia::render('admin/Application', [
+            'taskRequest' => $taskRequest,
+        ]);
+    }
+
+    public function getResponsibleUserTaskRequests(Request $request): \Inertia\Response
     {
         $filters = $request->only(['search']);
-        $taskRequests = $this->taskService->getMentorTaskRequests($filters);
+        $taskRequests = $this->taskService->getResponsibleUserTaskRequests($filters);
         return Inertia::render('admin/Applications', [
             'taskRequests' => $taskRequests,
             'filters' => $filters,
@@ -76,5 +87,25 @@ class AdminController extends Controller
             'vacancies' => $vacancies,
             'filters' => $filters,
         ]);
+    }
+
+    public function deleteTaskRequest(Request $request, int $id): RedirectResponse
+    {
+        $this->taskService->deleteTaskRequest($id);
+        return redirect()->route('admin.applications.index')->with('success', 'Заявка успешно удалена');
+    }
+
+    public function approveTaskRequest(ApproveTaskRequestRequest $request, int $id): RedirectResponse
+    {
+        $data = $request->validated();
+        $this->taskService->approveTaskRequest($id, $data, $request->file('files', []));
+        return redirect()->route('admin.applications.index')->with('success', 'Заявка успешно одобрена');
+    }
+
+    public function updateTaskRequestResponsibleUser(UpdateTaskRequestMentorRequest $request, int $id): RedirectResponse
+    {
+        $data = $request->validated();
+        $this->taskService->updateTaskRequestResponsibleUser($id, $data['responsibleUserId']);
+        return redirect()->route('admin.applications.index')->with('success', 'Ответственный успешно обновлен');
     }
 }

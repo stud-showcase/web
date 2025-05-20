@@ -9,7 +9,7 @@ class Complexity extends Model
 {
     use HasFactory;
 
-    protected $table = 'complexity';
+    protected $table = 'complexities';
 
     public $timestamps = false;
 
