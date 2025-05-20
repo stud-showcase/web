@@ -41,6 +41,12 @@ class TaskService
         return $this->formatPaginatedData($paginator, fn($taskRequest) => TaskRequestDto::fromModel($taskRequest)->toArrayForAdmin());
     }
 
+    public function getMentorTaskRequests(array $filters = []): array
+    {
+        $paginator = $this->taskRepository->getFilteredTaskRequests($filters, true);
+        return $this->formatPaginatedData($paginator, fn($taskRequest) => TaskRequestDto::fromModel($taskRequest)->toArrayForAdmin());
+    }
+
     public function getAdminTasks(array $filters = []): array
     {
         $paginator = $this->taskRepository->getAdminTasks($filters);

@@ -58,6 +58,16 @@ class AdminController extends Controller
         ]);
     }
 
+    public function getMentorTaskRequests(Request $request): \Inertia\Response
+    {
+        $filters = $request->only(['search']);
+        $taskRequests = $this->taskService->getMentorTaskRequests($filters);
+        return Inertia::render('admin/Applications', [
+            'taskRequests' => $taskRequests,
+            'filters' => $filters,
+        ]);
+    }
+
     public function vacancies(Request $request): \Inertia\Response
     {
         $filters = $request->only(['search']);

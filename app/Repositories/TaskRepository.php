@@ -82,17 +82,23 @@ class TaskRepository
         }
     }
 
-    public function getFilteredTaskRequests(array $filters): LengthAwarePaginator
+    public function getFilteredTaskRequests(array $filters, bool $forUser = false): LengthAwarePaginator
     {
-        $cacheKey = 'task_requests:filtered:' . md5(json_encode($filters)) . ':page_' . request()->query('page', 1);
+        $cacheKey = 'task_requests:filtered:' . md5(json_encode($filters) . ':' . ($forUser ? 'user:' . Auth::id() : 'all')) . ':page_' . request()->query('page', 1);
         try {
-            return Cache::tags(['task_requests'])->remember($cacheKey, 300, function () use ($filters) {
+            return Cache::tags(['task_requests'])->remember($cacheKey, 300, function () use ($filters, $forUser) {
                 return TaskRequest::query()
+                    ->with(['user', 'mentor'])
                     ->when(
                         !empty($filters['search']),
                         fn($q) => $q->where('title', 'LIKE', '%' . $filters['search'] . '%')
                             ->orWhere('customer', 'LIKE', '%' . $filters['search'] . '%')
                             ->orWhere('customer_email', 'LIKE', '%' . $filters['search'] . '%')
+                    )
+                    ->when(
+                        $forUser,
+                        fn($q) => $q->whereNotNull('mentor_id')
+                            ->where('mentor_id', Auth::id())
                     )
                     ->paginate(10)
                     ->withQueryString();
@@ -136,6 +142,8 @@ class TaskRepository
                     'project_name' => $data['projectName'] ?? null,
                     'user_id' => Auth::check() ? Auth::id() : null,
                 ]);
+
+                Cache::tags(['task_requests'])->flush();
 
                 return $taskRequest->id;
             });

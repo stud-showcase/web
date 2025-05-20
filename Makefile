@@ -24,6 +24,15 @@ migrate:
 migrate-fresh:
 	$(APP_EXEC) php artisan migrate:fresh --seed
 
+clear-cache:
+	$(APP_EXEC) php artisan cache:clear
+	$(APP_EXEC) php artisan config:clear
+	$(APP_EXEC) php artisan route:clear
+	$(APP_EXEC) php artisan view:clear
+	$(APP_EXEC) php artisan event:clear
+	$(APP_EXEC) php artisan clear-compiled
+	$(DOCKER_COMPOSE) exec redis redis-cli FLUSHALL
+
 shell:
 	$(APP_EXEC) bash
 

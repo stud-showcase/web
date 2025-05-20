@@ -16,6 +16,7 @@ class TaskRequestDto
         public bool $withProject,
         public ?string $projectName,
         public ?array $user,
+        public ?array $mentor,
         public array $files
     ) {}
 
@@ -30,9 +31,8 @@ class TaskRequestDto
             customerPhone: $taskRequest->customer_phone,
             withProject: $taskRequest->with_project,
             projectName: $taskRequest->project_name,
-            user: $taskRequest->relationLoaded('user') && $taskRequest->user
-                ? UserDto::fromModel($taskRequest->user)->toArray()
-                : null,
+            user: $taskRequest->user ? UserDto::fromModel($taskRequest->user)->toArray() : null,
+            mentor: $taskRequest->mentor ? UserDto::fromModel($taskRequest->mentor)->toArray() : null,
             files: $taskRequest->files->map(fn($file) => FileDto::fromModel($file)->toArray())->toArray()
         );
     }
@@ -49,6 +49,7 @@ class TaskRequestDto
             'withProject' => $this->withProject,
             'projectName' => $this->projectName,
             'user' => $this->user,
+            'mentor' => $this->mentor,
             'files' => $this->files,
         ];
     }
@@ -63,6 +64,8 @@ class TaskRequestDto
             'customerPhone' => $this->customerPhone,
             'withProject' => $this->withProject,
             'projectName' => $this->projectName,
+            'user' => $this->user,
+            'mentor' => $this->mentor,
         ];
     }
 }

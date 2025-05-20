@@ -49,6 +49,8 @@ return new class extends Migration
             $table->string('project_name')->nullable();
             $table->uuid('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->uuid('mentor_id')->nullable();
+            $table->foreign('mentor_id')->references('id')->on('users');
             $table->timestamps();
         });
 
