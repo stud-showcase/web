@@ -21,10 +21,8 @@ export default function ApplicationsPage(props: Props) {
         <title>Заявки</title>
       </Head>
       <AdminLayout>
-        <>
-          <Heading level={1}>Заявки</Heading>
-          <ApplicationsTable applications={taskRequests} />
-        </>
+        <Heading level={1}>Заявки</Heading>
+        <ApplicationsTable applications={taskRequests} />
       </AdminLayout>
     </>
   );
