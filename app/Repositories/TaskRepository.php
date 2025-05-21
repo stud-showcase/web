@@ -117,7 +117,7 @@ class TaskRepository
                         fn($q) => $q->whereNotNull('responsible_user_id')
                             ->where('responsible_user_id', Auth::id())
                     )
-                    ->paginate(10)
+                    ->paginate(20)
                     ->withQueryString();
             });
         } catch (Throwable $e) {
@@ -137,7 +137,7 @@ class TaskRepository
                         fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
                             ->orWhere('description', 'LIKE', '%' . $filters['search'] . '%')
                     )
-                    ->paginate(10)
+                    ->paginate(20)
                     ->withQueryString();
             });
         } catch (Throwable $e) {

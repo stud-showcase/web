@@ -189,7 +189,7 @@ class ProjectRepository
                         fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
                             ->orWhere('annotation', 'LIKE', '%' . $filters['search'] . '%')
                     )
-                    ->paginate(10)
+                    ->paginate(20)
                     ->withQueryString();
             });
         } catch (Throwable $e) {

@@ -97,7 +97,7 @@ class VacancyRepository
                         fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
                             ->orWhere('description', 'LIKE', '%' . $filters['search'] . '%')
                     )
-                    ->paginate(10)
+                    ->paginate(20)
                     ->withQueryString();
             });
         } catch (Throwable $e) {

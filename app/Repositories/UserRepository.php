@@ -25,7 +25,7 @@ class UserRepository
                                 ->orWhere('email', 'LIKE', '%' . $filters['search'] . '%');
                         })
                     )
-                    ->paginate(10)
+                    ->paginate(20)
                     ->withQueryString();
             });
         } catch (Throwable $e) {
