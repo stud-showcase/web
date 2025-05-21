@@ -1,19 +1,3 @@
-import * as React from "react";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -22,160 +6,216 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/Table";
-import { DataTablePagination } from "@/shared/ui/DataTablePagination";
-import {
-  DataTableToolbar,
-  FilterConfig,
-  SearchConfig,
-} from "./DataTableToolbar";
+import { Input } from "@/shared/ui/Input";
 import { Button } from "@/shared/ui/Button";
-import { Edit } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/shared/ui/DropdownMenu";
+import { Filter } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  labels?: { [key: string]: string };
-  onEdit?: (row: TData) => void;
-  onDelete?: (selectedRows: TData[]) => void;
-  searchConfig?: SearchConfig;
-  filterConfig?: FilterConfig[];
-}
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/ui/Select";
+import { ServerPaginatedData } from "../types/ServerPaginatedData";
+import { ReactNode } from "react";
+import { router } from "@inertiajs/react";
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-  labels,
-  onEdit,
-  onDelete,
-  searchConfig,
-  filterConfig,
-}: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+type PaginationProps<TData> = {
+  paginatedData: ServerPaginatedData<TData>;
+};
 
-  const columnsWithActions = React.useMemo(() => {
-    if (!onEdit) return columns;
-    return [
-      ...columns,
-      {
-        id: "actions",
-        cell: ({ row }) => (
-          <Button
-            variant="ghost"
-            className="text-primary"
-            onClick={() => onEdit(row.original)}
-          >
-            <Edit />
-            Изменить
-          </Button>
-        ),
-      },
-    ];
-  }, [columns, onEdit]);
+function DataTablePagination<TData>({ paginatedData }: PaginationProps<TData>) {
+  const { currentPage, perPage, total, lastPage, links } = paginatedData;
+  console.log(paginatedData);
 
-  const table = useReactTable({
-    data,
-    columns: columnsWithActions,
-    state: {
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
-    },
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    globalFilterFn: (row, columnId, filterValue) => {
-      if (!searchConfig || !filterValue) return true;
-      return searchConfig.columnIds.some((id) => {
-        const value = row.getValue(id);
-        return value
-          ? String(value)
-              .toLowerCase()
-              .includes(String(filterValue).toLowerCase())
-          : false;
-      });
-    },
-  });
+  const handleFirstPage = () => {
+    router.get(links[1]);
+  };
+
+  // TODO почему приходят не все links?
+  const handleLastPage = () => {
+    router.get(links[lastPage]);
+  };
+
+  const handlePrevPage = () => {
+    router.get(links[currentPage - 1]);
+  };
+
+  const handleNextPage = () => {
+    router.get(links[currentPage + 1]);
+  };
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-md border overflow-x-auto">
-        <div className="py-3 px-4 border-b">
-          <DataTableToolbar
-            table={table}
-            searchConfig={searchConfig}
-            filterConfig={filterConfig}
-            onDelete={onDelete}
-            labels={labels}
-          />
+    <div className="flex items-center justify-between px-2">
+      <div className="flex-1 text-sm text-muted-foreground">{total} строк</div>
+      <div className="flex items-center space-x-6 lg:space-x-8">
+        <div className="flex items-center space-x-2">
+          <p className="text-sm font-medium">Строк на странице</p>
+          <Select value={`${perPage}`}>
+            <SelectTrigger className="h-8 w-[70px]">
+              <SelectValue placeholder={perPage} />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {[10, 20, 30, 40, 50].map((size) => (
+                <SelectItem key={size} value={`${size}`}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-        <Table className="min-w-full">
-          <TableHeader className="bg-muted/50">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    colSpan={header.colSpan}
+        <div className="flex w-[120px] items-center justify-center text-sm font-medium">
+          Страница {currentPage} из {lastPage}
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            className="hidden h-8 w-8 p-0 lg:flex"
+            disabled={currentPage === 1}
+            onClick={handleFirstPage}
+          >
+            <span className="sr-only">Go to first page</span>
+            <ChevronsLeft />
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            disabled={currentPage === 1}
+            onClick={handlePrevPage}
+          >
+            <span className="sr-only">Go to previous page</span>
+            <ChevronLeft />
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            disabled={currentPage === lastPage}
+            onClick={handleNextPage}
+          >
+            <span className="sr-only">Go to next page</span>
+            <ChevronRight />
+          </Button>
+          <Button
+            variant="outline"
+            className="hidden h-8 w-8 p-0 lg:flex"
+            disabled={currentPage === lastPage}
+            onClick={handleLastPage}
+          >
+            <span className="sr-only">Go to last page</span>
+            <ChevronsRight />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface DataTableProps<TData extends { id: string | number }> {
+  data: ServerPaginatedData<TData>;
+  columns: ColumnDef<TData>[];
+  filtersSlot?: ReactNode;
+}
+
+interface ColumnDef<TData> {
+  title: string;
+  cell: (data: TData) => React.ReactNode;
+}
+
+// TODO:
+// 1. Сделать поиск
+// 2. Сделать фильтры
+// 3. Сделать переключение perPage
+// 4. Сделать переход на страницу конкретной строки таблицы
+export function DataTable<TData extends { id: string | number }>({
+  data,
+  columns,
+  filtersSlot,
+}: DataTableProps<TData>) {
+  return (
+    <div className="rounded-md border overflow-x-auto">
+      <div className="py-3 px-4 border-b flex items-center justify-between">
+        <Input
+          placeholder="Поиск..."
+          className="min-w-[150px] lg:min-w-[280px] max-w-fit"
+        />
+        {filtersSlot && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <Filter />
+                Фильтры
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[300px] p-4">
+              <div className="flex items-center justify-between mb-2">
+                <DropdownMenuLabel className="p-0 font-semibold text-lg">
+                  Фильтры
+                </DropdownMenuLabel>
+                <DropdownMenuItem className="p-0 focus:bg-transparent cursor-pointer">
+                  <Button variant="outline" size="sm">
+                    Сбросить
+                  </Button>
+                </DropdownMenuItem>
+              </div>
+              <DropdownMenuSeparator />
+              <div className="space-y-4 mt-4">{filtersSlot}</div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+      </div>
+      <Table className="min-w-full">
+        <TableHeader className="bg-muted/60">
+          <TableRow>
+            {columns.map((column) => (
+              <TableHead
+                key={column.title}
+                className="font-semibold max-w-[200px] truncate"
+              >
+                {column.title}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.data.length ? (
+            data.data.map((item, index) => (
+              <TableRow key={item.id || index}>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.title}
                     className="max-w-[200px] truncate"
                   >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
+                    {column.cell(item)}
+                  </TableCell>
                 ))}
               </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="max-w-[200px] truncate">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  Нет результатов.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        <div className="px-4 py-5 border-t">
-          <DataTablePagination table={table} />
-        </div>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                Нет результатов.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <div className="px-4 py-5 border-t">
+        <DataTablePagination paginatedData={data} />
       </div>
     </div>
   );

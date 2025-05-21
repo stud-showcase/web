@@ -1,36 +1,24 @@
-import { vacancies } from "../mocks";
-import { Vacancy } from "@/entities/Vacancy";
-import { columns } from "./columns";
+import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
+import { ExtendedVacancy } from "../model/ExtendedVacancy";
 import { DataTable } from "@/shared/ui/DataTable";
 
-const labels = {
-  id: "ID",
-  title: "Название",
-  description: "Описание",
-};
+const columns = [
+  { title: "ID", cell: (vacancy: ExtendedVacancy) => vacancy.id },
+  { title: "Название", cell: (vacancy: ExtendedVacancy) => vacancy.name },
+  {
+    title: "Описание",
+    cell: (vacancy: ExtendedVacancy) => vacancy.description,
+  },
+  {
+    title: "Проект",
+    cell: (vacancy: ExtendedVacancy) => vacancy.project.name,
+  },
+];
 
-export function VacanciesTable() {
-  const handleEdit = (row: Vacancy) => {
-    console.log("Редактирование", row);
-  };
-
-  const handleDelete = (selectedRows: Vacancy[]) => {
-    console.log("Удаление задач:", selectedRows);
-  };
-
-  const searchConfig = {
-    columnIds: ["title"],
-    placeholder: "Поиск...",
-  };
-
-  return (
-    <DataTable
-      columns={columns}
-      data={vacancies}
-      labels={labels}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-      searchConfig={searchConfig}
-    />
-  );
+export function VacanciesTable({
+  vacancies,
+}: {
+  vacancies: ServerPaginatedData<ExtendedVacancy>;
+}) {
+  return <DataTable data={vacancies} columns={columns} />;
 }

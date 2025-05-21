@@ -1,63 +1,18 @@
-import { tasks } from "../mocks";
-import { Task } from "@/entities/Task";
-import { columns } from "./columns";
+import { Task, TaskComplexityBadge, TaskDeadlineBadge, TaskMembersBadge } from "@/entities/Task";
+import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { DataTable } from "@/shared/ui/DataTable";
 
-const labels = {
-  id: "ID",
-  title: "Название",
-  customer: "Заказчик",
-  customerEmail: "Электронная почта",
-  customerPhone: "Телефон",
-  maxMembers: "Макс. участников",
-  deadline: "Дедлайн",
-  complexity: "Сложность",
-};
+const columns = [
+  { title: "ID", cell: (task: Task) => task.id },
+  { title: "Название", cell: (task: Task) => task.title },
+  { title: "Заказчик", cell: (task: Task) => task.customer },
+  { title: "Email", cell: (task: Task) => task.customerEmail },
+  { title: "Телефон", cell: (task: Task) => task.customerPhone || "-" },
+  { title: "Участники", cell: (task: Task) => <TaskMembersBadge maxMembers={task.maxMembers} /> },
+  { title: "Сроки", cell: (task: Task) => <TaskDeadlineBadge deadline={task.deadline} /> },
+  { title: "Сложность", cell: (task: Task) => <TaskComplexityBadge complexity={task.complexity} /> },
+];
 
-export function TaskBankTable() {
-  const handleEdit = (row: Task) => {
-    console.log("Редактирование", row);
-  };
-
-  const handleDelete = (selectedRows: Task[]) => {
-    console.log("Удаление задач:", selectedRows);
-  };
-
-  const searchConfig = {
-    columnIds: ["title"],
-    placeholder: "Поиск...",
-  };
-
-  const filterConfig = [
-    {
-      label: "Сложность",
-      columnId: "complexity",
-      filters: [
-        {
-          label: "Легкий",
-          value: "easy",
-        },
-        {
-          label: "Средний",
-          value: "medium",
-        },
-        {
-          label: "Сложный",
-          value: "hard",
-        },
-      ],
-    },
-  ];
-
-  return (
-    <DataTable
-      columns={columns}
-      data={tasks}
-      labels={labels}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-      searchConfig={searchConfig}
-      filterConfig={filterConfig}
-    />
-  );
+export function TaskBankTable({ tasks }: { tasks: ServerPaginatedData<Task> }) {
+  return <DataTable data={tasks} columns={columns} />;
 }

@@ -1,11 +1,13 @@
-import { ApplicationType } from "./ApplicationType";
+import { ServerFile } from "@/shared/types/ServerFile";
 
 export type Application = {
   id: number;
   title: string;
-  description?: string;
+  projectName: string | null;
+  description: string;
   customer: string;
   customerEmail: string;
-  customerPhone?: string;
-  type: ApplicationType;
-};
+  customerPhone: string | null;
+  withProject: boolean;
+  files: ServerFile[];
+}

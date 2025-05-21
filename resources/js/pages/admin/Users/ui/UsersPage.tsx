@@ -2,8 +2,19 @@ import { AdminLayout } from "@/layouts/AdminLayout";
 import { Heading } from "@/shared/ui/Heading";
 import { Head } from "@inertiajs/react";
 import { UsersTable } from "./UsersTable";
+import { User } from "@/entities/User";
+import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 
-export default function UsersPage() {
+type Props = {
+  users: ServerPaginatedData<User>;
+  filters: any;
+  availableFilters: any;
+};
+
+export default function UsersPage(props: Props) {
+  const { users, availableFilters, filters: appliedFilters } = props;
+  console.log(users)
+
   return (
     <>
       <Head>
@@ -11,7 +22,7 @@ export default function UsersPage() {
       </Head>
       <AdminLayout>
         <Heading level={1}>Пользователи</Heading>
-        <UsersTable />
+        <UsersTable users={users} />
       </AdminLayout>
     </>
   );

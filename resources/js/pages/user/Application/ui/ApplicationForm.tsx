@@ -12,6 +12,7 @@ import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { FileUpload } from "@/shared/ui/FileUpload";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
+// TODO: может быть перемещен в entities/application
 type ApplicationForm = {
   title: string;
   projectName: string;
