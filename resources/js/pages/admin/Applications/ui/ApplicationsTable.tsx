@@ -49,6 +49,10 @@ export function ApplicationsTable({
   applications: ServerPaginatedData<Application>;
 }) {
   return (
-    <DataTable data={applications} columns={columns} route="/admin/applications" />
+    <DataTable
+      data={applications}
+      columns={columns}
+      route="/admin/applications"
+    />
   );
 }

@@ -123,7 +123,7 @@ export function ApplicationForm() {
         <div className="space-y-2">
           <Label htmlFor="files">Прикрепить файлы</Label>
           <FileUpload
-            name="files"
+            id="files"
             files={data.files}
             onFilesChange={(files) => setData("files", files)}
           />

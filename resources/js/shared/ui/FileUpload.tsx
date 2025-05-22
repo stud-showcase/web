@@ -5,12 +5,12 @@ import { cn } from "@/shared/lib/utils";
 import { Upload } from "lucide-react";
 
 type FileUploadProps = {
-  name?: string;
+  id?: string;
   files: File[];
   onFilesChange: (files: File[]) => void;
 };
 
-export function FileUpload({ name, files, onFilesChange }: FileUploadProps) {
+export function FileUpload({ id, files, onFilesChange }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,12 +51,11 @@ export function FileUpload({ name, files, onFilesChange }: FileUploadProps) {
       onDragLeave={handleDragLeave}
     >
       <input
-        id="files"
         type="file"
         multiple
         className="hidden"
         onChange={handleFileChange}
-        name={name}
+        id={id}
       />
       <div className="space-y-2">
         <Upload className="h-6 w-6 mx-auto text-muted-foreground" />

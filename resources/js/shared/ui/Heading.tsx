@@ -9,7 +9,7 @@ type Props = {
 };
 
 const headingStyles: Record<Level, string> = {
-  1: "text-4xl font-bold lg:text-5xl",
+  1: "text-4xl font-bold",
   2: "text-3xl font-semibold",
   3: "text-2xl font-semibold",
   4: "text-xl font-semibold",
