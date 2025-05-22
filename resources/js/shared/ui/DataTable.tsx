@@ -24,16 +24,9 @@ import {
   ChevronsRight,
 } from "lucide-react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/ui/Select";
 import { ServerPaginatedData } from "../types/ServerPaginatedData";
 import { ReactNode } from "react";
-import { router } from "@inertiajs/react";
+import { router, Link } from "@inertiajs/react";
 
 type PaginationProps<TData> = {
   paginatedData: ServerPaginatedData<TData>;
@@ -47,7 +40,6 @@ function DataTablePagination<TData>({ paginatedData }: PaginationProps<TData>) {
     router.get(links[1]);
   };
 
-  // TODO почему приходят не все links?
   const handleLastPage = () => {
     router.get(links[lastPage]);
   };
@@ -64,7 +56,7 @@ function DataTablePagination<TData>({ paginatedData }: PaginationProps<TData>) {
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">{total} строк</div>
       <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Строк на странице</p>
           <Select value={`${perPage}`}>
             <SelectTrigger className="h-8 w-[70px]">
@@ -78,7 +70,7 @@ function DataTablePagination<TData>({ paginatedData }: PaginationProps<TData>) {
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
         <div className="flex w-[120px] items-center justify-center text-sm font-medium">
           Страница {currentPage} из {lastPage}
         </div>
@@ -128,6 +120,7 @@ function DataTablePagination<TData>({ paginatedData }: PaginationProps<TData>) {
 interface DataTableProps<TData extends { id: string | number }> {
   data: ServerPaginatedData<TData>;
   columns: ColumnDef<TData>[];
+  route: string;
   filtersSlot?: ReactNode;
 }
 
@@ -144,6 +137,7 @@ interface ColumnDef<TData> {
 export function DataTable<TData extends { id: string | number }>({
   data,
   columns,
+  route,
   filtersSlot,
 }: DataTableProps<TData>) {
   return (
@@ -189,6 +183,9 @@ export function DataTable<TData extends { id: string | number }>({
                 {column.title}
               </TableHead>
             ))}
+            <TableHead className="font-semibold max-w-[200px] truncate">
+              Действие
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -203,6 +200,9 @@ export function DataTable<TData extends { id: string | number }>({
                     {column.cell(item)}
                   </TableCell>
                 ))}
+                <TableCell className="max-w-[200px] truncate text-primary">
+                  <Link href={`${route}/${item.id}`}>Перейти</Link>
+                </TableCell>
               </TableRow>
             ))
           ) : (

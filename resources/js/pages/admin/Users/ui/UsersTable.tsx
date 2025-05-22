@@ -48,5 +48,5 @@ const columns = [
 ];
 
 export function UsersTable({ users }: { users: ServerPaginatedData<User> }) {
-  return <DataTable data={users} columns={columns} />;
+  return <DataTable data={users} columns={columns} route="/admin/users" />;
 }

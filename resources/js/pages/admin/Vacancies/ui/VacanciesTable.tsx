@@ -20,5 +20,5 @@ export function VacanciesTable({
 }: {
   vacancies: ServerPaginatedData<ExtendedVacancy>;
 }) {
-  return <DataTable data={vacancies} columns={columns} />;
+  return <DataTable data={vacancies} columns={columns} route="/admin/vacancies" />;
 }

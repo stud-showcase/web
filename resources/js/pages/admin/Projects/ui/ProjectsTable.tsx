@@ -35,7 +35,5 @@ export function ProjectsTable({
 }: {
   projects: ServerPaginatedData<Project>;
 }) {
-  return (
-    <DataTable data={projects} columns={columns} />
-  );
+  return <DataTable data={projects} columns={columns} route="/admin/projects" />;
 }
