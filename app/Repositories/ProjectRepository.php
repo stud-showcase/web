@@ -8,6 +8,7 @@ use App\Models\ProjectInvite;
 use App\Models\ProjectStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +32,7 @@ class ProjectRepository
                 return $projects;
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -57,7 +58,7 @@ class ProjectRepository
                 return $project;
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить проект: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить проект: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -210,7 +211,7 @@ class ProjectRepository
                     ->withQueryString();
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
         }
     }
 

@@ -23,7 +23,7 @@ class UserService
             return $this->formatPaginatedData($paginator, fn($user) => UserDto::fromModel($user)->toArray());
         } catch (Throwable $e) {
             Log::error("Ошибка получения пользователей: " . $e->getMessage(), ['filters' => $filters]);
-            throw new \Exception("Не удалось получить пользователей: {$e->getMessage()}", 0, $e);
+            throw $e;;
         }
     }
 }

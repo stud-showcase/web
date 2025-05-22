@@ -2,13 +2,19 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Task;
 use App\Rules\MaxTotalFileSize;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateTaskRequest extends FormRequest
+class UpdateTaskRequest extends FormRequest
 {
     public function authorize(): bool
     {
+        $task = Task::find($this->route('id'));
+        if (!$task) {
+            return false;
+        }
+
         return true;
     }
 
@@ -24,7 +30,6 @@ class CreateTaskRequest extends FormRequest
             'customerPhone' => 'nullable|string|max:20',
             'deadline' => 'required|date|after:now',
             'complexityId' => 'required|exists:complexities,id',
-            'files' => ['nullable', 'array', 'max:10', new MaxTotalFileSize()],
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
         ];
@@ -53,7 +58,6 @@ class CreateTaskRequest extends FormRequest
             'deadline.after' => 'Недопустимая дата',
             'complexityId.required' => 'Сложность задачи обязательна',
             'complexityId.exists' => 'Указана неверная сложность',
-            'files.max' => 'Можно загрузить не более 10 файлов',
             'tags.*.exists' => 'Указан неверный тег',
         ];
     }

@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\RoleMiddleware;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -23,4 +24,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions) {})->create();
+    ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (ModelNotFoundException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Ресурс не найден',
+                ], 404);
+            }
+
+            return response()->view('errors.404', [], 404);
+        });
+    })->create();

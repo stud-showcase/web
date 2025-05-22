@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ProjectInvite;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -63,7 +64,7 @@ class ProjectInviteRepository
         try {
             return ProjectInvite::with(['user', 'project', 'vacancy'])->findOrFail($inviteId);
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -72,7 +73,7 @@ class ProjectInviteRepository
         try {
             return ProjectInvite::findOrFail($inviteId);
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
         }
     }
 }

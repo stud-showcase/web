@@ -78,6 +78,10 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
     Route::get('/tasks/create', [AdminController::class, 'indexTaskCreate'])->name('admin.tasks.create');
     Route::post('/tasks/create', [AdminController::class, 'createTask'])->name('admin.tasks.store');
     Route::get('/tasks/{id}', [AdminController::class, 'showTask'])->name('admin.tasks.show');
+    Route::put('/tasks/{id}', [AdminController::class, 'updateTask'])->name('admin.tasks.update');
+    Route::post('/tasks/{id}/files', [AdminController::class, 'uploadTaskFiles'])->name('admin.tasks.files.upload');
+    Route::delete('/tasks/{id}', [AdminController::class, 'deleteTask'])->name('admin.tasks.delete');
+    Route::delete('/tasks/{taskId}/files/{fileId}', [AdminController::class, 'deleteTaskFile'])->name('admin.tasks.files.delete');
 
     Route::get('/projects', [AdminController::class, 'projects'])->name('admin.projects.index');
     Route::get('/projects/{id}', function () {

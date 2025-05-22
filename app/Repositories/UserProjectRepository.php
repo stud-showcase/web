@@ -23,7 +23,7 @@ class UserProjectRepository
 
             return $userProject;
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось найти участника: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось найти участника: {$e->getMessage()}", 0, $e);
         }
     }
 

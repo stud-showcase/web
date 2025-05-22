@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Vacancy;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -32,7 +33,7 @@ class VacancyRepository
                     ->withQueryString();
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить вакансии: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить вакансии: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -101,7 +102,7 @@ class VacancyRepository
                     ->withQueryString();
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить вакансии: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить вакансии: {$e->getMessage()}", 0, $e);
         }
     }
 }

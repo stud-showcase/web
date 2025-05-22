@@ -21,6 +21,6 @@ trait AuthorizesProjectActions
             ->wherePivot('is_creator', true)
             ->exists();
 
-        return $isMentor || $isCreator;
+        return $isMentor || $isCreator || $user->hasAnyRole('admin');
     }
 }

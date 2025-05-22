@@ -6,8 +6,10 @@ use App\Dto\TaskDto;
 use App\Dto\TaskRequestDto;
 use App\Repositories\TaskRepository;
 use App\Traits\PaginatesCollections;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Throwable;
 
 class TaskService
@@ -31,7 +33,18 @@ class TaskService
             return TaskDto::fromModel($task)->toFullArray();
         } catch (Throwable $e) {
             Log::error("Ошибка получения задания [$id]: " . $e->getMessage());
-            throw new \Exception("Не удалось получить задание: {$e->getMessage()}", 0, $e);
+            throw $e;
+        }
+    }
+
+    public function getTaskForAdmin(int $id): array
+    {
+        try {
+            $task = $this->taskRepository->getTaskForAdmin($id);
+            return TaskDto::fromModel($task)->toFullArray();
+        } catch (Throwable $e) {
+            Log::error("Ошибка получения задачи для админа [$id]: " . $e->getMessage());
+            throw $e;
         }
     }
 
@@ -54,7 +67,7 @@ class TaskService
             return TaskRequestDto::fromModel($taskRequest)->toArray();
         } catch (Throwable $e) {
             Log::error("Ошибка получения заявки [$id]: " . $e->getMessage());
-            throw new \Exception("Не удалось получить заявку: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -79,7 +92,7 @@ class TaskService
                 'data' => $data,
                 'files_count' => count($files),
             ]);
-            throw new \Exception("Не удалось создать заявку: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -89,7 +102,7 @@ class TaskService
             $this->taskRepository->deleteTaskRequest($id);
         } catch (Throwable $e) {
             Log::error("Ошибка удаления заявки [$id]: " . $e->getMessage());
-            throw new \Exception("Не удалось удалить заявку: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -102,7 +115,7 @@ class TaskService
                 'data' => $data,
                 'files_count' => count($files),
             ]);
-            throw new \Exception("Не удалось одобрить заявку: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -112,7 +125,7 @@ class TaskService
             $this->taskRepository->updateTaskRequestResponsibleUser($id, $mentorId);
         } catch (Throwable $e) {
             Log::error("Ошибка обновления ответственного для заявки [$id]: " . $e->getMessage());
-            throw new \Exception("Не удалось обновить ответственного: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -125,7 +138,68 @@ class TaskService
                 'data' => $data,
                 'files_count' => count($files),
             ]);
-            throw new \Exception("Не удалось создать задачу: {$e->getMessage()}", 0, $e);
+            throw $e;
+        }
+    }
+
+    public function updateTask(int $id, array $data): void
+    {
+        try {
+            $this->taskRepository->updateTask($id, $data);
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления задачи [$id]: " . $e->getMessage(), [
+                'data' => $data,
+            ]);
+            throw $e;
+        }
+    }
+
+    public function uploadFiles(int $taskId, array $files): void
+    {
+        try {
+            $filesData = [];
+            foreach ($files as $file) {
+                if (!$file instanceof UploadedFile) {
+                    throw new \InvalidArgumentException('Недопустимый тип файла');
+                }
+
+                $extension = $file->getClientOriginalExtension();
+                $uniqueName = Str::uuid() . '.' . $extension;
+                $directory = 'task_files/' . $taskId;
+                $path = $file->storeAs($directory, $uniqueName, 'public');
+
+                $filesData[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => str_replace('public/', '', $path),
+                ];
+            }
+
+            $this->taskRepository->createFiles($taskId, $filesData);
+        } catch (Throwable $e) {
+            Log::error("Ошибка загрузки файлов для задачи [$taskId]: " . $e->getMessage(), [
+                'files_count' => count($files),
+            ]);
+            throw $e;
+        }
+    }
+
+    public function deleteTask(int $id): void
+    {
+        try {
+            $this->taskRepository->deleteTask($id);
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления задачи [$id]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function deleteFile(int $taskId, int $fileId): void
+    {
+        try {
+            $this->taskRepository->deleteFile($taskId, $fileId);
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления файла [$fileId] для задачи [$taskId]: " . $e->getMessage());
+            throw $e;
         }
     }
 }

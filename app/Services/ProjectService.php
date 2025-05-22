@@ -10,7 +10,6 @@ use App\Repositories\ProjectRepository;
 use App\Repositories\UserProjectRepository;
 use App\Traits\PaginatesCollections;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -44,7 +43,7 @@ class ProjectService
             return ProjectDto::fromModel($project)->toArray();
         } catch (Throwable $e) {
             Log::error("Ошибка получения проекта [$id]: " . $e->getMessage());
-            throw new \Exception("Не удалось получить проект: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -54,7 +53,7 @@ class ProjectService
             $this->inviteRepository->create($userId, $projectId, $vacancyId);
         } catch (Throwable $e) {
             Log::error("Ошибка создания приглашения в проект [$projectId]: " . $e->getMessage(), ['user_id' => $userId, 'vacancy_id' => $vacancyId]);
-            throw new \Exception("Не удалось создать приглашение: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -65,7 +64,7 @@ class ProjectService
             $this->inviteRepository->acceptInvite($invite);
         } catch (Throwable $e) {
             Log::error("Ошибка принятия приглашения [$inviteId]: " . $e->getMessage());
-            throw new \Exception("Не удалось принять приглашение: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -76,7 +75,7 @@ class ProjectService
             $this->inviteRepository->rejectInvite($invite);
         } catch (Throwable $e) {
             Log::error("Ошибка отклонения приглашения [$inviteId]: " . $e->getMessage());
-            throw new \Exception("Не удалось отклонить приглашение: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -86,7 +85,7 @@ class ProjectService
             return $this->projectRepository->create($taskId, $name, $user);
         } catch (Throwable $e) {
             Log::error("Ошибка создания проекта: " . $e->getMessage(), ['task_id' => $taskId, 'name' => $name, 'user_id' => $user->id]);
-            throw new \Exception("Не удалось создать проект: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -96,7 +95,7 @@ class ProjectService
             return $this->projectRepository->update($projectId, $data);
         } catch (Throwable $e) {
             Log::error("Ошибка обновления проекта [$projectId]: " . $e->getMessage(), ['data' => $data]);
-            throw new \Exception("Не удалось обновить проект: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -125,7 +124,7 @@ class ProjectService
             Log::error("Ошибка загрузки файлов для проекта [$projectId]: " . $e->getMessage(), [
                 'files_count' => count($files),
             ]);
-            throw new \Exception("Не удалось загрузить файлы: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -135,7 +134,7 @@ class ProjectService
             $this->projectRepository->deleteFile($projectId, $fileId);
         } catch (Throwable $e) {
             Log::error("Ошибка удаления файла [$fileId] для проекта [$projectId]: " . $e->getMessage());
-            throw new \Exception("Не удалось удалить файл: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -151,7 +150,7 @@ class ProjectService
             $this->userProjectRepository->update($projectId, $memberId, $data);
         } catch (Throwable $e) {
             Log::error("Ошибка обновления участника [$memberId] проекта [$projectId]: " . $e->getMessage(), ['data' => $data]);
-            throw new \Exception("Не удалось обновить участника: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 
@@ -161,7 +160,7 @@ class ProjectService
             $this->userProjectRepository->delete($projectId, $memberId);
         } catch (Throwable $e) {
             Log::error("Ошибка удаления участника [$memberId] из проекта [$projectId]: " . $e->getMessage());
-            throw new \Exception("Не удалось удалить участника: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 }

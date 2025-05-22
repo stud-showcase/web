@@ -31,7 +31,7 @@ class VacancyService
             return $this->vacancyRepository->create($projectId, $filteredData);
         } catch (Throwable $e) {
             Log::error("Ошибка создания вакансии для проекта [$projectId]: " . $e->getMessage(), ['data' => $data]);
-            throw new \Exception("Не удалось создать вакансию: {$e->getMessage()}", 0, $e);
+            throw $e;;
         }
     }
 
@@ -42,7 +42,7 @@ class VacancyService
             return $this->vacancyRepository->update($vacancyId, $filteredData);
         } catch (Throwable $e) {
             Log::error("Ошибка обновления вакансии [$vacancyId]: " . $e->getMessage(), ['data' => $data]);
-            throw new \Exception("Не удалось обновить вакансию: {$e->getMessage()}", 0, $e);
+            throw $e;;
         }
     }
 
@@ -52,7 +52,7 @@ class VacancyService
             $this->vacancyRepository->delete($vacancyId);
         } catch (Throwable $e) {
             Log::error("Ошибка удаления вакансии [$vacancyId]: " . $e->getMessage());
-            throw new \Exception("Не удалось удалить вакансию: {$e->getMessage()}", 0, $e);
+            throw $e;;
         }
     }
 

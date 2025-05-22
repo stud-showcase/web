@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Throwable;
 
@@ -29,7 +30,7 @@ class UserRepository
                     ->withQueryString();
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить пользователей: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить пользователей: {$e->getMessage()}", 0, $e);
         }
     }
 }

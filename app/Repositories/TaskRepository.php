@@ -5,9 +5,11 @@ namespace App\Repositories;
 use App\Models\Project;
 use App\Models\ProjectStatus;
 use App\Models\Task;
+use App\Models\TaskFile;
 use App\Models\TaskRequest;
 use App\Models\UserProject;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -62,7 +64,7 @@ class TaskRepository
                     ->withQueryString();
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить задания: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить задания: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -82,7 +84,23 @@ class TaskRepository
                 ])->findOrFail($id);
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить задание: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить задание: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function getTaskForAdmin(int $id): Task
+    {
+        $cacheKey = "task_admin:{$id}";
+        try {
+            return Cache::tags(['tasks'])->remember($cacheKey, 3600, function () use ($id) {
+                return Task::with([
+                    'complexity',
+                    'tags',
+                    'files',
+                ])->findOrFail($id);
+            });
+        } catch (Throwable $e) {
+            throw new ModelNotFoundException("Не удалось получить задание: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -95,7 +113,7 @@ class TaskRepository
                     ->findOrFail($id);
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить заявку: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить заявку: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -132,7 +150,7 @@ class TaskRepository
                     ->withQueryString();
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить заявки: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить заявки: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -163,7 +181,7 @@ class TaskRepository
                     ->withQueryString();
             });
         } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить задания: {$e->getMessage()}", 0, $e);
+            throw new ModelNotFoundException("Не удалось получить задания: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -376,6 +394,83 @@ class TaskRepository
             });
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось создать задачу: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function updateTask(int $id, array $data): void
+    {
+        try {
+            DB::transaction(function () use ($id, $data) {
+                $task = Task::findOrFail($id);
+                $task->update([
+                    'title' => $data['title'],
+                    'description' => $data['description'],
+                    'max_projects' => $data['maxProjects'],
+                    'max_members' => $data['maxMembers'],
+                    'customer' => $data['customer'],
+                    'customer_email' => $data['customerEmail'] ?? null,
+                    'customer_phone' => $data['customerPhone'] ?? null,
+                    'deadline' => $data['deadline'],
+                    'complexity_id' => $data['complexityId'],
+                ]);
+
+                $task->tags()->sync($data['tags'] ?? []);
+
+                Cache::tags(['tasks'])->flush();
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось обновить задачу: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function createFiles(int $taskId, array $files): void
+    {
+        try {
+            DB::transaction(function () use ($taskId, $files) {
+                foreach ($files as $file) {
+                    $this->fileRepository->saveFile($file, 'task', $taskId);
+                }
+            });
+            Cache::tags(['tasks'])->forget("task:{$taskId}");
+            Cache::tags(['tasks'])->forget("task_admin:{$taskId}");
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось создать файлы для задачи [$taskId]: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function deleteTask(int $id): void
+    {
+        try {
+            DB::transaction(function () use ($id) {
+                $task = Task::findOrFail($id);
+                $files = $task->files;
+
+                foreach ($files as $file) {
+                    $this->fileRepository->deleteFile($file);
+                }
+
+                $task->delete();
+
+                Cache::tags(['tasks'])->flush();
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось удалить задачу: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function deleteFile(int $taskId, int $fileId): void
+    {
+        try {
+            DB::transaction(function () use ($taskId, $fileId) {
+                $file = TaskFile::where('task_id', $taskId)
+                    ->where('id', $fileId)
+                    ->firstOrFail();
+                $this->fileRepository->deleteFile($file);
+            });
+            Cache::tags(['tasks'])->forget("task:{$taskId}");
+            Cache::tags(['tasks'])->forget("task_admin:{$taskId}");
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось удалить файл: {$e->getMessage()}", 0, $e);
         }
     }
 }
