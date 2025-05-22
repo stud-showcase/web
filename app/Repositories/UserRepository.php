@@ -29,8 +29,10 @@ class UserRepository
                     ->paginate(20)
                     ->withQueryString();
             });
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
-            throw new ModelNotFoundException("Не удалось получить пользователей: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException("Не удалось получить пользователей: {$e->getMessage()}", 0, $e);
         }
     }
 }

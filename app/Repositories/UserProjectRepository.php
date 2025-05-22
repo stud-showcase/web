@@ -15,15 +15,12 @@ class UserProjectRepository
         try {
             $userProject = UserProject::where('project_id', $projectId)
                 ->where('user_id', $userId)
-                ->first();
-
-            if (!$userProject) {
-                throw new ModelNotFoundException("Участник [$userId] не найден в проекте [$projectId].");
-            }
-
+                ->firstOrFail();
             return $userProject;
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
-            throw new ModelNotFoundException("Не удалось найти участника: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException("Не удалось найти участника: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -39,6 +36,8 @@ class UserProjectRepository
             });
             Cache::tags(['projects', 'user_projects'])->flush();
             Cache::tags(['projects'])->forget("project:{$projectId}");
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось обновить участника: {$e->getMessage()}", 0, $e);
         }
@@ -53,6 +52,8 @@ class UserProjectRepository
             });
             Cache::tags(['projects', 'user_projects'])->flush();
             Cache::tags(['projects'])->forget("project:{$projectId}");
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось удалить участника: {$e->getMessage()}", 0, $e);
         }

@@ -11,13 +11,14 @@ use App\Http\Requests\UploadTaskFileRequest;
 use App\Models\Complexity;
 use App\Models\Tag;
 use App\Models\Task;
+use App\Models\TaskRequest;
 use App\Services\ProjectService;
 use App\Services\UserService;
 use App\Services\TaskService;
 use App\Services\VacancyService;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Throwable;
@@ -160,7 +161,7 @@ class AdminController extends Controller
             'taskRequests' => $taskRequests,
             'filters' => $filters,
             'availableFilters' => [
-                'customers' => Task::select('customer')->distinct()->pluck('customer')->toArray(),
+                'customers' => TaskRequest::select('customer')->distinct()->pluck('customer')->toArray(),
             ]
         ]);
     }
@@ -180,6 +181,14 @@ class AdminController extends Controller
         return Inertia::render('admin/Applications', [
             'taskRequests' => $taskRequests,
             'filters' => $filters,
+            'availableFilters' => [
+                'customers' => TaskRequest::query()
+                    ->where('responsible_user_id', Auth::id())
+                    ->select('customer')
+                    ->distinct()
+                    ->pluck('customer')
+                    ->toArray(),
+            ]
         ]);
     }
 

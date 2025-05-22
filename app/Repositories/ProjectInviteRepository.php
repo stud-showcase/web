@@ -19,6 +19,8 @@ class ProjectInviteRepository
                 'vacancy_id' => $vacancyId,
             ]);
             Cache::tags(['projects'])->forget("project:{$projectId}");
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось создать приглашение: {$e->getMessage()}", 0, $e);
         }
@@ -41,6 +43,8 @@ class ProjectInviteRepository
             });
             Cache::tags(['projects', 'user_projects'])->flush();
             Cache::tags(['projects'])->forget("project:{$invite->project_id}");
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось принять приглашение: {$e->getMessage()}", 0, $e);
         }
@@ -54,6 +58,8 @@ class ProjectInviteRepository
             });
 
             Cache::tags(['projects'])->forget("project:{$invite->project_id}");
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось отклонить приглашение: {$e->getMessage()}", 0, $e);
         }
@@ -63,8 +69,10 @@ class ProjectInviteRepository
     {
         try {
             return ProjectInvite::with(['user', 'project', 'vacancy'])->findOrFail($inviteId);
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
-            throw new ModelNotFoundException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -72,8 +80,10 @@ class ProjectInviteRepository
     {
         try {
             return ProjectInvite::findOrFail($inviteId);
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
-            throw new ModelNotFoundException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException("Не удалось получить приглашение: {$e->getMessage()}", 0, $e);
         }
     }
 }

@@ -32,8 +32,10 @@ class VacancyRepository
                     ->paginate(10)
                     ->withQueryString();
             });
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
-            throw new ModelNotFoundException("Не удалось получить вакансии: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException("Не удалось получить вакансии: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -50,6 +52,8 @@ class VacancyRepository
             Cache::tags(['vacancies'])->flush();
             Cache::tags(['projects'])->forget("project:{$projectId}");
             return $vacancy;
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось создать вакансию: {$e->getMessage()}", 0, $e);
         }
@@ -66,6 +70,8 @@ class VacancyRepository
             Cache::tags(['vacancies'])->flush();
             Cache::tags(['projects'])->forget("project:{$vacancy->project_id}");
             return $vacancy;
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось обновить вакансию: {$e->getMessage()}", 0, $e);
         }
@@ -81,6 +87,8 @@ class VacancyRepository
                 Cache::tags(['vacancies'])->flush();
                 Cache::tags(['projects'])->forget("project:{$projectId}");
             });
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось удалить вакансию: {$e->getMessage()}", 0, $e);
         }
@@ -101,8 +109,10 @@ class VacancyRepository
                     ->paginate(20)
                     ->withQueryString();
             });
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
-            throw new ModelNotFoundException("Не удалось получить вакансии: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException("Не удалось получить вакансии: {$e->getMessage()}", 0, $e);
         }
     }
 }

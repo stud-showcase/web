@@ -25,14 +25,16 @@ class ProjectRepository
     {
         $cacheKey = 'projects:filtered:' . md5(json_encode($filters) . ':' . ($forUser ? 'user:' . Auth::id() : 'all')) . ':page_' . request()->query('page', 1);
         try {
-            return Cache::tags(['projects'])->remember($cacheKey, 1, function () use ($filters, $forUser) {
+            return Cache::tags(['projects'])->remember($cacheKey, 300, function () use ($filters, $forUser) {
                 $projects = $this->buildProjectQuery($filters, $forUser)
                     ->paginate(10)
                     ->withQueryString();
                 return $projects;
             });
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
-            throw new ModelNotFoundException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -54,11 +56,12 @@ class ProjectRepository
                         'vacancy' => fn($q2) => $q2->select('id', 'name'),
                     ]),
                 ])->findOrFail($id);
-
                 return $project;
             });
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
-            throw new ModelNotFoundException("Не удалось получить проект: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException("Не удалось получить проект: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -83,6 +86,8 @@ class ProjectRepository
 
             Cache::tags(['projects', 'user_projects'])->flush();
             return $project;
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось создать проект: {$e->getMessage()}", 0, $e);
         }
@@ -126,6 +131,8 @@ class ProjectRepository
             Cache::tags(['projects', 'user_projects'])->flush();
             Cache::tags(['projects'])->forget("project:{$projectId}");
             return $project;
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось обновить проект: {$e->getMessage()}", 0, $e);
         }
@@ -141,6 +148,8 @@ class ProjectRepository
                 Cache::tags(['projects'])->forget("project:{$id}");
                 Cache::tags(['projects'])->flush();
             });
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось удалить проект: {$e->getMessage()}", 0, $e);
         }
@@ -155,7 +164,9 @@ class ProjectRepository
                 }
             });
             Cache::tags(['projects'])->forget("project:{$projectId}");
-        } catch (\Throwable $e) {
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось создать файлы для проекта [$projectId]: {$e->getMessage()}", 0, $e);
         }
     }
@@ -166,10 +177,12 @@ class ProjectRepository
             DB::transaction(function () use ($projectId, $fileId) {
                 $file = ProjectFile::where('project_id', $projectId)
                     ->where('id', $fileId)
-                    ->first();
+                    ->firstOrFail();
                 $this->fileRepository->deleteFile($file);
             });
             Cache::tags(['projects'])->forget("project:{$projectId}");
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось удалить файл: {$e->getMessage()}", 0, $e);
         }
@@ -210,8 +223,10 @@ class ProjectRepository
                     ->paginate($perPage)
                     ->withQueryString();
             });
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         } catch (Throwable $e) {
-            throw new ModelNotFoundException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException("Не удалось получить проекты: {$e->getMessage()}", 0, $e);
         }
     }
 
