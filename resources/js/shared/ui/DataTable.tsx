@@ -8,14 +8,6 @@ import {
 } from "@/shared/ui/Table";
 import { Input } from "@/shared/ui/Input";
 import { Button } from "@/shared/ui/Button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/shared/ui/DropdownMenu";
 import { Filter } from "lucide-react";
 import {
   ChevronLeft,
@@ -27,14 +19,20 @@ import {
 import { ServerPaginatedData } from "../types/ServerPaginatedData";
 import { ReactNode } from "react";
 import { router, Link } from "@inertiajs/react";
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from "./Popover";
+import { Text } from "./Text";
 
 type PaginationProps<TData> = {
   paginatedData: ServerPaginatedData<TData>;
 };
 
 function DataTablePagination<TData>({ paginatedData }: PaginationProps<TData>) {
-  const { currentPage, perPage, total, lastPage, links } = paginatedData;
-  console.log(paginatedData);
+  const { currentPage, total, lastPage, links } = paginatedData;
 
   const handleFirstPage = () => {
     router.get(links[1]);
@@ -56,21 +54,6 @@ function DataTablePagination<TData>({ paginatedData }: PaginationProps<TData>) {
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">{total} строк</div>
       <div className="flex items-center space-x-6 lg:space-x-8">
-        {/* <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Строк на странице</p>
-          <Select value={`${perPage}`}>
-            <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={perPage} />
-            </SelectTrigger>
-            <SelectContent side="top">
-              {[10, 20, 30, 40, 50].map((size) => (
-                <SelectItem key={size} value={`${size}`}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div> */}
         <div className="flex w-[120px] items-center justify-center text-sm font-medium">
           Страница {currentPage} из {lastPage}
         </div>
@@ -121,6 +104,10 @@ interface DataTableProps<TData extends { id: string | number }> {
   data: ServerPaginatedData<TData>;
   columns: ColumnDef<TData>[];
   route: string;
+  search: string;
+  onSearch: (value: string) => void;
+  onFiltersApply?: () => void;
+  onFiltersReset?: () => void;
   filtersSlot?: ReactNode;
 }
 
@@ -128,11 +115,6 @@ interface ColumnDef<TData> {
   title: string;
   cell: (data: TData) => React.ReactNode;
 }
-
-// TODO:
-// 1. Сделать поиск
-// 2. Сделать фильтры
-// 3. Сделать переключение perPage
 
 /* TODO:
 - Создание задачи
@@ -147,38 +129,52 @@ export function DataTable<TData extends { id: string | number }>({
   data,
   columns,
   route,
+  search,
+  onSearch,
+  onFiltersApply,
+  onFiltersReset,
   filtersSlot,
 }: DataTableProps<TData>) {
   return (
     <div className="rounded-md border overflow-x-auto shadow-sm">
       <div className="py-3 px-4 border-b flex items-center justify-between">
         <Input
+          value={search}
+          onChange={(e) => onSearch(e.target.value)}
           placeholder="Поиск..."
           className="min-w-[150px] lg:min-w-[280px] max-w-fit"
         />
         {filtersSlot && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <Popover>
+            <PopoverTrigger asChild>
               <Button variant="outline">
                 <Filter />
                 Фильтры
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[300px] p-4">
-              <div className="flex items-center justify-between mb-2">
-                <DropdownMenuLabel className="p-0 font-semibold text-lg">
-                  Фильтры
-                </DropdownMenuLabel>
-                <DropdownMenuItem className="p-0 focus:bg-transparent cursor-pointer">
-                  <Button variant="outline" size="sm">
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-96">
+              <Text variant="large" className="font-semibold">
+                Фильтры
+              </Text>
+              <div className="space-y-4 mt-4">{filtersSlot}</div>
+              <div className="flex gap-2 mt-4">
+                <PopoverClose asChild>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={onFiltersReset}
+                  >
                     Сбросить
                   </Button>
-                </DropdownMenuItem>
+                </PopoverClose>
+                <PopoverClose asChild>
+                  <Button className="flex-1" onClick={onFiltersApply}>
+                    Сохранить
+                  </Button>
+                </PopoverClose>
               </div>
-              <DropdownMenuSeparator />
-              <div className="space-y-4 mt-4">{filtersSlot}</div>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </PopoverContent>
+          </Popover>
         )}
       </div>
       <Table>

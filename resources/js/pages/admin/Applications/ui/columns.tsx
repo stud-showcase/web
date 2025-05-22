@@ -1,87 +1,42 @@
-import { Checkbox } from "@/shared/ui/Checkbox";
-import { ColumnDef } from "@tanstack/react-table";
+import { Application } from "@/entities/Application";
 import { Badge } from "@/shared/ui/Badge";
-import { DataTableColumnHeader } from "@/shared/ui/DataTableColumnHeader";
-import { Application, ApplicationType } from "@/entities/Application";
 
-export const columns: ColumnDef<Application>[] = [
+export const columns = [
+  { title: "ID", cell: (application: Application) => application.id },
+  { title: "Задача", cell: (application: Application) => application.title },
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        className="mt-1"
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Выбрать все"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        className="mt-1"
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Выбрать строку"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
+    title: "Проект",
+    cell: (application: Application) => application.projectName || "-",
   },
   {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("id")}</div>,
-    enableSorting: false,
+    title: "Заказчик",
+    cell: (application: Application) => application.customer,
   },
   {
-    accessorKey: "title",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Название" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("title")}</div>,
+    title: "Email",
+    cell: (application: Application) => application.customerEmail,
   },
   {
-    accessorKey: "customer",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Заказчик" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("customer")}</div>,
+    title: "Телефон",
+    cell: (application: Application) => application.customerPhone || "-",
   },
   {
-    accessorKey: "customerEmail",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Электронная почта" />
-    ),
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("customerEmail")}</div>
-    ),
-  },
-  {
-    accessorKey: "customerPhone",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Телефон" />
-    ),
-    cell: ({ row }) => {
-      const phone = row.getValue("customerPhone");
-      return <div>{(phone as string) || "-"}</div>;
-    },
-  },
-  {
-    accessorKey: "type",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Тип заявки" />
-    ),
-    cell: ({ row }) => {
-      const type = row.getValue("type") as ApplicationType;
-      return (
-        <Badge variant="secondary">
-          {type === "project" ? "Проект" : "Банк задач"}
+    title: "Тип заявки",
+    cell: (application: Application) =>
+      application.withProject ? (
+        <Badge
+          variant="secondary"
+          title="Заявка на создание проекта с собственной темой"
+        >
+          Проект
         </Badge>
-      );
-    },
+      ) : (
+        <Badge
+          variant="secondary"
+          title="Заявка на добавление новой задачи в банк задач"
+        >
+          Банк задач
+        </Badge>
+      ),
   },
 ];
