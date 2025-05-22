@@ -75,12 +75,9 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
     Route::put('/applications/{id}/responsibleUser', [AdminController::class, 'updateTaskRequestResponsibleUser'])->name('admin.applications.updateResponsibleUser');
 
     Route::get('/tasks', [AdminController::class, 'tasks'])->name('admin.tasks.index');
-    Route::get('/tasks/create', function () {
-        return Inertia::render('admin/TaskCreate');
-    });
-    Route::get('/tasks/{id}', function () {
-        return Inertia::render('admin/Task');
-    });
+    Route::get('/tasks/create', [AdminController::class, 'indexTaskCreate'])->name('admin.tasks.create');
+    Route::post('/tasks/create', [AdminController::class, 'createTask'])->name('admin.tasks.store');
+    Route::get('/tasks/{id}', [AdminController::class, 'showTask'])->name('admin.tasks.show');
 
     Route::get('/projects', [AdminController::class, 'projects'])->name('admin.projects.index');
     Route::get('/projects/{id}', function () {

@@ -125,8 +125,8 @@ class TaskRepository
                         fn($q) => $q->whereIn('customer', $filters['customers'])
                     )
                     ->when(
-                        !empty($filters['withProject']),
-                        fn($q) => $q->where('with_project', 1)
+                        isset($filters['withProject']),
+                        fn($q) => $q->where('with_project', $filters['withProject'])
                     )
                     ->paginate($perPage)
                     ->withQueryString();
@@ -327,6 +327,55 @@ class TaskRepository
             });
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось обновить ответственного: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function createTask(array $data, array $files = []): int
+    {
+        try {
+            return DB::transaction(function () use ($data, $files) {
+                $task = Task::create([
+                    'title' => $data['title'],
+                    'description' => $data['description'],
+                    'customer' => $data['customer'],
+                    'max_projects' => $data['maxProjects'],
+                    'max_members' => $data['maxMembers'],
+                    'customer_email' => $data['customerEmail'] ?? null,
+                    'customer_phone' => $data['customerPhone'] ?? null,
+                    'deadline' => $data['deadline'],
+                    'complexity_id' => $data['complexityId'],
+                ]);
+
+                if (!empty($data['tags'])) {
+                    $task->tags()->attach($data['tags']);
+                }
+
+                if (!empty($files)) {
+                    $fileData = [];
+                    foreach ($files as $file) {
+                        if (!$file instanceof UploadedFile) {
+                            throw new \InvalidArgumentException('Недопустимый тип файла');
+                        }
+                        $extension = $file->getClientOriginalExtension();
+                        $uniqueName = Str::uuid() . '.' . $extension;
+                        $directory = 'task_files/' . $task->id;
+                        $path = $file->storeAs($directory, $uniqueName, 'public');
+                        $fileData[] = [
+                            'name' => $file->getClientOriginalName(),
+                            'path' => str_replace('public/', '', $path),
+                        ];
+                    }
+                    foreach ($fileData as $file) {
+                        $this->fileRepository->saveFile($file, 'task', $task->id);
+                    }
+                }
+
+                Cache::tags(['tasks'])->flush();
+
+                return $task->id;
+            });
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось создать задачу: {$e->getMessage()}", 0, $e);
         }
     }
 }

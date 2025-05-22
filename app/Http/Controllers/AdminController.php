@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ApproveTaskRequestRequest;
+use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequestMentorRequest;
+use App\Models\Complexity;
+use App\Models\Tag;
+use App\Models\Task;
 use App\Services\ProjectService;
 use App\Services\UserService;
 use App\Services\TaskService;
@@ -58,7 +62,30 @@ class AdminController extends Controller
         return Inertia::render('admin/TaskBank', [
             'tasks' => $tasks,
             'filters' => $filters,
+            'availableFilters' => [
+                'customers' => Task::select('customer')->distinct()->pluck('customer')->toArray(),
+            ]
         ]);
+    }
+
+    public function showTask(Request $request): \Inertia\Response
+    {
+        return Inertia::render('admin/Task');
+    }
+
+    public function indexTaskCreate(): \Inertia\Response
+    {
+        return Inertia::render('admin/TaskCreate', [
+            'complexities' => Complexity::all()->toArray(),
+            'tags' => Tag::all()->toArray(),
+        ]);
+    }
+
+    public function createTask(CreateTaskRequest $request): RedirectResponse
+    {
+        $data = $request->validated();
+        $this->taskService->createTask($data, $request->file('files', []));
+        return redirect()->route('admin.tasks.index')->with('success', 'Задача успешно создана');
     }
 
     public function taskRequests(Request $request): \Inertia\Response
@@ -73,6 +100,9 @@ class AdminController extends Controller
         return Inertia::render('admin/Applications', [
             'taskRequests' => $taskRequests,
             'filters' => $filters,
+            'availableFilters' => [
+                'customers' => Task::select('customer')->distinct()->pluck('customer')->toArray(),
+            ]
         ]);
     }
 

@@ -115,4 +115,17 @@ class TaskService
             throw new \Exception("Не удалось обновить ответственного: {$e->getMessage()}", 0, $e);
         }
     }
+
+    public function createTask(array $data, array $files = []): int
+    {
+        try {
+            return $this->taskRepository->createTask($data, $files);
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания задачи: " . $e->getMessage(), [
+                'data' => $data,
+                'files_count' => count($files),
+            ]);
+            throw new \Exception("Не удалось создать задачу: {$e->getMessage()}", 0, $e);
+        }
+    }
 }
