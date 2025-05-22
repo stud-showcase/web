@@ -23,7 +23,11 @@ class AdminController extends Controller
 
     public function projects(Request $request): \Inertia\Response
     {
-        $filters = $request->only(['search']);
+        $filters = $request->only([
+            'search',
+            'status',
+            'isHiring',
+        ]);
         $projects = $this->projectService->getAdminProjects($filters);
         return Inertia::render('admin/Projects', [
             'projects' => $projects,
@@ -43,7 +47,12 @@ class AdminController extends Controller
 
     public function tasks(Request $request): \Inertia\Response
     {
-        $filters = $request->only(['search']);
+        $filters = $request->only([
+            'search',
+            'perPage',
+            'complexity',
+            'customers',
+        ]);
         $tasks = $this->taskService->getAdminTasks($filters);
         return Inertia::render('admin/TaskBank', [
             'tasks' => $tasks,
@@ -53,7 +62,11 @@ class AdminController extends Controller
 
     public function taskRequests(Request $request): \Inertia\Response
     {
-        $filters = $request->only(['search']);
+        $filters = $request->only([
+            'search',
+            'withProject',
+            'customers',
+        ]);
         $taskRequests = $this->taskService->getFilteredTaskRequests($filters);
         return Inertia::render('admin/Applications', [
             'taskRequests' => $taskRequests,

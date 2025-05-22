@@ -189,7 +189,21 @@ class ProjectRepository
                         fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
                             ->orWhere('annotation', 'LIKE', '%' . $filters['search'] . '%')
                     )
-                    ->paginate(20)
+                    ->when(
+                        isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,
+                        fn($q) => $q->whereIn('status_id', $filters['status'])
+                    )
+                    ->when(
+                        isset($filters['isHiring']),
+                        fn($q) => $filters['isHiring']
+                            ? $q->whereHas('task', fn($q2) => $q2->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) < tasks.max_members'))
+                            ->where('projects.is_close', false)
+                            : $q->where(function ($subQ) {
+                                $subQ->whereHas('task', fn($q2) => $q2->whereRaw('(SELECT COUNT(*) FROM user_project WHERE user_project.project_id = projects.id) >= tasks.max_members'))
+                                    ->orWhere('projects.is_close', true);
+                            })
+                    )
+                    ->paginate((int)$filters['perPage'] ?? 20)
                     ->withQueryString();
             });
         } catch (Throwable $e) {

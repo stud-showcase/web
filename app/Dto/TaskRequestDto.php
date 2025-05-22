@@ -11,7 +11,7 @@ class TaskRequestDto
         public string $title,
         public string $description,
         public string $customer,
-        public string $customerEmail,
+        public ?string $customerEmail,
         public ?string $customerPhone,
         public bool $withProject,
         public ?string $projectName,

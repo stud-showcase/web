@@ -18,7 +18,7 @@ class TaskDto
         public string $deadline,
         public array $tags,
         public array $complexity,
-        public string $customerEmail,
+        public ?string $customerEmail,
         public ?string $customerPhone,
         public ?array $files,
         public ?array $projects,

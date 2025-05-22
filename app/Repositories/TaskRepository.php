@@ -117,7 +117,15 @@ class TaskRepository
                         fn($q) => $q->whereNotNull('responsible_user_id')
                             ->where('responsible_user_id', Auth::id())
                     )
-                    ->paginate(20)
+                    ->when(
+                        isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
+                        fn($q) => $q->whereIn('customer', $filters['customers'])
+                    )
+                    ->when(
+                        !empty($filters['withProject']),
+                        fn($q) => $q->where('with_project', 1)
+                    )
+                    ->paginate((int)$filters['perPage'] ?? 20)
                     ->withQueryString();
             });
         } catch (Throwable $e) {
@@ -137,7 +145,15 @@ class TaskRepository
                         fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
                             ->orWhere('description', 'LIKE', '%' . $filters['search'] . '%')
                     )
-                    ->paginate(20)
+                    ->when(
+                        isset($filters['complexity']) && is_array($filters['complexity']) && count($filters['complexity']) > 0,
+                        fn($q) => $q->whereIn('complexity_id', $filters['complexity'])
+                    )
+                    ->when(
+                        isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
+                        fn($q) => $q->whereIn('customer', $filters['customers'])
+                    )
+                    ->paginate((int)$filters['perPage'] ?? 20)
                     ->withQueryString();
             });
         } catch (Throwable $e) {
