@@ -179,6 +179,9 @@ class ProjectRepository
         $cacheKey = 'admin_projects:filtered:' . md5(json_encode($filters)) . ':page_' . request()->query('page', 1);
         try {
             return Cache::tags(['projects'])->remember($cacheKey, 300, function () use ($filters) {
+                $perPage = isset($filters['perPage']) && is_numeric($filters['perPage']) && $filters['perPage'] > 0
+                    ? (int)$filters['perPage']
+                    : 20;
                 return Project::query()
                     ->with([
                         'mentor' => fn($q) => $q->select('users.id', 'first_name', 'second_name', 'last_name', 'email'),
@@ -203,7 +206,7 @@ class ProjectRepository
                                     ->orWhere('projects.is_close', true);
                             })
                     )
-                    ->paginate((int)$filters['perPage'] ?? 20)
+                    ->paginate($perPage)
                     ->withQueryString();
             });
         } catch (Throwable $e) {

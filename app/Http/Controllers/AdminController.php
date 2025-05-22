@@ -27,6 +27,7 @@ class AdminController extends Controller
             'search',
             'status',
             'isHiring',
+            'perPage',
         ]);
         $projects = $this->projectService->getAdminProjects($filters);
         return Inertia::render('admin/Projects', [
@@ -66,6 +67,7 @@ class AdminController extends Controller
             'search',
             'withProject',
             'customers',
+            'perPage',
         ]);
         $taskRequests = $this->taskService->getFilteredTaskRequests($filters);
         return Inertia::render('admin/Applications', [

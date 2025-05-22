@@ -104,6 +104,9 @@ class TaskRepository
         $cacheKey = 'task_requests:filtered:' . md5(json_encode($filters) . ':' . ($forUser ? 'user:' . Auth::id() : 'all')) . ':page_' . request()->query('page', 1);
         try {
             return Cache::tags(['task_requests'])->remember($cacheKey, 300, function () use ($filters, $forUser) {
+                $perPage = isset($filters['perPage']) && is_numeric($filters['perPage']) && $filters['perPage'] > 0
+                    ? (int)$filters['perPage']
+                    : 20;
                 return TaskRequest::query()
                     ->with(['user', 'responsibleUser'])
                     ->when(
@@ -125,7 +128,7 @@ class TaskRepository
                         !empty($filters['withProject']),
                         fn($q) => $q->where('with_project', 1)
                     )
-                    ->paginate((int)$filters['perPage'] ?? 20)
+                    ->paginate($perPage)
                     ->withQueryString();
             });
         } catch (Throwable $e) {
@@ -138,6 +141,9 @@ class TaskRepository
         $cacheKey = 'admin_tasks:filtered:' . md5(json_encode($filters)) . ':page_' . request()->query('page', 1);
         try {
             return Cache::tags(['tasks'])->remember($cacheKey, 300, function () use ($filters) {
+                $perPage = isset($filters['perPage']) && is_numeric($filters['perPage']) && $filters['perPage'] > 0
+                    ? (int)$filters['perPage']
+                    : 20;
                 return Task::query()
                     ->with(['complexity'])
                     ->when(
@@ -153,7 +159,7 @@ class TaskRepository
                         isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
                         fn($q) => $q->whereIn('customer', $filters['customers'])
                     )
-                    ->paginate((int)$filters['perPage'] ?? 20)
+                    ->paginate($perPage)
                     ->withQueryString();
             });
         } catch (Throwable $e) {
