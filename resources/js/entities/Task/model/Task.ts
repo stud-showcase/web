@@ -12,6 +12,7 @@ export type Task = {
   customerPhone: string;
   maxMembers: number;
   deadline: string;
+  maxProjects: number;
   complexity: TaskComplexity;
   tags: TaskTag[];
   files: ServerFile[];

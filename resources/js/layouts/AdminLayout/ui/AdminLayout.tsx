@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
+import { Toaster } from "@/shared/ui/Toaster";
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -11,6 +12,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         <main className="flex flex-col p-4 gap-6 lg:p-6">
           {children}
         </main>
+         <Toaster />
       </div>
     </div>
   );

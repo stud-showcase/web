@@ -6,7 +6,7 @@ import { useForm } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
-import { COMPLEXITIES } from "@/entities/Task";
+import { COMPLEXITIES, TaskTag } from "@/entities/Task";
 import {
   Select,
   SelectContent,
@@ -18,49 +18,56 @@ import {
 } from "@/shared/ui/Select";
 import { FileUpload } from "@/shared/ui/FileUpload";
 import { MultiSelect } from "@/shared/ui/MultiSelect";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
 type TaskForm = {
   title: string;
   description: string;
   customer: string;
-  customerEmail: string | null;
-  customerPhone: string | null;
+  customerEmail: string;
+  customerPhone: string;
   maxMembers: string;
   deadline: string;
-  complexity: string;
+  complexityId: string;
+  maxProjects: string;
   files: File[];
   tags: string[];
 };
 
-const tags = [
-  { value: "react", label: "React" },
-  { value: "angular", label: "Angular" },
-  { value: "vue", label: "Vue" },
-  { value: "svelte", label: "Svelte" },
-  { value: "ember", label: "Ember" },
-];
+export function TaskCreateForm({ tags }: { tags: TaskTag[] }) {
+  const tagsOptions = tags.map((tag) => ({
+    label: tag.name,
+    value: tag.id.toString(),
+  }));
 
-export function TaskCreateForm() {
-  const { data, setData, post, transform, errors, reset, clearErrors } =
+  const { data, setData, post, errors, reset, clearErrors } =
     useForm<TaskForm>({
       title: "",
       description: "",
       customer: "",
       customerEmail: "",
       customerPhone: "",
-      maxMembers: "",
+      maxMembers: "10",
       deadline: "",
-      complexity: "",
+      complexityId: "",
+      maxProjects: "",
       files: [],
       tags: [],
     });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    post("/admin/tasks/create", {
+      onSuccess: () =>
+        showSuccessToast("Задача успешно добавлена в банк задач"),
+      onError: () => showErrorToast("Произошла ошибка в ходе создания задачи"),
+    });
   };
 
   const handleReset = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    reset();
+    clearErrors();
   };
 
   return (
@@ -118,7 +125,7 @@ export function TaskCreateForm() {
           <Label htmlFor="customer">Заказчик *</Label>
           <Input
             id="customer"
-            placeholder="Введите заказчика..."
+            placeholder="Укажите заказчика..."
             type="text"
             value={data.customer}
             onChange={(e) => setData("customer", e.target.value)}
@@ -164,11 +171,12 @@ export function TaskCreateForm() {
         <div className="space-y-2">
           <Label htmlFor="complexity">Сложность *</Label>
           <Select
-            value={data.complexity}
-            onValueChange={(value) => setData("complexity", value)}
+            value={data.complexityId}
+            onValueChange={(value) => setData("complexityId", value)}
+            required
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Выберите сложность проекта" />
+              <SelectValue placeholder="Выберите сложность проекта..." />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -184,44 +192,15 @@ export function TaskCreateForm() {
               </SelectGroup>
             </SelectContent>
           </Select>
-          {errors.complexity && (
-            <ValidationErrorText text={errors.complexity} />
+          {errors.complexityId && (
+            <ValidationErrorText text={errors.complexityId} />
           )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="maxMembers">Максимально участников *</Label>
-          <Input
-            id="maxMembers"
-            placeholder="Введите максимальное количество участников..."
-            type="number"
-            value={data.maxMembers}
-            onChange={(e) => setData("maxMembers", e.target.value)}
-            required
-            className="w-full"
-          />
-          {errors.maxMembers && (
-            <ValidationErrorText text={errors.maxMembers} />
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="deadline">Крайний срок *</Label>
-          <Input
-            type="date"
-            id="deadline"
-            value={data.deadline}
-            onChange={(e) => setData("deadline", e.target.value)}
-            required
-            className="w-full"
-          />
-          {errors.deadline && <ValidationErrorText text={errors.deadline} />}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="tags">Тэги</Label>
           <MultiSelect
-            options={tags}
+            options={tagsOptions}
             onValueChange={(value) => setData("tags", value)}
             defaultValue={data.tags}
             placeholder="Выберите тэги..."
@@ -230,6 +209,48 @@ export function TaskCreateForm() {
           />
           {errors.tags && <ValidationErrorText text={errors.tags} />}
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="maxMembers">Ограничение по числу участников *</Label>
+        <Input
+          id="maxMembers"
+          placeholder="Введите максимальное количество участников..."
+          type="number"
+          value={data.maxMembers}
+          onChange={(e) => setData("maxMembers", e.target.value)}
+          required
+          className="w-full"
+        />
+        {errors.maxMembers && <ValidationErrorText text={errors.maxMembers} />}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="maxProjects">Ограничение по числу проектов</Label>
+        <Input
+          type="number"
+          id="maxProjects"
+          placeholder="Введите максимальное число проектов..."
+          value={data.maxProjects}
+          onChange={(e) => setData("maxProjects", e.target.value)}
+          className="w-full"
+        />
+        {errors.maxProjects && (
+          <ValidationErrorText text={errors.maxProjects} />
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="deadline">Крайний срок *</Label>
+        <Input
+          type="date"
+          id="deadline"
+          value={data.deadline}
+          onChange={(e) => setData("deadline", e.target.value)}
+          required
+          className="w-full"
+        />
+        {errors.deadline && <ValidationErrorText text={errors.deadline} />}
       </div>
 
       <div className="flex gap-2">
@@ -241,4 +262,3 @@ export function TaskCreateForm() {
     </form>
   );
 }
-// TODO: добавить поле maxProjects

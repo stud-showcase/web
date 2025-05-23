@@ -86,7 +86,6 @@ class AdminController extends Controller
     public function indexTaskCreate(): \Inertia\Response
     {
         return Inertia::render('admin/TaskCreate', [
-            'complexities' => Complexity::all()->toArray(),
             'tags' => Tag::all()->toArray(),
         ]);
     }

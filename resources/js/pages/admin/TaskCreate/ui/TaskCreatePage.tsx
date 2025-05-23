@@ -1,5 +1,4 @@
 import { AdminLayout } from "@/layouts/AdminLayout";
-import { Heading } from "@/shared/ui/Heading";
 import { Head, Link } from "@inertiajs/react";
 import { TaskCreateForm } from "./TaskCreateForm";
 import {
@@ -10,8 +9,9 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/shared/ui/Breadcrumb";
+import { TaskTag } from "@/entities/Task";
 
-export default function TaskPage() {
+export default function TaskPage({tags}: {tags: TaskTag[]}) {
   return (
     <>
       <Head>
@@ -31,7 +31,7 @@ export default function TaskPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <TaskCreateForm />
+        <TaskCreateForm tags={tags} />
       </AdminLayout>
     </>
   );
