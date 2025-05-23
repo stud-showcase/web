@@ -1,52 +1,59 @@
 import { DataTable } from "@/shared/ui/DataTable";
-import { getFullName, User, UserRole } from "@/entities/User";
+import { User } from "@/entities/User";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
-import { Badge } from "@/shared/ui/Badge";
+import { columns } from "./columns";
+import { UsersFiltersContext } from "../context/UsersFiltersContext";
+import { useContext } from "react";
+import { MultiSelect } from "@/shared/ui/MultiSelect";
 
-const roleTranslations: Record<UserRole, string> = {
-  admin: "Администратор",
-  mentor: "Наставник",
-  student: "Студент",
-};
+function Filters() {
+  const { filters, setFilters } = useContext(UsersFiltersContext);
 
-const columns = [
-  { title: "ID", cell: (user: User) => user.id },
-  {
-    title: "ФИО",
-    cell: (user: User) => {
-      return getFullName(user.firstName, user.secondName, user.lastName);
-    },
-  },
-  {
-    title: "Email",
-    cell: (user: User) => {
-      return user.email;
-    },
-  },
-  {
-    title: "Роли",
-    cell: (user: User) => {
-      const roles = user.roles;
+  const rolesOptions = [
+    { label: "Студент", value: "student" },
+    { label: "Наставник", value: "mentor" },
+    { label: "Администратор", value: "admin" },
+  ];
 
-      return (
-        <div>
-          {roles.length > 0 ? (
-            <div className="flex gap-1">
-              {roles.map((role, index) => (
-                <Badge key={index} variant="secondary">
-                  {roleTranslations[role]}
-                </Badge>
-              ))}
-            </div>
-          ) : (
-            <span>-</span>
-          )}
-        </div>
-      );
-    },
-  },
-];
+  return (
+    <>
+      <MultiSelect
+        id="roles"
+        options={rolesOptions}
+        defaultValue={filters.roles}
+        onValueChange={(value) => setFilters({ ...filters, roles: value })}
+        placeholder="Выберите роль пользователя..."
+        maxCount={1}
+      />
+    </>
+  );
+}
 
-export function UsersTable({ users }: { users: ServerPaginatedData<User> }) {
-  return <DataTable data={users} columns={columns} route="/admin/users" />;
+const route = "/admin/users";
+
+export function UsersTable({
+  users,
+  handleSearch,
+  handleFiltersApply,
+  handleFiltersReset,
+}: {
+  users: ServerPaginatedData<User>;
+  handleSearch: (route: string, value: string) => void;
+  handleFiltersApply: (route: string) => void;
+  handleFiltersReset: (route: string) => void;
+}) {
+  const { filters } = useContext(UsersFiltersContext);
+
+  return (
+    <DataTable
+      data={users}
+      columns={columns}
+      rowRoute="/admin/users"
+      search={filters.search ?? ""}
+      onSearch={(value) => handleSearch(route, value)}
+      onFiltersApply={() => handleFiltersApply(route)}
+      onFiltersReset={() => handleFiltersReset(route)}
+      filtersSlot={<Filters />}
+    />
+  );
 }

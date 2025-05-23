@@ -4,16 +4,26 @@ import { Head } from "@inertiajs/react";
 import { VacanciesTable } from "./VacanciesTable";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { ExtendedVacancy } from "../model/ExtendedVacancy";
+import { useFilters } from "@/shared/hooks/useFilters";
+import { VacanciesFilters } from "../model/VacanciesFilters";
+import { VacanciesFiltersContext } from "../context/VacanciesFiltersContext";
 
 type Props = {
   vacancies: ServerPaginatedData<ExtendedVacancy>;
-  filters: any;
-  availableFilters: any;
+  filters: VacanciesFilters;
+};
+
+const defaultVacanciesFilters: VacanciesFilters = {
+  search: undefined,
 };
 
 export default function VacanciesPage(props: Props) {
-  const { vacancies, availableFilters, filters: appliedFilters } = props;
-  console.log(vacancies);
+  const { vacancies, filters: appliedFilters } = props;
+
+  const { filters, setFilters, handleSearch } = useFilters<VacanciesFilters>(
+    defaultVacanciesFilters,
+    appliedFilters
+  );
 
   return (
     <>
@@ -22,7 +32,9 @@ export default function VacanciesPage(props: Props) {
       </Head>
       <AdminLayout>
         <Heading level={1}>Вакансии</Heading>
-        <VacanciesTable vacancies={vacancies} />
+        <VacanciesFiltersContext.Provider value={{ filters, setFilters }}>
+          <VacanciesTable vacancies={vacancies} handleSearch={handleSearch} />
+        </VacanciesFiltersContext.Provider>
       </AdminLayout>
     </>
   );

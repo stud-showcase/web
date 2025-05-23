@@ -4,16 +4,30 @@ import { Head } from "@inertiajs/react";
 import { UsersTable } from "./UsersTable";
 import { User } from "@/entities/User";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
+import { useFilters } from "@/shared/hooks/useFilters";
+import { UsersFilters } from "../model/UsersFilters";
+import { UsersFiltersContext } from "../context/UsersFiltersContext";
 
 type Props = {
   users: ServerPaginatedData<User>;
-  filters: any;
-  availableFilters: any;
+  filters: UsersFilters;
+};
+
+const defaultUsersFilters: UsersFilters = {
+  search: undefined,
+  roles: [],
 };
 
 export default function UsersPage(props: Props) {
-  const { users, availableFilters, filters: appliedFilters } = props;
-  console.log(users)
+  const { users, filters: appliedFilters } = props;
+
+  const {
+    filters,
+    setFilters,
+    handleFiltersApply,
+    handleFiltersReset,
+    handleSearch,
+  } = useFilters<UsersFilters>(defaultUsersFilters, appliedFilters);
 
   return (
     <>
@@ -22,7 +36,14 @@ export default function UsersPage(props: Props) {
       </Head>
       <AdminLayout>
         <Heading level={1}>Пользователи</Heading>
-        <UsersTable users={users} />
+        <UsersFiltersContext.Provider value={{ filters, setFilters }}>
+          <UsersTable
+            users={users}
+            handleFiltersApply={handleFiltersApply}
+            handleFiltersReset={handleFiltersReset}
+            handleSearch={handleSearch}
+          />
+        </UsersFiltersContext.Provider>
       </AdminLayout>
     </>
   );
