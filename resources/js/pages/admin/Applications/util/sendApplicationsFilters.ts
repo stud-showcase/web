@@ -8,5 +8,5 @@ export const sendApplicationsFilters = (
   currentTab?: "my" | "all"
 ) => {
   let url = tabToUrl[currentTab ?? getCurrentTab()];
-  router.get(url, filters, { preserveScroll: true });
+  router.get(url, filters, { preserveScroll: true, preserveState: true });
 };

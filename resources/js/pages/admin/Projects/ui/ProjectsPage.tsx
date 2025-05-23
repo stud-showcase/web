@@ -4,15 +4,24 @@ import { Head } from "@inertiajs/react";
 import { ProjectsTable } from "./ProjectsTable";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { Project } from "@/entities/Project";
+import { ProjectsFilters } from "../model/ProjectsFilters";
+import { useState } from "react";
+import { defaultProjectFilters } from "../consts/defaultProjectFilters";
+import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
 
 type Props = {
   projects: ServerPaginatedData<Project>;
-  filters: any;
-  availableFilters: any;
+  filters: ProjectsFilters;
 };
 
 export default function ProjectsPage(props: Props) {
-  const { projects, availableFilters, filters: appliedFilters } = props;
+  const { projects, filters: appliedFilters } = props;
+
+  const [filters, setFilters] = useState<ProjectsFilters>({
+    ...defaultProjectFilters,
+    ...appliedFilters,
+  });
+
   console.log(projects);
 
   return (
@@ -22,7 +31,9 @@ export default function ProjectsPage(props: Props) {
       </Head>
       <AdminLayout>
         <Heading level={1}>Проекты</Heading>
-        <ProjectsTable projects={projects} />
+        <ProjectsFiltersContext.Provider value={{ filters, setFilters }}>
+          <ProjectsTable projects={projects} />
+        </ProjectsFiltersContext.Provider>
       </AdminLayout>
     </>
   );

@@ -94,6 +94,7 @@ class ProjectDto
             'name' => $this->name,
             'annotation' => $this->annotation,
             'mentor' => $this->mentor,
+            'isHiring' => $this->isHiring,
             'status' => $this->status,
             'canJoin' => $this->canJoin,
         ];
