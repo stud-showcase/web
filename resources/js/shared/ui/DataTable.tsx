@@ -100,10 +100,10 @@ function DataTablePagination<TData>({ paginatedData }: PaginationProps<TData>) {
   );
 }
 
-interface DataTableProps<TData extends { id: string | number }> {
+interface DataTableProps<TData> {
   data: ServerPaginatedData<TData>;
   columns: ColumnDef<TData>[];
-  route: string;
+  rowRoute: string;
   search: string;
   onSearch: (value: string) => void;
   onFiltersApply?: () => void;
@@ -111,7 +111,7 @@ interface DataTableProps<TData extends { id: string | number }> {
   filtersSlot?: ReactNode;
 }
 
-interface ColumnDef<TData> {
+export interface ColumnDef<TData> {
   title: string;
   cell: (data: TData) => React.ReactNode;
 }
@@ -125,10 +125,10 @@ interface ColumnDef<TData> {
 - Редактирование пользователя (страница пользователя)
 - Управление заявками
 */
-export function DataTable<TData extends { id: string | number }>({
+export function DataTable<TData extends { id: number | string }>({
   data,
   columns,
-  route,
+  rowRoute,
   search,
   onSearch,
   onFiltersApply,
@@ -206,7 +206,7 @@ export function DataTable<TData extends { id: string | number }>({
                   </TableCell>
                 ))}
                 <TableCell className="max-w-[200px] truncate text-primary">
-                  <Link href={`${route}/${item.id}`}>Перейти</Link>
+                  <Link href={`${rowRoute}/${item.id}`}>Перейти</Link>
                 </TableCell>
               </TableRow>
             ))

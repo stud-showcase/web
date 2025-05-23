@@ -5,24 +5,30 @@ import { ProjectsTable } from "./ProjectsTable";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { Project } from "@/entities/Project";
 import { ProjectsFilters } from "../model/ProjectsFilters";
-import { useState } from "react";
-import { defaultProjectFilters } from "../consts/defaultProjectFilters";
 import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
+import { useFilters } from "@/shared/hooks/useFilters";
 
 type Props = {
   projects: ServerPaginatedData<Project>;
   filters: ProjectsFilters;
 };
 
+const defaultProjectsFilters: ProjectsFilters = {
+  search: undefined,
+  isHiring: undefined,
+  status: [],
+};
+
 export default function ProjectsPage(props: Props) {
   const { projects, filters: appliedFilters } = props;
 
-  const [filters, setFilters] = useState<ProjectsFilters>({
-    ...defaultProjectFilters,
-    ...appliedFilters,
-  });
-
-  console.log(projects);
+  const {
+    filters,
+    setFilters,
+    handleFiltersApply,
+    handleFiltersReset,
+    handleSearch,
+  } = useFilters<ProjectsFilters>(defaultProjectsFilters, appliedFilters);
 
   return (
     <>
@@ -32,7 +38,12 @@ export default function ProjectsPage(props: Props) {
       <AdminLayout>
         <Heading level={1}>Проекты</Heading>
         <ProjectsFiltersContext.Provider value={{ filters, setFilters }}>
-          <ProjectsTable projects={projects} />
+          <ProjectsTable
+            projects={projects}
+            handleFiltersApply={handleFiltersApply}
+            handleFiltersReset={handleFiltersReset}
+            handleSearch={handleSearch}
+          />
         </ProjectsFiltersContext.Provider>
       </AdminLayout>
     </>

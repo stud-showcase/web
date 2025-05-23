@@ -4,9 +4,6 @@ import { DataTable } from "@/shared/ui/DataTable";
 import { columns } from "./columns";
 import { useContext } from "react";
 import { TaskBankFiltersContext } from "../context/TaskBankFiltersContext";
-import { useDebounce } from "@/shared/hooks/useDebounce";
-import { sendTaskBankFilters } from "../util/sendTaskBankFilters";
-import { defaultTaskBankFilters } from "../consts/defaultTaskBankFilters";
 import { MultiSelect } from "@/shared/ui/MultiSelect";
 
 function Filters({ customers }: { customers: string[] }) {
@@ -44,41 +41,32 @@ function Filters({ customers }: { customers: string[] }) {
   );
 }
 
+const route = "/admin/tasks";
+
 export function TaskBankTable({
   tasks,
   customers,
+  handleSearch,
+  handleFiltersApply,
+  handleFiltersReset,
 }: {
   tasks: ServerPaginatedData<Task>;
   customers: string[];
+  handleSearch: (route: string, value: string) => void;
+  handleFiltersApply: (route: string) => void;
+  handleFiltersReset: (route: string) => void;
 }) {
-  const { filters, setFilters } = useContext(TaskBankFiltersContext);
-
-  const debouncedSendFilters = useDebounce(sendTaskBankFilters, 500);
-
-  const handleSearch = (value: string) => {
-    const newFilters = { ...filters, search: value || undefined };
-    setFilters(newFilters);
-    debouncedSendFilters(newFilters);
-  };
-
-  const handleFiltersApply = () => {
-    sendTaskBankFilters(filters);
-  };
-
-  const handleFiltersReset = () => {
-    setFilters(defaultTaskBankFilters);
-    sendTaskBankFilters(defaultTaskBankFilters);
-  };
+  const { filters } = useContext(TaskBankFiltersContext);
 
   return (
     <DataTable
       data={tasks}
       columns={columns}
-      route="/admin/tasks"
+      rowRoute={route}
       search={filters.search ?? ""}
-      onSearch={handleSearch}
-      onFiltersApply={handleFiltersApply}
-      onFiltersReset={handleFiltersReset}
+      onSearch={(value) => handleSearch(route, value)}
+      onFiltersApply={() => handleFiltersApply(route)}
+      onFiltersReset={() => handleFiltersReset(route)}
       filtersSlot={<Filters customers={customers} />}
     />
   );

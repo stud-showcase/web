@@ -6,10 +6,9 @@ import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { Task } from "@/entities/Task";
 import { Button } from "@/shared/ui/Button";
 import { Plus } from "lucide-react";
-import { TaskBankFilters } from "../model/TaskBankFilters";
-import { useState } from "react";
-import { defaultTaskBankFilters } from "../consts/defaultTaskBankFilters";
 import { TaskBankFiltersContext } from "../context/TaskBankFiltersContext";
+import { useFilters } from "@/shared/hooks/useFilters";
+import { TaskBankFilters } from "../model/TaskBankFilters";
 
 type Props = {
   tasks: ServerPaginatedData<Task>;
@@ -17,13 +16,25 @@ type Props = {
   availableFilters: { customers: string[] };
 };
 
+const defaultTaskBankFilters: TaskBankFilters = {
+  search: undefined,
+  complexity: [],
+  customers: [],
+};
+
 export default function TaskBankPage(props: Props) {
   const { tasks, availableFilters, filters: appliedFilters } = props;
 
-  const [filters, setFilters] = useState<TaskBankFilters>({
-    ...defaultTaskBankFilters,
-    ...appliedFilters,
-  });
+  const {
+    filters,
+    setFilters,
+    handleFiltersApply,
+    handleFiltersReset,
+    handleSearch,
+  } = useFilters<TaskBankFilters>(
+    defaultTaskBankFilters,
+    appliedFilters,
+  );
 
   return (
     <>
@@ -41,7 +52,13 @@ export default function TaskBankPage(props: Props) {
           </Button>
         </div>
         <TaskBankFiltersContext.Provider value={{ filters, setFilters }}>
-          <TaskBankTable tasks={tasks} customers={availableFilters.customers} />
+          <TaskBankTable
+            tasks={tasks}
+            customers={availableFilters.customers}
+            handleSearch={handleSearch}
+            handleFiltersApply={handleFiltersApply}
+            handleFiltersReset={handleFiltersReset}
+          />
         </TaskBankFiltersContext.Provider>
       </AdminLayout>
     </>

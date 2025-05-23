@@ -241,3 +241,4 @@ export function TaskCreateForm() {
     </form>
   );
 }
+// TODO: добавить поле maxProjects

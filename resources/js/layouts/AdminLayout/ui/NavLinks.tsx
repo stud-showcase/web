@@ -26,7 +26,10 @@ export function NavLinks({ mobile }: Props) {
         href="/admin/applications"
         icon={FileText}
         label="Заявки"
-        isActive={window.location.pathname.startsWith("/admin/applications")}
+        isActive={
+          window.location.pathname.startsWith("/admin/applications") ||
+          window.location.pathname.startsWith("/admin/myApplications")
+        }
         mobile={mobile}
       />
       <NavLink
@@ -43,7 +46,7 @@ export function NavLinks({ mobile }: Props) {
         isActive={window.location.pathname.startsWith("/admin/projects")}
         mobile={mobile}
       />
-        <NavLink
+      <NavLink
         href="/admin/vacancies"
         icon={Briefcase}
         label="Вакансии"

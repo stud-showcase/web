@@ -12,11 +12,10 @@ import {
   SelectValue,
 } from "@/shared/ui/Select";
 import { useContext } from "react";
-import { useDebounce } from "@/shared/hooks/useDebounce";
-import { sendApplicationsFilters } from "../util/sendApplicationsFilters";
 import { ApplicationsFiltersContext } from "../context/ApplicationsFiltersContext";
-import { defaultApplicationsFilters } from "../consts/defaultApplicationsFilters";
 import { columns } from "./columns";
+import { getCurrentTab } from "../util/getCurrentTab";
+import { tabToUrl } from "../consts/tabToUrl";
 
 function Filters({ customers }: { customers: string[] }) {
   const { filters, setFilters } = useContext(ApplicationsFiltersContext);
@@ -60,38 +59,28 @@ function Filters({ customers }: { customers: string[] }) {
 export function ApplicationsTable({
   applications,
   customers,
+  handleSearch,
+  handleFiltersApply,
+  handleFiltersReset,
 }: {
   applications: ServerPaginatedData<Application>;
   customers: string[];
+  handleSearch: (route: string, value: string) => void;
+  handleFiltersApply: (route: string) => void;
+  handleFiltersReset: (route: string) => void;
 }) {
-  const { filters, setFilters } = useContext(ApplicationsFiltersContext);
-
-  const debouncedSendFilters = useDebounce(sendApplicationsFilters, 500);
-
-  const handleSearch = (value: string) => {
-    const newFilters = { ...filters, search: value || undefined };
-    setFilters(newFilters);
-    debouncedSendFilters(newFilters);
-  };
-
-  const handleFiltersApply = () => {
-    sendApplicationsFilters(filters);
-  };
-
-  const handleFiltersReset = () => {
-    setFilters(defaultApplicationsFilters);
-    sendApplicationsFilters(defaultApplicationsFilters);
-  };
+  const { filters } = useContext(ApplicationsFiltersContext);
+  const route = tabToUrl[getCurrentTab()];
 
   return (
     <DataTable
       data={applications}
       columns={columns}
-      route="/admin/applications"
+      rowRoute={'/admin/applications'}
       search={filters.search ?? ""}
-      onSearch={handleSearch}
-      onFiltersApply={handleFiltersApply}
-      onFiltersReset={handleFiltersReset}
+      onSearch={(value) => handleSearch(route, value)}
+      onFiltersApply={() => handleFiltersApply(route)}
+      onFiltersReset={() => handleFiltersReset(route)}
       filtersSlot={<Filters customers={customers} />}
     />
   );

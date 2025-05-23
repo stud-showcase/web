@@ -6,11 +6,10 @@ import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { Application } from "@/entities/Application";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
 import { getCurrentTab } from "../util/getCurrentTab";
-import { sendApplicationsFilters } from "../util/sendApplicationsFilters";
 import { ApplicationsFilters } from "../model/ApplicationsFilters";
-import { useState } from "react";
-import { defaultApplicationsFilters } from "../consts/defaultApplicationsFilters";
 import { ApplicationsFiltersContext } from "../context/ApplicationsFiltersContext";
+import { useFilters } from "@/shared/hooks/useFilters";
+import { tabToUrl } from "../consts/tabToUrl";
 
 type Props = {
   taskRequests: ServerPaginatedData<Application>;
@@ -18,17 +17,28 @@ type Props = {
   availableFilters: { customers: string[] };
 };
 
+const defaultApplicationsFilters: ApplicationsFilters = {
+  customers: [],
+  withProject: undefined,
+  search: undefined,
+};
+
 export default function ApplicationsPage(props: Props) {
   const { taskRequests, availableFilters, filters: appliedFilters } = props;
 
-  const [filters, setFilters] = useState<ApplicationsFilters>({
-    ...defaultApplicationsFilters,
-    ...appliedFilters,
-  });
+  const {
+    filters,
+    setFilters,
+    handleFiltersApply,
+    handleFiltersReset,
+    handleSearch,
+  } = useFilters<ApplicationsFilters>(
+    defaultApplicationsFilters,
+    appliedFilters
+  );
 
   const handleTabChange = (value: string) => {
-    setFilters(defaultApplicationsFilters);
-    sendApplicationsFilters(defaultApplicationsFilters, value as "my" | "all");
+    handleFiltersReset(tabToUrl[value as "my" | "all"]);
   };
 
   return (
@@ -49,6 +59,9 @@ export default function ApplicationsPage(props: Props) {
                 <ApplicationsTable
                   applications={taskRequests}
                   customers={availableFilters.customers}
+                  handleFiltersApply={handleFiltersApply}
+                  handleFiltersReset={handleFiltersReset}
+                  handleSearch={handleSearch}
                 />
               </div>
             </TabsContent>
@@ -57,6 +70,9 @@ export default function ApplicationsPage(props: Props) {
                 <ApplicationsTable
                   applications={taskRequests}
                   customers={availableFilters.customers}
+                  handleFiltersApply={handleFiltersApply}
+                  handleFiltersReset={handleFiltersReset}
+                  handleSearch={handleSearch}
                 />
               </div>
             </TabsContent>

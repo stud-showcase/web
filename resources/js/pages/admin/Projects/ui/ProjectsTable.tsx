@@ -4,9 +4,6 @@ import { DataTable } from "@/shared/ui/DataTable";
 import { columns } from "./columns";
 import { useContext } from "react";
 import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
-import { useDebounce } from "@/shared/hooks/useDebounce";
-import { sendProjectsFilters } from "../util/sendProjectsFilters";
-import { defaultProjectFilters } from "../consts/defaultProjectFilters";
 import { MultiSelect } from "@/shared/ui/MultiSelect";
 import {
   Select,
@@ -55,40 +52,31 @@ function Filters() {
   );
 }
 
+const route = "/admin/projects";
+
 export function ProjectsTable({
   projects,
+  handleSearch,
+  handleFiltersApply,
+  handleFiltersReset,
 }: {
   projects: ServerPaginatedData<Project>;
+  handleSearch: (route: string, value: string) => void;
+  handleFiltersApply: (route: string) => void;
+  handleFiltersReset: (route: string) => void;
 }) {
-  const { filters, setFilters } = useContext(ProjectsFiltersContext);
-
-  const debouncedSendFilters = useDebounce(sendProjectsFilters, 500);
-
-  const handleSearch = (value: string) => {
-    const newFilters = { ...filters, search: value || undefined };
-    setFilters(newFilters);
-    debouncedSendFilters(newFilters);
-  };
-
-  const handleFiltersApply = () => {
-    sendProjectsFilters(filters);
-  };
-
-  const handleFiltersReset = () => {
-    setFilters(defaultProjectFilters);
-    sendProjectsFilters(defaultProjectFilters);
-  };
+  const { filters } = useContext(ProjectsFiltersContext);
 
   return (
     <DataTable
       data={projects}
       columns={columns}
-      route="/admin/projects"
+      rowRoute={route}
       search={filters.search ?? ""}
       filtersSlot={<Filters />}
-      onSearch={handleSearch}
-      onFiltersApply={handleFiltersApply}
-      onFiltersReset={handleFiltersReset}
+      onSearch={(value) => handleSearch(route, value)}
+      onFiltersApply={() => handleFiltersApply(route)}
+      onFiltersReset={() => handleFiltersReset(route)}
     />
   );
 }

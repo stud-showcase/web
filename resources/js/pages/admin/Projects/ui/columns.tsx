@@ -1,4 +1,8 @@
-import { Project, ProjectHiringBadge, ProjectStatusBadge } from "@/entities/Project";
+import {
+  Project,
+  ProjectHiringBadge,
+  ProjectStatusBadge,
+} from "@/entities/Project";
 import { getFullName } from "@/entities/User";
 
 export const columns = [
