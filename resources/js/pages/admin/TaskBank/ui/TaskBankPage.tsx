@@ -5,7 +5,7 @@ import { TaskBankTable } from "./TaskBankTable";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { Task } from "@/entities/Task";
 import { Button } from "@/shared/ui/Button";
-import { Plus } from "lucide-react";
+import { Plus, Settings } from "lucide-react";
 import { TaskBankFiltersContext } from "../context/TaskBankFiltersContext";
 import { useFilters } from "@/shared/hooks/useFilters";
 import { TaskBankFilters } from "../model/TaskBankFilters";
@@ -31,10 +31,7 @@ export default function TaskBankPage(props: Props) {
     handleFiltersApply,
     handleFiltersReset,
     handleSearch,
-  } = useFilters<TaskBankFilters>(
-    defaultTaskBankFilters,
-    appliedFilters,
-  );
+  } = useFilters<TaskBankFilters>(defaultTaskBankFilters, appliedFilters);
 
   return (
     <>
@@ -44,12 +41,20 @@ export default function TaskBankPage(props: Props) {
       <AdminLayout>
         <div className="flex items-center justify-between">
           <Heading level={1}>Банк задач</Heading>
-          <Button size="sm" variant="outline" asChild>
-            <Link href="/admin/tasks/create">
-              <Plus />
-              Создать
-            </Link>
-          </Button>
+          <div className="flex gap-2 items-center">
+            <Button variant="outline" asChild>
+              <Link href="/admin/tasks/settings">
+                <Settings />
+                Настройки
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/admin/tasks/create">
+                <Plus />
+                Создать
+              </Link>
+            </Button>
+          </div>
         </div>
         <TaskBankFiltersContext.Provider value={{ filters, setFilters }}>
           <TaskBankTable

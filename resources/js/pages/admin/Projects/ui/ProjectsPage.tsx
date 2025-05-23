@@ -1,12 +1,14 @@
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { Heading } from "@/shared/ui/Heading";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { ProjectsTable } from "./ProjectsTable";
 import { ServerPaginatedData } from "@/shared/types/ServerPaginatedData";
 import { Project } from "@/entities/Project";
 import { ProjectsFilters } from "../model/ProjectsFilters";
 import { ProjectsFiltersContext } from "../context/ProjectsFiltersContext";
 import { useFilters } from "@/shared/hooks/useFilters";
+import { Button } from "@/shared/ui/Button";
+import { Settings } from "lucide-react";
 
 type Props = {
   projects: ServerPaginatedData<Project>;
@@ -36,7 +38,15 @@ export default function ProjectsPage(props: Props) {
         <title>Проекты</title>
       </Head>
       <AdminLayout>
-        <Heading level={1}>Проекты</Heading>
+        <div className="flex gap-2 justify-between items-center">
+          <Heading level={1}>Проекты</Heading>
+          <Button variant="outline" asChild>
+            <Link href="/admin/projects/settings">
+              <Settings />
+              Настройки
+            </Link>
+          </Button>
+        </div>
         <ProjectsFiltersContext.Provider value={{ filters, setFilters }}>
           <ProjectsTable
             projects={projects}

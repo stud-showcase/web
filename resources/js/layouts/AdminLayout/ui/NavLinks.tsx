@@ -13,13 +13,15 @@ type Props = {
 };
 
 export function NavLinks({ mobile }: Props) {
+  const pathname = window.location.pathname;
+
   return (
     <>
       <NavLink
         href="/admin/dashboard"
         icon={LayoutDashboard}
         label="Дашборд"
-        isActive={window.location.pathname.startsWith("/admin/dashboard")}
+        isActive={pathname.startsWith("/admin/dashboard")}
         mobile={mobile}
       />
       <NavLink
@@ -27,8 +29,8 @@ export function NavLinks({ mobile }: Props) {
         icon={FileText}
         label="Заявки"
         isActive={
-          window.location.pathname.startsWith("/admin/applications") ||
-          window.location.pathname.startsWith("/admin/myApplications")
+          pathname.startsWith("/admin/applications") ||
+          pathname.startsWith("/admin/myApplications")
         }
         mobile={mobile}
       />
@@ -36,28 +38,28 @@ export function NavLinks({ mobile }: Props) {
         href="/admin/tasks"
         icon={ClipboardList}
         label="Банк задач"
-        isActive={window.location.pathname.startsWith("/admin/tasks")}
+        isActive={pathname.startsWith("/admin/tasks")}
         mobile={mobile}
       />
       <NavLink
         href="/admin/projects"
         icon={FolderKanban}
         label="Проекты"
-        isActive={window.location.pathname.startsWith("/admin/projects")}
+        isActive={pathname.startsWith("/admin/projects")}
         mobile={mobile}
       />
       <NavLink
         href="/admin/vacancies"
         icon={Briefcase}
         label="Вакансии"
-        isActive={window.location.pathname.startsWith("/admin/vacancies")}
+        isActive={pathname.startsWith("/admin/vacancies")}
         mobile={mobile}
       />
       <NavLink
         href="/admin/users"
         icon={Users}
         label="Пользователи"
-        isActive={window.location.pathname.startsWith("/admin/users")}
+        isActive={pathname.startsWith("/admin/users")}
         mobile={mobile}
       />
     </>

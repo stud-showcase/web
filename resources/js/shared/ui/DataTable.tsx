@@ -148,9 +148,8 @@ export function DataTable<TData extends { id: number | string }>({
         {filtersSlot && (
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" size="icon">
                 <Filter />
-                Фильтры
               </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-96">

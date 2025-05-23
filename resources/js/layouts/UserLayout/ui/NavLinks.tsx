@@ -5,12 +5,14 @@ type Props = {
 };
 
 export function NavLinks({ mobile }: Props) {
+  const pathname = window.location.pathname;
+
   return (
     <>
       <NavLink
         href="/"
         withUnderline={!mobile}
-        isActive={window.location.pathname === "/"}
+        isActive={pathname === "/"}
       >
         Главная
       </NavLink>
@@ -18,8 +20,8 @@ export function NavLinks({ mobile }: Props) {
         href="/projects"
         withUnderline={!mobile}
         isActive={
-          window.location.pathname.startsWith("/projects") ||
-          window.location.pathname.startsWith("/myProjects")
+          pathname.startsWith("/projects") ||
+          pathname.startsWith("/myProjects")
         }
       >
         Проекты
@@ -27,21 +29,21 @@ export function NavLinks({ mobile }: Props) {
       <NavLink
         href="/tasks"
         withUnderline={!mobile}
-        isActive={window.location.pathname.startsWith("/tasks")}
+        isActive={pathname.startsWith("/tasks")}
       >
         Банк задач
       </NavLink>
       <NavLink
         href="/vacancies"
         withUnderline={!mobile}
-        isActive={window.location.pathname.startsWith("/vacancies")}
+        isActive={pathname.startsWith("/vacancies")}
       >
         Вакансии
       </NavLink>
       <NavLink
         href="/application"
         withUnderline={!mobile}
-        isActive={window.location.pathname.startsWith("/application")}
+        isActive={pathname.startsWith("/application")}
       >
         Заявка
       </NavLink>
