@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ApproveTaskRequestRequest;
+use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\DeleteTaskFileRequest;
+use App\Http\Requests\UpdateSettingsRequest;
+use App\Http\Requests\UpdateTagRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Requests\UpdateTaskRequestMentorRequest;
 use App\Http\Requests\UploadTaskFileRequest;
-use App\Models\Tag;
-use App\Models\Task;
-use App\Models\TaskRequest;
 use App\Services\ProjectService;
 use App\Services\UserService;
 use App\Services\TaskService;
@@ -78,6 +78,32 @@ class AdminController extends Controller
         return Inertia::render('admin/Task', [
             'task' => $task,
         ]);
+    }
+
+    public function indexTaskSettings(): \Inertia\Response
+    {
+        return Inertia::render('admin/TaskBankSettings', [
+            'tags' => $this->taskService->getAvailableFilters(['tags']),
+        ]);
+    }
+
+    public function indexProjectSettings(): \Inertia\Response
+    {
+        $settings = $this->taskService->getSettings();
+        return Inertia::render('admin/ProjectsSettings', [
+            'settings' => $settings,
+        ]);
+    }
+
+    public function updateSettings(UpdateSettingsRequest $request)
+    {
+        try {
+            $this->taskService->updateSettings($request->validated());
+            redirect()->route('admin.projects.settings')->with('success', 'Настройки успешно обновлены');
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления настроек: {$e->getMessage()}");
+            return redirect()->back()->withErrors(['error' => 'Не удалось обновить настройки']);
+        }
     }
 
     public function indexTaskCreate(): \Inertia\Response
@@ -182,16 +208,6 @@ class AdminController extends Controller
         ]);
     }
 
-    public function vacancies(Request $request): \Inertia\Response
-    {
-        $filters = $request->only(['search']);
-        $vacancies = $this->vacancyService->getAdminVacancies($filters);
-        return Inertia::render('admin/Vacancies', [
-            'vacancies' => $vacancies,
-            'filters' => $filters,
-        ]);
-    }
-
     public function deleteTaskRequest(Request $request, int $id): RedirectResponse
     {
         $this->taskService->deleteTaskRequest($id);
@@ -210,5 +226,50 @@ class AdminController extends Controller
         $data = $request->validated();
         $this->taskService->updateTaskRequestResponsibleUser($id, $data['responsibleUserId']);
         return redirect()->route('admin.applications.index')->with('success', 'Ответственный успешно обновлен');
+    }
+
+    public function createTag(CreateTagRequest $request): RedirectResponse
+    {
+        try {
+            $data = $request->validated();
+            $this->taskService->createTag($data['name']);
+            return redirect()->route('admin.tasks.settings')->with('success', 'Тег успешно создан');
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания тега: {$e->getMessage()}");
+            return redirect()->back()->withErrors(['error' => 'Не удалось создать тег']);
+        }
+    }
+
+    public function updateTag(UpdateTagRequest $request, int $id): RedirectResponse
+    {
+        try {
+            $data = $request->validated();
+            $this->taskService->updateTag($id, $data['name']);
+            return redirect()->route('admin.tasks.settings')->with('success', 'Тег успешно обновлен');
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления тег: {$e->getMessage()}");
+            return redirect()->back()->withErrors(['error' => 'Не удалось обновить тег']);
+        }
+    }
+
+    public function deleteTag(int $id): RedirectResponse
+    {
+        try {
+            $this->taskService->deleteTag($id);
+            return redirect()->route('admin.tasks.settings')->with('success', 'Тег успешно удален');
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления тега {$id}: {$e->getMessage()}");
+            return redirect()->back()->withErrors(['error' => 'Не удалось удалить тег']);
+        }
+    }
+
+    public function vacancies(Request $request): \Inertia\Response
+    {
+        $filters = $request->only(['search']);
+        $vacancies = $this->vacancyService->getAdminVacancies($filters);
+        return Inertia::render('admin/Vacancies', [
+            'vacancies' => $vacancies,
+            'filters' => $filters,
+        ]);
     }
 }

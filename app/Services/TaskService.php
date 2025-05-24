@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Dto\TaskDto;
 use App\Dto\TaskRequestDto;
+use App\Repositories\SettingRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
 use App\Traits\PaginatesCollections;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +21,8 @@ class TaskService
 
     public function __construct(
         private TaskRepository $taskRepository,
-        private TagRepository $tagRepository
+        private TagRepository $tagRepository,
+        private SettingRepository $settingRepository,
     ) {}
 
     public function getAvailableFilters(array $requestedFilters, ?int $responsibleUserId = null): array
@@ -220,6 +223,62 @@ class TaskService
             $this->taskRepository->deleteFile($taskId, $fileId);
         } catch (Throwable $e) {
             Log::error("Ошибка удаления файла [$fileId] для задачи [$taskId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function createTag(string $name): void
+    {
+        try {
+            $this->tagRepository->createTag($name);
+        } catch (Throwable $e) {
+            Log::error("Ошибка создания тега [$name]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function updateTag(int $id, string $name): void
+    {
+        try {
+            $this->tagRepository->updateTag($id, $name);
+        } catch (Throwable $e) {
+            Log::error("Ошибка изменения тега [$id, $name]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function deleteTag(int $id): void
+    {
+        try {
+            $this->tagRepository->deleteTag($id);
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления тега [$id]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function getSettings(): array
+    {
+        try {
+            $settings = $this->settingRepository->getSettings();
+            return [
+                'startDate' => $settings?->start_date,
+                'endDate' => $settings?->end_date,
+            ];
+        } catch (Throwable $e) {
+            return [
+                'startDate' => null,
+                'endDate' => null,
+            ];
+        }
+    }
+
+    public function updateSettings(array $data): void
+    {
+        try {
+            $this->settingRepository->updateSettings($data);
+        } catch (Throwable $e) {
+            Log::error('Ошибка изменения настроек: ' . $e->getMessage(), $data);
             throw $e;
         }
     }

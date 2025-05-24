@@ -77,9 +77,10 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
     Route::get('/tasks', [AdminController::class, 'tasks'])->name('admin.tasks.index');
     Route::get('/tasks/create', [AdminController::class, 'indexTaskCreate'])->name('admin.tasks.create');
     Route::post('/tasks/create', [AdminController::class, 'createTask'])->name('admin.tasks.store');
-    Route::get('/tasks/settings', function() {
-        return Inertia::render('admin/TaskBankSettings');
-    });
+    Route::get('/tasks/settings', [AdminController::class, 'indexTaskSettings'])->name('admin.tasks.settings');
+    Route::post('/tags', [AdminController::class, 'createTag'])->name('admin.tag.create');
+    Route::put('/tags/{id}', [AdminController::class, 'updateTag'])->name('admin.tag.update');
+    Route::delete('/tags/{id}', [AdminController::class, 'deleteTag'])->name('admin.tag.delete');
     Route::get('/tasks/{id}', [AdminController::class, 'showTask'])->name('admin.tasks.show');
     Route::put('/tasks/{id}', [AdminController::class, 'updateTask'])->name('admin.tasks.update');
     Route::post('/tasks/{id}/files', [AdminController::class, 'uploadTaskFiles'])->name('admin.tasks.files.upload');
@@ -87,9 +88,8 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
     Route::delete('/tasks/{taskId}/files/{fileId}', [AdminController::class, 'deleteTaskFile'])->name('admin.tasks.files.delete');
 
     Route::get('/projects', [AdminController::class, 'projects'])->name('admin.projects.index');
-    Route::get('/projects/settings', function() {
-        return Inertia::render('admin/ProjectsSettings');
-    });
+    Route::get('/projects/settings', [AdminController::class, 'indexProjectSettings'])->name('admin.projects.settings');
+    Route::put('/project/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
     Route::get('/projects/{id}', function () {
         return Inertia::render('admin/Project');
     });
