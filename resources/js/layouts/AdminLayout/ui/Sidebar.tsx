@@ -14,11 +14,9 @@ export function Sidebar() {
             <SevSULogo color="blue" width={166} height={46} />
           </Link>
         </div>
-        <div className="flex-1">
-          <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            <NavLinks />
-          </nav>
-        </div>
+        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+          <NavLinks />
+        </nav>
       </div>
     </div>
   );

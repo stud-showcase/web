@@ -137,7 +137,7 @@ export function DataTable<TData extends { id: number | string }>({
   filtersSlot,
 }: DataTableProps<TData>) {
   return (
-    <div className="rounded-md border overflow-x-auto shadow-sm">
+    <div className="rounded-md border overflow-x-auto bg-background shadow-sm">
       <div className="py-3 px-4 border-b flex items-center justify-between">
         <Input
           value={search}
@@ -178,7 +178,7 @@ export function DataTable<TData extends { id: number | string }>({
         )}
       </div>
       <Table>
-        <TableHeader className="bg-muted/60">
+        <TableHeader>
           <TableRow>
             {columns.map((column) => (
               <TableHead

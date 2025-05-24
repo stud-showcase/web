@@ -9,10 +9,8 @@ export function AdminLayout({ children }: { children: ReactNode }) {
       <Sidebar />
       <div>
         <Header />
-        <main className="flex flex-col p-4 gap-6 lg:p-6">
-          {children}
-        </main>
-         <Toaster />
+        <main className="flex flex-col p-4 gap-6 lg:p-6">{children}</main>
+        <Toaster />
       </div>
     </div>
   );

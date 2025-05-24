@@ -14,12 +14,7 @@ import {
 import { TaskCreateForm, TaskForm } from "@/features/TaskCreateForm";
 import { Button } from "@/shared/ui/Button";
 import {
-  PersonStanding,
-  Trash,
-  Trash2,
-  UserCheck,
-  UserCog,
-  UserPlus,
+  Trash2, UserCog
 } from "lucide-react";
 import { Heading } from "@/shared/ui/Heading";
 

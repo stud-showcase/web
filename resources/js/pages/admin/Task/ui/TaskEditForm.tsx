@@ -5,7 +5,13 @@ import { Label } from "@/shared/ui/Label";
 import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
-import { COMPLEXITIES, TaskForm } from "@/entities/Task";
+import {
+  COMPLEXITIES,
+  getFlatTags,
+  getOptionsTags,
+  Task,
+  TaskForm,
+} from "@/entities/Task";
 import {
   Select,
   SelectContent,
@@ -15,33 +21,49 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/Select";
-import { FileUpload } from "@/shared/ui/FileUpload";
 import { MultiSelect } from "@/shared/ui/MultiSelect";
-import { ServerFile } from "@/shared/types/ServerFile";
-import { ServerFiles } from "./ServerFiles";
+import { useForm } from "@inertiajs/react";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
-type Props = {
-  data: TaskForm;
-  setData: (key: keyof TaskForm, value: any) => void;
-  errors: Partial<Record<keyof TaskForm, string>>;
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  handleReset: (e: FormEvent<HTMLFormElement>) => void;
-  tags: { label: string; value: string }[];
-  files?: ServerFile[];
-};
+type TaskEditForm = Omit<TaskForm, "files">;
 
-export function TaskCreateForm({
-  data,
-  setData,
-  errors,
-  handleSubmit,
-  handleReset,
-  tags,
-  files,
-}: Props) {
+export function TaskEditForm({ task }: { task: Task }) {
+  const tagsFlat = getFlatTags(task.tags);
+  const tagsOptions = getOptionsTags(task.tags); // TODO: принимать норм тэги
+
+  const { data, setData, put, errors, reset, clearErrors } =
+    useForm<TaskEditForm>({
+      title: task.title,
+      description: task.description,
+      customer: task.customer,
+      customerEmail: task.customerEmail || "",
+      customerPhone: task.customerPhone || "",
+      maxMembers: task.maxMembers.toString(),
+      deadline: task.deadline,
+      complexityId: task.complexity.id.toString(),
+      maxProjects: task.maxProjects?.toString() || "",
+      tags: tagsFlat,
+    });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    put(`/admin/tasks/${task.id}`, {
+      preserveScroll: true,
+      onSuccess: () => showSuccessToast("Задача успешно отредактирована"),
+      onError: () =>
+        showErrorToast("Произошла ошибка в ходе редактирования задачи"),
+    });
+  };
+
+  const handleReset = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    reset();
+    clearErrors();
+  };
+
   return (
     <form onSubmit={handleSubmit} onReset={handleReset}>
-      <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 items-start">
+      <div className="grid grid-cols-1  gap-4 items-start">
         <div className="space-y-4 border p-4 rounded-md shadow-sm">
           <Heading level={5}>Общая информация</Heading>
           <div className="space-y-2">
@@ -69,17 +91,6 @@ export function TaskCreateForm({
             {errors.description && (
               <ValidationErrorText text={errors.description} />
             )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="files">Файлы к описанию</Label>
-            <FileUpload
-              id="files"
-              files={data.files}
-              onFilesChange={(files) => setData("files", files)}
-            />
-            {errors.files && <ValidationErrorText text={errors.files} />}
-            {files && files.length > 0 && <ServerFiles serverFiles={files} />}
           </div>
         </div>
 
@@ -118,7 +129,7 @@ export function TaskCreateForm({
             <div className="space-y-2">
               <Label htmlFor="tags">Тэги</Label>
               <MultiSelect
-                options={tags}
+                options={tagsOptions}
                 onValueChange={(value) => setData("tags", value)}
                 defaultValue={data.tags}
                 placeholder="Выберите тэги..."
@@ -229,7 +240,7 @@ export function TaskCreateForm({
         <Button variant="outline" type="reset">
           Сбросить
         </Button>
-        <Button type="submit">Создать задачу</Button>
+        <Button type="submit">Сохранить</Button>
       </div>
     </form>
   );

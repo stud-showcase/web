@@ -10,4 +10,5 @@ export { TaskTagBadge } from "./ui/TaskTagBadge";
 export { TaskDeadlineBadge } from "./ui/TaskDeadlineBadge";
 export { TaskMembersBadge } from "./ui/TaskMembersBadge";
 
-export { getMemberLabel } from "./util/getMemberLabel";
+export { getMemberLabel } from "./util/members";
+export { getFlatTags, getOptionsTags } from "./util/tags";

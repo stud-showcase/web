@@ -8,11 +8,11 @@ export type Task = {
   canTake: boolean;
   description: string;
   customer: string;
-  customerEmail: string;
-  customerPhone: string;
+  customerEmail: string | null;
+  customerPhone: string | null;
   maxMembers: number;
   deadline: string;
-  maxProjects: number;
+  maxProjects: number | null;
   complexity: TaskComplexity;
   tags: TaskTag[];
   files: ServerFile[];

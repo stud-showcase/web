@@ -130,7 +130,7 @@ class AdminController extends Controller
         try {
             $data = $request->validated();
             $this->taskService->updateTask($id, $data);
-            return redirect()->route('admin.tasks.index')->with('success', 'Задача успешно обновлена');
+            return redirect()->route('admin.tasks.show', ["id" => $id])->with('success', 'Задача успешно обновлена');
         } catch (Throwable $e) {
             Log::error("Ошибка обновления задачи [$id]: " . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Не удалось обновить задачу']);

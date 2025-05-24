@@ -1,6 +1,6 @@
 import { Users } from "lucide-react";
 import { Badge } from "@/shared/ui/Badge";
-import { getMemberLabel } from "../util/getMemberLabel";
+import { getMemberLabel } from "../util/members";
 
 export function TaskMembersBadge({ maxMembers }: { maxMembers: number }) {
   return (
