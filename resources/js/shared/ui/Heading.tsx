@@ -1,7 +1,7 @@
 import { cn } from "@/shared/lib/utils";
 import { PropsWithChildren } from "react";
 
-type Level = 1 | 2 | 3 | 4;
+type Level = 1 | 2 | 3 | 4 | 5;
 
 type Props = {
   level: Level;
@@ -13,6 +13,7 @@ const headingStyles: Record<Level, string> = {
   2: "text-3xl font-semibold",
   3: "text-2xl font-semibold",
   4: "text-xl font-semibold",
+  5: "text-lg font-semibold",
 };
 
 const baseStyles = "scroll-m-20 tracking-tight";

@@ -12,6 +12,16 @@ import {
   BreadcrumbSeparator,
 } from "@/shared/ui/Breadcrumb";
 import { TaskCreateForm, TaskForm } from "@/features/TaskCreateForm";
+import { Button } from "@/shared/ui/Button";
+import {
+  PersonStanding,
+  Trash,
+  Trash2,
+  UserCheck,
+  UserCog,
+  UserPlus,
+} from "lucide-react";
+import { Heading } from "@/shared/ui/Heading";
 
 // TODO: убрать
 const tagsOptions = [
@@ -71,10 +81,23 @@ export default function ApplicationPage({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Обработка заявки</BreadcrumbPage>
+              <BreadcrumbPage>Заявка №{application.id}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+        <div className="flex items-center justify-between gap-2 ">
+          <Heading level={1}>Заявка №{application.id}</Heading>
+          <div className="flex gap-2">
+            <Button variant="outline">
+              <UserCog />
+              Назначить
+            </Button>
+            <Button variant="destructive">
+              <Trash2 />
+              Удалить
+            </Button>
+          </div>
+        </div>
         <TaskCreateForm
           data={data}
           setData={setData}

@@ -11,7 +11,7 @@ export function ServerFiles({ serverFiles }: { serverFiles: ServerFile[] }) {
         {serverFiles.map((file) => (
           <li
             key={file.id}
-            className="flex items-center justify-between py-2 px-3 bg-muted/60 rounded-lg"
+            className="flex items-center justify-between py-3 px-4 bg-background border rounded-lg"
           >
             <Text variant="small">{file.name}</Text>
             <a href={`/download/${encodeURIComponent(file.path)}`} download title={`Скачать ${file.name}`}>

@@ -203,7 +203,7 @@ class AdminController extends Controller
             'taskRequests' => $taskRequests,
             'filters' => $filters,
             'availableFilters' => [
-                'customers' => $this->taskService->getAvailableFilters(['taskRequestCustomers'], Auth::id()),
+                'customers' => $this->taskService->getAvailableFilters(['taskRequestCustomers'], (int)Auth::id()),
             ],
         ]);
     }

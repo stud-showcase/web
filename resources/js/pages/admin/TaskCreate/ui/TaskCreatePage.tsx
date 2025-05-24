@@ -12,12 +12,20 @@ import { TaskTag } from "@/entities/Task";
 import { TaskCreateForm, TaskForm } from "@/features/TaskCreateForm";
 import { FormEvent } from "react";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
+import { Heading } from "@/shared/ui/Heading";
 
-export default function TaskPage({ tags }: { tags: TaskTag[] }) {
-  const tagsOptions = tags.map((tag) => ({
-    label: tag.name,
-    value: tag.id.toString(),
-  }));
+// TODO: убрать
+const tagsOptions = [
+  { label: "Тэг1", value: "tag1" },
+  { label: "Тэг2", value: "tag2" },
+  { label: "Тэг3", value: "tag3" },
+];
+
+export default function TaskCreatePage({ tags }: { tags: TaskTag[] }) {
+  // const tagsOptions = tags.map((tag) => ({
+  //   label: tag.name,
+  //   value: tag.id.toString(),
+  // }));
 
   const { data, setData, post, errors, reset, clearErrors } = useForm<TaskForm>(
     {
@@ -69,6 +77,7 @@ export default function TaskPage({ tags }: { tags: TaskTag[] }) {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+        <Heading level={1}>Создание задачи</Heading>
         <TaskCreateForm
           data={data}
           setData={setData}
