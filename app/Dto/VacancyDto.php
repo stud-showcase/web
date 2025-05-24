@@ -38,7 +38,8 @@ class VacancyDto
             ] : null,
             canJoin: !$userId || (
                 !$vacancy->project->users->contains('id', $userId) &&
-                !$vacancy->projectInvites->contains('user_id', $userId)
+                !$vacancy->projectInvites->contains('user_id', $userId) &&
+                !$vacancy->project->mentor_id == $userId
             )
         );
     }

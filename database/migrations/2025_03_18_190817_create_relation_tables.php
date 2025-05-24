@@ -13,8 +13,8 @@ return new class extends Migration
             $table->uuid('user_id');
             $table->string('position')->nullable();
             $table->boolean('is_creator')->nullable();
-            $table->foreignId('project_id')->constrained('projects');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unique(['user_id', 'project_id']);
             $table->timestamps();
             $table->index('is_creator');
@@ -31,8 +31,8 @@ return new class extends Migration
         Schema::create('project_invites', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreignId('project_id')->constrained('projects');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->foreignId('vacancy_id')->nullable()->constrained('vacancies')->nullOnDelete();
             $table->timestamps();
             $table->index(['user_id', 'project_id']);
@@ -43,15 +43,17 @@ return new class extends Migration
             $table->string('title');
             $table->string('description', 1000);
             $table->string('customer');
-            $table->string('customer_email');
+            $table->string('customer_email')->nullable();
             $table->string('customer_phone')->nullable();
             $table->boolean('with_project')->default(false);
             $table->string('project_name')->nullable();
             $table->uuid('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->uuid('responsible_user_id')->nullable();
-            $table->foreign('responsible_user_id')->references('id')->on('users');
+            $table->foreign('responsible_user_id')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
+            $table->softDeletes();
+            $table->index('customer');
         });
 
         Schema::create('task_request_files', function (Blueprint $table) {

@@ -13,13 +13,14 @@ return new class extends Migration
             $table->string('title');
             $table->string('description', 1000);
             $table->string('customer');
-            $table->tinyInteger('max_projects')->default(1);
+            $table->tinyInteger('max_projects')->nullable();
             $table->tinyInteger('max_members');
             $table->string('customer_email')->nullable();
             $table->string('customer_phone')->nullable();
             $table->dateTime('deadline');
-            $table->foreignId('complexity_id')->constrained('complexities');
+            $table->foreignId('complexity_id')->nullable()->constrained('complexities')->nullOnDelete();
             $table->timestamps();
+            $table->softDeletes();
             $table->index('max_members');
             $table->index('customer');
             $table->index('deadline');

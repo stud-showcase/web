@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Dto\VacancyDto;
 use App\Models\Vacancy;
+use App\Repositories\ProjectRepository;
+use App\Repositories\TagRepository;
 use App\Repositories\VacancyRepository;
 use App\Traits\PaginatesCollections;
 use Illuminate\Support\Arr;
@@ -15,8 +17,21 @@ class VacancyService
     use PaginatesCollections;
 
     public function __construct(
-        private VacancyRepository $vacancyRepository
+        private VacancyRepository $vacancyRepository,
+        private ProjectRepository $projectRepository,
+        private TagRepository $tagRepository,
     ) {}
+
+    public function getAvailableFilters(array $requestedFilters): array
+    {
+        $filters = [];
+
+        if (in_array('tags', $requestedFilters)) {
+            $filters['tags'] = $this->tagRepository->getTagsForFilters()->toArray();
+        }
+
+        return $filters;
+    }
 
     public function getFormattedVacancies(array $filters = []): array
     {

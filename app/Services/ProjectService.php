@@ -7,9 +7,11 @@ use App\Models\Project;
 use App\Models\User;
 use App\Repositories\ProjectInviteRepository;
 use App\Repositories\ProjectRepository;
+use App\Repositories\TagRepository;
 use App\Repositories\UserProjectRepository;
 use App\Traits\PaginatesCollections;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -22,7 +24,21 @@ class ProjectService
         private ProjectRepository $projectRepository,
         private ProjectInviteRepository $inviteRepository,
         private UserProjectRepository $userProjectRepository,
+        private TagRepository $tagRepository
     ) {}
+
+    public function getAvailableFilters(array $requestedFilters, bool $forUser = false): array
+    {
+        $filters = [];
+
+        if (in_array('tags', $requestedFilters)) {
+            $filters['tags'] = $forUser
+                ? $this->projectRepository->getUserProjectTags(Auth::id())->toArray()
+                : $this->tagRepository->getTagsForFilters()->toArray();
+        }
+
+        return $filters;
+    }
 
     public function getProjects(array $filters = []): array
     {

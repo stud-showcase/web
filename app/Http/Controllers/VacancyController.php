@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateVacancyRequest;
 use App\Http\Requests\DeleteVacancyRequest;
 use App\Http\Requests\UpdateVacancyRequest;
-use App\Models\Tag;
 use App\Services\VacancyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,9 +25,7 @@ class VacancyController extends Controller
         return Inertia::render('user/Vacancies', [
             'vacancies' => $vacancies,
             'filters' => $filters,
-            'availableFilters' => [
-                'tags' => Tag::select('id', 'name')->get()->toArray(),
-            ]
+            'availableFilters' => $this->vacancyService->getAvailableFilters(['tags']),
         ]);
     }
 

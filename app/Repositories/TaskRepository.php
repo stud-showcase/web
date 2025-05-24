@@ -11,6 +11,7 @@ use App\Models\UserProject;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -293,7 +294,7 @@ class TaskRepository
                     'customer' => $data['customer'] ?? $taskRequest->customer,
                     'customer_email' => $data['customerEmail'] ?? $taskRequest->customer_email,
                     'customer_phone' => $data['customerPhone'] ?? $taskRequest->customer_phone,
-                    'max_projects' => $data['maxProjects'],
+                    'max_projects' => $data['maxProjects'] ?? null,
                     'max_members' => $data['maxMembers'],
                     'deadline' => $data['deadline'],
                     'complexity_id' => $data['complexityId'],
@@ -378,7 +379,7 @@ class TaskRepository
                     'title' => $data['title'],
                     'description' => $data['description'],
                     'customer' => $data['customer'],
-                    'max_projects' => $data['maxProjects'],
+                    'max_projects' => $data['maxProjects'] ?? null,
                     'max_members' => $data['maxMembers'],
                     'customer_email' => $data['customerEmail'] ?? null,
                     'customer_phone' => $data['customerPhone'] ?? null,
@@ -429,7 +430,7 @@ class TaskRepository
                 $task->update([
                     'title' => $data['title'],
                     'description' => $data['description'],
-                    'max_projects' => $data['maxProjects'],
+                    'max_projects' => $data['maxProjects'] ?? null,
                     'max_members' => $data['maxMembers'],
                     'customer' => $data['customer'],
                     'customer_email' => $data['customerEmail'] ?? null,
@@ -504,5 +505,25 @@ class TaskRepository
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось удалить файл: {$e->getMessage()}", 0, $e);
         }
+    }
+
+    public function getTaskCustomers(): Collection
+    {
+        $cacheKey = 'tasks:customers';
+        return Cache::tags(['tasks'])->remember($cacheKey, 3600, function () {
+            return Task::select('customer')->distinct()->pluck('customer');
+        });
+    }
+
+    public function getTaskRequestCustomers(?int $responsibleUserId = null): Collection
+    {
+        $cacheKey = 'task_requests:customers' . ($responsibleUserId ? ':user_' . $responsibleUserId : '');
+        return Cache::tags(['task_requests'])->remember($cacheKey, 3600, function () use ($responsibleUserId) {
+            $query = TaskRequest::select('customer')->distinct();
+            if ($responsibleUserId) {
+                $query->where('responsible_user_id', $responsibleUserId);
+            }
+            return $query->pluck('customer');
+        });
     }
 }

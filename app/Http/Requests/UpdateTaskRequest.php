@@ -23,7 +23,7 @@ class UpdateTaskRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'maxProjects' => 'required|integer|min:1|max:127',
+            'maxProjects' => 'nullable|integer|min:1|max:127',
             'maxMembers' => 'required|integer|min:1|max:127',
             'customer' => 'required|string|max:255',
             'customerEmail' => 'nullable|email|max:255',
@@ -44,7 +44,6 @@ class UpdateTaskRequest extends FormRequest
             'description.max' => 'Описание задачи не может превышать 1000 символов',
             'customer.required' => 'Имя заказчика обязательно для заполнения',
             'customer.max' => 'Имя заказчика не может превышать 255 символов',
-            'maxProjects.required' => 'Максимальное количество проектов обязательно',
             'maxProjects.min' => 'Максимальное количество проектов должно быть не менее 1',
             'maxProjects.max' => 'Максимальное количество проектов не может превышать 127',
             'maxMembers.required' => 'Максимальное количество участников обязательно',

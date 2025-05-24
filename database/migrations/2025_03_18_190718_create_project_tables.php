@@ -15,14 +15,15 @@ return new class extends Migration
 
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('task_id')->constrained('tasks');
-            $table->foreignId('status_id')->constrained('project_statuses');
+            $table->foreignId('task_id')->nullable()->constrained('tasks')->nullOnDelete();
+            $table->foreignId('status_id')->nullable()->constrained('project_statuses')->nullOnDelete();
             $table->string('name');
             $table->string('annotation', 1000)->nullable();
             $table->boolean('is_close')->default(false);
             $table->uuid('mentor_id')->nullable();
             $table->foreign('mentor_id')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
+            $table->softDeletes();
             $table->index('is_close');
         });
 

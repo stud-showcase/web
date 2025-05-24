@@ -34,10 +34,7 @@ class TaskController extends Controller
         return Inertia::render('user/TaskBank', [
             'tasks' => $tasks,
             'filters' => $filters,
-            'availableFilters' => [
-                'tags' => Tag::select('id', 'name')->get()->toArray(),
-                'customers' => Task::select('customer')->distinct()->pluck('customer')->toArray(),
-            ]
+            'availableFilters' => $this->taskService->getAvailableFilters(['tags', 'customers']),
         ]);
     }
 

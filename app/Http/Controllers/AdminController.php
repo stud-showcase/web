@@ -8,7 +8,6 @@ use App\Http\Requests\DeleteTaskFileRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Requests\UpdateTaskRequestMentorRequest;
 use App\Http\Requests\UploadTaskFileRequest;
-use App\Models\Complexity;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TaskRequest;
@@ -69,9 +68,7 @@ class AdminController extends Controller
         return Inertia::render('admin/TaskBank', [
             'tasks' => $tasks,
             'filters' => $filters,
-            'availableFilters' => [
-                'customers' => Task::select('customer')->distinct()->pluck('customer')->toArray(),
-            ]
+            'availableFilters' => $this->taskService->getAvailableFilters(['customers']),
         ]);
     }
 
@@ -86,7 +83,7 @@ class AdminController extends Controller
     public function indexTaskCreate(): \Inertia\Response
     {
         return Inertia::render('admin/TaskCreate', [
-            'tags' => Tag::all()->toArray(),
+            'tags' => $this->taskService->getAvailableFilters(['tags']),
         ]);
     }
 
@@ -159,9 +156,7 @@ class AdminController extends Controller
         return Inertia::render('admin/Applications', [
             'taskRequests' => $taskRequests,
             'filters' => $filters,
-            'availableFilters' => [
-                'customers' => TaskRequest::select('customer')->distinct()->pluck('customer')->toArray(),
-            ]
+            'availableFilters' => $this->taskService->getAvailableFilters(['customers']),
         ]);
     }
 
@@ -170,6 +165,7 @@ class AdminController extends Controller
         $taskRequest = $this->taskService->getTaskRequestById($id);
         return Inertia::render('admin/Application', [
             'taskRequest' => $taskRequest,
+            'tags' => $this->taskService->getAvailableFilters(['tags']),
         ]);
     }
 
@@ -181,13 +177,8 @@ class AdminController extends Controller
             'taskRequests' => $taskRequests,
             'filters' => $filters,
             'availableFilters' => [
-                'customers' => TaskRequest::query()
-                    ->where('responsible_user_id', Auth::id())
-                    ->select('customer')
-                    ->distinct()
-                    ->pluck('customer')
-                    ->toArray(),
-            ]
+                'customers' => $this->taskService->getAvailableFilters(['taskRequestCustomers'], Auth::id()),
+            ],
         ]);
     }
 

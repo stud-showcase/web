@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class ProjectRepository
@@ -63,6 +64,25 @@ class ProjectRepository
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось получить проект: {$e->getMessage()}", 0, $e);
         }
+    }
+
+    public function getUserProjectTags(int $userId): Collection
+    {
+        $cacheKey = "user:{$userId}:project_tags";
+        return Cache::tags(['projects', 'tags'])->remember($cacheKey, 3600, function () use ($userId) {
+            return Project::query()
+                ->where(function ($q) use ($userId) {
+                    $q->whereHas('users', fn($q2) => $q2->where('users.id', $userId))
+                        ->orWhere('mentor_id', $userId);
+                })
+                ->whereHas('task.tags')
+                ->with(['task.tags' => fn($q) => $q->select('tags.id', 'tags.name')])
+                ->get()
+                ->pluck('task.tags')
+                ->flatten(1)
+                ->unique('id')
+                ->values();
+        });
     }
 
     public function create(int $taskId, string $name, User $user): Project

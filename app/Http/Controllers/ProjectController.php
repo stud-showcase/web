@@ -12,7 +12,6 @@ use App\Http\Requests\ShowControlPanelRequest;
 use App\Http\Requests\UpdateProjectMemberRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Requests\UploadProjectFileRequest;
-use App\Models\Tag;
 use App\Services\ProjectService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,9 +40,7 @@ class ProjectController extends Controller
         return Inertia::render('user/Projects', [
             'projects' => $projects,
             'filters' => $filters,
-            'availableFilters' => [
-                'tags' => Tag::select('id', 'name')->get()->toArray(),
-            ]
+            'availableFilters' => $this->projectService->getAvailableFilters(['tags']),
         ]);
     }
 
@@ -62,9 +59,7 @@ class ProjectController extends Controller
         return Inertia::render('user/Projects', [
             'projects' => $projects,
             'filters' => $filters,
-            'availableFilters' => [
-                'tags' => Tag::select('id', 'name')->get()->toArray(),
-            ]
+            'availableFilters' => $this->projectService->getAvailableFilters(['tags'], true),
         ]);
     }
 

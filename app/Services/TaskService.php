@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dto\TaskDto;
 use App\Dto\TaskRequestDto;
+use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
 use App\Traits\PaginatesCollections;
 use Illuminate\Http\UploadedFile;
@@ -17,8 +18,28 @@ class TaskService
     use PaginatesCollections;
 
     public function __construct(
-        private TaskRepository $taskRepository
+        private TaskRepository $taskRepository,
+        private TagRepository $tagRepository
     ) {}
+
+    public function getAvailableFilters(array $requestedFilters, ?int $responsibleUserId = null): array
+    {
+        $filters = [];
+
+        if (in_array('tags', $requestedFilters)) {
+            $filters['tags'] = $this->tagRepository->getTagsForFilters()->toArray();
+        }
+
+        if (in_array('customers', $requestedFilters)) {
+            $filters['customers'] = $this->taskRepository->getTaskCustomers()->toArray();
+        }
+
+        if (in_array('taskRequestCustomers', $requestedFilters)) {
+            $filters['taskRequestCustomers'] = $this->taskRepository->getTaskRequestCustomers($responsibleUserId)->toArray();
+        }
+
+        return $filters;
+    }
 
     public function getFilteredTasks(array $filters = []): array
     {

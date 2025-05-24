@@ -64,7 +64,8 @@ class ProjectDto
                 : null,
             canJoin: !$userId || (
                 !$project->users->contains('id', $userId) &&
-                !$project->invites->contains('user_id', $userId)
+                !$project->invites->contains('user_id', $userId) &&
+                !$project->mentor_id == $userId
             )
         );
     }
