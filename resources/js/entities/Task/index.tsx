@@ -1,6 +1,7 @@
 export type { Task } from "./model/Task";
 export type { TaskComplexity } from "./model/TaskCompexity";
 export type { TaskTag } from "./model/TaskTag";
+export type { TaskForm } from "./model/TaskForm";
 
 export { COMPLEXITIES } from "./consts/complexities";
 

@@ -65,7 +65,7 @@ export function FileUpload({ id, files, onFilesChange }: FileUploadProps) {
             : "Перетащите файлы сюда или"}
         </Text>
         <Button variant="outline" asChild className="mt-2">
-          <label htmlFor="files" className="cursor-pointer">
+          <label htmlFor={id} className="cursor-pointer">
             Выбрать файлы
           </label>
         </Button>

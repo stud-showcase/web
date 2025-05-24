@@ -6,7 +6,7 @@ import { useForm } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
-import { COMPLEXITIES, TaskTag } from "@/entities/Task";
+import { COMPLEXITIES, TaskForm, TaskTag } from "@/entities/Task";
 import {
   Select,
   SelectContent,
@@ -19,20 +19,6 @@ import {
 import { FileUpload } from "@/shared/ui/FileUpload";
 import { MultiSelect } from "@/shared/ui/MultiSelect";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
-
-type TaskForm = {
-  title: string;
-  description: string;
-  customer: string;
-  customerEmail: string;
-  customerPhone: string;
-  maxMembers: string;
-  deadline: string;
-  complexityId: string;
-  maxProjects: string;
-  files: File[];
-  tags: string[];
-};
 
 export function TaskCreateForm({ tags }: { tags: TaskTag[] }) {
   const tagsOptions = tags.map((tag) => ({

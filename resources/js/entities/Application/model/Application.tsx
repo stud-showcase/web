@@ -1,3 +1,4 @@
+import { User } from "@/entities/User";
 import { ServerFile } from "@/shared/types/ServerFile";
 
 export type Application = {
@@ -9,5 +10,6 @@ export type Application = {
   customerEmail: string;
   customerPhone: string | null;
   withProject: boolean;
+  responsibleUser: User | null;
   files: ServerFile[];
 }

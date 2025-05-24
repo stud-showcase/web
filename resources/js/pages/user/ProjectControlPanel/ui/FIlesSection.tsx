@@ -65,6 +65,7 @@ function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
         </AlertDialogHeader>
         <div>
           <FileUpload
+            id="files"
             files={data.files}
             onFilesChange={(files) => setData("files", files)}
           />

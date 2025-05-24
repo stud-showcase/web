@@ -67,7 +67,7 @@ export function HeaderSection({ project }: { project: ExtendedProject }) {
               >
                 <Link href={`/projects/${project.id}/controlPanel`}>
                   <Settings />
-                  Панель управления
+                  Настройки
                 </Link>
               </Button>
             )}
