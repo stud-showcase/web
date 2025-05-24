@@ -2,7 +2,6 @@ import { FormEvent } from "react";
 import { Input } from "@/shared/ui/Input";
 import { Textarea } from "@/shared/ui/Textarea";
 import { Label } from "@/shared/ui/Label";
-import { useForm } from "@inertiajs/react";
 import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
@@ -18,47 +17,30 @@ import {
 } from "@/shared/ui/Select";
 import { FileUpload } from "@/shared/ui/FileUpload";
 import { MultiSelect } from "@/shared/ui/MultiSelect";
-import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
+import { ServerFile } from "@/shared/types/ServerFile";
+import { ServerFiles } from "./ServerFiles";
 
-export function TaskCreateForm({ tags }: { tags: TaskTag[] }) {
-  const tagsOptions = tags.map((tag) => ({
-    label: tag.name,
-    value: tag.id.toString(),
-  }));
+type Props = {
+  data: TaskForm;
+  setData: (key: keyof TaskForm, value: any) => void;
+  errors: Partial<Record<keyof TaskForm, string>>;
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  handleReset: (e: FormEvent<HTMLFormElement>) => void;
+  tags: { label: string; value: string }[];
+  files?: ServerFile[];
+};
 
-  const { data, setData, post, errors, reset, clearErrors } =
-    useForm<TaskForm>({
-      title: "",
-      description: "",
-      customer: "",
-      customerEmail: "",
-      customerPhone: "",
-      maxMembers: "10",
-      deadline: "",
-      complexityId: "",
-      maxProjects: "",
-      files: [],
-      tags: [],
-    });
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    post("/admin/tasks/create", {
-      onSuccess: () =>
-        showSuccessToast("Задача успешно добавлена в банк задач"),
-      onError: () => showErrorToast("Произошла ошибка в ходе создания задачи"),
-    });
-  };
-
-  const handleReset = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    reset();
-    clearErrors();
-  };
-
+export function TaskCreateForm({
+  data,
+  setData,
+  errors,
+  handleSubmit,
+  handleReset,
+  tags,
+  files,
+}: Props) {
   return (
     <form
-      id="leave-request-form"
       onSubmit={handleSubmit}
       onReset={handleReset}
       className="border rounded-lg p-3 shadow-sm max-w-4xl space-y-6"
@@ -102,6 +84,7 @@ export function TaskCreateForm({ tags }: { tags: TaskTag[] }) {
             onFilesChange={(files) => setData("files", files)}
           />
           {errors.files && <ValidationErrorText text={errors.files} />}
+          {files && <ServerFiles serverFiles={files} />}
         </div>
       </div>
 
@@ -121,6 +104,7 @@ export function TaskCreateForm({ tags }: { tags: TaskTag[] }) {
           {errors.customer && <ValidationErrorText text={errors.customer} />}
         </div>
 
+        {/* TODO: nullable */}
         <div className="space-y-2">
           <Label htmlFor="customerEmail">Email</Label>
           <Input
@@ -186,7 +170,7 @@ export function TaskCreateForm({ tags }: { tags: TaskTag[] }) {
         <div className="space-y-2">
           <Label htmlFor="tags">Тэги</Label>
           <MultiSelect
-            options={tagsOptions}
+            options={tags}
             onValueChange={(value) => setData("tags", value)}
             defaultValue={data.tags}
             placeholder="Выберите тэги..."

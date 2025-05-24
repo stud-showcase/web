@@ -1,6 +1,5 @@
 import { AdminLayout } from "@/layouts/AdminLayout";
-import { Head, Link } from "@inertiajs/react";
-import { TaskCreateForm } from "./TaskCreateForm";
+import { Head, Link, useForm } from "@inertiajs/react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,8 +9,47 @@ import {
   BreadcrumbPage,
 } from "@/shared/ui/Breadcrumb";
 import { TaskTag } from "@/entities/Task";
+import { TaskCreateForm, TaskForm } from "@/features/TaskCreateForm";
+import { FormEvent } from "react";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
-export default function TaskPage({tags}: {tags: TaskTag[]}) {
+export default function TaskPage({ tags }: { tags: TaskTag[] }) {
+  const tagsOptions = tags.map((tag) => ({
+    label: tag.name,
+    value: tag.id.toString(),
+  }));
+
+  const { data, setData, post, errors, reset, clearErrors } = useForm<TaskForm>(
+    {
+      title: "",
+      description: "",
+      customer: "",
+      customerEmail: "",
+      customerPhone: "",
+      maxMembers: "10",
+      deadline: "",
+      complexityId: "",
+      maxProjects: "",
+      files: [],
+      tags: [],
+    }
+  );
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    post("/admin/tasks/create", {
+      onSuccess: () =>
+        showSuccessToast("Задача успешно добавлена в банк задач"),
+      onError: () => showErrorToast("Произошла ошибка в ходе создания задачи"),
+    });
+  };
+
+  const handleReset = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    reset();
+    clearErrors();
+  };
+
   return (
     <>
       <Head>
@@ -31,7 +69,14 @@ export default function TaskPage({tags}: {tags: TaskTag[]}) {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <TaskCreateForm tags={tags} />
+        <TaskCreateForm
+          data={data}
+          setData={setData}
+          errors={errors}
+          handleReset={handleReset}
+          handleSubmit={handleSubmit}
+          tags={tagsOptions}
+        />
       </AdminLayout>
     </>
   );
