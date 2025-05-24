@@ -89,6 +89,6 @@ class FileRepository
 
     protected function isValidPath(string $path): bool
     {
-        return Str::startsWith($path, ['task_requests/', 'task_files/', 'project_files/']);
+        return Str::startsWith($path, ['task_requests_files/', 'task_files/', 'project_files/']);
     }
 }

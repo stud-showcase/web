@@ -31,7 +31,7 @@ export default function ProjectControlPanel({
   return (
     <>
       <Head>
-        <title>Панель управления</title>
+        <title>Настройки</title>
       </Head>
       <UserLayout>
         <Container withVerticalPaddings>
@@ -46,17 +46,17 @@ export default function ProjectControlPanel({
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href={`/projects/${project.id}`}>{project.name}</Link>
+                    <Link href={`/projects/${project.id}`}>{`Проект ${project.id}`}</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Панель управления</BreadcrumbPage>
+                  <BreadcrumbPage>Настройки</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
             <Heading level={1} className="mt-6">
-              Панель управления
+              Настройки
             </Heading>
           </header>
 

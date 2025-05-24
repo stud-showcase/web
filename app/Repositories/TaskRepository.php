@@ -235,7 +235,7 @@ class TaskRepository
 
                     $extension = $file->getClientOriginalExtension();
                     $uniqueName = Str::uuid() . '.' . $extension;
-                    $directory = 'task_request_files/' . $taskRequestId;
+                    $directory = 'task_requests_files/' . $taskRequestId;
                     $path = $file->storeAs($directory, $uniqueName, 'public');
 
                     $fileData[] = [

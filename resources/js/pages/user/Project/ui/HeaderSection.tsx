@@ -40,7 +40,7 @@ export function HeaderSection({ project }: { project: ExtendedProject }) {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{project.name}</BreadcrumbPage>
+            <BreadcrumbPage>{`Проект ${project.id}`}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
