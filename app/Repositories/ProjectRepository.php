@@ -119,30 +119,15 @@ class ProjectRepository
             $project = DB::transaction(function () use ($projectId, $data) {
                 $project = Project::findOrFail($projectId);
 
-                $updateData = [];
+                $project->update([
+                    'name' => $data['name'] ?? $project->name,
+                    'annotation' => $data['annotation'] ?? $project->annotation,
+                    'status_id' => $data['statusId'] ?? $project->status_id,
+                    'is_close' => $data['isClose'] ?? $project->is_close,
+                ]);
 
-                if (isset($data['name'])) {
-                    $updateData['name'] = $data['name'];
-                }
-
-                if (isset($data['annotation'])) {
-                    $updateData['annotation'] = $data['annotation'];
-                }
-
-                if (isset($data['statusId'])) {
-                    $updateData['status_id'] = $data['statusId'];
-                }
-
-                if (isset($data['isClose'])) {
-                    $updateData['is_close'] = $data['isClose'];
-
-                    if ($data['isClose']) {
-                        ProjectInvite::where('project_id', $projectId)->delete();
-                    }
-                }
-
-                if (!empty($updateData)) {
-                    $project->update($updateData);
+                if ($data['isClose']) {
+                    ProjectInvite::where('project_id', $projectId)->delete();
                 }
 
                 return $project->fresh();
@@ -224,7 +209,6 @@ class ProjectRepository
                     ->when(
                         isset($filters['search']) && !empty($filters['search']),
                         fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
-                            ->orWhere('annotation', 'LIKE', '%' . $filters['search'] . '%')
                     )
                     ->when(
                         isset($filters['status']) && is_array($filters['status']) && count($filters['status']) > 0,

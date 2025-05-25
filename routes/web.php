@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminProjectController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\TagController as AdminTagController;
+use App\Http\Controllers\Admin\TaskRequestController as AdminTaskRequestController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\TaskController as AdminTaskController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SocialController;
@@ -63,31 +66,31 @@ Route::prefix('projects')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(function () {
-    Route::get('/myApplications', [AdminController::class, 'getResponsibleUserTaskRequests']);
+    Route::get('/myApplications', [AdminTaskRequestController::class, 'responsible']);
     Route::prefix('applications')->group(function () {
-        Route::get('/', [AdminController::class, 'taskRequests'])->name('admin.applications.index');
-        Route::get('/{id}', [AdminController::class, 'showTaskRequest'])->name('admin.applications.show');
-        Route::post('/{id}', [AdminController::class, 'approveTaskRequest'])->name('admin.applications.approve');
-        Route::delete('/{id}', [AdminController::class, 'deleteTaskRequest'])->name('admin.applications.delete');
-        Route::put('/{id}/responsibleUser', [AdminController::class, 'updateTaskRequestResponsibleUser'])->name('admin.applications.updateResponsibleUser');
+        Route::get('/', [AdminTaskRequestController::class, 'index'])->name('admin.applications.index');
+        Route::get('/{id}', [AdminTaskRequestController::class, 'show'])->name('admin.applications.show');
+        Route::delete('/{id}', [AdminTaskRequestController::class, 'destroy'])->name('admin.applications.destroy');
+        Route::post('/{id}', [AdminTaskRequestController::class, 'approve'])->name('admin.applications.approve');
+        Route::put('/{id}/responsible', [AdminTaskRequestController::class, 'updateResponsible'])->name('admin.applications.responsible.update');
     });
 
     Route::prefix('tags')->group(function () {
-        Route::post('/', [AdminController::class, 'createTag'])->name('admin.tag.create');
-        Route::put('/{id}', [AdminController::class, 'updateTag'])->name('admin.tag.update');
-        Route::delete('/{id}', [AdminController::class, 'deleteTag'])->name('admin.tag.delete');
+        Route::get('/', [AdminTagController::class, 'index'])->name('admin.tags.index');
+        Route::post('/', [AdminTagController::class, 'store'])->name('admin.tags.store');
+        Route::put('/{id}', [AdminTagController::class, 'update'])->name('admin.tags.update');
+        Route::delete('/{id}', [AdminTagController::class, 'destroy'])->name('admin.tags.destroy');
     });
 
     Route::prefix('tasks')->group(function () {
-        Route::get('/', [AdminController::class, 'tasks'])->name('admin.tasks.index');
-        Route::get('/create', [AdminController::class, 'indexTaskCreate'])->name('admin.tasks.create');
-        Route::post('/create', [AdminController::class, 'createTask'])->name('admin.tasks.store');
-        Route::get('/settings', [AdminController::class, 'indexTaskSettings'])->name('admin.tasks.settings');
-        Route::get('/{id}', [AdminController::class, 'showTask'])->name('admin.tasks.show');
-        Route::put('/{id}', [AdminController::class, 'updateTask'])->name('admin.tasks.update');
-        Route::post('/{id}/files', [AdminController::class, 'uploadTaskFiles'])->name('admin.tasks.files.upload');
-        Route::delete('/{id}', [AdminController::class, 'deleteTask'])->name('admin.tasks.delete');
-        Route::delete('/{taskId}/files/{fileId}', [AdminController::class, 'deleteTaskFile'])->name('admin.tasks.files.delete');
+        Route::get('/', [AdminTaskController::class, 'index'])->name('admin.tasks.index');
+        Route::get('/create', [AdminTaskController::class, 'create'])->name('admin.tasks.create');
+        Route::post('/', [AdminTaskController::class, 'store'])->name('admin.tasks.store');
+        Route::get('/{id}', [AdminTaskController::class, 'show'])->name('admin.tasks.show');
+        Route::put('/{id}', [AdminTaskController::class, 'update'])->name('admin.tasks.update');
+        Route::delete('/{id}', [AdminTaskController::class, 'destroy'])->name('admin.tasks.destroy');
+        Route::post('/{id}/files', [AdminTaskController::class, 'uploadFiles'])->name('admin.tasks.files.upload');
+        Route::delete('/{taskId}/files/{fileId}', [AdminTaskController::class, 'deleteFile'])->name('admin.tasks.files.destroy');
     });
 
     Route::prefix('projects')->group(function () {
@@ -102,8 +105,11 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
         Route::delete('/{id}/mentor', [AdminProjectController::class, 'removeMentor'])->name('admin.projects.mentor.remove');
     });
 
-    Route::get('/users', [AdminController::class, 'users'])->name('admin.users.index');
-    Route::get('/users/{id}', function () {
-        return Inertia::render('admin/User');
+    Route::prefix('users')->group(function () {
+        Route::get('/', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::get('/{id}', [AdminUserController::class, 'show'])->name('admin.users.show');
+        Route::put('/{id}', [AdminUserController::class, 'update'])->name('admin.users.update');
+        Route::delete('/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+        Route::put('/{id}/roles', [AdminUserController::class, 'updateRoles'])->name('admin.users.roles.update');
     });
 });

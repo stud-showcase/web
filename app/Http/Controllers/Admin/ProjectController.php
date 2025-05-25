@@ -16,7 +16,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Throwable;
 
-class AdminProjectController extends Controller
+class ProjectController extends Controller
 {
     public function __construct(
         private ProjectService $projectService

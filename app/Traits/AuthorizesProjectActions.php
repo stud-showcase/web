@@ -22,7 +22,7 @@ trait AuthorizesProjectActions
         }
 
         $user = Auth::user();
-        $isMentor = $project->mentor_id === $user->id;
+        $isMentor = $project->mentor_id == $user->id;
         $isAdmin = $user->hasAnyRole('admin');
 
         if ($restrictToMentorAndAdmin) {
