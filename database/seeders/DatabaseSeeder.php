@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             VacancySeeder::class,
             TagSeeder::class,
             SettingsSeeder::class,
+            TaskRequestSeeder::class,
         ]);
     }
 }
