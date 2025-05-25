@@ -12,12 +12,8 @@ class CustomerFactory extends Factory
     {
         $faker = \Faker\Factory::create('ru_RU');
 
-        $orgTypes = ['ООО', 'ЗАО', 'АО', 'ОАО', 'ПАО', 'ИП'];
-        $orgType = $faker->randomElement($orgTypes);
-        $companyName = $faker->company;
-
         return [
-            'name' => $orgType . ' "' . $companyName . '"',
+            'name' => $faker->company,
             'email' => $faker->companyEmail,
             'phone' => $faker->optional()->phoneNumber,
             'created_at' => now(),
