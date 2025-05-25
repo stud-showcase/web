@@ -125,6 +125,7 @@ export interface ColumnDef<TData> {
 - Управление заявки, назначение ответсвенного
 - Сделать периоды командообразования
 - Дополнить комманд в хедере всеми возможностями
+- Фильтры на странице пользователей
 */
 export function DataTable<TData extends { id: number | string }>({
   data,

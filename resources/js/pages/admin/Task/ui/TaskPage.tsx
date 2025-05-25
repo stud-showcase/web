@@ -21,7 +21,7 @@ export default function TaskPage({ task, tags }: { task: ExtendedTask, tags: Tas
   return (
     <>
       <Head>
-        <title>Заявка</title>
+        <title>Задача</title>
       </Head>
       <AdminLayout>
         <Breadcrumb>

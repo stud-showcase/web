@@ -26,8 +26,6 @@ export default function ProjectControlPanel({
 }: {
   project: ExtendedProject;
 }) {
-  console.log(project);
-
   return (
     <>
       <Head>

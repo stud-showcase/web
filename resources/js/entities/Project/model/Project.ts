@@ -8,10 +8,10 @@ export type Project = {
   id: number;
   name: string;
   annotation: string | null;
-  members: ProjectMember[];
+  isHiring: boolean;
+  status: ProjectStatus;
   mentor: User | null;
   files: ServerFile[];
-  status: ProjectStatus;
-  isHiring: boolean;
+  members: ProjectMember[];
   invites: ProjectInvite[];
 };
