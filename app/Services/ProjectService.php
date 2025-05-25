@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Repositories\ProjectInviteRepository;
 use App\Repositories\ProjectRepository;
+use App\Repositories\SettingRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\UserProjectRepository;
 use App\Traits\PaginatesCollections;
@@ -24,7 +25,8 @@ class ProjectService
         private ProjectRepository $projectRepository,
         private ProjectInviteRepository $inviteRepository,
         private UserProjectRepository $userProjectRepository,
-        private TagRepository $tagRepository
+        private TagRepository $tagRepository,
+        private SettingRepository $settingRepository,
     ) {}
 
     public function getAvailableFilters(array $requestedFilters, bool $forUser = false): array
@@ -115,6 +117,36 @@ class ProjectService
         }
     }
 
+    public function deleteProject(int $projectId): void
+    {
+        try {
+            $this->projectRepository->delete($projectId);
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function setMentor(int $projectId, int $mentorId): void
+    {
+        try {
+            $this->projectRepository->setMentor($projectId, $mentorId);
+        } catch (Throwable $e) {
+            Log::error("Ошибка установки ментора [$mentorId] для проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function removeMentor(int $projectId): void
+    {
+        try {
+            $this->projectRepository->removeMentor($projectId);
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления ментора из проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
     public function uploadFiles(int $projectId, array $files): void
     {
         try {
@@ -176,6 +208,32 @@ class ProjectService
             $this->userProjectRepository->delete($projectId, $memberId);
         } catch (Throwable $e) {
             Log::error("Ошибка удаления участника [$memberId] из проекта [$projectId]: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function getSettings(): array
+    {
+        try {
+            $settings = $this->settingRepository->getSettings();
+            return [
+                'startDate' => $settings?->start_date,
+                'endDate' => $settings?->end_date,
+            ];
+        } catch (Throwable $e) {
+            return [
+                'startDate' => null,
+                'endDate' => null,
+            ];
+        }
+    }
+
+    public function updateSettings(array $data): void
+    {
+        try {
+            $this->settingRepository->updateSettings($data);
+        } catch (Throwable $e) {
+            Log::error('Ошибка изменения настроек: ' . $e->getMessage(), $data);
             throw $e;
         }
     }

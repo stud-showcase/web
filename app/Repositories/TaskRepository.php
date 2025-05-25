@@ -200,7 +200,7 @@ class TaskRepository
         }
     }
 
-    public function createRequest(array $data): int
+    public function createApplication(array $data): int
     {
         try {
             return DB::transaction(function () use ($data) {

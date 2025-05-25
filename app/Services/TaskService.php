@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Dto\TaskDto;
 use App\Dto\TaskRequestDto;
-use App\Repositories\SettingRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
 use App\Traits\PaginatesCollections;
@@ -21,7 +20,6 @@ class TaskService
     public function __construct(
         private TaskRepository $taskRepository,
         private TagRepository $tagRepository,
-        private SettingRepository $settingRepository,
     ) {}
 
     public function getAvailableFilters(array $requestedFilters, ?int $responsibleUserId = null): array
@@ -100,11 +98,11 @@ class TaskService
         return $this->formatPaginatedData($paginator, fn($task) => TaskDto::fromModel($task)->toArrayForAdmin());
     }
 
-    public function createRequest(array $data, array $files): int
+    public function createApplication(array $data, array $files): int
     {
         try {
             return DB::transaction(function () use ($data, $files) {
-                $taskRequestId = $this->taskRepository->createRequest($data);
+                $taskRequestId = $this->taskRepository->createApplication($data);
                 if (!empty($files)) {
                     $this->taskRepository->uploadFiles($taskRequestId, $files);
                 }
@@ -252,32 +250,6 @@ class TaskService
             $this->tagRepository->deleteTag($id);
         } catch (Throwable $e) {
             Log::error("Ошибка удаления тега [$id]: " . $e->getMessage());
-            throw $e;
-        }
-    }
-
-    public function getSettings(): array
-    {
-        try {
-            $settings = $this->settingRepository->getSettings();
-            return [
-                'startDate' => $settings?->start_date,
-                'endDate' => $settings?->end_date,
-            ];
-        } catch (Throwable $e) {
-            return [
-                'startDate' => null,
-                'endDate' => null,
-            ];
-        }
-    }
-
-    public function updateSettings(array $data): void
-    {
-        try {
-            $this->settingRepository->updateSettings($data);
-        } catch (Throwable $e) {
-            Log::error('Ошибка изменения настроек: ' . $e->getMessage(), $data);
             throw $e;
         }
     }

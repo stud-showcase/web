@@ -6,7 +6,7 @@ use App\Rules\MaxTotalFileSize;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class TaskRequestCreateRequest extends FormRequest
+class CreateApplicationRequest extends FormRequest
 {
     public function authorize(): bool
     {

@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TaskRequestCreateRequest;
-use App\Models\Tag;
-use App\Models\Task;
+use App\Http\Requests\CreateApplicationRequest;
 use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,10 +44,15 @@ class TaskController extends Controller
         ]);
     }
 
-    public function createRequest(TaskRequestCreateRequest $request): RedirectResponse
+    public function showApplication(): \Inertia\Response
+    {
+        return Inertia::render('user/Application');
+    }
+
+    public function createApplication(CreateApplicationRequest $request): RedirectResponse
     {
         try {
-            $this->taskService->createRequest(
+            $this->taskService->createApplication(
                 $request->validated(),
                 $request->file('files') ?? []
             );

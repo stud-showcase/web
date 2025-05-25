@@ -51,7 +51,7 @@ class VacancyController extends Controller
         }
     }
 
-    public function delete(DeleteVacancyRequest $request, int $projectId, int $vacancyId): RedirectResponse
+    public function destroy(DeleteVacancyRequest $request, int $projectId, int $vacancyId): RedirectResponse
     {
         try {
             $this->vacancyService->deleteVacancy($vacancyId);

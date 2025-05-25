@@ -250,6 +250,38 @@ class ProjectRepository
         }
     }
 
+    public function setMentor(int $projectId, int $mentorId): void
+    {
+        try {
+            DB::transaction(function () use ($projectId, $mentorId) {
+                $project = Project::findOrFail($projectId);
+                $project->update(['mentor_id' => $mentorId]);
+            });
+            Cache::tags(['projects', 'user_projects'])->flush();
+            Cache::tags(['projects'])->forget("project:{$projectId}");
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось установить ментора: {$e->getMessage()}", 0, $e);
+        }
+    }
+
+    public function removeMentor(int $projectId): void
+    {
+        try {
+            DB::transaction(function () use ($projectId) {
+                $project = Project::findOrFail($projectId);
+                $project->update(['mentor_id' => null]);
+            });
+            Cache::tags(['projects', 'user_projects'])->flush();
+            Cache::tags(['projects'])->forget("project:{$projectId}");
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        } catch (Throwable $e) {
+            throw new \RuntimeException("Не удалось удалить ментора: {$e->getMessage()}", 0, $e);
+        }
+    }
+
     protected function buildProjectQuery(array $filters, bool $forUser): Builder
     {
         $query = Project::query()->with([
