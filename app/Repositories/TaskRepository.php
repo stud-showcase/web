@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Customer;
 use App\Models\Project;
 use App\Models\ProjectStatus;
 use App\Models\Task;
@@ -36,6 +37,7 @@ class TaskRepository
                     ->with([
                         'complexity',
                         'tags',
+                        'customer',
                         'projects.users' => fn($q) => $q->select('users.id'),
                         'files',
                     ])
@@ -53,7 +55,7 @@ class TaskRepository
                     )
                     ->when(
                         isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
-                        fn($q) => $q->whereIn('customer', $filters['customers'])
+                        fn($q) => $q->whereHas('customer', fn($q2) => $q2->whereIn('customers.name', $filters['customers']))
                     )
                     ->when(
                         isset($filters['deadline']),
@@ -82,6 +84,7 @@ class TaskRepository
                     'complexity',
                     'tags',
                     'files',
+                    'customer',
                     'projects' => fn($query) => $query->with([
                         'status',
                         'users' => fn($q) => $q->select('users.id'),
@@ -104,6 +107,7 @@ class TaskRepository
                     'complexity',
                     'tags',
                     'files',
+                    'customer',
                 ])->findOrFail($id);
             });
         } catch (ModelNotFoundException $e) {
@@ -118,7 +122,7 @@ class TaskRepository
         $cacheKey = "task_request:{$id}";
         try {
             return Cache::tags(['task_requests'])->remember($cacheKey, 3600, function () use ($id) {
-                return TaskRequest::with(['user', 'responsibleUser', 'files'])
+                return TaskRequest::with(['user', 'responsibleUser', 'files', 'customer'])
                     ->findOrFail($id);
             });
         } catch (ModelNotFoundException $e) {
@@ -137,12 +141,12 @@ class TaskRepository
                     ? (int)$filters['perPage']
                     : 20;
                 return TaskRequest::query()
-                    ->with(['user', 'responsibleUser'])
+                    ->with(['user', 'responsibleUser', 'customer'])
                     ->when(
                         !empty($filters['search']),
                         fn($q) => $q->where('title', 'LIKE', '%' . $filters['search'] . '%')
-                            ->orWhere('customer', 'LIKE', '%' . $filters['search'] . '%')
-                            ->orWhere('customer_email', 'LIKE', '%' . $filters['search'] . '%')
+                            ->orWhereHas('customer', fn($q2) => $q2->where('name', 'LIKE', '%' . $filters['search'] . '%')
+                                ->orWhere('email', 'LIKE', '%' . $filters['search'] . '%'))
                     )
                     ->when(
                         $forUser,
@@ -151,7 +155,7 @@ class TaskRepository
                     )
                     ->when(
                         isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
-                        fn($q) => $q->whereIn('customer', $filters['customers'])
+                        fn($q) => $q->whereHas('customer', fn($q2) => $q2->whereIn('customers.name', $filters['customers']))
                     )
                     ->when(
                         isset($filters['withProject']),
@@ -176,7 +180,7 @@ class TaskRepository
                     ? (int)$filters['perPage']
                     : 20;
                 return Task::query()
-                    ->with(['complexity'])
+                    ->with(['complexity', 'customer'])
                     ->when(
                         !empty($filters['search']),
                         fn($q) => $q->where('title', 'LIKE', '%' . $filters['search'] . '%')
@@ -188,7 +192,7 @@ class TaskRepository
                     )
                     ->when(
                         isset($filters['customers']) && is_array($filters['customers']) && count($filters['customers']) > 0,
-                        fn($q) => $q->whereIn('customer', $filters['customers'])
+                        fn($q) => $q->whereHas('customer', fn($q2) => $q2->whereIn('customers.name', $filters['customers']))
                     )
                     ->paginate($perPage)
                     ->withQueryString();
@@ -204,18 +208,22 @@ class TaskRepository
     {
         try {
             return DB::transaction(function () use ($data) {
+                $customer = Customer::firstOrCreate([
+                    'name' => $data['customer'],
+                    'email' => $data['customerEmail'],
+                    'phone' => $data['customerPhone'] ?? null,
+                ]);
+
                 $taskRequest = TaskRequest::create([
                     'title' => $data['title'],
                     'description' => $data['description'],
-                    'customer' => $data['customer'],
-                    'customer_email' => $data['customerEmail'],
-                    'customer_phone' => $data['customerPhone'] ?? null,
+                    'customer_id' => $customer->id,
                     'with_project' => $data['withProject'] ?? false,
                     'project_name' => $data['projectName'] ?? null,
                     'user_id' => Auth::check() ? Auth::id() : null,
                 ]);
 
-                Cache::tags(['task_requests'])->flush();
+                Cache::tags(['task_requests', 'customers'])->flush();
 
                 return $taskRequest->id;
             });
@@ -275,7 +283,7 @@ class TaskRepository
 
                 $taskRequest->delete();
 
-                Cache::tags(['task_requests'])->flush();
+                Cache::tags(['task_requests', 'customers'])->flush();
             });
         } catch (ModelNotFoundException $e) {
             throw $e;
@@ -288,14 +296,18 @@ class TaskRepository
     {
         try {
             return DB::transaction(function () use ($id, $data, $files) {
-                $taskRequest = TaskRequest::with('files')->findOrFail($id);
+                $taskRequest = TaskRequest::with(['files', 'customer'])->findOrFail($id);
+
+                $customer = Customer::firstOrCreate([
+                    'name' => $data['customer'] ?? $taskRequest->customer->name,
+                    'email' => $data['customerEmail'] ?? $taskRequest->customer->email,
+                    'phone' => $data['customerPhone'] ?? $taskRequest->customer->phone,
+                ]);
 
                 $task = Task::create([
                     'title' => $data['title'] ?? $taskRequest->title,
                     'description' => $data['description'] ?? $taskRequest->description,
-                    'customer' => $data['customer'] ?? $taskRequest->customer,
-                    'customer_email' => $data['customerEmail'] ?? $taskRequest->customer_email,
-                    'customer_phone' => $data['customerPhone'] ?? $taskRequest->customer_phone,
+                    'customer_id' => $customer->id,
                     'max_projects' => $data['maxProjects'] ?? null,
                     'max_members' => $data['maxMembers'],
                     'deadline' => $data['deadline'],
@@ -354,7 +366,7 @@ class TaskRepository
 
                 $taskRequest->delete();
 
-                Cache::tags(['task_requests', 'tasks'])->flush();
+                Cache::tags(['task_requests', 'tasks', 'customers'])->flush();
 
                 return $task->id;
             });
@@ -385,14 +397,18 @@ class TaskRepository
     {
         try {
             return DB::transaction(function () use ($data, $files) {
+                $customer = Customer::firstOrCreate([
+                    'name' => $data['customer'],
+                    'email' => $data['customerEmail'] ?? null,
+                    'phone' => $data['customerPhone'] ?? null,
+                ]);
+
                 $task = Task::create([
                     'title' => $data['title'],
                     'description' => $data['description'],
-                    'customer' => $data['customer'],
+                    'customer_id' => $customer->id,
                     'max_projects' => $data['maxProjects'] ?? null,
                     'max_members' => $data['maxMembers'],
-                    'customer_email' => $data['customerEmail'] ?? null,
-                    'customer_phone' => $data['customerPhone'] ?? null,
                     'deadline' => $data['deadline'],
                     'complexity_id' => $data['complexityId'],
                 ]);
@@ -421,7 +437,7 @@ class TaskRepository
                     }
                 }
 
-                Cache::tags(['tasks'])->flush();
+                Cache::tags(['tasks', 'customers'])->flush();
 
                 return $task->id;
             });
@@ -436,22 +452,26 @@ class TaskRepository
     {
         try {
             DB::transaction(function () use ($id, $data) {
+                $customer = Customer::firstOrCreate([
+                    'name' => $data['customer'],
+                    'email' => $data['customerEmail'] ?? null,
+                    'phone' => $data['customerPhone'] ?? null,
+                ]);
+
                 $task = Task::findOrFail($id);
                 $task->update([
                     'title' => $data['title'],
                     'description' => $data['description'],
                     'max_projects' => $data['maxProjects'] ?? null,
                     'max_members' => $data['maxMembers'],
-                    'customer' => $data['customer'],
-                    'customer_email' => $data['customerEmail'] ?? null,
-                    'customer_phone' => $data['customerPhone'] ?? null,
+                    'customer_id' => $customer->id,
                     'deadline' => $data['deadline'],
                     'complexity_id' => $data['complexityId'],
                 ]);
 
                 $task->tags()->sync($data['tags'] ?? []);
 
-                Cache::tags(['tasks'])->flush();
+                Cache::tags(['tasks', 'customers'])->flush();
             });
         } catch (ModelNotFoundException $e) {
             throw $e;
@@ -490,7 +510,7 @@ class TaskRepository
 
                 $task->delete();
 
-                Cache::tags(['tasks'])->flush();
+                Cache::tags(['tasks', 'customers'])->flush();
             });
         } catch (ModelNotFoundException $e) {
             throw $e;
@@ -520,20 +540,21 @@ class TaskRepository
     public function getTaskCustomers(): Collection
     {
         $cacheKey = 'tasks:customers';
-        return Cache::tags(['tasks'])->remember($cacheKey, 3600, function () {
-            return Task::select('customer')->distinct()->pluck('customer');
+        return Cache::tags(['tasks', 'customers'])->remember($cacheKey, 3600, function () {
+            return Customer::whereHas('tasks')->pluck('name');
         });
     }
 
     public function getTaskRequestCustomers(?int $responsibleUserId = null): Collection
     {
-        $cacheKey = 'task_requests:customers' . ($responsibleUserId ? ':user_' . $responsibleUserId : '');
-        return Cache::tags(['task_requests'])->remember($cacheKey, 3600, function () use ($responsibleUserId) {
-            $query = TaskRequest::select('customer')->distinct();
-            if ($responsibleUserId) {
-                $query->where('responsible_user_id', $responsibleUserId);
-            }
-            return $query->pluck('customer');
+        $cacheKey = 'task_requests:customers:' . ($responsibleUserId ?: 'all');
+        return Cache::tags(['task_requests', 'customers'])->remember($cacheKey, 3600, function () use ($responsibleUserId) {
+            $query = Customer::whereHas('taskRequests', function ($q) use ($responsibleUserId) {
+                if ($responsibleUserId) {
+                    $q->where('task_requests.responsible_user_id', $responsibleUserId);
+                }
+            });
+            return $query->pluck('name');
         });
     }
 }

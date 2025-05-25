@@ -8,21 +8,28 @@ return new class extends Migration
 {
     public function up()
     {
+        Schema::create('customers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+            $table->index('name');
+        });
+
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('description', 1000);
-            $table->string('customer');
             $table->tinyInteger('max_projects')->nullable();
             $table->tinyInteger('max_members');
-            $table->string('customer_email')->nullable();
-            $table->string('customer_phone')->nullable();
             $table->dateTime('deadline');
             $table->foreignId('complexity_id')->nullable()->constrained('complexities')->nullOnDelete();
+            $table->foreignId('customer_id')->nullable()->constrained('customers')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
             $table->index('max_members');
-            $table->index('customer');
             $table->index('deadline');
         });
 
@@ -53,5 +60,6 @@ return new class extends Migration
         Schema::dropIfExists('task_files');
         Schema::dropIfExists('tags');
         Schema::dropIfExists('tasks');
+        Schema::dropIfExists('customers');
     }
 };

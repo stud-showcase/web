@@ -16,14 +16,17 @@ class TaskRequest extends Model
         'id',
         'title',
         'description',
-        'customer',
-        'customer_email',
-        'customer_phone',
         'with_project',
         'project_name',
         'user_id',
         'responsible_user_id',
+        'customer_id',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 
     public function user()
     {

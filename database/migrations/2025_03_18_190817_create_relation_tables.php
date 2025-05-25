@@ -42,18 +42,15 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('description', 1000);
-            $table->string('customer');
-            $table->string('customer_email')->nullable();
-            $table->string('customer_phone')->nullable();
             $table->boolean('with_project')->default(false);
             $table->string('project_name')->nullable();
             $table->uuid('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->uuid('responsible_user_id')->nullable();
             $table->foreign('responsible_user_id')->references('id')->on('users')->nullOnDelete();
+            $table->foreignId('customer_id')->nullable()->constrained('customers')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
-            $table->index('customer');
         });
 
         Schema::create('task_request_files', function (Blueprint $table) {

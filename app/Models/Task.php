@@ -13,19 +13,22 @@ class Task extends Model
     protected $fillable = [
         'title',
         'description',
-        'customer',
         'max_projects',
         'max_members',
-        'customer_email',
-        'customer_phone',
         'deadline',
         'complexity_id',
+        'customer_id',
         'created_at',
     ];
 
     public function complexity()
     {
         return $this->belongsTo(Complexity::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
     }
 
     public function projects()

@@ -31,7 +31,7 @@ class TaskDto
             id: $task->id,
             title: $task->title,
             description: $task->description,
-            customer: $task->customer,
+            customer: $task->customer->name,
             maxMembers: $task->max_members,
             deadline: Carbon::parse($task->deadline)->format('Y-m-d'),
             createdAt: $task->created_at->format('Y-m-d'),
@@ -43,8 +43,8 @@ class TaskDto
                 'id' => $task->complexity->id,
                 'name' => $task->complexity->name,
             ],
-            customerEmail: $task->customer_email,
-            customerPhone: $task->customer_phone,
+            customerEmail: $task->customer->email,
+            customerPhone: $task->customer->phone,
             files: isset($task->files)
                 ? $task->files->map(fn($file) => FileDto::fromModel($file)->toArray())->toArray()
                 : null,
