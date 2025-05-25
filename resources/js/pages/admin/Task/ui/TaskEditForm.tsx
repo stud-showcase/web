@@ -64,7 +64,7 @@ export function TaskEditForm({ task, tags }: { task: Task, tags: TaskTag[] }) {
 
   return (
     <form onSubmit={handleSubmit} onReset={handleReset} className="space-y-4">
-      <div className="space-y-4 border p-4 rounded-md shadow-sm">
+      <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
         <Heading level={5}>Общая информация</Heading>
         <div className="space-y-2">
           <Label htmlFor="title">Название задачи *</Label>
@@ -94,7 +94,7 @@ export function TaskEditForm({ task, tags }: { task: Task, tags: TaskTag[] }) {
         </div>
       </div>
 
-      <div className="space-y-4 border p-4 rounded-md shadow-sm">
+      <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
         <Heading level={5}>Дополнительная информация</Heading>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -186,7 +186,7 @@ export function TaskEditForm({ task, tags }: { task: Task, tags: TaskTag[] }) {
         </div>
       </div>
 
-      <div className="space-y-4 border p-4 rounded-md shadow-sm">
+      <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
         <Heading level={5}>Контактная информация</Heading>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">

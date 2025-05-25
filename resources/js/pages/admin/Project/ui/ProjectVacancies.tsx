@@ -165,7 +165,7 @@ export function ProjectVacancies({
   };
 
   return (
-    <div className="space-y-4 border p-4 rounded-md shadow-sm">
+    <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
       <Heading level={5}>Вакансии</Heading>
       <CreateVacancyDialog projectId={id}>
         <Button size="sm" variant="outline">

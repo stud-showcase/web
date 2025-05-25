@@ -90,7 +90,7 @@ export function TasksFiles({ id, files }: { id: number; files: ServerFile[] }) {
   };
 
   return (
-    <div className="space-y-4 border p-4 rounded-md shadow-sm">
+    <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
       <Heading level={5}>Файлы задачи</Heading>
       <FileUploadDialog id={id}>
         <Button size="sm" variant="outline">

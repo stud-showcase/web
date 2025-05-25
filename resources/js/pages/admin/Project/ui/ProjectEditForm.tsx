@@ -52,7 +52,7 @@ export function ProjectEditForm({ project }: { project: ExtendedProject }) {
 
   return (
     <form onSubmit={handleSubmit} onReset={handleReset} className="space-y-4">
-      <div className="space-y-4 border p-4 rounded-md shadow-sm">
+      <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
         <Heading level={5}>Общая информация</Heading>
         <div className="space-y-2">
           <Label htmlFor="title">Название проекта *</Label>
@@ -82,7 +82,7 @@ export function ProjectEditForm({ project }: { project: ExtendedProject }) {
         </div>
       </div>
 
-      <div className="space-y-4 border p-4 rounded-md shadow-sm">
+      <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
         <Heading level={5}>Дополнительная информация</Heading>
         <div className="space-y-2">
           <Label htmlFor="status">Статус *</Label>

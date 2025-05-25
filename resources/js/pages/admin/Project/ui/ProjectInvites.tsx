@@ -52,7 +52,7 @@ export function ProjectInvites({
   };
 
   return (
-    <div className="space-y-4 border p-4 rounded-md shadow-sm">
+    <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
       <Heading level={5}>Заявки на вступление</Heading>
       {hasInvites ? (
         <Table>

@@ -160,29 +160,6 @@ export function Footer() {
                 </li>
               </ul>
             </div>
-            <div>
-              <Text className="font-semibold">КОНТАКТЫ</Text>
-              <ul className="mt-2 space-y-2">
-                <li className="text-xs">
-                  <a
-                    target="_blank"
-                    href="tel:+79781234567"
-                    className="hover:underline"
-                  >
-                    +7 (978) 777-77-77
-                  </a>
-                </li>
-                <li className="text-xs">
-                  <a
-                    target="_blank"
-                    href="mailto:proektika@mail.sevsu.ru"
-                    className="hover:underline"
-                  >
-                    proektika@mail.sevsu.ru
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
           <p className="mt-10 text-center text-xs">
             Все права защищены © «Севастопольский государственный университет»,{" "}
