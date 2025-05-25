@@ -51,7 +51,7 @@ export function ProjectEditForm({ project }: { project: ExtendedProject }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} onReset={handleReset}>
+    <form onSubmit={handleSubmit} onReset={handleReset} className="space-y-4">
       <div className="space-y-4 border p-4 rounded-md shadow-sm">
         <Heading level={5}>Общая информация</Heading>
         <div className="space-y-2">
@@ -126,7 +126,7 @@ export function ProjectEditForm({ project }: { project: ExtendedProject }) {
           {errors.statusId && <ValidationErrorText text={errors.statusId} />}
         </div>
       </div>
-      <div className="flex gap-2 mt-6">
+      <div className="flex gap-2">
         <Button variant="outline" type="reset">
           Сбросить
         </Button>

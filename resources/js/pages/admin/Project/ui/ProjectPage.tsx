@@ -14,43 +14,35 @@ import {
 import { Button } from "@/shared/ui/Button";
 import { Trash2 } from "lucide-react";
 
-export default function ProjectPage({ p }: { project: ExtendedProject }) {
-  const project = {};
-
-  project.id = 134;
-  project.name = "asdasd";
-  project.annotation = "asdasdas";
-  project.status = { id: 1, name: "В ожидании" };
-  project.isHiring = false;
-
-  // console.log(props);
+export default function ProjectPage({ project }: { project: ExtendedProject }) {
   return (
     <>
       <Head>
         <title>Проект</title>
       </Head>
       <AdminLayout>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/admin/projects">Проекты</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Проект №{project.id}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <div className="flex items-center justify-between gap-2">
-          <Heading level={1}>Проект №{project.id}</Heading>
-          <Button variant="destructive">
-            <Trash2 />
-            Удалить
-          </Button>
+        <div className="max-w-4xl space-y-4">
+          <div className="flex items-center justify-between gap-2">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href="/admin/projects">Проекты</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Проект №{project.id}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+            <Button variant="destructive" size="sm">
+              <Trash2 />
+              Удалить
+            </Button>
+          </div>
+          <ProjectEditForm project={project} />
         </div>
-        <ProjectEditForm project={project} />
       </AdminLayout>
     </>
   );

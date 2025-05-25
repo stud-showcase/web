@@ -47,15 +47,13 @@ export default function ApplicationsPage(props: Props) {
         <title>Заявки</title>
       </Head>
       <AdminLayout>
+        <Heading level={1}>Заявки</Heading>
         <ApplicationsFiltersContext.Provider value={{ filters, setFilters }}>
           <Tabs defaultValue={getCurrentTab()} onValueChange={handleTabChange}>
-            <div className="flex gap-3 items-center justify-between">
-            <Heading level={1}>Заявки</Heading>
             <TabsList>
               <TabsTrigger value="all">Все заявки</TabsTrigger>
               <TabsTrigger value="my">Мои заявки</TabsTrigger>
             </TabsList>
-            </div>
             <TabsContent value="all">
               <div className="mt-4">
                 <ApplicationsTable

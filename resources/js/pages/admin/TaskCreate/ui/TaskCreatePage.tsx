@@ -12,7 +12,6 @@ import { TaskTag } from "@/entities/Task";
 import { TaskCreateForm, TaskForm } from "@/features/TaskCreateForm";
 import { FormEvent } from "react";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
-import { Heading } from "@/shared/ui/Heading";
 
 export default function TaskCreatePage({ tags }: { tags: TaskTag[] }) {
   const { data, setData, post, errors, reset, clearErrors } = useForm<TaskForm>(
@@ -52,28 +51,29 @@ export default function TaskCreatePage({ tags }: { tags: TaskTag[] }) {
         <title>Создание задачи</title>
       </Head>
       <AdminLayout>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/admin/tasks">Банк задач</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Создание задачи</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <Heading level={1}>Создание задачи</Heading>
-        <TaskCreateForm
-          data={data}
-          setData={setData}
-          errors={errors}
-          handleReset={handleReset}
-          handleSubmit={handleSubmit}
-          tags={tags}
-        />
+        <div className="max-w-4xl space-y-4">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/admin/tasks">Банк задач</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Создание задачи</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <TaskCreateForm
+            data={data}
+            setData={setData}
+            errors={errors}
+            handleReset={handleReset}
+            handleSubmit={handleSubmit}
+            tags={tags}
+          />
+        </div>
       </AdminLayout>
     </>
   );

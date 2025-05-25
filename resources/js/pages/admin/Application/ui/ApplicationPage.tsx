@@ -14,7 +14,6 @@ import {
 import { TaskCreateForm, TaskForm } from "@/features/TaskCreateForm";
 import { Button } from "@/shared/ui/Button";
 import { Trash2, UserCog } from "lucide-react";
-import { Heading } from "@/shared/ui/Heading";
 import { TaskTag } from "@/entities/Task";
 
 export default function ApplicationPage({
@@ -61,41 +60,42 @@ export default function ApplicationPage({
         <title>Заявка</title>
       </Head>
       <AdminLayout>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/admin/applications">Заявки</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Заявка №{application.id}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <div className="flex items-center justify-between gap-2 ">
-          <Heading level={1}>Заявка №{application.id}</Heading>
-          <div className="flex gap-2">
-            <Button variant="outline">
-              <UserCog />
-              Назначить
-            </Button>
-            <Button variant="destructive">
-              <Trash2 />
-              Удалить
-            </Button>
+        <div className="max-w-4xl space-y-4">
+          <div className="flex items-center gap-2 justify-between">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href="/admin/applications">Заявки</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Заявка №{application.id}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">
+                <UserCog />
+                Назначить
+              </Button>
+              <Button variant="destructive" size="sm">
+                <Trash2 />
+                Удалить
+              </Button>
+            </div>
           </div>
+          <TaskCreateForm
+            data={data}
+            setData={setData}
+            errors={errors}
+            handleReset={handleReset}
+            handleSubmit={handleSubmit}
+            tags={tags}
+            files={application.files}
+          />
         </div>
-        <TaskCreateForm
-          data={data}
-          setData={setData}
-          errors={errors}
-          handleReset={handleReset}
-          handleSubmit={handleSubmit}
-          tags={tags}
-          files={application.files}
-        />
       </AdminLayout>
     </>
   );

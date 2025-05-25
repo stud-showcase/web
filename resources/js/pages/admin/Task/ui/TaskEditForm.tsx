@@ -231,7 +231,7 @@ export function TaskEditForm({ task, tags }: { task: Task, tags: TaskTag[] }) {
           </div>
         </div>
       </div>
-      <div className="flex gap-2 mt-6">
+      <div className="flex gap-2">
         <Button variant="outline" type="reset">
           Сбросить
         </Button>
