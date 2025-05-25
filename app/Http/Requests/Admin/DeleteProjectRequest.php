@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use App\Traits\AuthorizesProjectActions;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteProjectMemberRequest extends FormRequest
+class DeleteProjectRequest extends FormRequest
 {
     use AuthorizesProjectActions;
 
     public function authorize(): bool
     {
-        $restrictToMentorAndAdmin = $this->has('isCreator');
-        return $this->authorizeProject($this->route('projectId'), $restrictToMentorAndAdmin);
+        return $this->authorizeProject($this->route('id'), true);
     }
 
     public function rules(): array

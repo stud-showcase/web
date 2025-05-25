@@ -29,13 +29,13 @@ class VacancyController extends Controller
         ]);
     }
 
-    public function store(CreateVacancyRequest $request): RedirectResponse
+    public function store(CreateVacancyRequest $request, int $id): RedirectResponse
     {
         try {
-            $this->vacancyService->createVacancy($request->route('id'), $request->validated());
-            return redirect()->route('projects.controlPanel.show', $request->route('id'))->with('success', 'Вакансия создана.');
+            $this->vacancyService->createVacancy($id, $request->validated());
+            return redirect()->route('projects.controlPanel.show', $id)->with('success', 'Вакансия создана.');
         } catch (Throwable $e) {
-            Log::error("Ошибка создания вакансии для проекта [{$request->route('id')}]: " . $e->getMessage(), ['data' => $request->validated()]);
+            Log::error("Ошибка создания вакансии для проекта [$id]: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }

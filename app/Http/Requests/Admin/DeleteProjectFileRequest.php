@@ -1,20 +1,25 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use App\Traits\AuthorizesProjectActions;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AdminDeleteProjectRequest extends FormRequest
+class DeleteProjectFileRequest extends FormRequest
 {
     use AuthorizesProjectActions;
 
     public function authorize(): bool
     {
-        return $this->authorizeProject($this->route('id'), true);
+        return $this->authorizeProject($this->route('projectId'), true);
     }
 
     public function rules(): array
+    {
+        return [];
+    }
+
+    public function messages(): array
     {
         return [];
     }

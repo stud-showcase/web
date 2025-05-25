@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use App\Traits\AuthorizesProjectActions;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AdminUpdateProjectRequest extends FormRequest
+class UpdateProjectRequest extends FormRequest
 {
     use AuthorizesProjectActions;
 

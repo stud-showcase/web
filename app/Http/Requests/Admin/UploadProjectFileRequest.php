@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use App\Rules\MaxTotalFileSize;
 use App\Traits\AuthorizesProjectActions;
@@ -12,7 +12,7 @@ class UploadProjectFileRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->authorizeProject($this->route('id'));
+        return $this->authorizeProject($this->route('id'), true);
     }
 
     public function rules(): array

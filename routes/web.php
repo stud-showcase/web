@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\TaskRequestController as AdminTaskRequestController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\TaskController as AdminTaskController;
+use App\Http\Controllers\Admin\VacancyController as AdminVacancyController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SocialController;
@@ -103,6 +104,16 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
         Route::delete('/{id}', [AdminProjectController::class, 'destroy'])->name('admin.projects.destroy');
         Route::post('/{id}/mentor', [AdminProjectController::class, 'setMentor'])->name('admin.projects.mentor.set');
         Route::delete('/{id}/mentor', [AdminProjectController::class, 'removeMentor'])->name('admin.projects.mentor.remove');
+
+        Route::post('/{id}/files', [AdminProjectController::class, 'uploadFiles'])->name('admin.projects.files.upload');
+        Route::delete('/{projectId}/files/{fileId}', [AdminProjectController::class, 'deleteFile'])->name('admin.projects.files.delete');
+
+        Route::post('/{id}/vacancy', [AdminVacancyController::class, 'store'])->name('admin.projects.vacancy.create');
+        Route::put('/{projectId}/vacancy/{vacancyId}', [AdminVacancyController::class, 'update'])->name('admin.projects.vacancy.update');
+        Route::delete('/{projectId}/vacancy/{vacancyId}', [AdminVacancyController::class, 'destroy'])->name('admin.projects.vacancy.destroy');
+
+        Route::put('/{projectId}/member/{memberId}', [AdminProjectController::class, 'updateMember'])->name('admin.projects.member.update');
+        Route::delete('/{projectId}/member/{memberId}', [AdminProjectController::class, 'deleteMember'])->name('admin.projects.member.delete');
     });
 
     Route::prefix('users')->group(function () {

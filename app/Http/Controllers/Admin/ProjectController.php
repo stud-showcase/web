@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminDeleteProjectRequest;
-use App\Http\Requests\AdminUpdateProjectRequest;
+use App\Http\Requests\Admin\DeleteProjectFileRequest as AdminDeleteProjectFileRequest;
+use App\Http\Requests\Admin\DeleteProjectMemberRequest as AdminDeleteProjectMemberRequest;
+use App\Http\Requests\Admin\DeleteProjectRequest as AdminDeleteProjectRequest;
+use App\Http\Requests\Admin\UpdateProjectMemberRequest as AdminUpdateProjectMemberRequest;
+use App\Http\Requests\Admin\UpdateProjectRequest as AdminUpdateProjectRequest;
+use App\Http\Requests\Admin\UploadProjectFileRequest as AdminUploadProjectFileRequest;
 use App\Http\Requests\RemoveProjectMentorRequest;
 use App\Http\Requests\SetProjectMentorRequest;
 use App\Http\Requests\UpdateSettingsRequest;
@@ -107,6 +111,50 @@ class ProjectController extends Controller
         } catch (Throwable $e) {
             Log::error("Ошибка обновления настроек: {$e->getMessage()}");
             return redirect()->back()->withErrors(['error' => 'Не удалось обновить настройки']);
+        }
+    }
+
+    public function uploadFiles(AdminUploadProjectFileRequest $request, int $id): RedirectResponse
+    {
+        try {
+            $this->projectService->uploadFiles($id, $request->file('files'));
+            return redirect()->route('admin.projects.show', $id)->with('success', 'Файлы успешно загружены');
+        } catch (Throwable $e) {
+            Log::error("Ошибка загрузки файлов для проекта [$id]: {$e->getMessage()}");
+            return redirect()->back()->withErrors(['error' => 'Не удалось загрузить файлы']);
+        }
+    }
+
+    public function deleteFile(AdminDeleteProjectFileRequest $request, int $projectId, int $fileId): RedirectResponse
+    {
+        try {
+            $this->projectService->deleteFile($projectId, $fileId);
+            return redirect()->route('admin.projects.show', $projectId)->with('success', 'Файл удалён');
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления файла [$fileId] для проекта [$projectId]: {$e->getMessage()}");
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function updateMember(AdminUpdateProjectMemberRequest $request, int $projectId, string $memberId): RedirectResponse
+    {
+        try {
+            $this->projectService->updateMember($projectId, $memberId, $request->validated());
+            return redirect()->route('admin.projects.show', $projectId)->with('success', 'Участник обновлён');
+        } catch (Throwable $e) {
+            Log::error("Ошибка обновления участника [$memberId] для проекта [$projectId]: {$e->getMessage()}", ['data' => $request->validated()]);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function deleteMember(AdminDeleteProjectMemberRequest $request, int $projectId, string $memberId): RedirectResponse
+    {
+        try {
+            $this->projectService->deleteMember($projectId, $memberId);
+            return redirect()->route('admin.projects.show', $projectId)->with('success', 'Участник удалён');
+        } catch (Throwable $e) {
+            Log::error("Ошибка удаления участника [$memberId] из проекта [$projectId]: {$e->getMessage()}");
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 }
