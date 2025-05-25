@@ -77,14 +77,14 @@ class AdminController extends Controller
         $task = $this->taskService->getTaskForAdmin($id);
         return Inertia::render('admin/Task', [
             'task' => $task,
-            $this->taskService->getAvailableFilters(['tags']),
+            ...$this->taskService->getAvailableFilters(['tags']),
         ]);
     }
 
     public function indexTaskSettings(): \Inertia\Response
     {
         return Inertia::render('admin/TaskBankSettings', [
-            $this->taskService->getAvailableFilters(['tags']),
+            ...$this->taskService->getAvailableFilters(['tags']),
         ]);
     }
 
@@ -110,7 +110,7 @@ class AdminController extends Controller
     public function indexTaskCreate(): \Inertia\Response
     {
         return Inertia::render('admin/TaskCreate', [
-            $this->taskService->getAvailableFilters(['tags']),
+            ...$this->taskService->getAvailableFilters(['tags']),
         ]);
     }
 
@@ -192,7 +192,7 @@ class AdminController extends Controller
         $taskRequest = $this->taskService->getTaskRequestById($id);
         return Inertia::render('admin/Application', [
             'taskRequest' => $taskRequest,
-            $this->taskService->getAvailableFilters(['tags']),
+            ...$this->taskService->getAvailableFilters(['tags']),
         ]);
     }
 

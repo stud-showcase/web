@@ -8,7 +8,6 @@ use App\Repositories\SettingRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
 use App\Traits\PaginatesCollections;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
