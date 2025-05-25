@@ -80,7 +80,10 @@ export function ProjectEditForm({ project }: { project: ExtendedProject }) {
             <ValidationErrorText text={errors.annotation} />
           )}
         </div>
+      </div>
 
+      <div className="space-y-4 border p-4 rounded-md shadow-sm">
+        <Heading level={5}>Дополнительная информация</Heading>
         <div className="space-y-2">
           <Label htmlFor="status">Статус *</Label>
           <Select

@@ -14,7 +14,7 @@ import { Trash2 } from "lucide-react";
 import { TaskEditForm } from "./TaskEditForm";
 import { TasksFiles } from "./TaskFiles";
 import { ExtendedTask } from "../model/ExtendedTask";
-import { TaskProjects } from "./TaskProject";
+import { TaskProjects } from "./TaskProjects";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
 
 export default function TaskPage({
@@ -55,10 +55,10 @@ export default function TaskPage({
           <Tabs defaultValue="main">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="main">Основная информация</TabsTrigger>
-              <TabsTrigger value="files">Файлы задачи</TabsTrigger>
-              <TabsTrigger value="projects">Проекты по задаче</TabsTrigger>
+              <TabsTrigger value="files">Файлы</TabsTrigger>
+              <TabsTrigger value="projects">Проекты</TabsTrigger>
             </TabsList>
-            <div className="mt-4">
+            <div className="mt-3">
               <TabsContent value="main">
                 <TaskEditForm task={task} tags={tags} />
               </TabsContent>
