@@ -29,6 +29,10 @@ class UserRepository
                                 ->orWhere('email', 'LIKE', '%' . $filters['search'] . '%');
                         })
                     )
+                    ->when(
+                        !empty($filters['roles']) && is_array($filters['roles']),
+                        fn($q) => $q->whereHas('roles', fn($query) => $query->whereIn('name', $filters['roles']))
+                    )
                     ->paginate(20)
                     ->withQueryString();
             });

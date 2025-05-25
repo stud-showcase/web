@@ -2,17 +2,29 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\ProjectStatus;
 use App\Models\User;
+use App\Models\Role;
+use Illuminate\Database\Seeder;
 
 class ProjectSeeder extends Seeder
 {
     public function run(): void
     {
         $tasks = Task::withCount('projects')->get();
+        $faker = \Faker\Factory::create('ru_RU');
+
+        $mentorRoleIds = Role::whereIn('name', ['mentor', 'admin'])->pluck('id');
+        $mentorUsers = User::whereHas('roles', function ($query) use ($mentorRoleIds) {
+            $query->whereIn('roles.id', $mentorRoleIds);
+        })->get();
+
+        $studentRole = Role::where('name', 'student')->firstOrFail();
+        $studentUsers = User::whereHas('roles', function ($query) use ($studentRole) {
+            $query->where('roles.id', $studentRole->id);
+        })->get();
 
         for ($i = 0; $i < 100; $i++) {
             $availableTasks = $tasks->filter(function ($task) {
@@ -24,28 +36,24 @@ class ProjectSeeder extends Seeder
             }
 
             $task = $availableTasks->random();
-            $mentor = User::inRandomOrder()->first();
+            $mentor = $mentorUsers->random();
 
             $project = Project::factory()->create([
                 'task_id' => $task->id,
-                'status_id' => fn() => ProjectStatus::inRandomOrder()->first()->id,
+                'status_id' => ProjectStatus::inRandomOrder()->first()->id,
                 'mentor_id' => $mentor->id,
-                'name' => fake()->sentence(3),
+                'name' => $faker->sentence(3),
             ]);
 
             $maxMembers = $task->max_members;
-            $participantsCount = rand(1, $maxMembers);
-            $participants = User::query()
-                ->where('id', '!=', $mentor->id)
-                ->inRandomOrder()
-                ->limit($participantsCount)
-                ->get();
+            $participantsCount = rand(1, min($maxMembers, $studentUsers->count()));
+            $participants = $studentUsers->random($participantsCount);
 
             $creatorAssigned = false;
             foreach ($participants as $participant) {
                 $isCreator = !$creatorAssigned;
                 $project->users()->attach($participant->id, [
-                    'position' => fake()->jobTitle(),
+                    'position' => $faker->jobTitle(),
                     'is_creator' => $isCreator,
                 ]);
                 $creatorAssigned = true;

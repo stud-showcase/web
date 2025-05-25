@@ -23,7 +23,7 @@ class UserController extends Controller
     public function index(Request $request): Response
     {
         try {
-            $filters = $request->only(['search']);
+            $filters = $request->only(['search', 'roles']);
             $users = $this->userService->getAdminUsers($filters);
             $roles = $this->userService->getAvailableRoles();
 
