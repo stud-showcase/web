@@ -5,7 +5,7 @@ import { Label } from "@/shared/ui/Label";
 import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
-import { COMPLEXITIES, TaskForm } from "@/entities/Task";
+import { COMPLEXITIES, getOptionsTags, TaskForm, TaskTag } from "@/entities/Task";
 import {
   Select,
   SelectContent,
@@ -26,7 +26,7 @@ type Props = {
   errors: Partial<Record<keyof TaskForm, string>>;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
   handleReset: (e: FormEvent<HTMLFormElement>) => void;
-  tags: { label: string; value: string }[];
+  tags: TaskTag[];
   files?: ServerFile[];
 };
 
@@ -39,6 +39,8 @@ export function TaskCreateForm({
   tags,
   files,
 }: Props) {
+  const tagsOptions = getOptionsTags(tags);
+
   return (
     <form onSubmit={handleSubmit} onReset={handleReset}>
       <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 items-start">
@@ -118,7 +120,7 @@ export function TaskCreateForm({
             <div className="space-y-2">
               <Label htmlFor="tags">Тэги</Label>
               <MultiSelect
-                options={tags}
+                options={tagsOptions}
                 onValueChange={(value) => setData("tags", value)}
                 defaultValue={data.tags}
                 placeholder="Выберите тэги..."

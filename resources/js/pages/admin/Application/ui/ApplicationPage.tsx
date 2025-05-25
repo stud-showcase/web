@@ -15,17 +15,13 @@ import { TaskCreateForm, TaskForm } from "@/features/TaskCreateForm";
 import { Button } from "@/shared/ui/Button";
 import { Trash2, UserCog } from "lucide-react";
 import { Heading } from "@/shared/ui/Heading";
-
-// TODO: убрать
-const tagsOptions = [
-  { label: "Тэг1", value: "tag1" },
-  { label: "Тэг2", value: "tag2" },
-  { label: "Тэг3", value: "tag3" },
-];
+import { TaskTag } from "@/entities/Task";
 
 export default function ApplicationPage({
+  tags,
   taskRequest: application,
 }: {
+  tags: TaskTag[];
   taskRequest: Application;
 }) {
   const { data, setData, post, errors, reset, clearErrors } = useForm<TaskForm>(
@@ -97,7 +93,7 @@ export default function ApplicationPage({
           errors={errors}
           handleReset={handleReset}
           handleSubmit={handleSubmit}
-          tags={tagsOptions}
+          tags={tags}
           files={application.files}
         />
       </AdminLayout>

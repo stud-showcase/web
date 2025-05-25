@@ -14,19 +14,7 @@ import { FormEvent } from "react";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 import { Heading } from "@/shared/ui/Heading";
 
-// TODO: убрать
-const tagsOptions = [
-  { label: "Тэг1", value: "tag1" },
-  { label: "Тэг2", value: "tag2" },
-  { label: "Тэг3", value: "tag3" },
-];
-
 export default function TaskCreatePage({ tags }: { tags: TaskTag[] }) {
-  // const tagsOptions = tags.map((tag) => ({
-  //   label: tag.name,
-  //   value: tag.id.toString(),
-  // }));
-
   const { data, setData, post, errors, reset, clearErrors } = useForm<TaskForm>(
     {
       title: "",
@@ -84,7 +72,7 @@ export default function TaskCreatePage({ tags }: { tags: TaskTag[] }) {
           errors={errors}
           handleReset={handleReset}
           handleSubmit={handleSubmit}
-          tags={tagsOptions}
+          tags={tags}
         />
       </AdminLayout>
     </>

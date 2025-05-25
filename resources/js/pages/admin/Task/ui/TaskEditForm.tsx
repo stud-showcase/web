@@ -11,6 +11,7 @@ import {
   getOptionsTags,
   Task,
   TaskForm,
+  TaskTag,
 } from "@/entities/Task";
 import {
   Select,
@@ -27,9 +28,9 @@ import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
 type TaskEditForm = Omit<TaskForm, "files">;
 
-export function TaskEditForm({ task }: { task: Task }) {
+export function TaskEditForm({ task, tags }: { task: Task, tags: TaskTag[] }) {
   const tagsFlat = getFlatTags(task.tags);
-  const tagsOptions = getOptionsTags(task.tags); // TODO: принимать норм тэги
+  const tagsOptions = getOptionsTags(tags);
 
   const { data, setData, put, errors, reset, clearErrors } =
     useForm<TaskEditForm>({

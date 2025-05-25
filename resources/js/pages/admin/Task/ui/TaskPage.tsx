@@ -1,4 +1,4 @@
-import { Task } from "@/entities/Task";
+import { TaskTag } from "@/entities/Task";
 import { AdminLayout } from "@/layouts/AdminLayout";
 import {
   Breadcrumb,
@@ -11,14 +11,13 @@ import {
 import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import { Head, Link } from "@inertiajs/react";
-import { Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { TaskEditForm } from "./TaskEditForm";
 import { TasksFiles } from "./TaskFiles";
 import { ExtendedTask } from "../model/ExtendedTask";
 import { TaskProjects } from "./TaskProject";
-import { Separator } from "@/shared/ui/Separator";
 
-export default function TaskPage({ task }: { task: ExtendedTask }) {
+export default function TaskPage({ task, tags }: { task: ExtendedTask, tags: TaskTag[] }) {
   return (
     <>
       <Head>
@@ -48,7 +47,7 @@ export default function TaskPage({ task }: { task: ExtendedTask }) {
           </div>
         </div>
         <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 items-start">
-          <TaskEditForm task={task} />
+          <TaskEditForm task={task} tags={tags} />
           <TasksFiles id={task.id} files={task.files} />
         </div>
         <div className="mt-4">
