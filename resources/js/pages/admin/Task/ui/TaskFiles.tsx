@@ -1,10 +1,3 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/shared/ui/Card";
 import { Button } from "@/shared/ui/Button";
 import {
   AlertDialog,
@@ -97,13 +90,9 @@ export function TasksFiles({ id, files }: { id: number; files: ServerFile[] }) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          <Heading level={5}>Файлы задачи</Heading>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="space-y-4 border p-4 rounded-md shadow-sm">
+      <Heading level={5}>Файлы задачи</Heading>
+      <div>
         <FileUploadDialog id={id}>
           <Button size="sm" variant="outline">
             <Plus />
@@ -150,7 +139,7 @@ export function TasksFiles({ id, files }: { id: number; files: ServerFile[] }) {
             Пока нет файлов
           </Text>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

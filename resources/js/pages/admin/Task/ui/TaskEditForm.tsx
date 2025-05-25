@@ -64,7 +64,7 @@ export function TaskEditForm({ task }: { task: Task }) {
 
   return (
     <form onSubmit={handleSubmit} onReset={handleReset}>
-      <div className="grid grid-cols-2 gap-4 items-start">
+      <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 items-start">
         <div className="space-y-4">
           <div className="space-y-4 border p-4 rounded-md shadow-sm">
             <Heading level={5}>Общая информация</Heading>
@@ -239,15 +239,15 @@ export function TaskEditForm({ task }: { task: Task }) {
               </div>
             </div>
           </div>
+          <div className="flex gap-2 mt-6">
+            <Button variant="outline" type="reset">
+              Сбросить
+            </Button>
+            <Button type="submit">Сохранить</Button>
+          </div>
         </div>
 
         <TasksFiles id={task.id} files={task.files} />
-      </div>
-      <div className="flex gap-2 mt-6">
-        <Button variant="outline" type="reset">
-          Сбросить
-        </Button>
-        <Button type="submit">Сохранить</Button>
       </div>
     </form>
   );
