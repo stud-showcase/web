@@ -45,7 +45,7 @@ class ProjectDto
                 'id' => $project->status->id,
                 'name' => $project->status->name,
             ],
-            isHiring: $project->users->count() < $project->task->max_members && !$project->is_close,
+            isHiring: $project->is_hiring,
             task: TaskDto::fromModel($project->task),
             vacancies: isset($project->vacancies)
                 ? $project->vacancies->map(fn($vacancy) => VacancyDto::fromModel($vacancy)->toArray())->toArray()
@@ -62,11 +62,15 @@ class ProjectDto
                     ];
                 })->toArray()
                 : null,
-            canJoin: !$userId || (
+            canJoin: $userId &&
+                !Auth::user()->hasPrivilegedRole() &&
                 !$project->users->contains('id', $userId) &&
                 !$project->invites->contains('user_id', $userId) &&
-                !$project->mentor_id == $userId
-            )
+                !Project::where('task_id', $project->task_id)
+                    ->whereHas('users', function ($query) use ($userId) {
+                        $query->where('user_id', $userId);
+                    })
+                    ->exists()
         );
     }
 

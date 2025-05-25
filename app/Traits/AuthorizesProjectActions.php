@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 trait AuthorizesProjectActions
 {
-    protected function authorizeProject(int $projectId): bool
+    protected function authorizeProject(int $projectId, bool $restrictToMentorAndAdmin = false): bool
     {
         $project = Project::find($projectId);
         if (!$project) {
@@ -15,12 +15,18 @@ trait AuthorizesProjectActions
         }
 
         $user = Auth::user();
-        $isMentor = $project->mentor_id == $user->id;
+        $isMentor = $project->mentor_id === $user->id;
+        $isAdmin = $user->hasAnyRole('admin');
+
+        if ($restrictToMentorAndAdmin) {
+            return $isMentor || $isAdmin;
+        }
+
         $isCreator = $project->users()
             ->where('user_id', $user->id)
             ->wherePivot('is_creator', true)
             ->exists();
 
-        return $isMentor || $isCreator || $user->hasAnyRole('admin');
+        return $isMentor || $isCreator || $isAdmin;
     }
 }

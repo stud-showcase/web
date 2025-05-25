@@ -66,7 +66,7 @@ class ProjectRepository
         }
     }
 
-    public function getUserProjectTags(int $userId): Collection
+    public function getUserProjectTags(string $userId): Collection
     {
         $cacheKey = "user:{$userId}:project_tags";
         return Cache::tags(['projects', 'tags'])->remember($cacheKey, 3600, function () use ($userId) {
@@ -89,15 +89,15 @@ class ProjectRepository
     {
         try {
             $project = DB::transaction(function () use ($taskId, $name, $user) {
-                $isPrivileged = $user->hasPrivilegedRole();
+                $hasUserPrivilegedRole = $user->hasPrivilegedRole();
                 $project = Project::create([
                     'task_id' => $taskId,
                     'status_id' => ProjectStatus::STATUS_WAITING,
                     'name' => $name,
-                    'mentor_id' => $isPrivileged ? $user->id : null,
+                    'mentor_id' => $hasUserPrivilegedRole ? $user->id : null,
                 ]);
 
-                if (!$isPrivileged) {
+                if (!$hasUserPrivilegedRole) {
                     $project->users()->attach($user->id, ['is_creator' => true]);
                 }
 

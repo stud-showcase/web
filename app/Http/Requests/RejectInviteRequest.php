@@ -3,11 +3,13 @@
 namespace App\Http\Requests;
 
 use App\Models\ProjectInvite;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Traits\AuthorizesProjectActions;
+use Illuminate\Foundation\Http\FormRequest;;
 
 class RejectInviteRequest extends FormRequest
 {
+    use AuthorizesProjectActions;
+
     public function authorize(): bool
     {
         $invite = ProjectInvite::find($this->input('inviteId'));
@@ -15,17 +17,12 @@ class RejectInviteRequest extends FormRequest
             return false;
         }
 
-        $project = $invite->project;
-        $user = Auth::user();
-
-        if ($project->id != $this->route('id')) {
+        $projectId = $invite->project->id;
+        if ($projectId != $this->route('id')) {
             return false;
         }
 
-        return $user->hasPrivilegedRole() || $project->users()
-            ->where('user_id', $user->id)
-            ->wherePivot('is_creator', true)
-            ->exists();
+        return $this->authorizeProject($projectId);
     }
 
     public function rules(): array

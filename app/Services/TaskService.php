@@ -84,7 +84,7 @@ class TaskService
         return $this->formatPaginatedData($paginator, fn($taskRequest) => TaskRequestDto::fromModel($taskRequest)->toArrayForAdmin());
     }
 
-    public function getTaskRequestById(int|string $id): array
+    public function getTaskRequestById(int $id): array
     {
         try {
             $taskRequest = $this->taskRepository->getTaskRequestById($id);

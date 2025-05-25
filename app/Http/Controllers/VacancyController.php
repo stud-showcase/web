@@ -40,7 +40,7 @@ class VacancyController extends Controller
         }
     }
 
-    public function update(UpdateVacancyRequest $request, int|string $projectId, int|string $vacancyId): RedirectResponse
+    public function update(UpdateVacancyRequest $request, int $projectId, int $vacancyId): RedirectResponse
     {
         try {
             $this->vacancyService->updateVacancy($vacancyId, $request->validated());
@@ -51,7 +51,7 @@ class VacancyController extends Controller
         }
     }
 
-    public function delete(DeleteVacancyRequest $request, int|string $projectId, int|string $vacancyId): RedirectResponse
+    public function delete(DeleteVacancyRequest $request, int $projectId, int $vacancyId): RedirectResponse
     {
         try {
             $this->vacancyService->deleteVacancy($vacancyId);

@@ -63,7 +63,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function show(int|string $id): \Inertia\Response
+    public function show(int $id): \Inertia\Response
     {
         $project = $this->projectService->getProjectById($id);
         return Inertia::render('user/Project', [
@@ -71,7 +71,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function showControlPanel(ShowControlPanelRequest $request, int|string $id): \Inertia\Response
+    public function showControlPanel(ShowControlPanelRequest $request, int $id): \Inertia\Response
     {
         $project = $this->projectService->getProjectById($id);
         return Inertia::render('user/ProjectControlPanel', [
@@ -91,7 +91,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function update(UpdateProjectRequest $request, int|string $id): RedirectResponse
+    public function update(UpdateProjectRequest $request, int $id): RedirectResponse
     {
         try {
             $project = $this->projectService->updateProject($id, $request->validated());
@@ -102,7 +102,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function createInvite(CreateInviteRequest $request, int|string $id): RedirectResponse
+    public function createInvite(CreateInviteRequest $request, int $id): RedirectResponse
     {
         try {
             $data = $request->validated();
@@ -114,7 +114,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function acceptInvite(AcceptInviteRequest $request, int|string $id): RedirectResponse
+    public function acceptInvite(AcceptInviteRequest $request, int $id): RedirectResponse
     {
         try {
             $data = $request->validated();
@@ -126,7 +126,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function rejectInvite(RejectInviteRequest $request, int|string $id): RedirectResponse
+    public function rejectInvite(RejectInviteRequest $request, int $id): RedirectResponse
     {
         try {
             $data = $request->validated();
@@ -138,7 +138,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function uploadFiles(UploadProjectFileRequest $request, int|string $id): RedirectResponse
+    public function uploadFiles(UploadProjectFileRequest $request, int $id): RedirectResponse
     {
         try {
             $this->projectService->uploadFiles($id, $request->file('files'));
@@ -149,7 +149,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function deleteFile(DeleteProjectFileRequest $request, int|string $projectId, int|string $fileId): RedirectResponse
+    public function deleteFile(DeleteProjectFileRequest $request, int $projectId, int $fileId): RedirectResponse
     {
         try {
             $this->projectService->deleteFile($projectId, $fileId);

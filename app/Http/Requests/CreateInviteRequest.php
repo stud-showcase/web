@@ -4,17 +4,14 @@ namespace App\Http\Requests;
 
 use App\Models\Project;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CreateInviteRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $project = Project::withCount('users')->with('task')->find($this->route('id'));
-        if (!$project) {
-            return false;
-        }
-
-        return !($project->users_count >= $project->task->max_members && $project->is_close);
+        $project = Project::find($this->route('id'));
+        return !Auth::user()->hasPrivilegedRole() && $project && $project->is_hiring;
     }
 
     public function rules(): array

@@ -27,6 +27,8 @@ class ApproveTaskRequestRequest extends FormRequest
             'deadline' => 'required|date',
             'complexityId' => 'required|exists:complexities,id',
             'files' => ['nullable', 'array', 'max:10', new MaxTotalFileSize()],
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ];
     }
 
@@ -49,8 +51,10 @@ class ApproveTaskRequestRequest extends FormRequest
             'maxProjects.min' => 'Максимальное количество проектов должно быть не менее 1',
             'maxProjects.max' => 'Максимальное количество проектов не может превышать 127',
             'deadline.date' => 'Дедлайн должен быть корректной датой',
-            'complexity_id.exists' => 'Указана неверная сложность',
+            'complexityId.required' => 'Выберите сложность',
+            'complexityId.exists' => 'Указана неверная сложность',
             'files.max' => 'Можно загрузить не более 10 файлов',
+            'tags.*.exists' => 'Указан неверный тег',
         ];
     }
 }

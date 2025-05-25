@@ -20,6 +20,8 @@ class Project extends Model
         'mentor_id',
     ];
 
+    protected $appends = ['is_hiring'];
+
     public function task()
     {
         return $this->belongsTo(Task::class);
@@ -55,5 +57,10 @@ class Project extends Model
     public function vacancies()
     {
         return $this->hasMany(Vacancy::class, 'project_id');
+    }
+
+    public function getIsHiringAttribute(): bool
+    {
+        return $this->users()->count() < $this->task->max_members && !$this->is_close;
     }
 }

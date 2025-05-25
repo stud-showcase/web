@@ -10,7 +10,7 @@ use Throwable;
 
 class ProjectInviteRepository
 {
-    public function create(string $userId, int $projectId, int|string|null $vacancyId): void
+    public function create(string $userId, int $projectId, ?int $vacancyId): void
     {
         try {
             ProjectInvite::create([

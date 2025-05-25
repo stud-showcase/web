@@ -2,6 +2,7 @@
 
 namespace App\Dto;
 
+use App\Models\Project;
 use App\Models\UserProject;
 use App\Models\Vacancy;
 use Illuminate\Support\Facades\Auth;
@@ -36,11 +37,15 @@ class VacancyDto
                     'name' => $tag->name,
                 ])->toArray(),
             ] : null,
-            canJoin: !$userId || (
+            canJoin: $userId &&
+                !Auth::user()->hasPrivilegedRole() &&
                 !$vacancy->project->users->contains('id', $userId) &&
                 !$vacancy->projectInvites->contains('user_id', $userId) &&
-                !$vacancy->project->mentor_id == $userId
-            )
+                !Project::where('task_id', $vacancy->project->task_id)
+                    ->whereHas('users', function ($query) use ($userId) {
+                        $query->where('user_id', $userId);
+                    })
+                    ->exists()
         );
     }
 

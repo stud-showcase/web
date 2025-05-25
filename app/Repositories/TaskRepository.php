@@ -8,6 +8,7 @@ use App\Models\Task;
 use App\Models\TaskFile;
 use App\Models\TaskRequest;
 use App\Models\UserProject;
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
@@ -15,6 +16,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Throwable;
@@ -111,7 +113,7 @@ class TaskRepository
         }
     }
 
-    public function getTaskRequestById(int|string $id): TaskRequest
+    public function getTaskRequestById(int $id): TaskRequest
     {
         $cacheKey = "task_request:{$id}";
         try {
@@ -300,6 +302,10 @@ class TaskRepository
                     'complexity_id' => $data['complexityId'],
                 ]);
 
+                if (!empty($data['tags'])) {
+                    $task->tags()->sync($data['tags']);
+                }
+
                 foreach ($taskRequest->files as $file) {
                     $newPath = 'task_files/' . $task->id . '/' . basename($file->path);
                     Storage::disk('public')->move($file->path, $newPath);
@@ -324,22 +330,26 @@ class TaskRepository
                 }
 
                 if ($taskRequest->with_project || ($data['withProject'] ?? false)) {
+                    $hasUserPrivilegedRole = $taskRequest->user->hasPrivilegedRole();
+
                     $project = Project::create([
                         'task_id' => $task->id,
                         'status_id' => ProjectStatus::STATUS_WAITING,
                         'name' => $data['projectName'] ?? $taskRequest->project_name,
+                        'mentor_id' => $hasUserPrivilegedRole ? Auth::id() : null,
                     ]);
 
-                    UserProject::create([
-                        'user_id' => $taskRequest->user_id,
-                        'project_id' => $project->id,
-                        'is_creator' => true,
-                    ]);
+                    if (!$hasUserPrivilegedRole) {
+                        UserProject::create([
+                            'user_id' => $taskRequest->user_id,
+                            'project_id' => $project->id,
+                            'is_creator' => true,
+                        ]);
+                    }
                 }
 
                 foreach ($taskRequest->files as $file) {
-                    Storage::disk('public')->delete($file->path);
-                    $file->delete();
+                    $this->fileRepository->deleteFile($file);
                 }
 
                 $taskRequest->delete();

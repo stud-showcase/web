@@ -52,7 +52,7 @@ class ProjectService
         return $this->formatPaginatedData($paginator, fn($project) => ProjectDto::fromModel($project)->toArray());
     }
 
-    public function getProjectById(int|string $id): array
+    public function getProjectById(int $id): array
     {
         try {
             $project = $this->projectRepository->getByIdWithRelations($id);
@@ -63,7 +63,7 @@ class ProjectService
         }
     }
 
-    public function createInvite(string $userId, int $projectId, int|string|null $vacancyId): void
+    public function createInvite(string $userId, int $projectId, ?int $vacancyId): void
     {
         try {
             $this->inviteRepository->create($userId, $projectId, $vacancyId);
