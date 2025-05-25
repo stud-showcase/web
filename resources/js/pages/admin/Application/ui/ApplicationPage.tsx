@@ -13,9 +13,7 @@ import {
 } from "@/shared/ui/Breadcrumb";
 import { TaskCreateForm, TaskForm } from "@/features/TaskCreateForm";
 import { Button } from "@/shared/ui/Button";
-import {
-  Trash2, UserCog
-} from "lucide-react";
+import { Trash2, UserCog } from "lucide-react";
 import { Heading } from "@/shared/ui/Heading";
 
 // TODO: убрать
@@ -48,7 +46,7 @@ export default function ApplicationPage({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post("/admin/tasks/create", {
+    post(`/admin/applications/${application.id}`, {
       onSuccess: () =>
         showSuccessToast("Задача успешно добавлена в банк задач"),
       onError: () => showErrorToast("Произошла ошибка в ходе создания задачи"),

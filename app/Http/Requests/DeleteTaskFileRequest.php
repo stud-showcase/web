@@ -9,7 +9,7 @@ class DeleteTaskFileRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $task = Task::find($this->route('id'));
+        $task = Task::find($this->route('taskId'));
         if (!$task) {
             return false;
         }
