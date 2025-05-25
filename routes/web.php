@@ -63,10 +63,6 @@ Route::prefix('projects')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('admin/Dashboard');
-    });
-
     Route::get('/applications', [AdminController::class, 'taskRequests'])->name('admin.applications.index');
     Route::get('/myApplications', [AdminController::class, 'getResponsibleUserTaskRequests']);
     Route::get('/applications/{id}', [AdminController::class, 'showTaskRequest'])->name('admin.applications.show');
@@ -97,10 +93,5 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users.index');
     Route::get('/users/{id}', function () {
         return Inertia::render('admin/User');
-    });
-
-    Route::get('/vacancies', [AdminController::class, 'vacancies'])->name('admin.vacancies.index');
-    Route::get('/vacancies/{id}', function () {
-        return Inertia::render('admin/Vacancy');
     });
 });

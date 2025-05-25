@@ -11,10 +11,14 @@ import {
 import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import { Head, Link } from "@inertiajs/react";
-import { Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { TaskEditForm } from "./TaskEditForm";
+import { TasksFiles } from "./TaskFiles";
+import { ExtendedTask } from "../model/ExtendedTask";
+import { TaskProjects } from "./TaskProject";
+import { Separator } from "@/shared/ui/Separator";
 
-export default function TaskPage({ task }: { task: Task }) {
+export default function TaskPage({ task }: { task: ExtendedTask }) {
   return (
     <>
       <Head>
@@ -25,7 +29,7 @@ export default function TaskPage({ task }: { task: Task }) {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="/admin/applications">Заявки</Link>
+                <Link href="/admin/tasks">Банк задач</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -43,7 +47,13 @@ export default function TaskPage({ task }: { task: Task }) {
             </Button>
           </div>
         </div>
-        <TaskEditForm task={task} />
+        <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 items-start">
+          <TaskEditForm task={task} />
+          <TasksFiles id={task.id} files={task.files} />
+        </div>
+        <div className="mt-4">
+          <TaskProjects projects={task.projects} />
+        </div>
       </AdminLayout>
     </>
   );

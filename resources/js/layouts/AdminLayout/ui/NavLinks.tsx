@@ -1,9 +1,7 @@
 import {
-  Briefcase,
   ClipboardList,
   FileText,
   FolderKanban,
-  LayoutDashboard,
   Users,
 } from "lucide-react";
 import { NavLink } from "./NavLink";
@@ -17,13 +15,6 @@ export function NavLinks({ mobile }: Props) {
 
   return (
     <>
-      <NavLink
-        href="/admin/dashboard"
-        icon={LayoutDashboard}
-        label="Дашборд"
-        isActive={pathname.startsWith("/admin/dashboard")}
-        mobile={mobile}
-      />
       <NavLink
         href="/admin/applications"
         icon={FileText}
@@ -46,13 +37,6 @@ export function NavLinks({ mobile }: Props) {
         icon={FolderKanban}
         label="Проекты"
         isActive={pathname.startsWith("/admin/projects")}
-        mobile={mobile}
-      />
-      <NavLink
-        href="/admin/vacancies"
-        icon={Briefcase}
-        label="Вакансии"
-        isActive={pathname.startsWith("/admin/vacancies")}
         mobile={mobile}
       />
       <NavLink

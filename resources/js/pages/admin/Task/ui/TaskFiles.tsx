@@ -81,8 +81,8 @@ function FileUploadDialog({ id, children }: PropsWithChildren<{ id: number }>) {
 export function TasksFiles({ id, files }: { id: number; files: ServerFile[] }) {
   const hasFiles = files.length > 0;
 
-  const handleDelete = (id: number) => {
-    router.delete(`/admin/tasks/${id}/files/${id}`, {
+  const handleDelete = (fileId: number) => {
+    router.delete(`/admin/tasks/${id}/files/${fileId}`, {
       preserveScroll: true,
       onSuccess: () => showSuccessToast("Файл был успешно удален"),
       onError: () => showErrorToast("Произошла ошибка в ходе удаления файла"),
@@ -92,54 +92,52 @@ export function TasksFiles({ id, files }: { id: number; files: ServerFile[] }) {
   return (
     <div className="space-y-4 border p-4 rounded-md shadow-sm">
       <Heading level={5}>Файлы задачи</Heading>
-      <div>
-        <FileUploadDialog id={id}>
-          <Button size="sm" variant="outline">
-            <Plus />
-            Добавить файл
-          </Button>
-        </FileUploadDialog>
+      <FileUploadDialog id={id}>
+        <Button size="sm" variant="outline">
+          <Plus />
+          Добавить файл
+        </Button>
+      </FileUploadDialog>
 
-        {hasFiles ? (
-          <Table className="mt-4">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Имя файла</TableHead>
-                <TableHead>Действия</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {files.map((file) => (
-                <TableRow key={file.path}>
-                  <TableCell>{file.name}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button size="icon" variant="outline" asChild>
-                        <a href={`/download/${encodeURIComponent(file.path)}`}>
-                          <Download />
-                        </a>
+      {hasFiles ? (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Имя файла</TableHead>
+              <TableHead>Действия</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {files.map((file) => (
+              <TableRow key={file.path}>
+                <TableCell>{file.name}</TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button size="icon" variant="outline" asChild>
+                      <a href={`/download/${encodeURIComponent(file.path)}`}>
+                        <Download />
+                      </a>
+                    </Button>
+                    <ConfirmationDialog
+                      title="Подтверждение удаления файла"
+                      description={`Вы уверены, что хотите удалить файл "${file.name}"? Это действие нельзя отменить.`}
+                      onAction={() => handleDelete(file.id)}
+                    >
+                      <Button variant="outline" size="icon">
+                        <Trash2 />
                       </Button>
-                      <ConfirmationDialog
-                        title="Подтверждение удаления файла"
-                        description={`Вы уверены, что хотите удалить файл "${file.name}"? Это действие нельзя отменить.`}
-                        onAction={() => handleDelete(file.id)}
-                      >
-                        <Button variant="outline" size="icon">
-                          <Trash2 />
-                        </Button>
-                      </ConfirmationDialog>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ) : (
-          <Text variant="muted" className="mt-4">
-            Пока нет файлов
-          </Text>
-        )}
-      </div>
+                    </ConfirmationDialog>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <Text variant="muted" className="mt-4">
+          Пока нет файлов
+        </Text>
+      )}
     </div>
   );
 }
