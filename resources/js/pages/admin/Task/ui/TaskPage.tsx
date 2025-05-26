@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/shared/ui/Breadcrumb";
 import { Button } from "@/shared/ui/Button";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { Trash2 } from "lucide-react";
 import { TaskEditForm } from "./TaskEditForm";
 import { TasksFiles } from "./TaskFiles";
@@ -17,6 +17,8 @@ import { ExtendedTask } from "../model/ExtendedTask";
 import { TaskProjects } from "./TaskProjects";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
 import { SettingsCard } from "@/shared/ui/SettingsCard";
+import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
 export default function TaskPage({
   task,
@@ -25,6 +27,13 @@ export default function TaskPage({
   task: ExtendedTask;
   tags: TaskTag[];
 }) {
+  const deleteTask = () => {
+    router.delete(`/admin/tasks/${task.id}`, {
+      onSuccess: () => showSuccessToast("Задача успешно удалена"),
+      onError: () => showErrorToast("Произошла ошибка в ходе удаления задачи"),
+    });
+  };
+
   return (
     <>
       <Head>
@@ -71,10 +80,16 @@ export default function TaskPage({
                     heading="Удаление задачи"
                     text="В случае удаления задачи вы больше не сможете вернуть ее. Пожалуйста, будьте внимательными."
                     buttonsSlot={
-                      <Button variant="destructive" size="sm">
-                        <Trash2 />
-                        Удалить
-                      </Button>
+                      <ConfirmationDialog
+                        title="Удаление задачи"
+                        description="Вы уверены что хотите удалить задачу? Это действие нельзя отменить."
+                        onAction={deleteTask}
+                      >
+                        <Button variant="destructive" size="sm">
+                          <Trash2 />
+                          Удалить
+                        </Button>
+                      </ConfirmationDialog>
                     }
                   />
                 </div>
