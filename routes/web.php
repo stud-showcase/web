@@ -77,13 +77,13 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
     });
 
     Route::prefix('tags')->group(function () {
-        Route::get('/', [AdminTagController::class, 'index'])->name('admin.tags.index');
         Route::post('/', [AdminTagController::class, 'store'])->name('admin.tags.store');
         Route::put('/{id}', [AdminTagController::class, 'update'])->name('admin.tags.update');
         Route::delete('/{id}', [AdminTagController::class, 'destroy'])->name('admin.tags.destroy');
     });
 
     Route::prefix('tasks')->group(function () {
+        Route::get('/settings', [AdminTaskController::class, 'indexSettings'])->name('admin.tasks.settings');
         Route::get('/', [AdminTaskController::class, 'index'])->name('admin.tasks.index');
         Route::get('/create', [AdminTaskController::class, 'create'])->name('admin.tasks.create');
         Route::post('/', [AdminTaskController::class, 'store'])->name('admin.tasks.store');

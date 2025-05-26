@@ -8,8 +8,6 @@ use App\Http\Requests\Admin\UpdateTagRequest as AdminUpdateTagRequest;
 use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
-use Inertia\Response;
 use Throwable;
 
 class TagController extends Controller
@@ -17,13 +15,6 @@ class TagController extends Controller
     public function __construct(
         private TaskService $taskService
     ) {}
-
-    public function index(): Response
-    {
-        return Inertia::render('admin/TaskBankSettings', [
-            ...$this->taskService->getAvailableFilters(['tags']),
-        ]);
-    }
 
     public function store(AdminCreateTagRequest $request): RedirectResponse
     {

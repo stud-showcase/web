@@ -3,12 +3,13 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class UpdateTaskRequestMentorRequest extends FormRequest
+class UpdateTaskRequestResponsibleUser extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return Auth::user()->hasAnyRole(['admin']);
     }
 
     public function rules(): array

@@ -109,4 +109,11 @@ class TaskController extends Controller
             return redirect()->back()->withErrors(['error' => 'Не удалось удалить файл']);
         }
     }
+
+    public function indexSettings(): Response
+    {
+        return Inertia::render('admin/TaskBankSettings', [
+            ...$this->taskService->getAvailableFilters(['tags']),
+        ]);
+    }
 }
