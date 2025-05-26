@@ -126,7 +126,7 @@ class ProjectRepository
                     'is_close' => $data['isClose'] ?? $project->is_close,
                 ]);
 
-                if ($data['isClose']) {
+                if (!empty($data['isClose'])) {
                     ProjectInvite::where('project_id', $projectId)->delete();
                 }
 
@@ -147,11 +147,15 @@ class ProjectRepository
     {
         try {
             DB::transaction(function () use ($id) {
-                $project = Project::findOrFail($id);
+                $project = Project::with(['invites', 'users', 'vacancies'])->findOrFail($id);
+
+                $project->invites()->delete();
+                $project->users()->detach();
+                $project->vacancies()->delete();
                 $project->delete();
 
-                Cache::tags(['projects'])->forget("project:{$id}");
-                Cache::tags(['projects'])->flush();
+                Cache::tags(['projects', 'tasks'])->flush();
+                Cache::forget("project:{$id}");
             });
         } catch (ModelNotFoundException $e) {
             throw $e;

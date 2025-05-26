@@ -62,6 +62,7 @@ class UserRepository
         try {
             return DB::transaction(function () use ($id, $data) {
                 $user = User::findOrFail($id);
+
                 $user->update([
                     'first_name' => $data['firstName'] ?? $user->first_name,
                     'second_name' => $data['secondName'] ?? $user->second_name,
@@ -70,8 +71,14 @@ class UserRepository
                     'group' => $data['group'] ?? $user->group,
                 ]);
 
+                if (!empty($data['roles'])) {
+                    $roleIds = Role::whereIn('name', $data['roles'])->pluck('id')->toArray();
+                    $user->roles()->sync($roleIds);
+                }
+
                 Cache::tags(['users'])->flush();
-                Cache::tags(['users'])->forget("user:{$id}");
+                Cache::forget("user:{$id}");
+
                 return $user->load('roles');
             });
         } catch (ModelNotFoundException $e) {

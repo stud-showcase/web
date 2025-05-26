@@ -17,7 +17,7 @@ class VacancyRepository
         try {
             return Cache::tags(['vacancies'])->remember($cacheKey, 300, function () use ($filters) {
                 return Vacancy::query()
-                    ->with(['project.task.tags'])
+                    ->with(['project', 'project.task', 'project.task.tags'])
                     ->when(
                         isset($filters['tags']) && is_array($filters['tags']) && count($filters['tags']) > 0,
                         fn($q) => $q->whereHas(

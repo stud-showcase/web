@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\DeleteUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
-use App\Http\Requests\Admin\UpdateUserRolesRequest;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -73,18 +72,6 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')->with('success', 'Пользователь успешно удалён');
         } catch (Throwable $e) {
             Log::error("Ошибка удаления пользователя [$id]: " . $e->getMessage());
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
-    }
-
-    public function updateRoles(UpdateUserRolesRequest $request, string $id): RedirectResponse
-    {
-        try {
-            $data = $request->validated();
-            $this->userService->updateUserRoles($id, $data['roles']);
-            return redirect()->route('admin.users.show', $id)->with('success', 'Роли пользователя обновлены');
-        } catch (Throwable $e) {
-            Log::error("Ошибка обновления ролей пользователя [$id]: " . $e->getMessage(), ['roles' => $request->input('roles')]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }

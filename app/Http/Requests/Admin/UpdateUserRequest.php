@@ -10,7 +10,7 @@ class UpdateUserRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return Auth::user()->hasAnyRole('admin');
+        return !empty($this->input('roles')) ? Auth::user()->hasAnyRole('admin') : true;
     }
 
     public function rules(): array
@@ -28,6 +28,8 @@ class UpdateUserRequest extends FormRequest
                 Rule::unique('users', 'email')->ignore($userId),
             ],
             'group' => 'sometimes|string|max:255|nullable',
+            'roles' => 'sometimes|array',
+            'roles.*' => 'string|exists:roles,name',
         ];
     }
 }

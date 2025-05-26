@@ -3,7 +3,6 @@
 namespace App\Dto;
 
 use App\Models\Project;
-use App\Models\UserProject;
 use App\Models\Vacancy;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,13 +24,13 @@ class VacancyDto
             id: $vacancy->id,
             name: $vacancy->name,
             description: $vacancy->description,
-            project: $vacancy->relationLoaded('project') ? [
+            project: isset($vacancy->project) ? [
                 'id' => $vacancy->project->id,
                 'name' => $vacancy->project->name,
                 'isHiring' => $vacancy->project->users->count() < $vacancy->project->task->max_members && !$vacancy->project->is_close,
             ] : null,
-            task: $vacancy->project->relationLoaded('task') ? [
-                'title' => $vacancy->project->task->title ?? null,
+            task: isset($vacancy->project->task) ? [
+                'title' => $vacancy->project->task->title,
                 'tags' => $vacancy->project->task->tags->map(fn($tag) => [
                     'id' => $tag->id,
                     'name' => $tag->name,

@@ -95,8 +95,8 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
     });
 
     Route::prefix('projects')->group(function () {
-        Route::get('/settings', [AdminProjectController::class, 'indexSettings'])->name('admin.projects.settings');
-        Route::put('/settings', [AdminProjectController::class, 'updateSettings'])->name('admin.settings.update');
+        Route::get('/settings', [AdminProjectController::class, 'indexSettings'])->middleware('role:admin')->name('admin.projects.settings');
+        Route::put('/settings', [AdminProjectController::class, 'updateSettings'])->middleware('role:admin')->name('admin.projects.settings.update');
 
         Route::get('/', [AdminProjectController::class, 'index'])->name('admin.projects.index');
         Route::get('/{id}', [AdminProjectController::class, 'show'])->name('admin.projects.show');
@@ -120,7 +120,6 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
         Route::get('/', [AdminUserController::class, 'index'])->name('admin.users.index');
         Route::get('/{id}', [AdminUserController::class, 'show'])->name('admin.users.show');
         Route::put('/{id}', [AdminUserController::class, 'update'])->name('admin.users.update');
-        Route::delete('/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
-        Route::put('/{id}/roles', [AdminUserController::class, 'updateRoles'])->name('admin.users.roles.update');
+        Route::delete('/{id}', [AdminUserController::class, 'destroy'])->middleware('role:admin')->name('admin.users.destroy');
     });
 });

@@ -59,16 +59,6 @@ class UserService
         }
     }
 
-    public function updateUserRoles(string $id, array $roleIds): void
-    {
-        try {
-            $this->userRepository->updateUserRoles($id, $roleIds);
-        } catch (Throwable $e) {
-            Log::error("Ошибка обновления ролей пользователя [$id]: " . $e->getMessage(), ['role_ids' => $roleIds]);
-            throw $e;
-        }
-    }
-
     public function getAvailableRoles(): array
     {
         try {
