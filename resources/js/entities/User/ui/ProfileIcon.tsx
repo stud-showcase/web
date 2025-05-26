@@ -7,13 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/DropdownMenu";
-import {
-  ChevronDown,
-  ChevronUp,
-  LogOut,
-  Settings,
-  Users,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, LogOut, Settings, Users } from "lucide-react";
 import { Link } from "@inertiajs/react";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { Text } from "@/shared/ui/Text";
@@ -21,7 +15,13 @@ import { getAvatartName, getFullName, getShortName } from "../util/names";
 import { isAdmin, isMentor, isStudent } from "../util/roles";
 import { useState } from "react";
 
-export function ProfileIcon({ variant }: { variant: "user" | "admin" }) {
+export function ProfileIcon({
+  role,
+  variant,
+}: {
+  role: "user" | "admin";
+  variant: "short" | "full";
+}) {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -53,13 +53,17 @@ export function ProfileIcon({ variant }: { variant: "user" | "admin" }) {
                 {avatarName}
               </AvatarFallback>
             </Avatar>
-            <Text variant="small" className="font-semibold text-primary">
-              {shortName}
-            </Text>
-            {isOpen ? (
-              <ChevronUp className="text-primary h-4 w-4" />
-            ) : (
-              <ChevronDown className="text-primary h-4 w-4" />
+            {variant === "full" && (
+              <>
+                <Text variant="small" className="font-semibold text-primary">
+                  {shortName}
+                </Text>
+                {isOpen ? (
+                  <ChevronUp className="text-primary h-4 w-4" />
+                ) : (
+                  <ChevronDown className="text-primary h-4 w-4" />
+                )}
+              </>
             )}
           </button>
         </DropdownMenuTrigger>
@@ -80,7 +84,7 @@ export function ProfileIcon({ variant }: { variant: "user" | "admin" }) {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {variant === "user" && (isMentor(user) || isAdmin(user)) && (
+          {role === "user" && (isMentor(user) || isAdmin(user)) && (
             <DropdownMenuItem asChild>
               <Link href="/admin/applications">
                 <Settings className="mr-2 h-4 w-4" />
@@ -88,7 +92,7 @@ export function ProfileIcon({ variant }: { variant: "user" | "admin" }) {
               </Link>
             </DropdownMenuItem>
           )}
-          {variant === "admin" && (
+          {role === "admin" && (
             <DropdownMenuItem asChild>
               <Link href="/">
                 <Users className="mr-2 h-4 w-4" />

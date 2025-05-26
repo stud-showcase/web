@@ -34,8 +34,7 @@ export default function UsersPage(props: Props) {
       <Head>
         <title>Пользователи</title>
       </Head>
-      <AdminLayout>
-        <Heading level={1}>Пользователи</Heading>
+      <AdminLayout headerSlot={<Heading level={2}>Пользователи</Heading>}>
         <UsersFiltersContext.Provider value={{ filters, setFilters }}>
           <UsersTable
             users={users}

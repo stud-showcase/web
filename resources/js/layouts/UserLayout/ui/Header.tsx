@@ -24,7 +24,7 @@ export function Header() {
           </nav>
         </div>
         <div className="lg:flex gap-4 items-center hidden">
-          {user ? <ProfileIcon variant="user" /> : <SignInButton />}
+          {user ? <ProfileIcon role="user" variant="full" /> : <SignInButton />}
         </div>
         <div className="flex lg:hidden">
           <MobileMenu />
@@ -33,4 +33,3 @@ export function Header() {
     </header>
   );
 }
-

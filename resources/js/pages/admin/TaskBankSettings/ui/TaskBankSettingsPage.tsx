@@ -8,8 +8,10 @@ export default function TaskBankSettingsPage() {
       <Head>
         <title>Настройки банка задач</title>
       </Head>
-      <AdminLayout>
-        <Heading level={1}>Настройки банка задач</Heading>
+      <AdminLayout
+        headerSlot={<Heading level={2}>Настройки банка задач</Heading>}
+      >
+        TODO
       </AdminLayout>
     </>
   );

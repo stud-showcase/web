@@ -46,8 +46,7 @@ export default function ApplicationsPage(props: Props) {
       <Head>
         <title>Заявки</title>
       </Head>
-      <AdminLayout>
-        <Heading level={1}>Заявки</Heading>
+      <AdminLayout headerSlot={<Heading level={2}>Заявки</Heading>}>
         <ApplicationsFiltersContext.Provider value={{ filters, setFilters }}>
           <Tabs defaultValue={getCurrentTab()} onValueChange={handleTabChange}>
             <TabsList>

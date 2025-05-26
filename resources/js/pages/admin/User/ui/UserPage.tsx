@@ -20,8 +20,8 @@ export default function UserPage({ user }: { user: User }) {
       <Head>
         <title>Пользователь</title>
       </Head>
-      <AdminLayout>
-        <div className="max-w-4xl space-y-4">
+      <AdminLayout
+        headerSlot={
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -35,9 +35,12 @@ export default function UserPage({ user }: { user: User }) {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+        }
+      >
+        <div className="max-w-5xl space-y-4">
           <Tabs defaultValue="main">
-            <TabsList className="w-full grid grid-cols-2">
-              <TabsTrigger value="main">Основная информация</TabsTrigger>
+            <TabsList>
+              <TabsTrigger value="main">Главное</TabsTrigger>
               <TabsTrigger value="settings">Настройки</TabsTrigger>
             </TabsList>
             <div className="mt-3">

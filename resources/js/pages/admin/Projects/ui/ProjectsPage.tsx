@@ -37,9 +37,8 @@ export default function ProjectsPage(props: Props) {
       <Head>
         <title>Проекты</title>
       </Head>
-      <AdminLayout>
+      <AdminLayout headerSlot={<Heading level={2}>Проекты</Heading>}>
         <div className="flex gap-2 justify-between items-center">
-          <Heading level={1}>Проекты</Heading>
           <Button variant="outline" asChild>
             <Link href="/admin/projects/settings">
               <Settings />

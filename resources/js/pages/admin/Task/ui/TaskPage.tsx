@@ -30,8 +30,8 @@ export default function TaskPage({
       <Head>
         <title>Задача</title>
       </Head>
-      <AdminLayout>
-        <div className="max-w-4xl space-y-4">
+      <AdminLayout
+        headerSlot={
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -45,9 +45,12 @@ export default function TaskPage({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+        }
+      >
+        <div className="max-w-5xl space-y-4">
           <Tabs defaultValue="main">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="main">Основная информация</TabsTrigger>
+            <TabsList>
+              <TabsTrigger value="main">Главное</TabsTrigger>
               <TabsTrigger value="files">Файлы</TabsTrigger>
               <TabsTrigger value="projects">Проекты</TabsTrigger>
               <TabsTrigger value="settings">Настройки</TabsTrigger>

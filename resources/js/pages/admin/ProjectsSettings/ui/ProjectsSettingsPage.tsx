@@ -8,8 +8,8 @@ export default function ProjectsSettingsPage() {
       <Head>
         <title>Настройки проектов</title>
       </Head>
-      <AdminLayout>
-        <Heading level={1}>Настройки проектов</Heading>
+      <AdminLayout headerSlot={<Heading level={2}>Настройки проектов</Heading>}>
+        TODO
       </AdminLayout>
     </>
   );

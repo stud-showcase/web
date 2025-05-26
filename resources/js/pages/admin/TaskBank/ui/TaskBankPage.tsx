@@ -38,20 +38,19 @@ export default function TaskBankPage(props: Props) {
       <Head>
         <title>Банк задач</title>
       </Head>
-      <AdminLayout>
+      <AdminLayout headerSlot={<Heading level={2}>Банк задач</Heading>}>
         <div className="flex items-center justify-between">
-          <Heading level={1}>Банк задач</Heading>
           <div className="flex gap-2 items-center">
-            <Button variant="outline" asChild>
-              <Link href="/admin/tasks/settings">
-                <Settings />
-                Настройки
-              </Link>
-            </Button>
             <Button variant="outline" asChild>
               <Link href="/admin/tasks/create">
                 <Plus />
                 Создать
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/admin/tasks/settings">
+                <Settings />
+                Настройки
               </Link>
             </Button>
           </div>

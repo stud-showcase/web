@@ -50,8 +50,8 @@ export default function TaskCreatePage({ tags }: { tags: TaskTag[] }) {
       <Head>
         <title>Создание задачи</title>
       </Head>
-      <AdminLayout>
-        <div className="max-w-4xl space-y-4">
+      <AdminLayout
+        headerSlot={
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -65,6 +65,9 @@ export default function TaskCreatePage({ tags }: { tags: TaskTag[] }) {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+        }
+      >
+        <div className="max-w-5xl space-y-4">
           <TaskCreateForm
             data={data}
             setData={setData}

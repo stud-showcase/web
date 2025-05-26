@@ -48,7 +48,7 @@ export function CommandMenu() {
     <>
       <Button
         variant="outline"
-        className="text-sm tracking-wide text-muted-foreground font-medium w-full sm:w-[326px] h-[36px]"
+        className="text-sm tracking-wide text-muted-foreground font-medium w-[326px] xl:inline-flex hidden"
         onClick={() => setOpen(true)}
       >
         <Search className="h-4 w-4" />
@@ -56,6 +56,14 @@ export function CommandMenu() {
         <kbd className="pointer-events-none ml-auto inline-flex h-5 select-none items-center gap-2 rounded border bg-muted px-1 font-mono text-xs font-medium text-muted-foreground">
           <span>⌘</span>K
         </kbd>
+      </Button>
+      <Button
+        variant="outline"
+        size="icon"
+        className="inline-flex xl:hidden"
+        onClick={() => setOpen(true)}
+      >
+        <Search className="h-4 w-4" />
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Введите команду или поиск..." />

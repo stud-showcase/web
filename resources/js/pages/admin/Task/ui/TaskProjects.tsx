@@ -24,7 +24,6 @@ export function TaskProjects({ projects }: { projects: Project[] }) {
   return (
     <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
       <Heading level={5}>Проекты задачи</Heading>
-      {/* TODO */}
       <Button size="sm" variant="outline">
         <Plus />
         Создать проект
