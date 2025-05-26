@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use App\Models\Task;
-use App\Models\TaskFile;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DeleteTaskFileRequest extends FormRequest
@@ -11,8 +10,12 @@ class DeleteTaskFileRequest extends FormRequest
     public function authorize(): bool
     {
         $task = Task::find($this->route('taskId'));
-        $taskFile = TaskFile::find($this->route('fileId'));
-        return $task && $taskFile;
+
+        if (!$task) {
+            return false;
+        }
+
+        return $task->files()->where('id', $this->route('fileId'))->exists();
     }
 
     public function rules(): array

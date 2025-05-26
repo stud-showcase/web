@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DeleteUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\UpdateUserRolesRequest;
+use App\Http\Requests\Admin\DeleteUserRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Http\Requests\Admin\UpdateUserRolesRequest;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

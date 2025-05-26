@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateTagRequest;
-use App\Http\Requests\UpdateTagRequest;
+use App\Http\Requests\Admin\CreateTagRequest as AdminCreateTagRequest;
+use App\Http\Requests\Admin\UpdateTagRequest as AdminUpdateTagRequest;
 use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
@@ -25,7 +25,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function store(CreateTagRequest $request): RedirectResponse
+    public function store(AdminCreateTagRequest $request): RedirectResponse
     {
         try {
             $data = $request->validated();
@@ -37,7 +37,7 @@ class TagController extends Controller
         }
     }
 
-    public function update(UpdateTagRequest $request, int $id): RedirectResponse
+    public function update(AdminUpdateTagRequest $request, int $id): RedirectResponse
     {
         try {
             $data = $request->validated();

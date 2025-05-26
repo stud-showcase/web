@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateTaskRequest;
-use App\Http\Requests\DeleteTaskFileRequest;
-use App\Http\Requests\UpdateTaskRequest;
-use App\Http\Requests\UploadTaskFileRequest;
+use App\Http\Requests\Admin\CreateTaskRequest as AdminCreateTaskRequest;
+use App\Http\Requests\Admin\DeleteTaskFileRequest as AdminDeleteTaskFileRequest;
+use App\Http\Requests\Admin\UpdateTaskRequest as AdminUpdateTaskRequest;
+use App\Http\Requests\Admin\UploadTaskFileRequest as AdminUploadTaskFileRequest;
 use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -53,7 +53,7 @@ class TaskController extends Controller
         ]);
     }
 
-    public function store(CreateTaskRequest $request): RedirectResponse
+    public function store(AdminCreateTaskRequest $request): RedirectResponse
     {
         try {
             $data = $request->validated();
@@ -65,7 +65,7 @@ class TaskController extends Controller
         }
     }
 
-    public function update(UpdateTaskRequest $request, int $id): RedirectResponse
+    public function update(AdminUpdateTaskRequest $request, int $id): RedirectResponse
     {
         try {
             $data = $request->validated();
@@ -88,7 +88,7 @@ class TaskController extends Controller
         }
     }
 
-    public function uploadFiles(UploadTaskFileRequest $request, int $id): RedirectResponse
+    public function uploadFiles(AdminUploadTaskFileRequest $request, int $id): RedirectResponse
     {
         try {
             $this->taskService->uploadFiles($id, $request->file('files'));
@@ -99,7 +99,7 @@ class TaskController extends Controller
         }
     }
 
-    public function deleteFile(DeleteTaskFileRequest $request, int $taskId, int $fileId): RedirectResponse
+    public function deleteFile(AdminDeleteTaskFileRequest $request, int $taskId, int $fileId): RedirectResponse
     {
         try {
             $this->taskService->deleteFile($taskId, $fileId);

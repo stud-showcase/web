@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\DeleteProjectFileRequest as AdminDeleteProjectFileRequest;
 use App\Http\Requests\Admin\DeleteProjectMemberRequest as AdminDeleteProjectMemberRequest;
 use App\Http\Requests\Admin\DeleteProjectRequest as AdminDeleteProjectRequest;
+use App\Http\Requests\Admin\RemoveProjectMentorRequest as AdminRemoveProjectMentorRequest;
+use App\Http\Requests\Admin\SetProjectMentorRequest as AdminSetProjectMentorRequest;
 use App\Http\Requests\Admin\UpdateProjectMemberRequest as AdminUpdateProjectMemberRequest;
 use App\Http\Requests\Admin\UpdateProjectRequest as AdminUpdateProjectRequest;
+use App\Http\Requests\Admin\UpdateSettingsRequest as AdminUpdateSettingsRequest;
 use App\Http\Requests\Admin\UploadProjectFileRequest as AdminUploadProjectFileRequest;
-use App\Http\Requests\RemoveProjectMentorRequest;
-use App\Http\Requests\SetProjectMentorRequest;
-use App\Http\Requests\UpdateSettingsRequest;
 use App\Services\ProjectService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -72,7 +72,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function setMentor(SetProjectMentorRequest $request, int $id): RedirectResponse
+    public function setMentor(AdminSetProjectMentorRequest $request, int $id): RedirectResponse
     {
         try {
             $data = $request->validated();
@@ -84,7 +84,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function removeMentor(RemoveProjectMentorRequest $request, int $id): RedirectResponse
+    public function removeMentor(AdminRemoveProjectMentorRequest $request, int $id): RedirectResponse
     {
         try {
             $this->projectService->removeMentor($id);
@@ -103,7 +103,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function updateSettings(UpdateSettingsRequest $request)
+    public function updateSettings(AdminUpdateSettingsRequest $request)
     {
         try {
             $this->projectService->updateSettings($request->validated());

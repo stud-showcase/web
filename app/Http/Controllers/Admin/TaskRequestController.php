@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ApproveTaskRequestRequest;
-use App\Http\Requests\UpdateTaskRequestMentorRequest;
+use App\Http\Requests\Admin\ApproveTaskRequestRequest as AdminApproveTaskRequestRequest;
+use App\Http\Requests\Admin\UpdateTaskRequestMentorRequest as AdminUpdateTaskRequestMentorRequest;
 use App\Services\TaskService;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
@@ -66,14 +66,14 @@ class TaskRequestController extends Controller
         return redirect()->route('admin.applications.index')->with('success', 'Заявка успешно удалена');
     }
 
-    public function approve(ApproveTaskRequestRequest $request, int $id): RedirectResponse
+    public function approve(AdminApproveTaskRequestRequest $request, int $id): RedirectResponse
     {
         $data = $request->validated();
         $this->taskService->approveTaskRequest($id, $data, $request->file('files', []));
         return redirect()->route('admin.applications.index')->with('success', 'Заявка успешно одобрена');
     }
 
-    public function updateResponsible(UpdateTaskRequestMentorRequest $request, int $id): RedirectResponse
+    public function updateResponsible(AdminUpdateTaskRequestMentorRequest $request, int $id): RedirectResponse
     {
         $data = $request->validated();
         $this->taskService->updateTaskRequestResponsibleUser($id, $data['responsibleUserId']);

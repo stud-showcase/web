@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
-use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class UpdateUserRolesRequest extends FormRequest
+class DeleteUserRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,9 +14,6 @@ class UpdateUserRolesRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'roles' => 'required|array',
-            'roles.*' => 'integer|exists:roles,id',
-        ];
+        return [];
     }
 }
