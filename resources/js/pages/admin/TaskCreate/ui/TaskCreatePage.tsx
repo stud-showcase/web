@@ -32,7 +32,7 @@ export default function TaskCreatePage({ tags }: { tags: TaskTag[] }) {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post("/admin/tasks/create", {
+    post("/admin/tasks", {
       onSuccess: () =>
         showSuccessToast("Задача успешно добавлена в банк задач"),
       onError: () => showErrorToast("Произошла ошибка в ходе создания задачи"),

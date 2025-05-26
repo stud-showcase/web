@@ -105,7 +105,7 @@ function EditVacancyDialog({
   });
 
   const handleSubmit = () => {
-    put(`/projects/${projectId}/vacancy/${vacancy.id}`, {
+    put(`/admin/projects/${projectId}/vacancy/${vacancy.id}`, {
       preserveScroll: true,
       onSuccess: () => showSuccessToast("Вы успешно отредактировали вакансию"),
       onError: (errors) => showErrorToast(formatErrors(errors)),

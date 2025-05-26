@@ -15,6 +15,7 @@ import { Button } from "@/shared/ui/Button";
 import { Trash2 } from "lucide-react";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
+import { UserEditForm } from "./UserEditForm";
 
 export default function UserPage({ user }: { user: User }) {
   const deleteUser = () => {
@@ -55,7 +56,7 @@ export default function UserPage({ user }: { user: User }) {
             </TabsList>
             <div className="mt-3">
               <TabsContent value="main">
-
+                <UserEditForm user={user} />
               </TabsContent>
               <TabsContent value="settings">
                 <div className="space-y-4">

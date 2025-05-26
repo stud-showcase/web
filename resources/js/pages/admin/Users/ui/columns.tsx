@@ -1,11 +1,5 @@
-import { getFullName, User, UserRole } from "@/entities/User";
+import { getFullName, roleTranslations, User, UserRole } from "@/entities/User";
 import { Badge } from "@/shared/ui/Badge";
-
-const roleTranslations: Record<UserRole, string> = {
-  admin: "Администратор",
-  mentor: "Наставник",
-  student: "Студент",
-};
 
 export const columns = [
   { title: "ID", cell: (user: User) => user.id },

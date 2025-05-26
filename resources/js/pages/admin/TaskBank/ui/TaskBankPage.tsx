@@ -41,13 +41,13 @@ export default function TaskBankPage(props: Props) {
       <AdminLayout headerSlot={<Heading level={2}>Банк задач</Heading>}>
         <div className="flex items-center justify-between">
           <div className="flex gap-2 items-center">
-            <Button variant="outline" asChild>
+            <Button variant="outline" size="sm" asChild>
               <Link href="/admin/tasks/create">
                 <Plus />
                 Создать
               </Link>
             </Button>
-            <Button variant="outline" asChild>
+            <Button variant="outline" size="sm" asChild>
               <Link href="/admin/tasks/settings">
                 <Settings />
                 Настройки

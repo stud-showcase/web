@@ -74,10 +74,9 @@ export function ProjectEditForm({ project }: { project: ExtendedProject }) {
             placeholder="Опишите проект..."
             value={data.annotation}
             onChange={(e) => setData("annotation", e.target.value)}
-            required
           />
           {errors.annotation && (
-            <ValidationErrorText text={errors.annotation} />
+            <ValidationErrorText text={errors.annotation} /> 
           )}
         </div>
       </div>
