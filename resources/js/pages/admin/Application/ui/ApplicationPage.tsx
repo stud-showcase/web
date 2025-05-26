@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 import { Application } from "@/entities/Application";
 import { AdminLayout } from "@/layouts/AdminLayout";
@@ -16,15 +16,23 @@ import { TaskTag } from "@/entities/Task";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
 import { SettingsCard } from "@/shared/ui/SettingsCard";
 import { Button } from "@/shared/ui/Button";
-import { Trash2, UserCog } from "lucide-react";
+import { Trash2 } from "lucide-react";
+import { isAdmin, User } from "@/entities/User";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { AppointResponsibleUser } from "./AppointResponsibleUser";
+import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
 
 export default function ApplicationPage({
   tags,
   taskRequest: application,
+  users,
 }: {
   tags: TaskTag[];
   taskRequest: Application;
+  users: User[];
 }) {
+  const { user } = useAuth();
+
   const { data, setData, post, errors, reset, clearErrors } = useForm<TaskForm>(
     {
       title: application.title,
@@ -56,6 +64,13 @@ export default function ApplicationPage({
     clearErrors();
   };
 
+  const deleteApplication = () => {
+    router.delete(`/admin/applications/${application.id}`, {
+      onSuccess: () => showSuccessToast("Заявка успешно удалена"),
+      onError: () => showErrorToast("Произошла ошибка в ходе удаления заявки"),
+    });
+  };
+
   return (
     <>
       <Head>
@@ -79,7 +94,6 @@ export default function ApplicationPage({
         }
       >
         <div className="max-w-5xl space-y-4">
-
           <Tabs defaultValue="main">
             <TabsList>
               <TabsTrigger value="main">Главное</TabsTrigger>
@@ -99,24 +113,34 @@ export default function ApplicationPage({
               </TabsContent>
               <TabsContent value="settings">
                 <div className="space-y-4">
-                  <SettingsCard
-                    heading="Назначение ответственного для заявки"
-                    text="Вы можете назначить ответсвенного для заявки, чтобы он продолжил работу с ней."
-                    buttonsSlot={
-                      <Button variant="outline" size="sm">
-                        <UserCog />
-                        Назначить
-                      </Button>
-                    }
-                  />
+                  {isAdmin(user) && (
+                    <SettingsCard
+                      heading="Назначение ответственного для заявки"
+                      text="Вы можете назначить ответсвенного для заявки, чтобы он продолжил работу с ней."
+                      buttonsSlot={
+                        <AppointResponsibleUser
+                          id={application.id}
+                          users={users}
+                          responsibleUser={application.responsibleUser}
+                        />
+                      }
+                    />
+                  )}
+
                   <SettingsCard
                     heading="Удаление заявки"
                     text="В случае удаления заявки вы больше не сможете вернуть ее. Пожалуйста, будьте внимательными."
                     buttonsSlot={
-                      <Button variant="destructive" size="sm">
-                        <Trash2 />
-                        Удалить
-                      </Button>
+                      <ConfirmationDialog
+                        title="Удаление заявки"
+                        description="Вы уверены что хотите удалить заявку? Это действие нельзя отменить."
+                        onAction={deleteApplication}
+                      >
+                        <Button variant="destructive" size="sm">
+                          <Trash2 />
+                          Удалить
+                        </Button>
+                      </ConfirmationDialog>
                     }
                   />
                 </div>
