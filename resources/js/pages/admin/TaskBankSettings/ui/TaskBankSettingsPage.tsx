@@ -1,8 +1,15 @@
 import { AdminLayout } from "@/layouts/AdminLayout";
-import { Heading } from "@/shared/ui/Heading";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { TaskBankTags } from "./TaskBankTags";
 import { TaskTag } from "@/entities/Task";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/shared/ui/Breadcrumb";
 
 export default function TaskBankSettingsPage({ tags }: { tags: TaskTag[] }) {
   return (
@@ -11,11 +18,24 @@ export default function TaskBankSettingsPage({ tags }: { tags: TaskTag[] }) {
         <title>Настройки банка задач</title>
       </Head>
       <AdminLayout
-        headerSlot={<Heading level={2}>Настройки банка задач</Heading>}
+        headerSlot={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/admin/tasks">Банк задач</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Настройки</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
       >
         <div className="max-w-5xl">
-        <TaskBankTags tags={tags} />
-
+          <TaskBankTags tags={tags} />
         </div>
       </AdminLayout>
     </>

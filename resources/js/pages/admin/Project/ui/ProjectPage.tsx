@@ -2,7 +2,7 @@ import { AdminLayout } from "@/layouts/AdminLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/Tabs";
 import { ExtendedProject } from "../model/ExtendedProject";
 import { ProjectEditForm } from "./ProjectEditForm";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,8 +18,17 @@ import { ProjectMembers } from "./ProjectMembers";
 import { ProjectVacancies } from "./ProjectVacancies";
 import { ProjectInvites } from "./ProjectInvites";
 import { SettingsCard } from "@/shared/ui/SettingsCard";
+import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
 
 export default function ProjectPage({ project }: { project: ExtendedProject }) {
+  const deleteProject = () => {
+    router.delete(`/admin/projects/${project.id}`, {
+      onSuccess: () => showSuccessToast("Проект успешно удален"),
+      onError: () => showErrorToast("Произошла ошибка в ходе удаления проекта"),
+    });
+  };
+
   return (
     <>
       <Head>
@@ -91,10 +100,16 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                     heading="Удаление проекта"
                     text="В случае удаления проекта вы больше не сможете вернуть его. Пожалуйста, будьте внимательными."
                     buttonsSlot={
-                      <Button variant="destructive" size="sm">
-                        <Trash2 />
-                        Удалить
-                      </Button>
+                      <ConfirmationDialog
+                        title="Удаление проекта"
+                        description="Вы уверены что хотите удалить проект? Это действие нельзя отменить."
+                        onAction={deleteProject}
+                      >
+                        <Button variant="destructive" size="sm">
+                          <Trash2 />
+                          Удалить
+                        </Button>
+                      </ConfirmationDialog>
                     }
                   />
                 </div>
