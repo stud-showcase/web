@@ -72,7 +72,7 @@ export default function TaskPage({
                 <TasksFiles id={task.id} files={task.files} />
               </TabsContent>
               <TabsContent value="projects">
-                <TaskProjects projects={task.projects} />
+                <TaskProjects id={task.id} projects={task.projects} />
               </TabsContent>
               <TabsContent value="settings">
                 <div className="space-y-4">

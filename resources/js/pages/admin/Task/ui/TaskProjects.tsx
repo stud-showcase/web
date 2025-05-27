@@ -4,7 +4,6 @@ import {
   ProjectStatusBadge,
 } from "@/entities/Project";
 import { getFullName } from "@/entities/User";
-import { Button } from "@/shared/ui/Button";
 import { Heading } from "@/shared/ui/Heading";
 import {
   Table,
@@ -16,18 +15,15 @@ import {
 } from "@/shared/ui/Table";
 import { Text } from "@/shared/ui/Text";
 import { Link } from "@inertiajs/react";
-import { Plus } from "lucide-react";
+import { CreateProjectModal } from "./CreateProjectModal";
 
-export function TaskProjects({ projects }: { projects: Project[] }) {
+export function TaskProjects({ id, projects }: { id: number, projects: Project[] }) {
   const hasProjects = projects.length > 0;
 
   return (
     <div className="space-y-4 border p-4 rounded-md shadow-sm bg-background">
-      <Heading level={5}>Проекты задачи</Heading>
-      <Button size="sm" variant="outline">
-        <Plus />
-        Создать проект
-      </Button>
+      <Heading level={5}>Проекты по задаче</Heading>
+      <CreateProjectModal taskId={id} />
       {hasProjects ? (
         <Table>
           <TableHeader>

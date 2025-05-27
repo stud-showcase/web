@@ -1,4 +1,4 @@
-import { FormEvent, PropsWithChildren } from "react";
+import { FormEvent } from "react";
 import {
   Dialog,
   DialogClose,
@@ -14,11 +14,9 @@ import { Button } from "@/shared/ui/Button";
 import { useForm } from "@inertiajs/react";
 import { ValidationErrorText } from "@/shared/ui/ValidationErrorText";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
+import { Plus } from "lucide-react";
 
-export function CreateProjectModal({
-  taskId,
-  children,
-}: PropsWithChildren<{ taskId: number }>) {
+export function CreateProjectModal({ taskId }: { taskId: number }) {
   const { data, setData, post, errors, clearErrors } = useForm({
     taskId,
     projectName: "",
@@ -26,7 +24,7 @@ export function CreateProjectModal({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post("/projects", {
+    post("/admin/projects", {
       onSuccess: () => showSuccessToast("Вы успешно создали проект"),
       onError: () => showErrorToast("Произошла ошибка в ходе создания проекта"),
     });
@@ -34,12 +32,17 @@ export function CreateProjectModal({
 
   return (
     <Dialog onOpenChange={(open) => !open && clearErrors()}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button size="sm" variant="outline">
+          <Plus />
+          Создать проект
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Создать проект</DialogTitle>
+          <DialogTitle>Создание проекта</DialogTitle>
           <DialogDescription>
-            Придумайте название проекта. Его можно будет изменить позже
+            Для создание проекта, укажите его название. Его можно будет изменить.
           </DialogDescription>
         </DialogHeader>
         <form id="project-creation-form" onSubmit={handleSubmit}>
