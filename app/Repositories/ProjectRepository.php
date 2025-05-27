@@ -238,7 +238,7 @@ class ProjectRepository
         }
     }
 
-    public function setMentor(int $projectId, int $mentorId): void
+    public function setMentor(int $projectId, string $mentorId): void
     {
         try {
             DB::transaction(function () use ($projectId, $mentorId) {

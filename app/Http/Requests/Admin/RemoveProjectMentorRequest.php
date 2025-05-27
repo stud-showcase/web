@@ -11,7 +11,7 @@ class RemoveProjectMentorRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->authorizeRemoveMentor($this->route('projectId'));
+        return $this->authorizeRemoveMentor($this->route('id'));
     }
 
     public function rules(): array

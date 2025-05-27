@@ -127,7 +127,7 @@ class ProjectService
         }
     }
 
-    public function setMentor(int $projectId, int $mentorId): void
+    public function setMentor(int $projectId, string $mentorId): void
     {
         try {
             $this->projectRepository->setMentor($projectId, $mentorId);

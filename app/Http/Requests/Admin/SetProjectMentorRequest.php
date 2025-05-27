@@ -11,13 +11,13 @@ class SetProjectMentorRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->authorizeSetMentor($this->route('projectId'), $this->input('mentorId'));
+        return $this->authorizeSetMentor($this->route('id'), $this->input('mentorId'));
     }
 
     public function rules(): array
     {
         return [
-            'mentorId' => 'required|integer|exists:users,id',
+            'mentorId' => 'required|string|exists:users,id',
         ];
     }
 }

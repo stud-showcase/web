@@ -41,10 +41,10 @@ trait AuthorizesProjectActions
      * Проверяет, может ли пользователь установить ментора для проекта.
      *
      * @param int $projectId ID проекта
-     * @param int $mentorId ID пользователя, которого хотят назначить ментором
+     * @param string $mentorId ID пользователя, которого хотят назначить ментором
      * @return bool
      */
-    protected function authorizeSetMentor(int $projectId, int $mentorId): bool
+    protected function authorizeSetMentor(int $projectId, string $mentorId): bool
     {
         $project = Project::find($projectId);
         if (!$project) {
