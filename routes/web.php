@@ -100,6 +100,7 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
 
         Route::get('/', [AdminProjectController::class, 'index'])->name('admin.projects.index');
         Route::get('/{id}', [AdminProjectController::class, 'show'])->name('admin.projects.show');
+        Route::post('/', [AdminProjectController::class, 'store'])->name('admin.projects.store');
         Route::put('/{id}', [AdminProjectController::class, 'update'])->name('admin.projects.update');
         Route::delete('/{id}', [AdminProjectController::class, 'destroy'])->name('admin.projects.destroy');
         Route::post('/{id}/mentor', [AdminProjectController::class, 'setMentor'])->name('admin.projects.mentor.set');

@@ -20,4 +20,12 @@ class SetProjectMentorRequest extends FormRequest
             'mentorId' => 'required|string|exists:users,id',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'mentorId.required' => 'Необходимо указать ментора',
+            'mentorId.exists' => 'Выбранный ментор не существует в системе',
+        ];
+    }
 }

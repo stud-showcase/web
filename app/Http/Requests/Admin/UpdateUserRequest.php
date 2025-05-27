@@ -32,4 +32,19 @@ class UpdateUserRequest extends FormRequest
             'roles.*' => 'string|exists:roles,name',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'firstName.max' => 'Имя не должно превышать 255 символов',
+            'secondName.max' => 'Отчество не должно превышать 255 символов',
+            'lastName.max' => 'Фамилия не должна превышать 255 символов',
+            'email.email' => 'Укажите корректный email адрес',
+            'email.max' => 'Email не должен превышать 255 символов',
+            'email.unique' => 'Этот email уже используется',
+            'group.max' => 'Название группы не должно превышать 255 символов',
+            'roles.array' => 'Роли должны быть переданы в виде списка',
+            'roles.*.exists' => 'Выбрана несуществующая роль',
+        ];
+    }
 }
