@@ -13,6 +13,9 @@ class Setting extends Model
 
     public $timestamps = false;
 
+    protected $primaryKey = null;
+    public $incrementing = false;
+
     protected $fillable = [
         'start_date',
         'end_date',

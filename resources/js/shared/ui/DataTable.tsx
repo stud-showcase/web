@@ -117,9 +117,8 @@ export interface ColumnDef<TData> {
 }
 
 /* TODO:
-- Назначение ментораъ
+- Назначение ментора
 - Сделать создание проекта
-- Сделать периоды командообразования
 - Дополнить комманды в хедере  всеми возможностями
 */
 export function DataTable<TData extends { id: number | string }>({
