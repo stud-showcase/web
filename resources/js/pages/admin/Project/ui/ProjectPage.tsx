@@ -12,7 +12,7 @@ import {
   BreadcrumbPage,
 } from "@/shared/ui/Breadcrumb";
 import { Button } from "@/shared/ui/Button";
-import { Trash2, UserCog } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { ProjectFiles } from "./ProjectFiles";
 import { ProjectMembers } from "./ProjectMembers";
 import { ProjectVacancies } from "./ProjectVacancies";
@@ -20,8 +20,16 @@ import { ProjectInvites } from "./ProjectInvites";
 import { SettingsCard } from "@/shared/ui/SettingsCard";
 import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
+import { AssignMentorModal } from "./AssignMentorModal";
+import { User } from "@/entities/User";
 
-export default function ProjectPage({ project }: { project: ExtendedProject }) {
+export default function ProjectPage({
+  project,
+  users,
+}: {
+  project: ExtendedProject;
+  users: User[];
+}) {
   const deleteProject = () => {
     router.delete(`/admin/projects/${project.id}`, {
       onSuccess: () => showSuccessToast("Проект успешно удален"),
@@ -90,10 +98,11 @@ export default function ProjectPage({ project }: { project: ExtendedProject }) {
                     heading="Назначение наставника проекта"
                     text="Вы можете назначить наставника для проекта, чтобы он стал его руководителем."
                     buttonsSlot={
-                      <Button variant="outline" size="sm">
-                        <UserCog />
-                        Назначить
-                      </Button>
+                      <AssignMentorModal
+                        id={project.id}
+                        users={users}
+                        mentor={project.mentor}
+                      />
                     }
                   />
                   <SettingsCard
