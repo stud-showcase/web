@@ -13,6 +13,7 @@ use App\Http\Requests\Admin\UpdateProjectRequest as AdminUpdateProjectRequest;
 use App\Http\Requests\Admin\UpdateSettingsRequest as AdminUpdateSettingsRequest;
 use App\Http\Requests\Admin\UploadProjectFileRequest as AdminUploadProjectFileRequest;
 use App\Services\ProjectService;
+use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +24,8 @@ use Throwable;
 class ProjectController extends Controller
 {
     public function __construct(
-        private ProjectService $projectService
+        private ProjectService $projectService,
+        private UserService $userService,
     ) {}
 
     public function index(Request $request): \Inertia\Response
@@ -44,9 +46,10 @@ class ProjectController extends Controller
     public function show(int $id): Response
     {
         $project = $this->projectService->getProjectById($id);
+        $users = $this->userService->getPrivilegedUsers();
         return Inertia::render('admin/Project', [
             'project' => $project,
-            'availableFilters' => $this->projectService->getAvailableFilters(['tags']),
+            'users' => $users,
         ]);
     }
 

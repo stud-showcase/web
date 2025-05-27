@@ -9,12 +9,13 @@ class Setting extends Model
 {
     use HasFactory;
 
-    protected $table = 'settings';
-
     public $timestamps = false;
 
-    protected $primaryKey = null;
     public $incrementing = false;
+
+    protected $table = 'settings';
+
+    protected $primaryKey = null;
 
     protected $fillable = [
         'start_date',
