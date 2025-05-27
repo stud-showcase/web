@@ -118,8 +118,7 @@ export interface ColumnDef<TData> {
 
 /* TODO:
 - Назначение ментора
-- Сделать создание проекта
-- Дополнить комманды в хедере  всеми возможностями
+- Проверить действия админа и наставника в админке
 */
 export function DataTable<TData extends { id: number | string }>({
   data,

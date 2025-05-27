@@ -8,6 +8,8 @@ import {
   Search,
   LogOut,
   User,
+  Settings,
+  Plus,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { router } from "@inertiajs/react";
@@ -69,11 +71,7 @@ export function CommandMenu() {
         <CommandInput placeholder="Введите команду или поиск..." />
         <CommandList>
           <CommandEmpty>Результаты не найдены.</CommandEmpty>
-          <CommandGroup heading="Навигация">
-            <CommandItem onSelect={() => navigateTo("/admin/dashboard")}>
-              <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Дашборд</span>
-            </CommandItem>
+          <CommandGroup heading="Главное">
             <CommandItem onSelect={() => navigateTo("/admin/applications")}>
               <FileText className="mr-2 h-4 w-4" />
               <span>Заявки</span>
@@ -86,16 +84,26 @@ export function CommandMenu() {
               <FolderKanban className="mr-2 h-4 w-4" />
               <span>Проекты</span>
             </CommandItem>
-            <CommandItem onSelect={() => navigateTo("/admin/vacancies")}>
-              <Briefcase className="mr-2 h-4 w-4" />
-              <span>Вакансии</span>
-            </CommandItem>
             <CommandItem onSelect={() => navigateTo("/admin/users")}>
               <Users className="mr-2 h-4 w-4" />
               <span>Пользователи</span>
             </CommandItem>
           </CommandGroup>
+           <CommandGroup heading="Настройки">
+            <CommandItem onSelect={() => navigateTo("/admin/tasks/settings")}>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Настройки банка задач</span>
+            </CommandItem>
+            <CommandItem onSelect={() => navigateTo("/admin/projects/settings")}>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Настройки проектов</span>
+            </CommandItem>
+          </CommandGroup>
           <CommandGroup heading="Действия">
+            <CommandItem onSelect={() => navigateTo("/admin/tasks/create")}>
+              <Plus className="mr-2 h-4 w-4" />
+              <span>Создать задачу</span>
+            </CommandItem>
             <CommandItem onSelect={() => navigateTo("/")}>
               <User className="mr-2 h-4 w-4" />
               <span>В подсистему пользователя</span>
