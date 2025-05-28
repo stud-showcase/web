@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ApproveTaskRequestRequest as AdminApproveTaskRequestRequest;
+use App\Http\Requests\Admin\DeleteTaskRequestRequest as AdminDeleteTaskRequestRequest;
 use App\Http\Requests\Admin\UpdateTaskRequestResponsibleUser as AdminUpdateTaskRequestResponsibleUser;
 use App\Services\TaskService;
 use App\Services\UserService;
@@ -60,7 +61,7 @@ class TaskRequestController extends Controller
         ]);
     }
 
-    public function destroy(Request $request, int $id): RedirectResponse
+    public function destroy(AdminDeleteTaskRequestRequest $request, int $id): RedirectResponse
     {
         $this->taskService->deleteTaskRequest($id);
         return redirect()->route('admin.applications.index')->with('success', 'Заявка успешно удалена');

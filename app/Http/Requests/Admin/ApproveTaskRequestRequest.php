@@ -2,14 +2,17 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\TaskRequest;
 use App\Rules\MaxTotalFileSize;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ApproveTaskRequestRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $taskRequest = TaskRequest::find($this->route('id'));
+        return Auth::user()->hasAnyRole('admin') || ($taskRequest && Auth::id() == $taskRequest->responsible_user_id);
     }
 
     public function rules(): array
