@@ -83,8 +83,6 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
     });
 
     Route::prefix('tasks')->group(function () {
-        Route::get('/', [AdminTaskController::class, 'index'])->name('admin.tasks.index');
-        Route::get('/{id}', [AdminTaskController::class, 'show'])->name('admin.tasks.show');
         Route::get('/settings', [AdminTaskController::class, 'indexSettings'])->name('admin.tasks.settings');
 
         Route::middleware('role:admin')->group(function () {
@@ -95,6 +93,9 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
             Route::post('/{id}/files', [AdminTaskController::class, 'uploadFiles'])->name('admin.tasks.files.upload');
             Route::delete('/{taskId}/files/{fileId}', [AdminTaskController::class, 'deleteFile'])->name('admin.tasks.files.destroy');
         });
+
+        Route::get('/', [AdminTaskController::class, 'index'])->name('admin.tasks.index');
+        Route::get('/{id}', [AdminTaskController::class, 'show'])->name('admin.tasks.show');
     });
 
     Route::prefix('projects')->group(function () {

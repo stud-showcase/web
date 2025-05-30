@@ -17,12 +17,14 @@ class TaskRequestFactory extends Factory
         $customer = Customer::factory()->create();
         $user = User::factory()->create();
         $responsibleUser = $faker->boolean(50) ? User::factory()->create() : null;
+        $withProject = $faker->boolean(30);
+        $projectName = $withProject ? $faker->sentence(3) : null;
 
         return [
             'title' => $faker->sentence(3),
             'description' => $faker->text(200),
-            'with_project' => $faker->boolean(30),
-            'project_name' => $faker->optional(0.3)->sentence(3),
+            'with_project' => $withProject,
+            'project_name' => $projectName,
             'user_id' => $user->id,
             'responsible_user_id' => $responsibleUser?->id,
             'customer_id' => $customer->id,
