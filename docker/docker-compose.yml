@@ -32,7 +32,7 @@ services:
     container_name: showcase_nginx
     restart: unless-stopped
     ports:
-      - "8000:80"
+      - "8080:80"
     volumes:
       - ..:/var/www
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
@@ -48,9 +48,10 @@ services:
     command: >
       sh -c "npm install && npm run dev -- --host 0.0.0.0"
     ports:
-      - "5173:5173"
-    depends_on:
-      - app
+      - "5189:5173"
+    environment:
+      - VITE_HOST=0.0.0.0
+      - VITE_PORT=5173
 
   db:
     image: mysql:8.0
@@ -60,7 +61,7 @@ services:
       MYSQL_DATABASE: showcase
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql/default.cnf:/etc/mysql/conf.d/default.cnf
@@ -70,7 +71,7 @@ services:
     container_name: phpmyadmin
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8096:80"
     environment:
       - PMA_HOST=db
       - PMA_PORT=3306
@@ -83,7 +84,7 @@ services:
     container_name: showcase_redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "6385:6379"
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
