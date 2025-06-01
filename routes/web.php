@@ -24,7 +24,7 @@ Route::get('/vacancies', [VacancyController::class, 'index'])->name('vacancies.i
 
 Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/{provider}/redirect', [SocialController::class, 'redirectToProvider'])->name('login');
-    Route::get('/{provider}/callback', [SocialController::class, 'handleProviderCallback']);
+    Route::get('/{provider}/callback', [SocialController::class, 'handleProviderCallback'])->name('social.callback');
 });
 
 Route::middleware('auth')->group(function () {
@@ -57,7 +57,7 @@ Route::prefix('projects')->group(function () {
         Route::post('{id}/acceptInvite', [ProjectController::class, 'acceptInvite'])->name('projects.invite.accept');
         Route::post('{id}/rejectInvite', [ProjectController::class, 'rejectInvite'])->name('projects.invite.reject');
 
-        Route::post('/{id}/vacancy', [VacancyController::class, 'store'])->name('projects.vacancy.create');
+        Route::post('/{id}/vacancy', [VacancyController::class, 'store'])->name('projects.vacancy.store');
         Route::put('/{projectId}/vacancy/{vacancyId}', [VacancyController::class, 'update'])->name('projects.vacancy.update');
         Route::delete('/{projectId}/vacancy/{vacancyId}', [VacancyController::class, 'destroy'])->name('projects.vacancy.destroy');
 
@@ -67,7 +67,7 @@ Route::prefix('projects')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(function () {
-    Route::get('/myApplications', [AdminTaskRequestController::class, 'responsible']);
+    Route::get('/myApplications', [AdminTaskRequestController::class, 'responsible'])->name('admin.myApplications');
     Route::prefix('applications')->group(function () {
         Route::get('/', [AdminTaskRequestController::class, 'index'])->name('admin.applications.index');
         Route::get('/{id}', [AdminTaskRequestController::class, 'show'])->name('admin.applications.show');
@@ -115,7 +115,7 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
         Route::post('/{id}/files', [AdminProjectController::class, 'uploadFiles'])->name('admin.projects.files.upload');
         Route::delete('/{projectId}/files/{fileId}', [AdminProjectController::class, 'deleteFile'])->name('admin.projects.files.delete');
 
-        Route::post('/{id}/vacancy', [AdminVacancyController::class, 'store'])->name('admin.projects.vacancy.create');
+        Route::post('/{id}/vacancy', [AdminVacancyController::class, 'store'])->name('admin.projects.vacancy.store');
         Route::put('/{projectId}/vacancy/{vacancyId}', [AdminVacancyController::class, 'update'])->name('admin.projects.vacancy.update');
         Route::delete('/{projectId}/vacancy/{vacancyId}', [AdminVacancyController::class, 'destroy'])->name('admin.projects.vacancy.destroy');
 

@@ -13,8 +13,7 @@ class DeleteTaskRequestRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $taskRequest = TaskRequest::find($this->route('id'));
-        return Auth::user()->hasAnyRole('admin') || ($taskRequest && Auth::id() == $taskRequest->responsible_user_id);
+        return true;
     }
 
     /**

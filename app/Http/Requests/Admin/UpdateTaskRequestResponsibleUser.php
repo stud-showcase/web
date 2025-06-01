@@ -9,7 +9,7 @@ class UpdateTaskRequestResponsibleUser extends FormRequest
 {
     public function authorize(): bool
     {
-        return Auth::user()->hasAnyRole(['admin']);
+        return true;
     }
 
     public function rules(): array

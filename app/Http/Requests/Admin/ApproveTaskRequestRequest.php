@@ -11,8 +11,7 @@ class ApproveTaskRequestRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $taskRequest = TaskRequest::find($this->route('id'));
-        return Auth::user()->hasAnyRole('admin') || ($taskRequest && Auth::id() == $taskRequest->responsible_user_id);
+        return true;
     }
 
     public function rules(): array
@@ -49,10 +48,12 @@ class ApproveTaskRequestRequest extends FormRequest
             'customerPhone.max' => 'Телефон заказчика не может превышать 20 символов',
             'projectName.required_if' => 'Название проекта обязательно, если выбрана опция "Создать проект"',
             'projectName.max' => 'Название проекта не может превышать 255 символов',
+            'maxMembers.required' => 'Максимальное количество участников обязательно для заполнения',
             'maxMembers.min' => 'Максимальное количество участников должно быть не менее 1',
             'maxMembers.max' => 'Максимальное количество участников не может превышать 127',
             'maxProjects.min' => 'Максимальное количество проектов должно быть не менее 1',
             'maxProjects.max' => 'Максимальное количество проектов не может превышать 127',
+            'deadline.required' => 'Дедлайн обязателен для заполнения',
             'deadline.date' => 'Дедлайн должен быть корректной датой',
             'complexityId.required' => 'Выберите сложность',
             'complexityId.exists' => 'Указана неверная сложность',

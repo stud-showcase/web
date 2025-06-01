@@ -24,7 +24,7 @@ class TagController extends Controller
             return redirect()->route('admin.tasks.settings')->with('success', 'Тег успешно создан');
         } catch (Throwable $e) {
             Log::error("Ошибка создания тега: {$e->getMessage()}");
-            return redirect()->back()->withErrors(['error' => 'Не удалось создать тег']);
+            return redirect()->route('admin.tasks.settings')->with('error', 'Не удалось создать тег');
         }
     }
 
@@ -36,7 +36,7 @@ class TagController extends Controller
             return redirect()->route('admin.tasks.settings')->with('success', 'Тег успешно обновлен');
         } catch (Throwable $e) {
             Log::error("Ошибка обновления тега [$id]: {$e->getMessage()}");
-            return redirect()->back()->withErrors(['error' => 'Не удалось обновить тег']);
+            return redirect()->route('admin.tasks.settings')->with('error', 'Не удалось обновить тег');
         }
     }
 
@@ -47,7 +47,7 @@ class TagController extends Controller
             return redirect()->route('admin.tasks.settings')->with('success', 'Тег успешно удален');
         } catch (Throwable $e) {
             Log::error("Ошибка удаления тега [$id]: {$e->getMessage()}");
-            return redirect()->back()->withErrors(['error' => 'Не удалось удалить тег']);
+            return redirect()->route('admin.tasks.settings')->with('error', 'Не удалось удалить тег');
         }
     }
 }

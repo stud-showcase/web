@@ -9,9 +9,14 @@ class Complexity extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+    public const COMPLEXITY_EASY = 1;
+    public const COMPLEXITY_MEDIUM = 2;
+    public const COMPLEXITY_HARD = 3;
+
     protected $table = 'complexities';
 
-    public $timestamps = false;
 
     protected $fillable = [
         'id',

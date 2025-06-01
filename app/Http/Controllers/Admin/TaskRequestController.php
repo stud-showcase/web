@@ -63,21 +63,33 @@ class TaskRequestController extends Controller
 
     public function destroy(AdminDeleteTaskRequestRequest $request, int $id): RedirectResponse
     {
-        $this->taskService->deleteTaskRequest($id);
-        return redirect()->route('admin.applications.index')->with('success', 'Заявка успешно удалена');
+        try {
+            $this->taskService->deleteTaskRequest($id);
+            return redirect()->route('admin.applications.index')->with('success', 'Заявка успешно удалена');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.applications.index')->with('error', "Ошибка удаления заявки [$id]");
+        }
     }
 
     public function approve(AdminApproveTaskRequestRequest $request, int $id): RedirectResponse
     {
-        $data = $request->validated();
-        $this->taskService->approveTaskRequest($id, $data, $request->file('files', []));
-        return redirect()->route('admin.applications.index')->with('success', 'Заявка успешно одобрена');
+        try {
+            $data = $request->validated();
+            $this->taskService->approveTaskRequest($id, $data, $request->file('files') ?? []);
+            return redirect()->route('admin.applications.index')->with('success', 'Заявка успешно одобрена');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.applications.index')->with('error', "Ошибка одобрения заявки [$id]");
+        }
     }
 
     public function updateResponsible(AdminUpdateTaskRequestResponsibleUser $request, int $id): RedirectResponse
     {
-        $data = $request->validated();
-        $this->taskService->updateTaskRequestResponsibleUser($id, $data['responsibleUserId']);
-        return redirect()->route('admin.applications.index')->with('success', 'Ответственный успешно обновлен');
+        try {
+            $data = $request->validated();
+            $this->taskService->updateTaskRequestResponsibleUser($id, (int) $data['responsibleUserId']);
+            return redirect()->route('admin.applications.index')->with('success', 'Ответственный успешно обновлен');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.applications.index')->with('error', "Ошибка назначения ответственного [$id]");
+        }
     }
 }

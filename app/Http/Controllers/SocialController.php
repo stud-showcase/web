@@ -76,7 +76,7 @@ class SocialController extends Controller
             ]);
             return redirect($logoutUri . '?' . $query);
         } catch (\Throwable $e) {
-            Log::error('Ошибка при выходе из системы: ' . $e->getMessage());
+            Log::error('Ошибка при выходе из системы: ' . $e->getMessage(), ['exception' => $e]);
             return redirect('/')->with('error', 'Ошибка при выходе из системы');
         }
     }

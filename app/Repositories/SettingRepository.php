@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Setting;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
