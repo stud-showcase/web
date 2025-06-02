@@ -123,7 +123,7 @@ class ProjectController extends Controller
     {
         try {
             $this->projectService->updateSettings($request->validated());
-            redirect()->route('admin.projects.settings')->with('success', 'Настройки успешно обновлены');
+            return redirect()->route('admin.projects.settings')->with('success', 'Настройки успешно обновлены');
         } catch (Throwable $e) {
             Log::error("Ошибка обновления настроек: {$e->getMessage()}");
             return redirect()->back()->withErrors(['error' => 'Не удалось обновить настройки']);
