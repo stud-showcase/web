@@ -12,11 +12,12 @@ services:
       - redis
     environment:
       - APP_ENV=local
+      - DB_CONNECTION=pgsql
       - DB_HOST=db
-      - DB_PORT=3306
+      - DB_PORT=5432
       - DB_DATABASE=showcase
-      - DB_USERNAME=root
-      - DB_PASSWORD=root
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     command: >
@@ -32,7 +33,7 @@ services:
     container_name: showcase_nginx
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8000:80"
     volumes:
       - ..:/var/www
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
@@ -48,34 +49,32 @@ services:
     command: >
       sh -c "npm install && npm run dev -- --host 0.0.0.0"
     ports:
-      - "5189:5173"
-    environment:
-      - VITE_HOST=0.0.0.0
-      - VITE_PORT=5173
+      - "5173:5173"
+    depends_on:
+      - app
 
   db:
-    image: mysql:8.0
-    container_name: mysql_db
+    image: postgres:15
+    container_name: postgres_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: showcase
-      MYSQL_ROOT_PASSWORD: root
+      POSTGRES_DB: showcase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "3307:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./mysql/default.cnf:/etc/mysql/conf.d/default.cnf
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+  adminer:
+    image: adminer:latest
+    container_name: adminer
     restart: unless-stopped
     ports:
-      - "8096:80"
+      - "9000:8080"
     environment:
-      - PMA_HOST=db
-      - PMA_PORT=3306
-      - MYSQL_ROOT_PASSWORD=root
+      - ADMINER_DEFAULT_SERVER=db
     depends_on:
       - db
 
@@ -84,11 +83,11 @@ services:
     container_name: showcase_redis
     restart: unless-stopped
     ports:
-      - "6385:6379"
+      - "6379:6379"
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
 
 volumes:
-  mysql_data:
+  postgres_data:
   redis_data:
