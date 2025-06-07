@@ -116,10 +116,6 @@ export interface ColumnDef<TData> {
   cell: (data: TData) => React.ReactNode;
 }
 
-/* TODO:
-- Назначение ментора
-- Проверить действия админа и наставника в админке
-*/
 export function DataTable<TData extends { id: number | string }>({
   data,
   columns,
