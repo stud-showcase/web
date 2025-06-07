@@ -83,10 +83,12 @@ Route::prefix('admin')->middleware(['auth', 'role:mentor,admin'])->group(functio
     });
 
     Route::prefix('tasks')->group(function () {
+        Route::get('/', [AdminTaskController::class, 'index'])->name('admin.tasks.index');
         Route::get('/settings', [AdminTaskController::class, 'indexSettings'])->name('admin.tasks.settings');
+        Route::get('/create', [AdminTaskController::class, 'create'])->name('admin.tasks.create');
+        Route::get('/{id}', [AdminTaskController::class, 'show'])->name('admin.tasks.show');
 
         Route::middleware('role:admin')->group(function () {
-            Route::get('/create', [AdminTaskController::class, 'create'])->name('admin.tasks.create');
             Route::post('/', [AdminTaskController::class, 'store'])->name('admin.tasks.store');
             Route::put('/{id}', [AdminTaskController::class, 'update'])->name('admin.tasks.update');
             Route::delete('/{id}', [AdminTaskController::class, 'destroy'])->name('admin.tasks.destroy');

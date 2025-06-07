@@ -36,7 +36,7 @@ export function MobileMenu() {
           <div className="flex flex-col gap-4">
             <Separator />
             {user ? (
-              <ProfileIcon role="user" variant="short" />
+              <ProfileIcon role="user" variant="full" />
             ) : (
               <SignInButton />
             )}
