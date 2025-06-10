@@ -99,7 +99,7 @@ export function TaskCreateForm({
               onValueChange={(value) => setData("complexityId", value)}
               required
             >
-              <SelectTrigger>
+              <SelectTrigger id="complexity">
                 <SelectValue placeholder="Выберите сложность проекта..." />
               </SelectTrigger>
               <SelectContent>
