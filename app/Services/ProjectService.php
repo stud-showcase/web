@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\ProjectDto;
+use App\Interfaces\Services\ProjectServiceInterface;
 use App\Models\Project;
 use App\Models\User;
 use App\Repositories\ProjectInviteRepository;
@@ -17,7 +18,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class ProjectService
+class ProjectService implements ProjectServiceInterface
 {
     use PaginatesCollections;
 

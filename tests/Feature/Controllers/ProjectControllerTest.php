@@ -18,6 +18,8 @@ use App\Models\ProjectStatus;
 use App\Models\Task;
 use App\Models\User;
 use App\Services\ProjectService;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -27,8 +29,8 @@ use Mockery;
 
 class ProjectControllerTest extends TestCase
 {
-    use \Illuminate\Foundation\Testing\RefreshDatabase;
-    use \Illuminate\Foundation\Testing\WithFaker;
+    use DatabaseTransactions;
+    use WithFaker;
 
     protected $projectService;
     protected $user;

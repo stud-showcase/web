@@ -2,13 +2,14 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\Repositories\UserProjectRepositoryInterface;
 use App\Models\UserProject;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-class UserProjectRepository
+class UserProjectRepository implements UserProjectRepositoryInterface
 {
     public function findByProjectAndUser(int $projectId, string $userId): UserProject
     {

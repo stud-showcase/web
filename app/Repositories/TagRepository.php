@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\Repositories\Admin\TagRepositoryInterface;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
@@ -9,7 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-class TagRepository
+class TagRepository implements TagRepositoryInterface
 {
     public function getTagsForFilters(): Collection
     {

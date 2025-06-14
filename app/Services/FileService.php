@@ -2,12 +2,13 @@
 
 namespace App\Services;
 
+use App\Interfaces\Services\FileServiceInterface;
 use App\Repositories\FileRepository;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Throwable;
 
-class FileService
+class FileService implements FileServiceInterface
 {
     public function __construct(
         private FileRepository $fileRepository

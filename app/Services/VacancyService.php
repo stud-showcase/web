@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\VacancyDto;
+use App\Interfaces\Services\VacancyServiceInterface;
 use App\Models\Vacancy;
 use App\Repositories\ProjectRepository;
 use App\Repositories\TagRepository;
@@ -12,7 +13,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class VacancyService
+class VacancyService implements VacancyServiceInterface
 {
     use PaginatesCollections;
 
@@ -69,11 +70,5 @@ class VacancyService
             Log::error("Ошибка удаления вакансии [$vacancyId]: " . $e->getMessage());
             throw $e;;
         }
-    }
-
-    public function getAdminVacancies(array $filters = []): array
-    {
-        $paginator = $this->vacancyRepository->getAdminVacancies($filters);
-        return $this->formatPaginatedData($paginator, fn($vacancy) => VacancyDto::fromModel($vacancy)->toArrayForAdmin());
     }
 }

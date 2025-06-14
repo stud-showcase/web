@@ -2,13 +2,14 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\Repositories\ProjectInviteRepositoryInterface;
 use App\Models\ProjectInvite;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-class ProjectInviteRepository
+class ProjectInviteRepository implements ProjectInviteRepositoryInterface
 {
     public function create(string $userId, int $projectId, ?int $vacancyId): void
     {

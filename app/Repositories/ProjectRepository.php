@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\Repositories\ProjectRepositoryInterface;
 use App\Models\Project;
 use App\Models\ProjectFile;
 use App\Models\ProjectInvite;
@@ -16,7 +17,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class ProjectRepository
+class ProjectRepository implements ProjectRepositoryInterface
 {
     public function __construct(
         private FileRepository $fileRepository

@@ -86,7 +86,7 @@ class TaskRequestController extends Controller
     {
         try {
             $data = $request->validated();
-            $this->taskService->updateTaskRequestResponsibleUser($id, (int) $data['responsibleUserId']);
+            $this->taskService->updateTaskRequestResponsibleUser($id, (string) $data['responsibleUserId']);
             return redirect()->route('admin.applications.index')->with('success', 'Ответственный успешно обновлен');
         } catch (\Exception $e) {
             return redirect()->route('admin.applications.index')->with('error', "Ошибка назначения ответственного [$id]");

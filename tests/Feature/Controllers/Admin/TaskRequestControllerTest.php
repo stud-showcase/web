@@ -7,13 +7,13 @@ use App\Models\Role;
 use App\Models\User;
 use App\Services\TaskService;
 use App\Services\UserService;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery;
 use Tests\TestCase;
 
 class TaskRequestControllerTest extends TestCase
 {
-    use \Illuminate\Foundation\Testing\RefreshDatabase;
+    use DatabaseTransactions;
 
     protected function createAdminUser(): User
     {
@@ -35,14 +35,16 @@ class TaskRequestControllerTest extends TestCase
     {
         parent::setUp();
 
-        // Очистка и создание записей Complexity
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Complexity::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
-
         Complexity::create(['id' => Complexity::COMPLEXITY_EASY, 'name' => 'Легкий']);
         Complexity::create(['id' => Complexity::COMPLEXITY_MEDIUM, 'name' => 'Средний']);
         Complexity::create(['id' => Complexity::COMPLEXITY_HARD, 'name' => 'Тяжелый']);
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 
     public function test_index_renders_applications_with_filters()
@@ -259,11 +261,11 @@ class TaskRequestControllerTest extends TestCase
         $taskService = Mockery::mock(TaskService::class);
         $taskService->shouldReceive('updateTaskRequestResponsibleUser')
             ->once()
-            ->with(42, (int) $mentor->id);
+            ->with(42, $mentor->id);
         $this->app->instance(TaskService::class, $taskService);
 
         $response = $this->put(route('admin.applications.responsible.update', ['id' => 42]), [
-            'responsibleUserId' => (int) $mentor->id,
+            'responsibleUserId' => $mentor->id,
         ]);
 
         $response->assertRedirect(route('admin.applications.index'));
@@ -280,21 +282,15 @@ class TaskRequestControllerTest extends TestCase
         $taskService = Mockery::mock(TaskService::class);
         $taskService->shouldReceive('updateTaskRequestResponsibleUser')
             ->once()
-            ->with(42, (int) $mentor->id)
-            ->andThrow(new \Exception('Ошибка назначения'));
+            ->with(42, $mentor->id)
+            ->andThrow(new \Exception('Ошибка'));
         $this->app->instance(TaskService::class, $taskService);
 
         $response = $this->put(route('admin.applications.responsible.update', ['id' => 42]), [
-            'responsibleUserId' => (int) $mentor->id,
+            'responsibleUserId' => $mentor->id,
         ]);
 
         $response->assertRedirect(route('admin.applications.index'));
         $response->assertSessionHas('error', 'Ошибка назначения ответственного [42]');
-    }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
     }
 }

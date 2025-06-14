@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dto\TaskDto;
 use App\Dto\TaskRequestDto;
+use App\Interfaces\Services\TaskServiceInterface;
 use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
 use App\Traits\PaginatesCollections;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Throwable;
 
-class TaskService
+class TaskService implements TaskServiceInterface
 {
     use PaginatesCollections;
 
@@ -140,7 +141,7 @@ class TaskService
         }
     }
 
-    public function updateTaskRequestResponsibleUser(int $id, int $mentorId): void
+    public function updateTaskRequestResponsibleUser(int $id, string $mentorId): void
     {
         try {
             $this->taskRepository->updateTaskRequestResponsibleUser($id, $mentorId);

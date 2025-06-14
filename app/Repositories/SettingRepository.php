@@ -2,12 +2,13 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\Repositories\Admin\SettingRepositoryInterface;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-class SettingRepository
+class SettingRepository implements SettingRepositoryInterface
 {
     public function getSettings(): ?Setting
     {

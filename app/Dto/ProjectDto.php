@@ -3,7 +3,6 @@
 namespace App\Dto;
 
 use App\Models\Project;
-use App\Models\UserProject;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectDto

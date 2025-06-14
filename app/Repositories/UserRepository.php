@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\Repositories\Admin\UserRepositoryInterface;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-class UserRepository
+class UserRepository implements UserRepositoryInterface
 {
     public function getFilteredUsers(array $filters): LengthAwarePaginator
     {

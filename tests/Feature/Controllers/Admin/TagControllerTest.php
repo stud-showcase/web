@@ -6,13 +6,13 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Tag;
 use App\Services\TaskService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class TagControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     protected function createAdminUser(): User
     {

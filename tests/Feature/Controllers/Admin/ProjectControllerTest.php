@@ -18,7 +18,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Services\ProjectService;
 use App\Services\UserService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
@@ -28,7 +28,7 @@ use Mockery;
 
 class ProjectControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
     use WithFaker;
 
     protected $projectService;

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\Repositories\FileRepositoryInterface;
 use App\Models\ProjectFile;
 use App\Models\TaskFile;
 use App\Models\TaskRequestFile;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class FileRepository
+class FileRepository implements FileRepositoryInterface
 {
     protected array $fileModels = [
         TaskRequestFile::class,

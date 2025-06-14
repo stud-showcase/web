@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\Repositories\VacancyRepositoryInterface;
 use App\Models\Vacancy;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-class VacancyRepository
+class VacancyRepository implements VacancyRepositoryInterface
 {
     public function getFilteredVacancies(array $filters): LengthAwarePaginator
     {
@@ -91,28 +92,6 @@ class VacancyRepository
             throw $e;
         } catch (Throwable $e) {
             throw new \RuntimeException("Не удалось удалить вакансию: {$e->getMessage()}", 0, $e);
-        }
-    }
-
-    public function getAdminVacancies(array $filters): LengthAwarePaginator
-    {
-        $cacheKey = 'admin_vacancies:filtered:' . md5(json_encode($filters)) . ':page_' . request()->query('page', 1);
-        try {
-            return Cache::tags(['vacancies'])->remember($cacheKey, 300, function () use ($filters) {
-                return Vacancy::query()
-                    ->with(['project'])
-                    ->when(
-                        !empty($filters['search']),
-                        fn($q) => $q->where('name', 'LIKE', '%' . $filters['search'] . '%')
-                            ->orWhere('description', 'LIKE', '%' . $filters['search'] . '%')
-                    )
-                    ->paginate(20)
-                    ->withQueryString();
-            });
-        } catch (ModelNotFoundException $e) {
-            throw $e;
-        } catch (Throwable $e) {
-            throw new \RuntimeException("Не удалось получить вакансии: {$e->getMessage()}", 0, $e);
         }
     }
 }

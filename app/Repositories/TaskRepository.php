@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\Repositories\TaskRepositoryInterface;
 use App\Models\Customer;
 use App\Models\Project;
 use App\Models\ProjectStatus;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Throwable;
 
-class TaskRepository
+class TaskRepository implements TaskRepositoryInterface
 {
     public function __construct(
         private FileRepository $fileRepository
@@ -375,7 +376,7 @@ class TaskRepository
         }
     }
 
-    public function updateTaskRequestResponsibleUser(int $id, int $responsibleUserId): void
+    public function updateTaskRequestResponsibleUser(int $id, string $responsibleUserId): void
     {
         try {
             DB::transaction(function () use ($id, $responsibleUserId) {

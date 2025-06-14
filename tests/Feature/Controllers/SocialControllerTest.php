@@ -5,9 +5,9 @@ namespace Tests\Feature\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Project;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\User as SocialiteUser;
 use Mockery;
@@ -15,6 +15,8 @@ use Tests\TestCase;
 
 class SocialControllerTest extends TestCase
 {
+    use DatabaseTransactions;
+
     protected $socialite;
 
     protected function setUp(): void
@@ -23,11 +25,9 @@ class SocialControllerTest extends TestCase
         $this->socialite = Mockery::mock('Laravel\Socialite\Contracts\Provider');
         Socialite::shouldReceive('driver')->with('keycloak')->andReturn($this->socialite);
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Project::truncate();
         User::truncate();
         Role::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 
     public function test_redirect_to_provider_redirects_to_keycloak()
@@ -52,7 +52,7 @@ class SocialControllerTest extends TestCase
         $socialUser = new SocialiteUser();
         $socialUser->user = [
             'email' => 'test@example.com',
-            'mapping_id' => 1,
+            'mapping_id' => \Illuminate\Support\Str::uuid()->toString(),
             'first_name' => 'John',
             'family_name' => 'Doe',
             'middle_name' => 'Smith',

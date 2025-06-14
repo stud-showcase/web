@@ -3,12 +3,13 @@
 namespace App\Services;
 
 use App\Dto\UserDto;
+use App\Interfaces\Services\Admin\UserServiceInterface;
 use App\Repositories\UserRepository;
 use App\Traits\PaginatesCollections;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class UserService
+class UserService implements UserServiceInterface
 {
     use PaginatesCollections;
 
