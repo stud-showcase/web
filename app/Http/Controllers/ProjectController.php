@@ -59,7 +59,7 @@ class ProjectController extends Controller
         return Inertia::render('user/Projects', [
             'projects' => $projects,
             'filters' => $filters,
-            'availableFilters' => $this->projectService->getAvailableFilters(['tags'], true),
+            'availableFilters' => $this->projectService->getAvailableFilters(['tags']),
         ]);
     }
 
@@ -175,7 +175,7 @@ class ProjectController extends Controller
     {
         try {
             $this->projectService->deleteMember($projectId, $memberId);
-            return redirect()->route('projects.controlPanel.show', $projectId)->with('success', 'Участник удалён.');
+            return redirect()->route('projects.show', $projectId)->with('success', 'Участник удалён.');
         } catch (Throwable $e) {
             Log::error("Ошибка удаления участника [$memberId] для проекта [$projectId]: " . $e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

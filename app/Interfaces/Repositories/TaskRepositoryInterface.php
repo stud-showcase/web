@@ -26,5 +26,5 @@ interface TaskRepositoryInterface
     public function deleteTask(int $id): void;
     public function deleteFile(int $taskId, int $fileId): void;
     public function getTaskCustomers(): Collection;
-    public function getTaskRequestCustomers(?int $responsibleUserId = null): Collection;
+    public function getTaskRequestCustomers(?string $responsibleUserId = null): Collection;
 }

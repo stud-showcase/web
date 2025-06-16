@@ -32,33 +32,45 @@ import { ConfirmationDialog } from "@/shared/ui/ConfirmationDialog";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { Label } from "@/shared/ui/Label";
 import { ProjectMember } from "@/entities/Project";
-import { getFullName, User } from "@/entities/User";
+import { getFullName, User, isAdmin } from "@/entities/User";
 import { Badge } from "@/shared/ui/Badge";
 import { Text } from "@/shared/ui/Text";
 import { router, useForm } from "@inertiajs/react";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/utils";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 function EditMemberDialog({
   projectId,
   memberId,
   position,
   isCreator,
+  mentorId,
   children,
 }: PropsWithChildren<{
   projectId: number;
   memberId: string;
   position: string | null;
   isCreator: boolean;
+  mentorId: string | null;
 }>) {
+  const { user } = useAuth();
+  const canAssignCreator = user?.id === mentorId || isAdmin(user);
   const { data, setData, put, transform } = useForm({
     position,
-    isCreator,
+    ...(canAssignCreator ? { isCreator } : {}),
   });
 
-  transform((data) => ({
-    ...data,
-    isCreator: data.isCreator ? 1 : 0,
-  }));
+  transform((data) => {
+    if (canAssignCreator) {
+      return {
+        position: data.position,
+        isCreator: data.isCreator ? 1 : 0,
+      };
+    }
+    return {
+      position: data.position,
+    };
+  });
 
   const handleSubmit = () => {
     put(`/projects/${projectId}/member/${memberId}`, {
@@ -86,14 +98,16 @@ function EditMemberDialog({
             onChange={(e) => setData("position", e.target.value)}
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Checkbox
-            id="team-leader"
-            checked={data.isCreator}
-            onCheckedChange={(value) => setData("isCreator", value === true)}
-          />
-          <Label htmlFor="team-leader">Руководитель команды</Label>
-        </div>
+        {canAssignCreator && (
+          <div className="flex items-center gap-2">
+            <Checkbox
+              id="team-leader"
+              checked={data.isCreator}
+              onCheckedChange={(value) => setData("isCreator", value === true)}
+            />
+            <Label htmlFor="team-leader">Руководитель команды</Label>
+          </div>
+        )}
         <AlertDialogFooter>
           <AlertDialogCancel>Отмена</AlertDialogCancel>
           <AlertDialogAction onClick={handleSubmit} disabled={!data.position}>
@@ -109,10 +123,12 @@ function MemberRow({
   projectId,
   member,
   isMentor = false,
+  mentorId,
 }: {
   projectId: number;
   member: ProjectMember;
   isMentor?: boolean;
+  mentorId: string | null;
 }) {
   const memberRole = isMentor
     ? "Наставник проекта"
@@ -148,6 +164,7 @@ function MemberRow({
               memberId={member.id}
               position={member.position}
               isCreator={member.isCreator}
+              mentorId={mentorId}
             >
               <Button size="icon" variant="outline">
                 <Edit />
@@ -178,6 +195,7 @@ export function MembersSection({
   mentor: User | null;
   members: ProjectMember[];
 }) {
+  const mentorId = mentor?.id || null;
   const hasSomeone = mentor || members.length > 0;
 
   return (
@@ -206,11 +224,17 @@ export function MembersSection({
                     projectId={id}
                     member={mentor as ProjectMember}
                     isMentor
+                    mentorId={mentorId}
                     key={mentor.id}
                   />
                 )}
                 {members.map((member) => (
-                  <MemberRow projectId={id} member={member} key={member.id} />
+                  <MemberRow
+                    projectId={id}
+                    member={member}
+                    mentorId={mentorId}
+                    key={member.id}
+                  />
                 ))}
               </TableBody>
             </Table>

@@ -32,7 +32,7 @@ class UserProjectRepository implements UserProjectRepositoryInterface
                 $userProject = $this->findByProjectAndUser($projectId, $userId);
                 $userProject->update([
                     'position' => $data['position'] ?? '',
-                    'is_creator' => $data['isCreator'] ?? 0
+                    'is_creator' => $data['isCreator'] ?? $userProject->is_creator
                 ]);
             });
             Cache::tags(['projects', 'user_projects'])->flush();

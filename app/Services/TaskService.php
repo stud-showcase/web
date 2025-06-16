@@ -23,7 +23,7 @@ class TaskService implements TaskServiceInterface
         private TagRepository $tagRepository,
     ) {}
 
-    public function getAvailableFilters(array $requestedFilters, ?int $responsibleUserId = null): array
+    public function getAvailableFilters(array $requestedFilters, ?string $responsibleUserId = null): array
     {
         $filters = [];
 

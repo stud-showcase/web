@@ -4,7 +4,7 @@ namespace App\Interfaces\Services;
 
 interface TaskServiceInterface
 {
-    public function getAvailableFilters(array $requestedFilters, ?int $responsibleUserId = null): array;
+    public function getAvailableFilters(array $requestedFilters, ?string $responsibleUserId = null): array;
     public function getFilteredTasks(array $filters = []): array;
     public function getFormattedTaskById(int $id): array;
     public function getTaskForAdmin(int $id): array;

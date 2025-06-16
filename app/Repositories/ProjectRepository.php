@@ -67,25 +67,6 @@ class ProjectRepository implements ProjectRepositoryInterface
         }
     }
 
-    public function getUserProjectTags(string $userId): Collection
-    {
-        $cacheKey = "user:{$userId}:project_tags";
-        return Cache::tags(['projects', 'tags'])->remember($cacheKey, 3600, function () use ($userId) {
-            return Project::query()
-                ->where(function ($q) use ($userId) {
-                    $q->whereHas('users', fn($q2) => $q2->where('users.id', $userId))
-                        ->orWhere('mentor_id', $userId);
-                })
-                ->whereHas('task.tags')
-                ->with(['task.tags' => fn($q) => $q->select('tags.id', 'tags.name')])
-                ->get()
-                ->pluck('task.tags')
-                ->flatten(1)
-                ->unique('id')
-                ->values();
-        });
-    }
-
     public function create(int $taskId, string $name, User $user): Project
     {
         try {
@@ -105,7 +86,7 @@ class ProjectRepository implements ProjectRepositoryInterface
                 return $project;
             });
 
-            Cache::tags(['projects', 'user_projects'])->flush();
+            Cache::tags(['projects', 'user_projects', 'tasks'])->flush();
             return $project;
         } catch (ModelNotFoundException $e) {
             throw $e;

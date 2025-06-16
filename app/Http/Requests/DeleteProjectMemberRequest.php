@@ -11,8 +11,7 @@ class DeleteProjectMemberRequest extends FormRequest
 
     public function authorize(): bool
     {
-        $restrictToMentorAndAdmin = $this->has('isCreator');
-        return $this->authorizeProject($this->route('projectId'), $restrictToMentorAndAdmin);
+        return $this->authorizeProject($this->route('projectId'));
     }
 
     public function rules(): array

@@ -509,7 +509,11 @@ class TaskRepository implements TaskRepositoryInterface
 
                 $task->delete();
 
-                Cache::tags(['tasks', 'customers'])->flush();
+                foreach ($task->projects as $project) {
+                    $project->delete();
+                }
+
+                Cache::tags(['tasks', 'customers', 'projects', 'vacancies'])->flush();
             });
         } catch (ModelNotFoundException $e) {
             throw $e;
@@ -544,7 +548,7 @@ class TaskRepository implements TaskRepositoryInterface
         });
     }
 
-    public function getTaskRequestCustomers(?int $responsibleUserId = null): Collection
+    public function getTaskRequestCustomers(?string $responsibleUserId = null): Collection
     {
         $cacheKey = 'task_requests:customers:' . ($responsibleUserId ?: 'all');
         return Cache::tags(['task_requests', 'customers'])->remember($cacheKey, 3600, function () use ($responsibleUserId) {

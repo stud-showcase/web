@@ -58,8 +58,8 @@ class ProjectController extends Controller
     {
         try {
             $data = $request->validated();
-            $this->projectService->createProject($data['taskId'], $data['projectName'], auth()->user());
-            return redirect()->route('admin.projects.index')->with('success', 'Проект успешно создан.');
+            $project = $this->projectService->createProject($data['taskId'], $data['projectName'], auth()->user());
+            return redirect()->route('admin.projects.show', $project->id)->with('success', 'Проект успешно создан.');
         } catch (Throwable $e) {
             Log::error("Ошибка создания проекта: " . $e->getMessage(), ['data' => $request->validated()]);
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

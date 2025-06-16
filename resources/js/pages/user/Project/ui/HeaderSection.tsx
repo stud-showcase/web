@@ -15,6 +15,7 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { JoinProjectModal } from "./JoinProjectModal";
 import { UserPlus, Settings, Link as LinkIcon } from "lucide-react";
 import { ExtendedProject } from "../model/ExtendedProject";
+import { isAdmin } from "@/entities/User";
 
 export function HeaderSection({ project }: { project: ExtendedProject }) {
   const { user } = useAuth();
@@ -58,7 +59,7 @@ export function HeaderSection({ project }: { project: ExtendedProject }) {
                 <LinkIcon /> К задаче
               </Link>
             </Button>
-            {user && (isProjectCreator() || isProjectMentor()) && (
+            {user && (isProjectCreator() || isProjectMentor() || isAdmin(user)) && (
               <Button
                 variant="secondary"
                 className="flex-1 sm:flex-none"

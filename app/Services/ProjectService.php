@@ -30,14 +30,12 @@ class ProjectService implements ProjectServiceInterface
         private SettingRepository $settingRepository,
     ) {}
 
-    public function getAvailableFilters(array $requestedFilters, bool $forUser = false): array
+    public function getAvailableFilters(array $requestedFilters): array
     {
         $filters = [];
 
         if (in_array('tags', $requestedFilters)) {
-            $filters['tags'] = $forUser
-                ? $this->projectRepository->getUserProjectTags(Auth::id())->toArray()
-                : $this->tagRepository->getTagsForFilters()->toArray();
+            $filters['tags'] = $this->tagRepository->getTagsForFilters()->toArray();
         }
 
         return $filters;

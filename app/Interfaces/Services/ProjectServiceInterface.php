@@ -7,7 +7,7 @@ use App\Models\User;
 
 interface ProjectServiceInterface
 {
-    public function getAvailableFilters(array $requestedFilters, bool $forUser = false): array;
+    public function getAvailableFilters(array $requestedFilters): array;
     public function getProjects(array $filters = []): array;
     public function getUserProjects(array $filters = []): array;
     public function getProjectById(int $id): array;

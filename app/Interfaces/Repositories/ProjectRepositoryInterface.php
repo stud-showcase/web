@@ -11,7 +11,6 @@ interface ProjectRepositoryInterface
 {
     public function getProjects(array $filters, bool $forUser = false): LengthAwarePaginator;
     public function getByIdWithRelations(int $id): Project;
-    public function getUserProjectTags(string $userId): Collection;
     public function create(int $taskId, string $name, User $user): Project;
     public function update(int $projectId, array $data): Project;
     public function delete(int $id): void;
