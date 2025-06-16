@@ -126,7 +126,7 @@ class ProjectControllerTest extends TestCase
 
         $response = $this->post(route('admin.projects.store'), $projectData);
 
-        $response->assertRedirect(route('admin.projects.index'))
+        $response->assertRedirect(route('admin.projects.show', $project->id))
             ->assertSessionHas('success', 'Проект успешно создан.');
     }
 

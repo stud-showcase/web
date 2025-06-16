@@ -9,6 +9,6 @@ class TaskRequestSeeder extends Seeder
 {
     public function run(): void
     {
-        TaskRequest::factory()->count(20)->create();
+        TaskRequest::factory()->count(50)->create();
     }
 }

@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
     {
         $adminRole = Role::where('name', 'admin')->firstOrFail();
         User::factory()
-            ->count(5)
+            ->count(10)
             ->create()
             ->each(function ($user) use ($adminRole) {
                 $user->roles()->attach($adminRole->id);
@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
 
         $mentorRole = Role::where('name', 'mentor')->firstOrFail();
         User::factory()
-            ->count(15)
+            ->count(30)
             ->create()
             ->each(function ($user) use ($mentorRole) {
                 $user->roles()->attach($mentorRole->id);
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
 
         $studentRole = Role::where('name', 'student')->firstOrFail();
         User::factory()
-            ->count(30)
+            ->count(60)
             ->create()
             ->each(function ($user) use ($studentRole) {
                 $user->roles()->attach($studentRole->id);

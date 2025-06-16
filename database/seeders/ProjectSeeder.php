@@ -16,6 +16,87 @@ class ProjectSeeder extends Seeder
         $tasks = Task::withCount('projects')->get();
         $faker = \Faker\Factory::create('ru_RU');
 
+        $projectTypes = [
+            'Разработка CRM-системы',
+            'Создание интернет-магазина',
+            'Мобильное приложение',
+            'Веб-портал',
+            'Интеграция API',
+            'Редизайн сайта',
+            'Автоматизация процессов',
+            'Разработка корпоративного сайта',
+            'E-commerce платформа',
+            'Личный кабинет',
+            'Чат-бот для Telegram',
+            'Система управления заказами',
+            'Платформа для обучения',
+            'Разработка ERP-системы',
+            'Создание маркетплейса',
+            'Система аналитики данных',
+            'Веб-приложение для логистики',
+            'Платформа для мероприятий',
+            'Система бронирования',
+            'Разработка дашборда',
+            'Интеграция с 1С',
+            'Создание блога',
+            'Платформа для стриминга',
+            'Разработка API для финтеха',
+            'Система управления складом'
+        ];
+        $industries = [
+            'ритейла',
+            'финтеха',
+            'медицины',
+            'образования',
+            'логистики',
+            'туризма',
+            'недвижимости',
+            'автобизнеса',
+            'производства',
+            'маркетинга',
+            'гейминга',
+            'страхования',
+            'энергетики',
+            'строительства',
+            'агропрома',
+            'госсектора',
+            'телекоммуникаций',
+            'медиа',
+            'HoReCa',
+            'электронной коммерции',
+            'фитнес-индустрии',
+            'юридических услуг',
+            'банковского сектора',
+            'ИТ-услуг'
+        ];
+
+        $positions = [
+            'Frontend разработчик',
+            'Backend разработчик',
+            'DevOps инженер',
+            'Project Manager',
+            'UI/UX дизайнер',
+            'QA инженер',
+            'Бизнес-аналитик',
+            'Fullstack разработчик',
+            'Системный администратор',
+            'Мобильный разработчик',
+            'Аналитик данных',
+            'Product Manager',
+            'Scrum Master',
+            'Администратор баз данных',
+            'Специалист по безопасности',
+            'Cloud инженер',
+            'Технический архитектор',
+            'Инженер поддержки',
+            'Team Lead',
+            'ML инженер',
+            'Data инженер',
+            'Разработчик игр',
+            'Контент-менеджер',
+            'SEO-специалист'
+        ];
+
         $mentorRoleIds = Role::whereIn('name', ['mentor', 'admin'])->pluck('id');
         $mentorUsers = User::whereHas('roles', function ($query) use ($mentorRoleIds) {
             $query->whereIn('roles.id', $mentorRoleIds);
@@ -42,7 +123,7 @@ class ProjectSeeder extends Seeder
                 'task_id' => $task->id,
                 'status_id' => ProjectStatus::inRandomOrder()->first()->id,
                 'mentor_id' => $mentor->id,
-                'name' => $faker->sentence(3),
+                'name' => $faker->randomElement($projectTypes) . ' для ' . $faker->randomElement($industries),
             ]);
 
             $maxMembers = $task->max_members;
@@ -53,7 +134,7 @@ class ProjectSeeder extends Seeder
             foreach ($participants as $participant) {
                 $isCreator = !$creatorAssigned;
                 $project->users()->attach($participant->id, [
-                    'position' => $faker->jobTitle(),
+                    'position' => $faker->randomElement($positions),
                     'is_creator' => $isCreator,
                 ]);
                 $creatorAssigned = true;

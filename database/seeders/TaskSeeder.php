@@ -11,7 +11,7 @@ class TaskSeeder extends Seeder
     public function run(): void
     {
         Task::factory()
-            ->count(30)
+            ->count(50)
             ->create([
                 'complexity_id' => fn() => Complexity::inRandomOrder()->first()->id,
                 'max_projects' => fn() => rand(3, 15),
